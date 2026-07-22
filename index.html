@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Civilisation Theory Map</title>
+    
+    <!-- Black Triangle Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='0,0 100,0 0,100' fill='%23000'/></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=IBM+Plex+Sans+Arabic:wght@500;600;700&family=Inter+Tight:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root { 
+            --bg-color: #f9f7f5; 
+            --topbar-bg: #ffffff; 
+            --text-color: #333333; 
+            --topbar-text: #000000; 
+            --accent-color: #3CB371; /* Medium Sea Green for Light Theme */
+            --nav-inactive: #b0b0b0;
+            --nav-border: #777777;
+            --diamond-bg: #ffffff; /* White Diamond for Light Theme */
+            /* Circle with a dot inside (Black for light theme) */
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2' fill='%23000'/></svg>") 12 12, auto;
+        }
+
+        /* Hidden Dark Theme Variables */
+        body.dark-mode {
+            --bg-color: #121212; 
+            --topbar-bg: #1a1a1a; 
+            --text-color: #e0e0e0; 
+            --topbar-text: #ffffff; 
+            --accent-color: #00BFFF; /* Deep Sky Blue for Dark Theme */
+            --nav-inactive: #555555;
+            --nav-border: #444444;
+            --diamond-bg: #000000; /* Black Diamond for Dark Theme */
+            /* Circle with a dot inside (White for dark theme) */
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23fff' stroke-width='1.5'/><circle cx='12' cy='12' r='2' fill='%23fff'/></svg>") 12 12, auto;
+        }
+
+        /* Art Modes overrides */
+        body.art-orange, body.dark-mode.art-orange {
+            --accent-color: #f43900;
+        }
+        
+        body.art-colorless {
+            --accent-color: #000000;
+        }
+        
+        body.dark-mode.art-colorless {
+            --accent-color: #ffffff;
+        }
+        
+        body.art-yellow, body.dark-mode.art-yellow {
+            --bg-color: #ffe442;
+            --topbar-bg: #ffe442;
+            --text-color: #000000;
+            --topbar-text: #000000;
+            --accent-color: #000000;
+            --diamond-bg: #ffe442;
+            --nav-inactive: #888888;
+            --nav-border: #000000;
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2' fill='%23000'/></svg>") 12 12, auto;
+        }
+
+        /* Background Match Mode */
+        body.bg-match-mode {
+            --topbar-bg: var(--bg-color);
+        }
+
+        /* Draws the black hypotenuse line specifically for Yellow Art Mode */
+        body.art-yellow #topbar {
+            background-image: linear-gradient(to top left, transparent 50%, var(--topbar-text) 50%, var(--topbar-text) calc(50% + 3px), transparent calc(50% + 3px));
+        }
+
+        body.art-yellow #bottom-triangle {
+            background-image: linear-gradient(to top left, transparent calc(50% - 3px), var(--topbar-text) calc(50% - 3px), var(--topbar-text) 50%, transparent 50%);
+        }
+
+        /* Removes the hypotenuse lines when Background Match Mode is active alongside Yellow Art Mode */
+        body.bg-match-mode.art-yellow #topbar,
+        body.bg-match-mode.art-yellow #bottom-triangle {
+            background-image: none;
+        }
+
+        /* Gradient Mode (Fades corners at the hypotenuse using a dynamic CSS mask) */
+        body.gradient-mode #topbar {
+            -webkit-mask-image: linear-gradient(to bottom right, black 35%, transparent 49%);
+            mask-image: linear-gradient(to bottom right, black 35%, transparent 49%);
+        }
+
+        body.gradient-mode #bottom-triangle {
+            -webkit-mask-image: linear-gradient(to top left, black 35%, transparent 49%);
+            mask-image: linear-gradient(to top left, black 35%, transparent 49%);
+        }
+
+        /* HUDless mode (Leaves bottom bar and text untouched) */
+        body.hudless #topbar,
+        body.hudless #bottom-triangle,
+        body.hudless #alphabet-nav {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        /* Minimalist Modern Custom Cursor */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            cursor: var(--cursor-style) !important;
+        }
+        
+        body { 
+            display: block; 
+            height: 100vh; 
+            overflow: hidden; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            line-height: 1.15; 
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        p, h1, h2, h3 { margin-bottom: 7.5px; }
+
+        /* Loading Screen overlay */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-color);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Hide cursor specifically during load */
+        #loading-screen, #loading-screen * {
+            cursor: none !important;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Diamond Wrapper */
+        .diamond-wrapper {
+            position: relative;
+            width: 400px; 
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .diamond-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .diamond-path {
+            fill: var(--diamond-bg);
+            stroke: var(--accent-color);
+            stroke-width: 5px;
+            stroke-linejoin: miter; /* Ensures sharp corners */
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            transition: fill 0.3s, stroke 0.3s;
+            animation: drawOutline 3s linear forwards; 
+        }
+
+        @keyframes drawOutline {
+            0% { stroke-dashoffset: 100; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        .diamond-text {
+            position: relative;
+            z-index: 2;
+            text-align: left;
+        }
+
+        .diamond-text h1 {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            font-weight: 600; 
+            font-size: 1.8rem; 
+            margin: 0;
+            text-transform: uppercase;
+            color: var(--topbar-text); 
+            transition: color 0.3s;
+        }
+
+        /* Bottom Progress Bar (Static) */
+        #bottom-line-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 6px; 
+            z-index: 1000;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        #bottom-line-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: var(--accent-color);
+            transition: background-color 0.3s;
+        }
+
+        /* Top Left Corner */
+        #topbar { 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 25vw; 
+            height: 25vh; 
+            background-color: var(--topbar-bg); 
+            color: var(--topbar-text); 
+            display: flex; 
+            align-items: flex-start; 
+            padding: 30px; 
+            clip-path: polygon(0 0, 100% 0, 0 100%); 
+            z-index: 100;
+            transition: background-color 0.3s, color 0.3s, opacity 0.3s, visibility 0.3s;
+        }
+        
+        #topbar h1 { 
+            font-family: 'IBM Plex Sans Arabic', sans-serif; 
+            font-weight: 600; 
+            font-size: 1.5rem; 
+            margin: 0; 
+            margin-top: 15px; 
+            text-transform: uppercase; 
+        }
+
+        /* Inline Info Icon */
+        #info-icon {
+            display: inline-block;
+            margin-left: 12px;
+            color: var(--topbar-text);
+            transition: color 0.3s;
+        }
+
+        #info-icon:hover {
+            color: var(--accent-color);
+        }
+
+        /* Bottom Right Corner */
+        #bottom-triangle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 25vw; 
+            height: 25vh; 
+            background-color: var(--topbar-bg); 
+            clip-path: polygon(100% 0, 100% 100%, 0 100%); 
+            z-index: 10;
+            pointer-events: none; 
+            transition: background-color 0.3s, opacity 0.3s, visibility 0.3s;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            padding: 30px;
+            color: var(--topbar-text);
+            text-align: right;
+        }
+        
+        #bottom-triangle h2 {
+            font-family: 'IBM Plex Sans Arabic', sans-serif; 
+            font-weight: 500; 
+            font-size: 1.5rem; 
+            margin: 0 0 5px 0; 
+            text-transform: capitalize; 
+            line-height: 1.1;
+        }
+        
+        #bottom-triangle p {
+            font-family: 'Inter Tight', sans-serif;
+            font-weight: 400;
+            font-size: 0.75rem;
+            margin: 15px 0 0 0; 
+        }
+        
+        #alphabet-nav { 
+            position: absolute;
+            top: 60px;
+            left: 28vw; 
+            right: 60px;
+            display: flex; 
+            justify-content: space-between;
+            align-items: flex-start;
+            border-top: 1px solid var(--nav-border); 
+            padding-top: 15px; 
+            z-index: 100;
+            transition: border-color 0.3s, opacity 0.3s, visibility 0.3s;
+        }
+        
+        .nav-letter {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            cursor: default;
+        }
+
+        .active-letter {
+            color: var(--topbar-text);
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        
+        .active-letter:hover { 
+            text-decoration: underline; 
+            color: var(--accent-color);
+        }
+        
+        .inactive-letter { color: var(--nav-inactive); }
+        
+        #main-content { 
+            padding: 40px 60px; 
+            height: 100vh;
+            overflow-y: auto; 
+            position: relative; 
+        }
+
+        /* Default Landing List classes (Desktop) */
+        .landing-concept-list {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .landing-concept-col {
+            flex: 1;
+        }
+        
+        /* Split Screen Editor Menu */
+        #editor-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 200;
+            display: none; /* Flex when active */
+            background-color: var(--bg-color);
+        }
+
+        .editor-menu-btn {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter Tight', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .editor-menu-btn.left {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border-right: 2px dashed var(--accent-color);
+        }
+
+        .editor-menu-btn.left:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        .editor-menu-btn.right {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        .editor-menu-btn.right:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+
+        #viewer-ui, #editor-entry-list { 
+            width: 50%; 
+            margin: 18vh auto 0 auto; 
+            position: relative;
+        }
+
+        /* Editor A-Z Concept List */
+        #editor-entry-list {
+            display: none;
+        }
+
+        #editor-entry-list h2 {
+            font-family: 'Inter Tight', sans-serif;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        #concept-title { 
+            font-family: 'Inter Tight', sans-serif; 
+            font-weight: 700; 
+            font-size: 2.5rem; 
+            white-space: nowrap; 
+        }
+        
+        #concept-description, #concept-description div { 
+            font-family: 'Cormorant Garamond', serif; 
+            font-weight: 500; 
+            font-size: 1.75rem; 
+            white-space: pre-wrap; 
+        }
+        
+        #concept-description a {
+            color: var(--accent-color);
+            text-decoration: underline;
+            transition: opacity 0.2s;
+        }
+        
+        #concept-description a:hover {
+            opacity: 0.7;
+        }
+
+        /* Superscript styling for footnotes in the description */
+        #concept-description sup {
+            color: var(--accent-color);
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 400; /* Unbolded */
+            font-size: 0.9rem; /* Match the footnote section size */
+            transition: color 0.3s;
+        }
+
+        /* Footnotes Section */
+        #concept-footnotes {
+            margin-top: 30px;
+            padding-top: 20px;
+            display: none; /* hidden by default if no footnotes */
+        }
+
+        .footnote-entry {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem; /* Smaller than description text */
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .footnote-num {
+            color: var(--accent-color);
+            font-weight: 400; /* Unbolded */
+            font-size: 0.9rem; /* Same as the superscript above */
+        }
+
+        .footnote-text {
+            flex: 1;
+            outline: none;
+            line-height: 1.4;
+        }
+
+        .footnote-text.editable-field {
+            outline: 2px dashed var(--accent-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(128, 128, 128, 0.05);
+            min-height: 1.5em;
+        }
+
+        .footnote-text:empty:before {
+            content: attr(data-placeholder);
+            color: var(--nav-inactive);
+            pointer-events: none;
+        }
+
+        /* In-Place Editor Toolbar */
+        #editor-toolbar {
+            display: none;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        #editor-toolbar button {
+            padding: 6px 14px;
+            background-color: var(--topbar-text);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Inter Tight', sans-serif;
+            font-weight: 700;
+            transition: opacity 0.3s;
+        }
+
+        #editor-toolbar button:hover {
+            opacity: 0.8;
+        }
+
+        #editor-toolbar .btn-export {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .editable-field {
+            outline: 2px dashed var(--accent-color);
+            padding: 8px;
+            border-radius: 6px;
+            background: rgba(128, 128, 128, 0.05);
+            min-height: 1.5em;
+        }
+
+        #editor-status { position: absolute; top: 20px; right: 20px; font-family: 'Inter Tight', sans-serif; font-size: 0.8rem; color: red; font-weight: 700; display: none; z-index: 300;}
+        
+        #bottom-bar {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-color); 
+            z-index: 100;
+            transition: color 0.3s, opacity 0.3s, visibility 0.3s;
+        }
+
+        /* --- MOBILE RESPONSIVE ADAPTATIONS --- */
+        @media (max-width: 850px) {
+            #topbar, #bottom-triangle {
+                width: 65vw;
+                height: 22vh;
+                padding: 20px;
+            }
+            
+            #topbar h1 {
+                font-size: 1.25rem;
+                margin-top: 5px;
+            }
+            
+            #bottom-triangle h2 {
+                font-size: 1.2rem;
+                margin-bottom: 2px;
+            }
+            
+            #bottom-triangle p {
+                font-size: 0.65rem;
+                margin-top: 5px;
+            }
+            
+            #alphabet-nav {
+                top: 20vh;
+                left: 5vw;
+                right: 5vw;
+                flex-wrap: wrap;
+                justify-content: center;
+                border-top: none;
+                gap: 12px;
+                padding-top: 0;
+            }
+            
+            .nav-letter { font-size: 1.15rem; padding: 4px; }
+            
+            #main-content { padding: 20px; }
+
+            #viewer-ui, #editor-entry-list { width: 90%; }
+            
+            #concept-title { 
+                font-size: 2.2rem; 
+                white-space: normal; /* Allows long titles to wrap instead of overflowing */
+                line-height: 1.2;
+            }
+            
+            #concept-description, #concept-description div { font-size: 1.35rem; }
+            
+            #editor-menu { flex-direction: column; }
+            
+            .editor-menu-btn.left {
+                border-right: none;
+                border-bottom: 2px dashed var(--accent-color);
+            }
+            
+            .editor-menu-btn { font-size: 1.8rem; text-align: center; padding: 20px; }
+            
+            .diamond-wrapper {
+                width: 80vw;
+                height: 80vw;
+                max-width: 400px;
+                max-height: 400px;
+            }
+            
+            .diamond-text h1 { font-size: 1.4rem; }
+            
+            #editor-toolbar { justify-content: center; margin-bottom: 30px; }
+            
+            .landing-concept-list { flex-direction: column; gap: 15px; }
+            
+            #bottom-bar { font-size: 0.8rem; left: 20px; bottom: 20px; }
+        }
+    </style>
+
+    <!-- THIS IS YOUR EMBEDDED DATA -->
+    <script id="about-data" type="application/json">
+{
+    "title": "Civilisation Theory",
+    "description": "Civilisation Theory",
+    "casDescription": "A conceptual adaptive system",
+    "mapDescription": "Below is a complete index of the concept entries on this site.",
+    "footnotes": {}
+}
+    </script>
+    <script id="glossary-data" type="application/json">
+[]
+    </script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="diamond-wrapper">
+            <svg class="diamond-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                <path class="diamond-path" d="M 435 165 L 570 300 L 300 570 L 30 300 L 300 30 Z" pathLength="100"/>
+            </svg>
+            <div class="diamond-text">
+                <h1>Civilisation<br>Theory Map</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="bottom-line-container">
+        <div id="bottom-line-bar"></div>
+    </div>
+
+    <div id="topbar">
+        <h1>
+            Civilisation
+            <span id="info-icon" onmouseenter="playSound('hover')" onclick="playSound('click'); showAbout()" title="About Civilisation Theory Map">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </span>
+            <br>Theory
+        </h1>
+    </div>
+    
+    <div id="alphabet-nav"></div>
+
+    <div id="main-content">
+        <span id="editor-status">EDITOR MODE ACTIVE (ESC TO MENU)</span>
+
+        <!-- Split Screen Editor Overlay -->
+        <div id="editor-menu">
+            <div class="editor-menu-btn left" onmouseenter="playSound('hover')" onclick="playSound('click'); startAddingNew()">
+                Add a New<br>Concept
+            </div>
+            <div class="editor-menu-btn right" onmouseenter="playSound('hover')" onclick="playSound('click'); startEditingExisting()">
+                Edit an Existing<br>Entry
+            </div>
+        </div>
+
+        <!-- Editor A-Z Concept Selection List -->
+        <div id="editor-entry-list"></div>
+
+        <div id="viewer-ui">
+            <!-- Inline Editor Toolbar -->
+            <div id="editor-toolbar">
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); document.execCommand('bold', false, null)" title="Bold Selection"><b>B</b></button>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); insertLink()" title="Insert Link">Link</button>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); insertFootnote()" title="Insert Footnote Marker">Footnote</button>
+                <button type="button" id="btn-preview" onmouseenter="playSound('hover')" onclick="playSound('click'); togglePreview()" style="background-color: #8e44ad; color: white;" title="Toggle Preview Mode">Preview</button>
+                <span style="width: 10px;"></span>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); saveCurrentConcept()">Save Edits</button>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); saveNewConcept()">Save as New</button>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); clearFields()" style="background-color: #666;">Clear</button>
+                <span style="width: 10px;"></span>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); exportHTML()" class="btn-export">Export HTML</button>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); exitEditor()" style="background-color: #999; color: #fff;">Exit</button>
+            </div>
+
+            <h2 id="concept-title"></h2>
+            <div id="concept-description"></div>
+            <div id="concept-footnotes"></div>
+        </div>
+    </div>
+    
+    <div id="bottom-bar">civilisationtheory/<span id="bottom-concept"></span></div>
+    
+    <div id="bottom-triangle">
+        <div class="bottom-triangle-content">
+            <h2>A Conceptual<br>Adaptive System</h2>
+            <p>A research project by Max Ramsahoye</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Web Audio API Synthesizer ---
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Catch initial user interaction to unlock audio context in browsers
+        document.addEventListener('click', initAudio, { once: true });
+        document.addEventListener('keydown', initAudio, { once: true });
+
+        function playSound(type) {
+            try {
+                initAudio();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                const now = audioCtx.currentTime;
+                
+                if (type === 'hover') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(400, now);
+                    gainNode.gain.setValueAtTime(0.015, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.05);
+                } else if (type === 'click') {
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(600, now);
+                    oscillator.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+                    gainNode.gain.setValueAtTime(0.03, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.1);
+                } else if (type === 'toggle') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(300, now);
+                    oscillator.frequency.exponentialRampToValueAtTime(400, now + 0.15);
+                    gainNode.gain.setValueAtTime(0.03, now);
+                    gainNode.gain.linearRampToValueAtTime(0, now + 0.15);
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.15);
+                } else if (type === 'success') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(500, now);
+                    oscillator.frequency.setValueAtTime(750, now + 0.1);
+                    gainNode.gain.setValueAtTime(0.03, now);
+                    gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.3);
+                } else if (type === 'alert') {
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(250, now);
+                    oscillator.frequency.linearRampToValueAtTime(200, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.02, now);
+                    gainNode.gain.linearRampToValueAtTime(0, now + 0.2);
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.2);
+                }
+            } catch (e) {
+                // Silently fail if audio is unsupported or blocked by browser policy
+            }
+        }
+        // ---------------------------------
+
+        let concepts = [];
+        let aboutConcept = {};
+        
+        let currentConceptIndex = -1; // Tracks actively viewed concept (-1 = About Page, -2 = New Concept)
+        
+        // State machine for Editor Mode
+        let isEditorMode = false;
+        let editorState = 'inactive'; // 'inactive' -> 'menu' -> 'list' -> 'active'
+        let isPreviewing = false;
+        
+        let artMode = 0; // 0: Default, 1: Orange, 2: Colorless, 3: Yellow
+
+        function loadConcepts() {
+            // Load Landing Page Data
+            const aboutElement = document.getElementById('about-data');
+            try {
+                if (aboutElement && aboutElement.textContent.trim()) {
+                    aboutConcept = JSON.parse(aboutElement.textContent);
+                }
+            } catch (e) {
+                console.error("Failed to parse about data", e);
+            }
+            
+            // Load Standard Glossary Data
+            const dataElement = document.getElementById('glossary-data');
+            try {
+                if (dataElement && dataElement.textContent.trim()) {
+                    concepts = JSON.parse(dataElement.textContent);
+                }
+            } catch (e) {
+                console.error("Failed to parse glossary data", e);
+            }
+            renderAlphabetNav();
+            
+            // Get URL safely (checking for file:// fallback)
+            let titleToMatch = "";
+            if (window.location.protocol === 'file:') {
+                titleToMatch = window.location.hash.replace('#', '');
+            } else {
+                titleToMatch = window.location.pathname.replace(/^\/+/, '').replace('civilisationtheory.html', '');
+            }
+            
+            if (titleToMatch && titleToMatch !== '') {
+                const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
+                
+                if (index !== -1) {
+                    showConcept(index);
+                } else {
+                    showAbout();
+                }
+            } else {
+                showAbout();
+            }
+
+            // Timeline for 3s linear drawing hitting the corners.
+            const loader = document.getElementById('loading-screen');
+            if(loader) {
+                setTimeout(() => document.body.classList.toggle('dark-mode'), 1125); 
+                setTimeout(() => document.body.classList.toggle('dark-mode'), 2625);
+                
+                // Remove Loading Screen right as 3000ms animation finishes
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 500); 
+                }, 3000); 
+            }
+        }
+        
+        function updateURL(slug) {
+            try {
+                if (window.location.protocol === 'file:') {
+                    if (window.location.hash !== '#' + slug) {
+                        window.location.hash = slug;
+                    }
+                } else {
+                    const newUrl = "/" + slug;
+                    if (window.location.pathname !== newUrl) {
+                        window.history.pushState({ slug: slug }, "", newUrl);
+                    }
+                }
+            } catch(e) {
+                console.warn("Routing safely caught to prevent execution halt:", e);
+            }
+        }
+
+        function renderAlphabetNav() {
+            const nav = document.getElementById('alphabet-nav');
+            nav.innerHTML = '';
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+            const availableLetters = new Set(concepts.map(c => c.title.charAt(0).toUpperCase()));
+
+            alphabet.forEach(letter => {
+                const span = document.createElement('span');
+                span.textContent = letter;
+                span.className = 'nav-letter';
+                
+                if (availableLetters.has(letter)) {
+                    span.classList.add('active-letter');
+                    span.onmouseenter = () => playSound('hover');
+                    span.onclick = () => { playSound('click'); showLetter(letter); };
+                } else {
+                    span.classList.add('inactive-letter');
+                }
+                
+                nav.appendChild(span);
+            });
+        }
+
+        function showLetter(letter) {
+            currentConceptIndex = -1; // Unbind from strict concept editing
+            const filtered = concepts.filter(c => c.title.charAt(0).toUpperCase() === letter);
+            
+            if (filtered.length === 1) {
+                showConcept(concepts.indexOf(filtered[0]));
+            } 
+            else if (filtered.length > 1) {
+                document.getElementById('concept-title').innerText = `Concepts starting with '${letter}'`;
+                
+                const slug = `conceptsstartingwith'${letter.toLowerCase()}'`;
+                document.getElementById('bottom-concept').textContent = slug;
+                updateURL(slug.replace(/'/g, ''));
+                
+                // Inject list dynamically
+                const descContainer = document.getElementById('concept-description');
+                descContainer.innerHTML = `<ul id="letter-list" style="list-style-type: none; padding: 0; margin-top: 20px;"></ul>`;
+                document.getElementById('concept-footnotes').style.display = 'none'; 
+                
+                const ul = document.getElementById('letter-list');
+                
+                filtered.forEach(c => {
+                    const li = document.createElement('li');
+                    li.textContent = c.title;
+                    li.style.fontFamily = "'Roboto Mono', monospace";
+                    li.style.fontSize = "1.2rem";
+                    li.style.marginBottom = "15px";
+                    li.style.color = "var(--text-color)"; 
+                    li.style.transition = "color 0.2s";
+                    li.style.cursor = "pointer";
+                    
+                    li.onmouseenter = () => { 
+                        playSound('hover');
+                        li.style.textDecoration = 'underline';
+                        li.style.color = "var(--accent-color)";
+                    };
+                    li.onmouseleave = () => { 
+                        li.style.textDecoration = 'none';
+                        li.style.color = "var(--text-color)";
+                    };
+                    
+                    li.onclick = () => { playSound('click'); showConcept(concepts.indexOf(c)); };
+                    ul.appendChild(li);
+                });
+            }
+            adjustTopMargin();
+        }
+
+        function syncFootnotes(savedFootnotes = null) {
+            let sups = [];
+            // Dynamically scan for superscript tags exactly where they are permitted
+            if (currentConceptIndex === -1) {
+                ['about-main-desc', 'about-cas-desc', 'about-map-desc'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) sups = [...sups, ...el.querySelectorAll('sup')];
+                });
+            } else {
+                const descEl = document.getElementById('concept-description');
+                if(descEl) sups = Array.from(descEl.querySelectorAll('sup'));
+            }
+
+            const markers = sups.map(sup => sup.innerText.trim()).filter(m => m !== '');
+            const uniqueMarkers = [...new Set(markers)];
+
+            const fnContainer = document.getElementById('concept-footnotes');
+            
+            // Preserve typed footnote texts during live re-renders
+            let currentTexts = {};
+            if (savedFootnotes) {
+                currentTexts = savedFootnotes;
+            } else {
+                const existingRows = fnContainer.querySelectorAll('.footnote-entry');
+                existingRows.forEach(row => {
+                    const marker = row.getAttribute('data-marker');
+                    const textEl = row.querySelector('.footnote-text');
+                    currentTexts[marker] = textEl ? textEl.innerHTML : '';
+                });
+            }
+
+            if (uniqueMarkers.length === 0) {
+                fnContainer.style.display = 'none';
+                fnContainer.innerHTML = '';
+                return;
+            }
+
+            fnContainer.style.display = 'block';
+            fnContainer.innerHTML = ''; // Rebuild list cleanly
+
+            uniqueMarkers.forEach(marker => {
+                const row = document.createElement('div');
+                row.className = 'footnote-entry';
+                row.setAttribute('data-marker', marker);
+
+                const numSpan = document.createElement('sup');
+                numSpan.className = 'footnote-num';
+                numSpan.innerText = marker;
+
+                const textSpan = document.createElement('div');
+                textSpan.className = 'footnote-text';
+                
+                if (isEditorMode && editorState === 'active' && !isPreviewing) {
+                    textSpan.classList.add('editable-field');
+                    textSpan.contentEditable = true;
+                }
+                
+                textSpan.setAttribute('data-placeholder', 'Enter footnote text...');
+                if (currentTexts[marker]) {
+                    textSpan.innerHTML = currentTexts[marker];
+                }
+
+                row.appendChild(numSpan);
+                row.appendChild(textSpan);
+
+                fnContainer.appendChild(row);
+            });
+        }
+
+        // Use event delegation on the viewer UI to handle dynamic edits across all fields
+        document.getElementById('viewer-ui').addEventListener('input', (e) => {
+            if (isEditorMode && editorState === 'active') {
+                if (e.target.classList.contains('editable-field') && !e.target.classList.contains('footnote-text')) {
+                    syncFootnotes();
+                }
+            }
+        });
+
+        // Dynamic Margin Resizing logic
+        function adjustTopMargin() {
+            requestAnimationFrame(() => {
+                const viewer = document.getElementById('viewer-ui');
+                const list = document.getElementById('editor-entry-list');
+                
+                let activeEl = null;
+                if (window.getComputedStyle(viewer).display !== 'none' && viewer.offsetHeight > 0) activeEl = viewer;
+                else if (window.getComputedStyle(list).display !== 'none' && list.offsetHeight > 0) activeEl = list;
+                
+                if (activeEl) {
+                    const contentHeight = activeEl.offsetHeight;
+                    const isMobile = window.innerWidth <= 850;
+                    
+                    // Provides safe clearance over the wrapped alphabet nav on mobile
+                    const minMarginVH = isMobile ? window.innerHeight * 0.32 : window.innerHeight * 0.20;
+                    
+                    // Subtract 40px to precisely account for main-content top padding
+                    const centeredMargin = (window.innerHeight - contentHeight) / 2 - 40; 
+                    
+                    activeEl.style.marginTop = Math.max(minMarginVH, centeredMargin) + 'px';
+                }
+            });
+        }
+
+        // Attach observer to gracefully animate the center positioning on content changes
+        const marginObserver = new ResizeObserver(() => adjustTopMargin());
+        marginObserver.observe(document.getElementById('viewer-ui'));
+        marginObserver.observe(document.getElementById('editor-entry-list'));
+        window.addEventListener('resize', adjustTopMargin);
+
+        function showConcept(index) {
+            currentConceptIndex = index;
+            document.getElementById('concept-title').innerText = concepts[index].title;
+            document.getElementById('concept-description').innerHTML = concepts[index].description;
+            
+            syncFootnotes(concepts[index].footnotes || {});
+            
+            const slug = concepts[index].title.toLowerCase().replace(/\s+/g, '');
+            document.getElementById('bottom-concept').textContent = slug;
+            updateURL(slug);
+            adjustTopMargin();
+        }
+
+        function showAbout() {
+            currentConceptIndex = -1; // Unbind to protect hardcoded structure
+            document.getElementById('concept-title').innerText = aboutConcept.title;
+            
+            const descContainer = document.getElementById('concept-description');
+            descContainer.innerHTML = ''; // Clear out the generic description
+            
+            // 1. Main Description
+            const mainDesc = document.createElement('div');
+            mainDesc.id = "about-main-desc";
+            mainDesc.innerHTML = aboutConcept.description;
+            descContainer.appendChild(mainDesc);
+            
+            // 2. Heading: A Conceptual Adaptive System
+            const casHeading = document.createElement('div');
+            casHeading.innerText = "A Conceptual Adaptive System";
+            casHeading.style.fontFamily = "'Inter Tight', sans-serif";
+            casHeading.style.fontWeight = "700";
+            casHeading.style.fontSize = "2rem";
+            casHeading.style.marginTop = "40px";
+            casHeading.style.marginBottom = "15px";
+            casHeading.style.whiteSpace = "normal";
+            descContainer.appendChild(casHeading);
+            
+            // CAS Description
+            const casDesc = document.createElement('div');
+            casDesc.id = "about-cas-desc";
+            casDesc.innerHTML = aboutConcept.casDescription;
+            descContainer.appendChild(casDesc);
+            
+            // 3. Heading: The Map
+            const mapHeading = document.createElement('div');
+            mapHeading.innerText = "The Map";
+            mapHeading.style.fontFamily = "'Inter Tight', sans-serif";
+            mapHeading.style.fontWeight = "700";
+            mapHeading.style.fontSize = "2rem";
+            mapHeading.style.marginTop = "40px";
+            mapHeading.style.marginBottom = "15px";
+            mapHeading.style.whiteSpace = "normal";
+            descContainer.appendChild(mapHeading);
+            
+            // Map Description
+            const mapDesc = document.createElement('div');
+            mapDesc.id = "about-map-desc";
+            mapDesc.innerHTML = aboutConcept.mapDescription;
+            mapDesc.style.marginBottom = "25px";
+            descContainer.appendChild(mapDesc);
+            
+            // The 2-Column Concept List with A-Z structure alternating side-to-side
+            const listContainer = document.createElement('div');
+            listContainer.className = 'landing-concept-list';
+
+            const col1 = document.createElement('div');
+            col1.className = 'landing-concept-col';
+            const col2 = document.createElement('div');
+            col2.className = 'landing-concept-col';
+
+            listContainer.appendChild(col1);
+            listContainer.appendChild(col2);
+            
+            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i})).sort((a, b) => a.title.localeCompare(b.title));
+            
+            if (sortedConcepts.length > 0) {
+                const grouped = {};
+                sortedConcepts.forEach(c => {
+                    const letter = c.title.charAt(0).toUpperCase();
+                    if (!grouped[letter]) grouped[letter] = [];
+                    grouped[letter].push(c);
+                });
+
+                const sortedLetters = Object.keys(grouped).sort();
+
+                sortedLetters.forEach((letter, index) => {
+                    const targetCol = (index % 2 === 0) ? col1 : col2;
+
+                    const header = document.createElement('h3');
+                    header.textContent = letter;
+                    header.style.marginTop = (targetCol.children.length === 0) ? "0" : "20px";
+                    header.style.marginBottom = "10px";
+                    header.style.color = "var(--nav-inactive)";
+                    header.style.fontFamily = "'Inter Tight', sans-serif";
+                    header.style.fontSize = "1.5rem";
+
+                    const ul = document.createElement('ul');
+                    ul.style.listStyleType = "none";
+                    ul.style.padding = "0";
+
+                    grouped[letter].forEach(c => {
+                        const li = document.createElement('li');
+                        li.textContent = c.title;
+                        li.style.fontFamily = "'Roboto Mono', monospace";
+                        li.style.fontSize = "1.2rem";
+                        li.style.marginBottom = "12px";
+                        li.style.color = "var(--text-color)"; 
+                        li.style.transition = "color 0.2s";
+                        li.style.cursor = "pointer";
+                        li.style.breakInside = "avoid";
+                        
+                        li.onmouseenter = () => { 
+                            playSound('hover');
+                            li.style.textDecoration = 'underline';
+                            li.style.color = "var(--accent-color)";
+                        };
+                        li.onmouseleave = () => { 
+                            li.style.textDecoration = 'none';
+                            li.style.color = "var(--text-color)";
+                        };
+                        
+                        li.onclick = () => {
+                            playSound('click');
+                            if (isEditorMode && editorState === 'active') {
+                                editSpecificConcept(c.originalIndex);
+                            } else {
+                                showConcept(c.originalIndex);
+                            }
+                        };
+                        ul.appendChild(li);
+                    });
+
+                    targetCol.appendChild(header);
+                    targetCol.appendChild(ul);
+                });
+            } else {
+                const emptyMsg = document.createElement('p');
+                emptyMsg.textContent = "No concepts have been mapped yet.";
+                emptyMsg.style.fontFamily = "'Roboto Mono', monospace";
+                emptyMsg.style.fontSize = "1.1rem";
+                emptyMsg.style.color = "var(--nav-inactive)";
+                col1.appendChild(emptyMsg);
+            }
+            
+            descContainer.appendChild(listContainer);
+            
+            syncFootnotes(aboutConcept.footnotes || {});
+            
+            const slug = "conceptualadaptivesystem"; 
+            document.getElementById('bottom-concept').textContent = slug;
+            updateURL(slug);
+            adjustTopMargin();
+        }
+
+        // --- SPLIT-SCREEN & LIST EDITOR FUNCTIONS ---
+
+        function enterEditor() {
+            playSound('success');
+            isEditorMode = true;
+            document.getElementById('editor-status').style.display = 'block';
+            showEditorMenu();
+        }
+
+        function showEditorMenu() {
+            editorState = 'menu';
+            resetPreviewState();
+            document.getElementById('editor-menu').style.display = 'flex';
+            document.getElementById('viewer-ui').style.display = 'none';
+            document.getElementById('editor-entry-list').style.display = 'none';
+            
+            // Safely disarm fields
+            const editableElements = document.querySelectorAll('.editable-field');
+            editableElements.forEach(el => {
+                el.contentEditable = false;
+                el.classList.remove('editable-field');
+            });
+        }
+
+        function startAddingNew() {
+            editorState = 'active';
+            resetPreviewState();
+            document.getElementById('editor-menu').style.display = 'none';
+            document.getElementById('editor-entry-list').style.display = 'none';
+            document.getElementById('viewer-ui').style.display = 'block';
+            document.getElementById('editor-toolbar').style.display = 'flex';
+            
+            clearFields();
+            
+            const titleEl = document.getElementById('concept-title');
+            const descEl = document.getElementById('concept-description');
+            titleEl.contentEditable = true;
+            descEl.contentEditable = true;
+            titleEl.classList.add('editable-field');
+            descEl.classList.add('editable-field');
+            adjustTopMargin();
+        }
+
+        function startEditingExisting() {
+            editorState = 'list';
+            resetPreviewState();
+            document.getElementById('editor-menu').style.display = 'none';
+            document.getElementById('viewer-ui').style.display = 'none';
+            
+            const entryList = document.getElementById('editor-entry-list');
+            entryList.style.display = 'block';
+            
+            entryList.innerHTML = '<h2>Select an Entry to Edit</h2><ul id="full-concept-list" style="list-style-type: none; padding: 0; margin-top: 20px;"></ul>';
+            const ul = document.getElementById('full-concept-list');
+            
+            // Add Top-Level Landing Page Option
+            const aboutLi = document.createElement('li');
+            aboutLi.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 5px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> Civilisation Theory (Landing Page)`;
+            aboutLi.style.fontFamily = "'Roboto Mono', monospace";
+            aboutLi.style.fontSize = "1.2rem";
+            aboutLi.style.marginBottom = "25px";
+            aboutLi.style.color = "var(--accent-color)";
+            aboutLi.style.cursor = "pointer";
+            
+            aboutLi.onmouseenter = () => { 
+                playSound('hover');
+                aboutLi.style.textDecoration = 'underline';
+            };
+            aboutLi.onmouseleave = () => { 
+                aboutLi.style.textDecoration = 'none';
+            };
+            
+            aboutLi.onclick = () => { playSound('click'); editSpecificConcept(-1); };
+            ul.appendChild(aboutLi);
+
+            if (concepts.length === 0) {
+                const emptyMsg = document.createElement('p');
+                emptyMsg.style.fontFamily = "'Cormorant Garamond', serif";
+                emptyMsg.style.fontSize = "1.5rem";
+                emptyMsg.style.color = "var(--nav-inactive)";
+                emptyMsg.textContent = "No concepts exist yet.";
+                entryList.appendChild(emptyMsg);
+                adjustTopMargin();
+                return;
+            }
+
+            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i})).sort((a, b) => a.title.localeCompare(b.title));
+            
+            let currentLetter = '';
+            sortedConcepts.forEach(c => {
+                const firstLetter = c.title.charAt(0).toUpperCase();
+                
+                if (firstLetter !== currentLetter) {
+                    currentLetter = firstLetter;
+                    const header = document.createElement('h3');
+                    header.textContent = currentLetter;
+                    header.style.marginTop = '20px';
+                    header.style.marginBottom = '10px';
+                    header.style.color = 'var(--nav-inactive)';
+                    header.style.fontFamily = "'Inter Tight', sans-serif";
+                    header.style.fontSize = "1.5rem";
+                    ul.appendChild(header);
+                }
+                
+                const li = document.createElement('li');
+                li.textContent = c.title;
+                li.style.fontFamily = "'Roboto Mono', monospace";
+                li.style.fontSize = "1.2rem";
+                li.style.marginBottom = "8px";
+                li.style.color = "var(--text-color)"; 
+                li.style.transition = "color 0.2s";
+                li.style.cursor = "pointer";
+                
+                li.onmouseenter = () => { 
+                    playSound('hover');
+                    li.style.textDecoration = 'underline';
+                    li.style.color = "var(--accent-color)";
+                };
+                li.onmouseleave = () => { 
+                    li.style.textDecoration = 'none';
+                    li.style.color = "var(--text-color)";
+                };
+                
+                li.onclick = () => { playSound('click'); editSpecificConcept(c.originalIndex); };
+                ul.appendChild(li);
+            });
+            adjustTopMargin();
+        }
+
+        function editSpecificConcept(index) {
+            editorState = 'active';
+            resetPreviewState();
+            document.getElementById('editor-entry-list').style.display = 'none';
+            document.getElementById('viewer-ui').style.display = 'block';
+            document.getElementById('editor-toolbar').style.display = 'flex';
+            
+            if (index === -1) {
+                showAbout(); // Renders the specialized landing page structure
+                document.getElementById('concept-title').contentEditable = true;
+                document.getElementById('concept-title').classList.add('editable-field');
+                
+                ['about-main-desc', 'about-cas-desc', 'about-map-desc'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.contentEditable = true;
+                        el.classList.add('editable-field');
+                    }
+                });
+            } else {
+                showConcept(index);
+                const titleEl = document.getElementById('concept-title');
+                const descEl = document.getElementById('concept-description');
+                titleEl.contentEditable = true;
+                descEl.contentEditable = true;
+                titleEl.classList.add('editable-field');
+                descEl.classList.add('editable-field');
+            }
+            adjustTopMargin();
+        }
+
+        function togglePreview() {
+            const btn = document.getElementById('btn-preview');
+            
+            let fields = [document.getElementById('concept-title')];
+            if (currentConceptIndex === -1) {
+                fields.push(document.getElementById('about-main-desc'));
+                fields.push(document.getElementById('about-cas-desc'));
+                fields.push(document.getElementById('about-map-desc'));
+            } else {
+                fields.push(document.getElementById('concept-description'));
+            }
+
+            if (!isPreviewing) {
+                fields.forEach(el => {
+                    if(el) {
+                        el.contentEditable = false;
+                        el.classList.remove('editable-field');
+                    }
+                });
+                btn.innerText = "Keep Editing";
+                btn.style.backgroundColor = "#e67e22";
+                isPreviewing = true;
+            } else {
+                fields.forEach(el => {
+                    if(el) {
+                        el.contentEditable = true;
+                        el.classList.add('editable-field');
+                    }
+                });
+                btn.innerText = "Preview";
+                btn.style.backgroundColor = "#8e44ad";
+                isPreviewing = false;
+            }
+            syncFootnotes(); // Recalculate footnote editability
+            adjustTopMargin();
+        }
+
+        function resetPreviewState() {
+            isPreviewing = false;
+            const btn = document.getElementById('btn-preview');
+            if(btn) {
+                btn.innerText = "Preview";
+                btn.style.backgroundColor = "#8e44ad";
+            }
+        }
+
+        function exitEditor() {
+            playSound('success');
+            isEditorMode = false;
+            editorState = 'inactive';
+            resetPreviewState();
+            
+            document.getElementById('editor-menu').style.display = 'none';
+            document.getElementById('editor-entry-list').style.display = 'none';
+            document.getElementById('viewer-ui').style.display = 'block';
+            document.getElementById('editor-toolbar').style.display = 'none';
+            document.getElementById('editor-status').style.display = 'none';
+            
+            // Clean up all edit fields globally just to be safe
+            document.querySelectorAll('.editable-field').forEach(el => {
+                el.contentEditable = false;
+                el.classList.remove('editable-field');
+            });
+            
+            if (currentConceptIndex !== -1 && currentConceptIndex !== -2) showConcept(currentConceptIndex);
+            else showAbout();
+            adjustTopMargin();
+        }
+
+        function insertLink() {
+            const url = prompt("Enter the URL to link to:", "https://");
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        }
+
+        function insertFootnote() {
+            let sups = [];
+            if (currentConceptIndex === -1) {
+                ['about-main-desc', 'about-cas-desc', 'about-map-desc'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) sups = [...sups, ...el.querySelectorAll('sup')];
+                });
+            } else {
+                const descEl = document.getElementById('concept-description');
+                if(descEl) sups = Array.from(descEl.querySelectorAll('sup'));
+            }
+            
+            let nextNum = 1;
+            if (sups.length > 0) {
+                let max = 0;
+                sups.forEach(sup => {
+                    let num = parseInt(sup.innerText, 10);
+                    if (!isNaN(num) && num > max) max = num;
+                });
+                nextNum = max + 1;
+            }
+            
+            document.execCommand('insertHTML', false, `<sup>${nextNum}</sup>`);
+            syncFootnotes(); // Force sync immediately so the box appears
+        }
+
+        function clearFields() {
+            document.getElementById('concept-title').innerText = "New Concept Title";
+            document.getElementById('concept-description').innerHTML = "Start typing here...";
+            document.getElementById('concept-footnotes').innerHTML = "";
+            document.getElementById('concept-footnotes').style.display = "none";
+            currentConceptIndex = -2; // Signals a brand new unsaved concept vs Landing Page (-1)
+            adjustTopMargin();
+        }
+
+        function saveCurrentConcept() {
+            if (currentConceptIndex === -2) {
+                playSound('alert');
+                alert("This is a new concept. Please use 'Save as New' instead.");
+                return;
+            }
+
+            const title = document.getElementById('concept-title').innerText.trim();
+
+            const fnContainer = document.getElementById('concept-footnotes');
+            const fns = {};
+            fnContainer.querySelectorAll('.footnote-entry').forEach(row => {
+                const marker = row.getAttribute('data-marker');
+                const text = row.querySelector('.footnote-text').innerHTML.trim();
+                if (text) fns[marker] = text;
+            });
+
+            if (currentConceptIndex === -1) {
+                // Save logic for Landing Page
+                const mainDesc = document.getElementById('about-main-desc').innerHTML.trim();
+                const casDesc = document.getElementById('about-cas-desc').innerHTML.trim();
+                const mapDesc = document.getElementById('about-map-desc').innerHTML.trim();
+                
+                if (title && mainDesc) {
+                    aboutConcept.title = title;
+                    aboutConcept.description = mainDesc;
+                    aboutConcept.casDescription = casDesc;
+                    aboutConcept.mapDescription = mapDesc;
+                    aboutConcept.footnotes = fns;
+                    
+                    const slug = "conceptualadaptivesystem";
+                    document.getElementById('bottom-concept').textContent = slug;
+                    updateURL(slug);
+                    
+                    playSound('success');
+                    alert("Landing Page updated in temporary memory. Click 'Export HTML' to permanently save.");
+                } else {
+                    playSound('alert');
+                    alert("Please ensure title and main description are properly filled.");
+                }
+            } else {
+                // Save logic for normal Concept
+                const description = document.getElementById('concept-description').innerHTML.trim();
+                if (title && description && title !== "New Concept Title") {
+                    concepts[currentConceptIndex].title = title;
+                    concepts[currentConceptIndex].description = description;
+                    concepts[currentConceptIndex].footnotes = fns;
+                    
+                    renderAlphabetNav();
+                    const slug = title.toLowerCase().replace(/\s+/g, '');
+                    document.getElementById('bottom-concept').textContent = slug;
+                    updateURL(slug);
+                    
+                    playSound('success');
+                    alert("Concept updated in temporary memory. Click 'Export HTML' to permanently save.");
+                } else {
+                    playSound('alert');
+                    alert("Please ensure both title and description are properly filled.");
+                }
+            }
+        }
+
+        function saveNewConcept() {
+            const title = document.getElementById('concept-title').innerText.trim();
+            const description = document.getElementById('concept-description').innerHTML.trim();
+
+            const fnContainer = document.getElementById('concept-footnotes');
+            const fns = {};
+            fnContainer.querySelectorAll('.footnote-entry').forEach(row => {
+                const marker = row.getAttribute('data-marker');
+                const text = row.querySelector('.footnote-text').innerHTML.trim();
+                if (text) fns[marker] = text;
+            });
+
+            if (title && description && title !== "New Concept Title") {
+                concepts.push({ title, description, footnotes: fns });
+                renderAlphabetNav();
+                showConcept(concepts.length - 1); // Bind to newly created concept
+                playSound('success');
+                alert("New concept added to temporary memory. Click 'Export HTML' to permanently save to disk.");
+            } else {
+                playSound('alert');
+                alert("Please ensure both title and description are properly filled.");
+            }
+        }
+
+        function exportHTML() {
+            const clone = document.documentElement.cloneNode(true);
+            
+            let dataScript = clone.querySelector('#glossary-data');
+            dataScript.textContent = '\n' + JSON.stringify(concepts, null, 4) + '\n    ';
+
+            let aboutScript = clone.querySelector('#about-data');
+            aboutScript.textContent = '\n' + JSON.stringify(aboutConcept, null, 4) + '\n    ';
+            
+            // Strip out editor states globally
+            const menu = clone.querySelector('#editor-menu');
+            if (menu) menu.style.display = 'none';
+
+            const entryList = clone.querySelector('#editor-entry-list');
+            if (entryList) entryList.style.display = 'none';
+            
+            const toolbar = clone.querySelector('#editor-toolbar');
+            if (toolbar) toolbar.style.display = 'none';
+            
+            const status = clone.querySelector('#editor-status');
+            if (status) status.style.display = 'none';
+            
+            const viewer = clone.querySelector('#viewer-ui');
+            if (viewer) viewer.style.display = 'block';
+            
+            clone.querySelectorAll('.editable-field').forEach(el => {
+                el.removeAttribute('contenteditable');
+                el.classList.remove('editable-field');
+            });
+
+            // Strip visual toggles so the exported file opens natively
+            clone.querySelector('body').className = ''; 
+            
+            // Remove the loading screen from exported HTML so it doesn't replay when reopening from local file 
+            const loadingScreen = clone.querySelector('#loading-screen');
+            if (loadingScreen) {
+                loadingScreen.remove();
+            }
+            
+            const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'civilisationtheory.html'; 
+            document.body.appendChild(a); 
+            a.click();
+            
+            a.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const key = event.key.toLowerCase();
+            
+            // Esc handling for Editor Logic
+            if (event.key === 'Escape' && isEditorMode) {
+                if (editorState === 'active' || editorState === 'list') {
+                    playSound('click');
+                    showEditorMenu();
+                } else if (editorState === 'menu') {
+                    exitEditor();
+                }
+                return;
+            }
+
+            // Ignore styling hotkeys if actively typing in inputs
+            if (event.target.isContentEditable || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+                if (event.ctrlKey && event.shiftKey && (key === 'e')) {
+                    event.preventDefault(); 
+                    exitEditor();
+                }
+                return;
+            }
+
+            // Toggle Dark Mode
+            if (key === 't') {
+                if (artMode !== 3) {
+                    playSound('toggle');
+                    document.body.classList.toggle('dark-mode');
+                }
+            }
+            
+            // Toggle Background Match Mode
+            if (key === 'b') {
+                playSound('toggle');
+                document.body.classList.toggle('bg-match-mode');
+            }
+
+            // Toggle Gradient Mode
+            if (key === 'g') {
+                playSound('toggle');
+                document.body.classList.toggle('gradient-mode');
+            }
+            
+            // Toggle HUDless Mode
+            if (key === 'h') {
+                playSound('toggle');
+                document.body.classList.toggle('hudless');
+            }
+
+            // Cycle Art Modes
+            if (key === 'a') {
+                playSound('toggle');
+                artMode = (artMode + 1) % 4;
+                document.body.classList.remove('art-orange', 'art-colorless', 'art-yellow');
+                
+                if (artMode === 1) document.body.classList.add('art-orange');
+                if (artMode === 2) document.body.classList.add('art-colorless');
+                if (artMode === 3) document.body.classList.add('art-yellow');
+            }
+            
+            // Editor Mode Trigger
+            if (event.ctrlKey && event.shiftKey && (key === 'e')) {
+                event.preventDefault(); 
+                if (!isEditorMode) {
+                    const password = prompt("Enter Editor Password:");
+                    if (password === 'changingcivilisation') {
+                        enterEditor();
+                    } else if (password !== null) {
+                        playSound('alert');
+                        alert("Incorrect password.");
+                    }
+                } else {
+                    exitEditor();
+                }
+            }
+        });
+        
+        window.addEventListener('popstate', function(event) {
+            let titleToMatch = "";
+            if(event.state && event.state.slug) {
+                titleToMatch = event.state.slug;
+            } else if (window.location.protocol === 'file:') {
+                titleToMatch = window.location.hash.replace('#', '');
+            }
+
+            if (titleToMatch) {
+                const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
+                if(index !== -1) {
+                    showConcept(index);
+                } else if (titleToMatch === 'conceptualadaptivesystem') {
+                    showAbout();
+                }
+            } else {
+                showAbout();
+            }
+        });
+        
+        window.addEventListener('hashchange', function() {
+            if (window.location.protocol === 'file:') {
+                const titleToMatch = window.location.hash.replace('#', '');
+                if (titleToMatch) {
+                    const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
+                    if(index !== -1) {
+                        showConcept(index);
+                    } else if (titleToMatch === 'conceptualadaptivesystem') {
+                        showAbout();
+                    }
+                }
+            }
+        });
+
+        loadConcepts();
+    </script>
+</body>
+</html>
