@@ -116,7 +116,7 @@
         body { 
             display: block; 
             height: 100vh; 
-            overflow: hidden; 
+            overflow: hidden; /* Desktop bounded scroll */
             background-color: var(--bg-color); 
             color: var(--text-color); 
             line-height: 1.15; 
@@ -537,77 +537,146 @@
             transition: color 0.3s, opacity 0.3s, visibility 0.3s;
         }
 
-        /* --- MOBILE RESPONSIVE ADAPTATIONS --- */
+        /* --- MOBILE RESPONSIVE ADAPTATIONS (iPhone SE & Small Screens) --- */
         @media (max-width: 850px) {
-            #topbar, #bottom-triangle {
-                width: 65vw;
-                height: 22vh;
-                padding: 20px;
+            body {
+                --topbar-bg: var(--bg-color); /* Force Background Match Mode on Mobile */
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto; /* Convert to native continuous body scroll */
+                overflow-x: hidden;
+                position: relative; /* Contains absolute UI elements so they attach to document top/bottom */
+            }
+
+            body.art-yellow #topbar,
+            body.art-yellow #bottom-triangle {
+                background-image: none; /* Hide diagonal lines for art-yellow on Mobile */
+            }
+
+            /* Convert UI corners to absolute so they scroll out of the way naturally */
+            #topbar, #bottom-triangle, #alphabet-nav, #bottom-line-container, #bottom-bar, #editor-status {
+                position: absolute;
+            }
+
+            #topbar {
+                width: 70vw;
+                height: 80px;
+                padding: 12px 15px;
+                clip-path: polygon(0 0, 100% 0, 0 100%);
             }
             
             #topbar h1 {
-                font-size: 1.25rem;
-                margin-top: 5px;
+                font-size: 0.95rem;
+                margin-top: 0;
+                line-height: 1.1;
             }
-            
-            #bottom-triangle h2 {
-                font-size: 1.2rem;
-                margin-bottom: 2px;
+
+            #info-icon {
+                margin-left: 6px;
             }
-            
-            #bottom-triangle p {
-                font-size: 0.65rem;
-                margin-top: 5px;
+
+            #info-icon svg {
+                width: 15px;
+                height: 15px;
             }
             
             #alphabet-nav {
-                top: 20vh;
-                left: 5vw;
-                right: 5vw;
+                top: 75px; 
+                left: 10px;
+                right: 10px;
                 flex-wrap: wrap;
                 justify-content: center;
                 border-top: none;
-                gap: 12px;
+                gap: 4px 8px;
                 padding-top: 0;
+                background: transparent;
             }
             
-            .nav-letter { font-size: 1.15rem; padding: 4px; }
+            .nav-letter { font-size: 0.85rem; padding: 2px; }
             
-            #main-content { padding: 20px; }
+            /* Main content container flows naturally */
+            #main-content { 
+                position: relative;
+                top: 0; 
+                height: auto;
+                min-height: 100vh;
+                width: 100%;
+                padding: 140px 15px 110px 15px; /* Safely avoids overlap with absolute corners at top and bottom limits */
+                box-sizing: border-box;
+                overflow-y: visible;
+            }
 
-            #viewer-ui, #editor-entry-list { width: 90%; }
+            #viewer-ui, #editor-entry-list { width: 100%; margin: 0 auto !important; }
             
             #concept-title { 
-                font-size: 2.2rem; 
-                white-space: normal; /* Allows long titles to wrap instead of overflowing */
+                font-size: 1.8rem; 
+                white-space: normal; /* Enables text wrapping for long entries */
                 line-height: 1.2;
             }
             
-            #concept-description, #concept-description div { font-size: 1.35rem; }
+            #concept-description, #concept-description div { font-size: 1.2rem; }
             
-            #editor-menu { flex-direction: column; }
+            #editor-menu { 
+                position: fixed; /* Keep menu fixed so it overlays entire screen */
+                height: 100vh;
+                flex-direction: column; 
+            }
             
             .editor-menu-btn.left {
                 border-right: none;
                 border-bottom: 2px dashed var(--accent-color);
             }
             
-            .editor-menu-btn { font-size: 1.8rem; text-align: center; padding: 20px; }
+            .editor-menu-btn { font-size: 1.5rem; text-align: center; padding: 15px; flex: 1; }
             
             .diamond-wrapper {
-                width: 80vw;
-                height: 80vw;
-                max-width: 400px;
-                max-height: 400px;
+                width: 70vw;
+                height: 70vw;
+                max-width: 280px;
+                max-height: 280px;
             }
             
-            .diamond-text h1 { font-size: 1.4rem; }
+            .diamond-text h1 { font-size: 1.2rem; }
             
-            #editor-toolbar { justify-content: center; margin-bottom: 30px; }
+            #editor-toolbar { justify-content: center; margin-bottom: 20px; }
             
             .landing-concept-list { flex-direction: column; gap: 15px; }
+
+            #bottom-triangle {
+                width: 55vw; 
+                height: 85px;
+                padding: 10px 12px;
+            }
             
-            #bottom-bar { font-size: 0.8rem; left: 20px; bottom: 20px; }
+            #bottom-triangle h2 {
+                font-size: 0.85rem;
+                margin-bottom: 2px;
+                line-height: 1.1;
+            }
+            
+            #bottom-triangle p {
+                font-size: 0.55rem;
+                margin-top: 2px;
+            }
+
+            .bottom-triangle-content {
+                max-width: 100%;
+            }
+
+            .url-base {
+                display: block; /* Pushes the entry slug to the next line */
+            }
+
+            /* Safely bounds the URL to the left side and breaks words to avoid crashes */
+            #bottom-bar { 
+                font-size: 0.65rem; 
+                left: 10px; 
+                bottom: 10px; 
+                max-width: 40vw; /* Fits alongside 55vw bottom triangle without overlapping */
+                word-break: break-all;
+                line-height: 1.2;
+                z-index: 100;
+            }
         }
     </style>
 
@@ -697,7 +766,7 @@
         </div>
     </div>
     
-    <div id="bottom-bar">civilisationtheory/<span id="bottom-concept"></span></div>
+    <div id="bottom-bar"><span class="url-base">civilisationtheory/</span><span id="bottom-concept"></span></div>
     
     <div id="bottom-triangle">
         <div class="bottom-triangle-content">
@@ -1015,16 +1084,17 @@
                 else if (window.getComputedStyle(list).display !== 'none' && list.offsetHeight > 0) activeEl = list;
                 
                 if (activeEl) {
-                    const contentHeight = activeEl.offsetHeight;
                     const isMobile = window.innerWidth <= 850;
                     
-                    // Provides safe clearance over the wrapped alphabet nav on mobile
-                    const minMarginVH = isMobile ? window.innerHeight * 0.32 : window.innerHeight * 0.20;
-                    
-                    // Subtract 40px to precisely account for main-content top padding
-                    const centeredMargin = (window.innerHeight - contentHeight) / 2 - 40; 
-                    
-                    activeEl.style.marginTop = Math.max(minMarginVH, centeredMargin) + 'px';
+                    if (isMobile) {
+                        // Mobile uses CSS top padding on #main-content to avoid overlapping topbar
+                        activeEl.style.marginTop = '0px'; 
+                    } else {
+                        const contentHeight = activeEl.offsetHeight;
+                        const vh20 = window.innerHeight * 0.20;
+                        const centeredMargin = (window.innerHeight - contentHeight) / 2 - 40; 
+                        activeEl.style.marginTop = Math.max(vh20, centeredMargin) + 'px';
+                    }
                 }
             });
         }
@@ -1045,6 +1115,11 @@
             const slug = concepts[index].title.toLowerCase().replace(/\s+/g, '');
             document.getElementById('bottom-concept').textContent = slug;
             updateURL(slug);
+            
+            // Scroll to top when changing concepts
+            if (window.innerWidth <= 850) {
+                window.scrollTo(0, 0);
+            }
             adjustTopMargin();
         }
 
@@ -1195,6 +1270,10 @@
             const slug = "conceptualadaptivesystem"; 
             document.getElementById('bottom-concept').textContent = slug;
             updateURL(slug);
+
+            if (window.innerWidth <= 850) {
+                window.scrollTo(0, 0);
+            }
             adjustTopMargin();
         }
 
