@@ -87,13 +87,13 @@
 
         /* Gradient Mode (Fades corners at the hypotenuse using a dynamic CSS mask) */
         body.gradient-mode #topbar {
-            -webkit-mask-image: linear-gradient(to bottom right, black 35%, transparent 49%);
-            mask-image: linear-gradient(to bottom right, black 35%, transparent 49%);
+            -webkit-mask-image: linear-gradient(to bottom right, black 45%, transparent 50%);
+            mask-image: linear-gradient(to bottom right, black 45%, transparent 50%);
         }
 
         body.gradient-mode #bottom-triangle {
-            -webkit-mask-image: linear-gradient(to top left, black 35%, transparent 49%);
-            mask-image: linear-gradient(to top left, black 35%, transparent 49%);
+            -webkit-mask-image: linear-gradient(to top left, black 45%, transparent 50%);
+            mask-image: linear-gradient(to top left, black 45%, transparent 50%);
         }
 
         /* HUDless mode (Leaves bottom bar and text untouched) */
@@ -1141,7 +1141,7 @@
             casHeading.innerText = "A Conceptual Adaptive System";
             casHeading.style.fontFamily = "'Inter Tight', sans-serif";
             casHeading.style.fontWeight = "700";
-            casHeading.style.fontSize = "2rem";
+            casHeading.style.fontSize = "1.75rem";
             casHeading.style.marginTop = "40px";
             casHeading.style.marginBottom = "15px";
             casHeading.style.whiteSpace = "normal";
@@ -1158,7 +1158,7 @@
             mapHeading.innerText = "The Map";
             mapHeading.style.fontFamily = "'Inter Tight', sans-serif";
             mapHeading.style.fontWeight = "700";
-            mapHeading.style.fontSize = "2rem";
+            mapHeading.style.fontSize = "1.75rem";
             mapHeading.style.marginTop = "40px";
             mapHeading.style.marginBottom = "15px";
             mapHeading.style.whiteSpace = "normal";
@@ -1213,7 +1213,7 @@
                     header.style.marginBottom = "10px";
                     header.style.color = "var(--nav-inactive)";
                     header.style.fontFamily = "'Inter Tight', sans-serif";
-                    header.style.fontSize = "1.5rem";
+                    header.style.fontSize = "1.75rem";
 
                     const ul = document.createElement('ul');
                     ul.style.listStyleType = "none";
@@ -1377,7 +1377,7 @@
                     header.style.marginBottom = '10px';
                     header.style.color = 'var(--nav-inactive)';
                     header.style.fontFamily = "'Inter Tight', sans-serif";
-                    header.style.fontSize = "1.5rem";
+                    header.style.fontSize = "1.75rem";
                     ul.appendChild(header);
                 }
                 
