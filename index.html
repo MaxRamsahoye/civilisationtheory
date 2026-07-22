@@ -813,13 +813,8 @@
             }
             renderAlphabetNav();
             
-            // Get URL safely (checking for file:// fallback)
-            let titleToMatch = "";
-            if (window.location.protocol === 'file:') {
-                titleToMatch = window.location.hash.replace('#', '');
-            } else {
-                titleToMatch = window.location.pathname.replace(/^\/+/, '').replace('civilisationtheory.html', '');
-            }
+            // Hash routing approach (Works natively with GitHub Pages)
+            let titleToMatch = window.location.hash.replace('#', '');
             
             if (titleToMatch && titleToMatch !== '') {
                 const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
@@ -851,15 +846,8 @@
         
         function updateURL(slug) {
             try {
-                if (window.location.protocol === 'file:') {
-                    if (window.location.hash !== '#' + slug) {
-                        window.location.hash = slug;
-                    }
-                } else {
-                    const newUrl = "/" + slug;
-                    if (window.location.pathname !== newUrl) {
-                        window.history.pushState({ slug: slug }, "", newUrl);
-                    }
+                if (window.location.hash !== '#' + slug) {
+                    window.history.pushState({ slug: slug }, "", "#" + slug);
                 }
             } catch(e) {
                 console.warn("Routing safely caught to prevent execution halt:", e);
@@ -1105,8 +1093,17 @@
             const mapDesc = document.createElement('div');
             mapDesc.id = "about-map-desc";
             mapDesc.innerHTML = aboutConcept.mapDescription;
-            mapDesc.style.marginBottom = "25px";
+            mapDesc.style.marginBottom = "10px";
             descContainer.appendChild(mapDesc);
+            
+            // Concept Count Display
+            const conceptCount = document.createElement('div');
+            conceptCount.innerText = `Concept Count: ${concepts.length}`;
+            conceptCount.style.fontFamily = "'Roboto Mono', monospace";
+            conceptCount.style.color = "var(--accent-color)";
+            conceptCount.style.fontSize = "1.1rem";
+            conceptCount.style.marginBottom = "25px";
+            descContainer.appendChild(conceptCount);
             
             // The 2-Column Concept List with A-Z structure alternating side-to-side
             const listContainer = document.createElement('div');
@@ -1689,18 +1686,15 @@
         });
         
         window.addEventListener('popstate', function(event) {
-            let titleToMatch = "";
-            if(event.state && event.state.slug) {
-                titleToMatch = event.state.slug;
-            } else if (window.location.protocol === 'file:') {
-                titleToMatch = window.location.hash.replace('#', '');
-            }
+            let titleToMatch = window.location.hash.replace('#', '');
 
             if (titleToMatch) {
                 const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
                 if(index !== -1) {
                     showConcept(index);
                 } else if (titleToMatch === 'conceptualadaptivesystem') {
+                    showAbout();
+                } else {
                     showAbout();
                 }
             } else {
@@ -1709,16 +1703,19 @@
         });
         
         window.addEventListener('hashchange', function() {
-            if (window.location.protocol === 'file:') {
-                const titleToMatch = window.location.hash.replace('#', '');
-                if (titleToMatch) {
-                    const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
-                    if(index !== -1) {
-                        showConcept(index);
-                    } else if (titleToMatch === 'conceptualadaptivesystem') {
-                        showAbout();
-                    }
+            let titleToMatch = window.location.hash.replace('#', '');
+            
+            if (titleToMatch) {
+                const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
+                if(index !== -1) {
+                    showConcept(index);
+                } else if (titleToMatch === 'conceptualadaptivesystem') {
+                    showAbout();
+                } else {
+                    showAbout();
                 }
+            } else {
+                showAbout();
             }
         });
 
