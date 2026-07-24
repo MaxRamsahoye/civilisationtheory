@@ -22,8 +22,11 @@
             --nav-inactive: #b0b0b0;
             --nav-border: #777777;
             --diamond-bg: #ffffff; /* White Diamond for Light Theme */
-            /* Circle with a dot inside (Black for light theme) */
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2' fill='%23000'/></svg>") 12 12, auto;
+            --tab-bg: rgba(0, 0, 0, 0.08); /* Middle ground shade for tabs in light theme */
+            
+            /* Cursors */
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%233CB371'/></svg>") 12 12, auto;
+            --cursor-alt-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2.5' fill='%23000'/></svg>") 12 12, auto;
         }
 
         /* Hidden Dark Theme Variables */
@@ -36,21 +39,26 @@
             --nav-inactive: #555555;
             --nav-border: #444444;
             --diamond-bg: #000000; /* Black Diamond for Dark Theme */
-            /* Circle with a dot inside (White for dark theme) */
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23fff' stroke-width='1.5'/><circle cx='12' cy='12' r='2' fill='%23fff'/></svg>") 12 12, auto;
+            --tab-bg: rgba(255, 255, 255, 0.08); /* Faint white tabs for dark theme */
+            
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%2300BFFF'/></svg>") 12 12, auto;
+            --cursor-alt-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23fff' stroke-width='1.5'/><circle cx='12' cy='12' r='2.5' fill='%23fff'/></svg>") 12 12, auto;
         }
 
         /* Art Modes overrides */
         body.art-orange, body.dark-mode.art-orange {
             --accent-color: #f43900;
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23f43900'/></svg>") 12 12, auto !important;
         }
         
         body.art-colorless {
             --accent-color: #000000;
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23000000'/></svg>") 12 12, auto !important;
         }
         
         body.dark-mode.art-colorless {
             --accent-color: #ffffff;
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23ffffff'/></svg>") 12 12, auto !important;
         }
         
         body.art-yellow, body.dark-mode.art-yellow {
@@ -62,7 +70,10 @@
             --diamond-bg: #ffe442;
             --nav-inactive: #888888;
             --nav-border: #000000;
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2' fill='%23000'/></svg>") 12 12, auto;
+            --tab-bg: rgba(0, 0, 0, 0.08);
+            
+            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23000000'/></svg>") 12 12, auto !important;
+            --cursor-alt-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2.5' fill='%23000'/></svg>") 12 12, auto !important;
         }
 
         /* Background Match Mode */
@@ -75,13 +86,8 @@
             background-image: linear-gradient(to top left, transparent 50%, var(--topbar-text) 50%, var(--topbar-text) calc(50% + 3px), transparent calc(50% + 3px));
         }
 
-        body.art-yellow #bottom-triangle {
-            background-image: linear-gradient(to top left, transparent calc(50% - 3px), var(--topbar-text) calc(50% - 3px), var(--topbar-text) 50%, transparent 50%);
-        }
-
         /* Removes the hypotenuse lines when Background Match Mode is active alongside Yellow Art Mode */
-        body.bg-match-mode.art-yellow #topbar,
-        body.bg-match-mode.art-yellow #bottom-triangle {
+        body.bg-match-mode.art-yellow #topbar {
             background-image: none;
         }
 
@@ -91,18 +97,64 @@
             mask-image: linear-gradient(to bottom right, black 45%, transparent 50%);
         }
 
-        body.gradient-mode #bottom-triangle {
-            -webkit-mask-image: linear-gradient(to top left, black 45%, transparent 50%);
-            mask-image: linear-gradient(to top left, black 45%, transparent 50%);
+        /* UI Auto-Hide Class */
+        .ui-hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
         }
 
         /* HUDless mode (Leaves bottom bar and text untouched) */
         body.hudless #topbar,
-        body.hudless #bottom-triangle,
-        body.hudless #alphabet-nav {
+        body.hudless #alphabet-nav,
+        body.hudless #bottom-right-footer,
+        body.hudless #right-tab,
+        body.hudless #url-bar {
             opacity: 0 !important;
             visibility: hidden !important;
             pointer-events: none !important;
+        }
+
+        /* HUD Hover Reveal Zone (Right Edge) */
+        #hud-hover-zone-right {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 300px;
+            z-index: 99;
+            display: none;
+        }
+        body.hudless #hud-hover-zone-right {
+            display: block; 
+        }
+        body.hudless #hud-hover-zone-right:hover ~ #right-tab,
+        body.hudless #right-tab:hover {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+
+        /* HUD Hover Reveal Zone (Left Edge for Alphabet) */
+        #hud-hover-zone-left {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60vh;
+            z-index: 99;
+            display: none;
+        }
+        body.hudless #hud-hover-zone-left {
+            display: block; 
+        }
+        body.hudless #hud-hover-zone-left:hover ~ #alphabet-nav,
+        body.hudless #alphabet-nav:hover {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
         }
 
         /* Minimalist Modern Custom Cursor */
@@ -113,17 +165,39 @@
             cursor: var(--cursor-style) !important;
         }
         
+        body.alt-cursor * {
+            cursor: var(--cursor-alt-style) !important;
+        }
+        
         body { 
             display: block; 
             height: 100vh; 
             overflow: hidden; /* Desktop bounded scroll */
             background-color: var(--bg-color); 
             color: var(--text-color); 
-            line-height: 1.15; 
+            line-height: 1.4; 
             transition: background-color 0.3s, color 0.3s;
         }
         
         p, h1, h2, h3 { margin-bottom: 7.5px; }
+
+        /* Cursor Trail Dot */
+        .cursor-trail-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+        
+        /* Disable trail completely in Alt Cursor Mode */
+        body.alt-cursor .cursor-trail-dot {
+            display: none !important;
+        }
 
         /* Loading Screen overlay */
         #loading-screen {
@@ -203,10 +277,10 @@
             transition: color 0.3s;
         }
 
-        /* Bottom Progress Bar (Static) */
-        #bottom-line-container {
+        /* Top Progress Bar (Static) */
+        #top-line-container {
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100vw;
             height: 6px; 
@@ -214,7 +288,7 @@
             transition: opacity 0.3s, visibility 0.3s;
         }
 
-        #bottom-line-bar {
+        #top-line-bar {
             position: absolute;
             top: 0;
             left: 0;
@@ -224,21 +298,41 @@
             transition: background-color 0.3s;
         }
 
-        /* Top Left Corner */
+        /* Top Left Corner (Asymmetrical with Shorter Left Edge) */
         #topbar { 
             position: absolute;
             top: 0;
             left: 0;
-            width: 25vw; 
-            height: 25vh; 
+            width: 26vw; 
+            height: 14vh; 
             background-color: var(--topbar-bg); 
             color: var(--topbar-text); 
             display: flex; 
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: flex-start; 
-            padding: 30px; 
+            padding: 30px 0 0 35px; 
             clip-path: polygon(0 0, 100% 0, 0 100%); 
             z-index: 100;
             transition: background-color 0.3s, color 0.3s, opacity 0.3s, visibility 0.3s;
+        }
+
+        .topbar-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .title-container {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: flex-start; 
+            cursor: pointer;
+        }
+
+        .title-container:hover h1 {
+            color: var(--accent-color);
+            transition: color 0.2s;
         }
         
         #topbar h1 { 
@@ -246,85 +340,130 @@
             font-weight: 600; 
             font-size: 1.5rem; 
             margin: 0; 
-            margin-top: 15px; 
             text-transform: uppercase; 
-        }
-
-        /* Inline Info Icon */
-        #info-icon {
-            display: inline-block;
-            margin-left: 12px;
-            color: var(--topbar-text);
+            line-height: 1.15;
+            text-align: left;
+            width: 100%;
+            white-space: nowrap; 
             transition: color 0.3s;
         }
 
-        #info-icon:hover {
+        /* Right Edge Icon Tab */
+        #right-tab {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            gap: 15px;
+            background: var(--tab-bg);
+            backdrop-filter: blur(4px);
+            border-radius: 16px 0 0 16px; 
+            padding: 18px 10px;
+            z-index: 100;
+            transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+        }
+
+        #info-icon, #settings-icon, #theme-icon, #color-icon, #hud-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            transition: color 0.3s;
+            pointer-events: auto;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        #info-icon svg, #settings-icon svg, #theme-icon svg, #color-icon svg, #hud-icon svg {
+            width: 20px; 
+            height: 20px;
+        }
+
+        #info-icon:hover, #settings-icon:hover, #theme-icon:hover, #color-icon:hover, #hud-icon:hover {
             color: var(--accent-color);
         }
 
-        /* Bottom Right Corner */
-        #bottom-triangle {
+        /* Top Right URL Bar (Aligned to Title) */
+        #url-bar {
             position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 25vw; 
-            height: 25vh; 
-            background-color: var(--topbar-bg); 
-            clip-path: polygon(100% 0, 100% 100%, 0 100%); 
-            z-index: 10;
-            pointer-events: none; 
-            transition: background-color 0.3s, opacity 0.3s, visibility 0.3s;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-end;
-            padding: 30px;
-            color: var(--topbar-text);
+            top: 32px; 
+            right: 40px;
             text-align: right;
-        }
-        
-        #bottom-triangle h2 {
-            font-family: 'IBM Plex Sans Arabic', sans-serif; 
-            font-weight: 500; 
-            font-size: 1.5rem; 
-            margin: 0 0 5px 0; 
-            text-transform: capitalize; 
-            line-height: 1.1;
-        }
-        
-        #bottom-triangle p {
-            font-family: 'Inter Tight', sans-serif;
-            font-weight: 400;
-            font-size: 0.75rem;
-            margin: 15px 0 0 0; 
-        }
-        
-        #alphabet-nav { 
-            position: absolute;
-            top: 60px;
-            left: 28vw; 
-            right: 60px;
-            display: flex; 
-            justify-content: space-between;
-            align-items: flex-start;
-            border-top: 1px solid var(--nav-border); 
-            padding-top: 15px; 
-            z-index: 100;
-            transition: border-color 0.3s, opacity 0.3s, visibility 0.3s;
-        }
-        
-        .nav-letter {
             font-family: 'Roboto Mono', monospace;
             font-size: 0.9rem;
+            color: var(--accent-color); 
+            z-index: 100;
+            transition: color 0.3s, opacity 0.3s, visibility 0.3s;
+        }
+        
+        /* Bottom Right Footer Text */
+        #bottom-right-footer {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            text-align: right;
+            font-family: 'Inter Tight', sans-serif;
+            font-weight: 400;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            z-index: 10;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        #bottom-right-footer p {
+            margin: 0;
+        }
+        
+        /* Alphabet Nav Vertical Left Tab */
+        #alphabet-nav { 
+            position: absolute;
+            top: 25vh; 
+            bottom: 0;
+            left: 0; 
+            transform: none;
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0; 
+            background: var(--tab-bg); 
+            backdrop-filter: blur(4px);
+            border-radius: 0 16px 16px 0; 
+            width: 40px; 
+            padding: 10px 0; 
+            z-index: 100;
+            transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
+            max-height: 70vh; 
+            overflow-y: auto; 
+        }
+        
+        #alphabet-nav::-webkit-scrollbar {
+            display: none; 
+        }
+
+        .nav-letter {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.95rem; 
             cursor: default;
+            width: 26px; 
+            height: 26px; 
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: background-color 0.2s, color 0.2s;
         }
 
         .active-letter {
-            color: var(--topbar-text);
+            color: var(--text-color);
             font-weight: bold;
-            transition: color 0.2s;
         }
         
         .active-letter:hover { 
+            background-color: rgba(128, 128, 128, 0.15); /* Faint circle hover */
             text-decoration: underline; 
             color: var(--accent-color);
         }
@@ -332,7 +471,7 @@
         .inactive-letter { color: var(--nav-inactive); }
         
         #main-content { 
-            padding: 40px 60px; 
+            padding: 40px 70px 40px 85px; /* Added spacing left for alphabet tab and right for icon tab */
             height: 100vh;
             overflow-y: auto; 
             position: relative; 
@@ -423,7 +562,14 @@
             font-family: 'Cormorant Garamond', serif; 
             font-weight: 500; 
             font-size: 1.75rem; 
+            line-height: 1.3; 
             white-space: pre-wrap; 
+        }
+
+        /* Dynamic Font Shrinker for Long Entries (Single Increment) */
+        #concept-description.reduced-font, 
+        #concept-description.reduced-font div {
+            font-size: 1.5rem !important; 
         }
         
         #concept-description a {
@@ -434,6 +580,91 @@
         
         #concept-description a:hover {
             opacity: 0.7;
+        }
+
+        /* Unordered List Styling (Line-height spacing + Normal Whitespace Fix) */
+        #concept-description ul {
+            list-style: none;
+            padding-left: 25px;
+            margin: 1.25em 0; 
+            white-space: normal; /* Disables pre-wrap gaps */
+        }
+        #concept-description ul li {
+            position: relative;
+            margin-bottom: 0.75em; 
+            line-height: 1.3; 
+            white-space: normal; /* Disables pre-wrap gaps */
+        }
+        #concept-description ul li::before {
+            content: '\2B26'; /* Medium Diamond Unicode */
+            color: var(--accent-color);
+            position: absolute;
+            left: -25px;
+            font-size: 0.75em; /* Smaller diamond */
+            line-height: inherit;
+            top: 0.25em; /* Optical alignment */
+            transition: color 0.3s;
+        }
+
+        /* Exclude custom bullet styling from layout specific index lists */
+        #concept-description .landing-concept-list ul,
+        #letter-list {
+            padding-left: 0 !important;
+            margin: 0 !important;
+        }
+        #concept-description .landing-concept-list li::before,
+        #letter-list li::before {
+            display: none !important;
+        }
+
+        /* Settings Page Formatting (SVG Keyboard Keys) */
+        .settings-content {
+            white-space: normal !important;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.75rem;
+        }
+        
+        .shortcut-key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 36px;
+            height: 36px;
+            color: var(--accent-color);
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .key-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .key-text {
+            position: relative;
+            z-index: 1;
+            font-family: 'Roboto Mono', monospace !important;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            transform: translateY(-2px);
+            transition: color 0.3s;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .settings-desc-text {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.15rem;
+            color: var(--text-color);
+            white-space: nowrap; /* Forces key descriptions onto a single line */
         }
 
         /* Superscript styling for footnotes in the description */
@@ -525,17 +756,6 @@
         }
 
         #editor-status { position: absolute; top: 20px; right: 20px; font-family: 'Inter Tight', sans-serif; font-size: 0.8rem; color: red; font-weight: 700; display: none; z-index: 300;}
-        
-        #bottom-bar {
-            position: absolute;
-            bottom: 30px;
-            left: 30px;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--accent-color); 
-            z-index: 100;
-            transition: color 0.3s, opacity 0.3s, visibility 0.3s;
-        }
 
         /* --- MOBILE RESPONSIVE ADAPTATIONS (iPhone SE & Small Screens) --- */
         @media (max-width: 850px) {
@@ -548,21 +768,19 @@
                 position: relative; /* Contains absolute UI elements so they attach to document top/bottom */
             }
 
-            body.art-yellow #topbar,
-            body.art-yellow #bottom-triangle {
+            body.art-yellow #topbar {
                 background-image: none; /* Hide diagonal lines for art-yellow on Mobile */
             }
 
             /* Convert UI corners to absolute so they scroll out of the way naturally */
-            #topbar, #bottom-triangle, #alphabet-nav, #bottom-line-container, #bottom-bar, #editor-status {
+            #topbar, #alphabet-nav, #top-line-container, #url-bar, #bottom-right-footer, #editor-status, #right-tab, #hud-hover-zone-right, #hud-hover-zone-left {
                 position: absolute;
             }
 
             #topbar {
-                width: 70vw;
-                height: 80px;
-                padding: 12px 15px;
-                clip-path: polygon(0 0, 100% 0, 0 100%);
+                width: 85vw; 
+                height: 80px; 
+                padding: 20px 0 0 20px; 
             }
             
             #topbar h1 {
@@ -570,29 +788,39 @@
                 margin-top: 0;
                 line-height: 1.1;
             }
-
-            #info-icon {
-                margin-left: 6px;
+            
+            #right-tab {
+                top: 50%;
+                right: 0;
+                padding: 12px 8px;
+                gap: 12px;
+                border-radius: 12px 0 0 12px;
             }
 
-            #info-icon svg {
-                width: 15px;
+            #info-icon svg, #settings-icon svg, #theme-icon svg, #color-icon svg, #hud-icon svg {
+                width: 15px; 
                 height: 15px;
             }
             
             #alphabet-nav {
-                top: 75px; 
-                left: 10px;
-                right: 10px;
-                flex-wrap: wrap;
-                justify-content: center;
-                border-top: none;
-                gap: 4px 8px;
-                padding-top: 0;
-                background: transparent;
+                top: 120px; 
+                bottom: 0;
+                left: 0;
+                width: 35px;
+                transform: none;
+                flex-direction: column;
+                flex-wrap: nowrap;
+                padding: 10px 0;
+                border-radius: 0 12px 12px 0; 
+                max-height: none; 
+                gap: 0; 
             }
             
-            .nav-letter { font-size: 0.85rem; padding: 2px; }
+            .nav-letter { 
+                width: 20px; 
+                height: 20px;
+                font-size: 0.8rem; 
+            }
             
             /* Main content container flows naturally */
             #main-content { 
@@ -601,7 +829,7 @@
                 height: auto;
                 min-height: 100vh;
                 width: 100%;
-                padding: 140px 15px 110px 15px; /* Safely avoids overlap with absolute corners at top and bottom limits */
+                padding: 90px 45px 110px 45px; /* Safely avoids overlap with tabs */
                 box-sizing: border-box;
                 overflow-y: visible;
             }
@@ -614,8 +842,11 @@
                 line-height: 1.2;
             }
             
-            #concept-description, #concept-description div { font-size: 1.2rem; }
+            #concept-description, #concept-description div { font-size: 1.2rem; line-height: 1.3; }
             
+            #concept-description.reduced-font, 
+            #concept-description.reduced-font div { font-size: 1.1rem !important; } /* Single increment reduction for mobile */
+
             #editor-menu { 
                 position: fixed; /* Keep menu fixed so it overlays entire screen */
                 height: 100vh;
@@ -642,40 +873,31 @@
             
             .landing-concept-list { flex-direction: column; gap: 15px; }
 
-            #bottom-triangle {
-                width: 55vw; 
-                height: 85px;
-                padding: 10px 12px;
-            }
+            .settings-content { font-size: 1.25rem; }
             
-            #bottom-triangle h2 {
-                font-size: 0.85rem;
-                margin-bottom: 2px;
-                line-height: 1.1;
-            }
+            .shortcut-key { width: 30px; height: 30px; margin-right: 10px; }
+            .key-text { font-size: 0.7rem; transform: translateY(-1px); }
             
-            #bottom-triangle p {
-                font-size: 0.55rem;
-                margin-top: 2px;
-            }
-
-            .bottom-triangle-content {
-                max-width: 100%;
-            }
+            .settings-desc-text { font-size: 0.75rem; white-space: nowrap; } 
 
             .url-base {
                 display: block; /* Pushes the entry slug to the next line */
             }
 
-            /* Safely bounds the URL to the left side and breaks words to avoid crashes */
-            #bottom-bar { 
+            /* Safely bounds the URL to the top right side and breaks words to avoid crashes */
+            #url-bar { 
+                top: 22px; /* Aligned with mobile text padding */
+                right: 20px;
                 font-size: 0.65rem; 
-                left: 10px; 
-                bottom: 10px; 
-                max-width: 40vw; /* Fits alongside 55vw bottom triangle without overlapping */
+                max-width: 40vw; 
                 word-break: break-all;
                 line-height: 1.2;
-                z-index: 100;
+            }
+
+            #bottom-right-footer {
+                bottom: 10px;
+                right: 15px;
+                font-size: 0.65rem;
             }
         }
     </style>
@@ -684,9 +906,10 @@
     <script id="about-data" type="application/json">
 {
     "title": "Civilisation Theory",
-    "description": "Civilisation Theory",
-    "casDescription": "A conceptual adaptive system",
-    "mapDescription": "Below is a complete index of the concept entries on this site.",
+    "description": "<i>Civilisation Theory</i> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of <i>civilisation theory</i> is that the <i>generative dynamics</i> of destruction and dystopia emerge from the <i>developmental process</i>, <i>initial conditions</i> and <i>dominant paradigm</i> of civilisation itself. Accordingly, from this macrohistorical frame of reference, the only sufficient solution is <i>civilisation design</i> <i>and transition</i>: to realise a new alternative for the 21st century.",
+    "casDescription": "This glossary site serves to create a <i>conceptual adaptive system</i> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or <i>world-model</i>. Recursively within the civilisational crisis, is an <i>epistemic crisis</i> to process it. The <i>Civilisation Theory</i> Map is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.",
+    "projectContext": "The <a href=\"https://maxramsahoye.github.io/civilisationtheory\"><i>Civilisation Theory</i> Map</a> is inspired, in substance and design, by <a href=\"https://consilienceproject.org/glossary/\">the glossary of <i>The Consilience Project</i></a> and the metacrisis frame of the <a href=\"https://civilizationresearchinstitute.org/\"><i>Civilization Research Institute</i></a>. More broadly, <i>Civilisation Theory</i> is a critical dialectical synthesis derived, in part, from three core clusters of intellectual subcultures:\n<ul>\n<li><b>The Meta-space<span style=\"color: var(--accent-color);\">:</span></b> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>\n<li><b>The PARA-academic space<span style=\"color: var(--accent-color);\">:</span></b> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>\n<li><b>The Cybernetic Economics lineage<span style=\"color: var(--accent-color);\">:</span></b> across Buckminster Fuller (1969), Jacque Fresco (1985), Stafford Beer (1971), Daniel Schmachtenberger (2017, 21), Peter Joseph (2014, 17, 25)</li>\n</ul>",
+    "mapDescription": "Below is a complete index of concepts on this site. Over time, this map will extend to cover hundreds of entries.",
     "footnotes": {}
 }
     </script>
@@ -708,22 +931,52 @@
     </div>
 
     <!-- Main Content -->
-    <div id="bottom-line-container">
-        <div id="bottom-line-bar"></div>
+    <div id="top-line-container">
+        <div id="top-line-bar"></div>
     </div>
 
     <div id="topbar">
-        <h1>
-            Civilisation
-            <span id="info-icon" onmouseenter="playSound('hover')" onclick="playSound('click'); showAbout()" title="About Civilisation Theory Map">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px;">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-            </span>
-            <br>Theory
-        </h1>
+        <div class="topbar-content">
+            <div class="title-container" onclick="playSound('click'); showAbout();" title="Return to Civilisation Theory Map">
+                <h1>Civilisation<br>Theory</h1>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HUD Hover Revealer Zones -->
+    <div id="hud-hover-zone-right"></div>
+    <div id="hud-hover-zone-left"></div>
+    
+    <div id="right-tab">
+        <span id="info-icon" onmouseenter="playSound('hover')" onclick="playSound('click'); showAbout()" title="About Civilisation Theory Map">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        </span>
+        <span id="settings-icon" onmouseenter="playSound('hover')" onclick="playSound('click'); showSettings()" title="Site Controls">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        </span>
+        <span id="theme-icon" onmouseenter="playSound('hover')" onclick="toggleThemeMode()" title="Toggle Theme (Light/Dark)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </span>
+        <span id="color-icon" onmouseenter="playSound('hover')" onclick="cycleArtStyle()" title="Cycle Art Style">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+        </span>
+        <span id="hud-icon" onmouseenter="playSound('hover')" onclick="toggleHUDMode()" title="Toggle HUD">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+        </span>
     </div>
     
     <div id="alphabet-nav"></div>
@@ -748,6 +1001,7 @@
             <!-- Inline Editor Toolbar -->
             <div id="editor-toolbar">
                 <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); document.execCommand('bold', false, null)" title="Bold Selection"><b>B</b></button>
+                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); document.execCommand('insertUnorderedList', false, null)" title="Bulleted List">List</button>
                 <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); insertLink()" title="Insert Link">Link</button>
                 <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); insertFootnote()" title="Insert Footnote Marker">Footnote</button>
                 <button type="button" id="btn-preview" onmouseenter="playSound('hover')" onclick="playSound('click'); togglePreview()" style="background-color: #8e44ad; color: white;" title="Toggle Preview Mode">Preview</button>
@@ -766,16 +1020,122 @@
         </div>
     </div>
     
-    <div id="bottom-bar"><span class="url-base">civilisationtheory/</span><span id="bottom-concept"></span></div>
+    <div id="url-bar"><span class="url-base">civilisationtheory/</span><span id="url-concept"></span></div>
     
-    <div id="bottom-triangle">
-        <div class="bottom-triangle-content">
-            <h2>A Conceptual<br>Adaptive System</h2>
-            <p>A research project by Max Ramsahoye</p>
-        </div>
+    <div id="bottom-right-footer">
+        <p>A research project by Max Ramsahoye</p>
     </div>
 
     <script>
+        // --- Custom Cursor Trail System ---
+        function initCursorTrail() {
+            const numDots = 12;
+            const dots = [];
+            for (let i = 0; i < numDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'cursor-trail-dot';
+                document.body.appendChild(dot);
+                dots.push({ el: dot });
+            }
+
+            let currentDotIndex = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                const dot = dots[currentDotIndex].el;
+                dot.style.transition = 'none';
+                dot.style.left = e.clientX + 'px';
+                dot.style.top = e.clientY + 'px';
+                dot.style.opacity = '0.6';
+                dot.style.transform = 'translate(-50%, -50%) scale(1)';
+                
+                // Force reflow to restart CSS animation properly
+                void dot.offsetWidth;
+                
+                dot.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+                dot.style.opacity = '0';
+                dot.style.transform = 'translate(-50%, -50%) scale(0.1)';
+                
+                currentDotIndex = (currentDotIndex + 1) % numDots;
+            });
+        }
+
+        // --- UI Auto-Hide Engine ---
+        let uiIdleTimer;
+        let lastScrollY = 0;
+        let isHoveringUI = false;
+        let idleDelay = 1000; // Fast 1 second disappear time globally
+
+        function resetUI() {
+            const pill = document.getElementById('right-tab');
+            const nav = document.getElementById('alphabet-nav');
+            
+            if (pill) pill.classList.remove('ui-hidden');
+            if (nav) nav.classList.remove('ui-hidden');
+            
+            clearTimeout(uiIdleTimer);
+            
+            if (!isHoveringUI) {
+                uiIdleTimer = setTimeout(() => {
+                    if (!document.body.classList.contains('hudless')) {
+                        if (pill) pill.classList.add('ui-hidden');
+                        if (nav) nav.classList.add('ui-hidden');
+                    }
+                }, idleDelay); 
+            }
+        }
+
+        function initUIAutoHide() {
+            resetUI();
+            
+            // Switch to shorter idle detection after the initial 2s load visibility
+            setTimeout(() => { idleDelay = 1000; }, 2000); 
+
+            document.addEventListener('mousemove', resetUI);
+            document.addEventListener('touchstart', resetUI);
+            
+            // UI Hover protection
+            const pill = document.getElementById('right-tab');
+            const nav = document.getElementById('alphabet-nav');
+            if(pill) {
+                pill.addEventListener('mouseenter', () => isHoveringUI = true);
+                pill.addEventListener('mouseleave', () => { isHoveringUI = false; resetUI(); });
+            }
+            if(nav) {
+                nav.addEventListener('mouseenter', () => isHoveringUI = true);
+                nav.addEventListener('mouseleave', () => { isHoveringUI = false; resetUI(); });
+            }
+
+            // Check scroll up 
+            function checkScrollDirection(scrollableElement) {
+                let currentScroll = scrollableElement.scrollTop;
+                if (currentScroll < lastScrollY) {
+                    resetUI(); // Reveal UI on scrolling up
+                }
+                lastScrollY = currentScroll <= 0 ? 0 : currentScroll;
+            }
+
+            const mainContentEl = document.getElementById('main-content');
+            if (mainContentEl) {
+                mainContentEl.addEventListener('scroll', function() { checkScrollDirection(this); });
+            }
+            window.addEventListener('scroll', function() {
+                let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                if (currentScroll < lastScrollY) {
+                    resetUI();
+                }
+                lastScrollY = currentScroll <= 0 ? 0 : currentScroll;
+            });
+        }
+
+        // --- Helper: Strip "The " for Indexing ---
+        function getIndexTitle(title) {
+            const t = title.trim();
+            if (t.toLowerCase().startsWith("the ") && t.length > 4) {
+                return t.substring(4).trim();
+            }
+            return t;
+        }
+
         // --- Web Audio API Synthesizer ---
         let audioCtx;
         function initAudio() {
@@ -851,7 +1211,8 @@
         let concepts = [];
         let aboutConcept = {};
         
-        let currentConceptIndex = -1; // Tracks actively viewed concept (-1 = About Page, -2 = New Concept)
+        // Tracks actively viewed concept (-1 = About Page, -2 = New Concept, -3 = Settings Menu)
+        let currentConceptIndex = -1; 
         
         // State machine for Editor Mode
         let isEditorMode = false;
@@ -859,6 +1220,30 @@
         let isPreviewing = false;
         
         let artMode = 0; // 0: Default, 1: Orange, 2: Colorless, 3: Yellow
+
+        function toggleThemeMode() {
+            if (artMode !== 3) {
+                playSound('toggle');
+                document.body.classList.toggle('dark-mode');
+            } else {
+                playSound('alert'); // Blocked by Yellow Paper mode
+            }
+        }
+
+        function cycleArtStyle() {
+            playSound('toggle');
+            artMode = (artMode + 1) % 4;
+            document.body.classList.remove('art-orange', 'art-colorless', 'art-yellow');
+            
+            if (artMode === 1) document.body.classList.add('art-orange');
+            if (artMode === 2) document.body.classList.add('art-colorless');
+            if (artMode === 3) document.body.classList.add('art-yellow');
+        }
+
+        function toggleHUDMode() {
+            playSound('toggle');
+            document.body.classList.toggle('hudless');
+        }
 
         function loadConcepts() {
             // Load Landing Page Data
@@ -890,26 +1275,13 @@
                 
                 if (index !== -1) {
                     showConcept(index);
+                } else if (titleToMatch === 'controls' || titleToMatch === 'settings') {
+                    showSettings();
                 } else {
                     showAbout();
                 }
             } else {
                 showAbout();
-            }
-
-            // Timeline for 3s linear drawing hitting the corners.
-            const loader = document.getElementById('loading-screen');
-            if(loader) {
-                setTimeout(() => document.body.classList.toggle('dark-mode'), 1125); 
-                setTimeout(() => document.body.classList.toggle('dark-mode'), 2625);
-                
-                // Remove Loading Screen right as 3000ms animation finishes
-                setTimeout(() => {
-                    loader.classList.add('hidden');
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                    }, 500); 
-                }, 3000); 
             }
         }
         
@@ -928,7 +1300,7 @@
             nav.innerHTML = '';
             const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-            const availableLetters = new Set(concepts.map(c => c.title.charAt(0).toUpperCase()));
+            const availableLetters = new Set(concepts.map(c => getIndexTitle(c.title).charAt(0).toUpperCase()));
 
             alphabet.forEach(letter => {
                 const span = document.createElement('span');
@@ -949,7 +1321,7 @@
 
         function showLetter(letter) {
             currentConceptIndex = -1; // Unbind from strict concept editing
-            const filtered = concepts.filter(c => c.title.charAt(0).toUpperCase() === letter);
+            const filtered = concepts.filter(c => getIndexTitle(c.title).charAt(0).toUpperCase() === letter);
             
             if (filtered.length === 1) {
                 showConcept(concepts.indexOf(filtered[0]));
@@ -958,19 +1330,19 @@
                 document.getElementById('concept-title').innerText = `Concepts starting with '${letter}'`;
                 
                 const slug = `conceptsstartingwith'${letter.toLowerCase()}'`;
-                document.getElementById('bottom-concept').textContent = slug;
+                document.getElementById('url-concept').textContent = slug;
                 updateURL(slug.replace(/'/g, ''));
                 
                 // Inject list dynamically
                 const descContainer = document.getElementById('concept-description');
-                descContainer.innerHTML = `<ul id="letter-list" style="list-style-type: none; padding: 0; margin-top: 20px;"></ul>`;
+                descContainer.innerHTML = `<ul id="letter-list"></ul>`;
                 document.getElementById('concept-footnotes').style.display = 'none'; 
                 
                 const ul = document.getElementById('letter-list');
                 
                 filtered.forEach(c => {
                     const li = document.createElement('li');
-                    li.textContent = c.title;
+                    li.textContent = getIndexTitle(c.title);
                     li.style.fontFamily = "'Roboto Mono', monospace";
                     li.style.fontSize = "1.2rem";
                     li.style.marginBottom = "15px";
@@ -992,18 +1364,18 @@
                     ul.appendChild(li);
                 });
             }
-            adjustTopMargin();
+            checkScrollAndResize();
         }
 
         function syncFootnotes(savedFootnotes = null) {
             let sups = [];
             // Dynamically scan for superscript tags exactly where they are permitted
             if (currentConceptIndex === -1) {
-                ['about-main-desc', 'about-cas-desc', 'about-map-desc'].forEach(id => {
+                ['about-main-desc', 'about-cas-desc', 'about-pc-desc', 'about-map-desc'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) sups = [...sups, ...el.querySelectorAll('sup')];
                 });
-            } else {
+            } else if (currentConceptIndex !== -3) {
                 const descEl = document.getElementById('concept-description');
                 if(descEl) sups = Array.from(descEl.querySelectorAll('sup'));
             }
@@ -1073,37 +1445,62 @@
             }
         });
 
-        // Dynamic Margin Resizing logic
-        function adjustTopMargin() {
+        // Dynamic Margin Resizing & Font Shrinking logic
+        function checkScrollAndResize() {
+            const mainContent = document.getElementById('main-content');
+            const desc = document.getElementById('concept-description');
+            const isMobile = window.innerWidth <= 850;
+            
+            // Reset state to measure cleanly
+            desc.classList.remove('reduced-font');
+            
             requestAnimationFrame(() => {
-                const viewer = document.getElementById('viewer-ui');
-                const list = document.getElementById('editor-entry-list');
-                
-                let activeEl = null;
-                if (window.getComputedStyle(viewer).display !== 'none' && viewer.offsetHeight > 0) activeEl = viewer;
-                else if (window.getComputedStyle(list).display !== 'none' && list.offsetHeight > 0) activeEl = list;
-                
-                if (activeEl) {
-                    const isMobile = window.innerWidth <= 850;
-                    
-                    if (isMobile) {
-                        // Mobile uses CSS top padding on #main-content to avoid overlapping topbar
-                        activeEl.style.marginTop = '0px'; 
-                    } else {
-                        const contentHeight = activeEl.offsetHeight;
-                        const vh20 = window.innerHeight * 0.20;
-                        const centeredMargin = (window.innerHeight - contentHeight) / 2 - 40; 
-                        activeEl.style.marginTop = Math.max(vh20, centeredMargin) + 'px';
-                    }
+                let isOverflowing = false;
+                if (isMobile) {
+                    // Test if native body scroll is longer than window
+                    isOverflowing = document.documentElement.scrollHeight > window.innerHeight;
+                } else {
+                    // Test if fixed viewport is overflowing
+                    isOverflowing = mainContent.scrollHeight > mainContent.clientHeight;
                 }
+                
+                if (isOverflowing) {
+                    desc.classList.add('reduced-font');
+                }
+                
+                // Allow style to paint then adjust vertical centering
+                requestAnimationFrame(() => adjustTopMargin());
             });
+        }
+
+        function adjustTopMargin() {
+            const viewer = document.getElementById('viewer-ui');
+            const list = document.getElementById('editor-entry-list');
+            
+            let activeEl = null;
+            if (window.getComputedStyle(viewer).display !== 'none' && viewer.offsetHeight > 0) activeEl = viewer;
+            else if (window.getComputedStyle(list).display !== 'none' && list.offsetHeight > 0) activeEl = list;
+            
+            if (activeEl) {
+                const isMobile = window.innerWidth <= 850;
+                
+                if (isMobile) {
+                    // Mobile uses CSS top padding on #main-content to avoid overlapping topbar
+                    activeEl.style.marginTop = '0px'; 
+                } else {
+                    const contentHeight = activeEl.offsetHeight;
+                    const vh20 = window.innerHeight * 0.20;
+                    const centeredMargin = (window.innerHeight - contentHeight) / 2 - 40; 
+                    activeEl.style.marginTop = Math.max(vh20, centeredMargin) + 'px';
+                }
+            }
         }
 
         // Attach observer to gracefully animate the center positioning on content changes
         const marginObserver = new ResizeObserver(() => adjustTopMargin());
         marginObserver.observe(document.getElementById('viewer-ui'));
         marginObserver.observe(document.getElementById('editor-entry-list'));
-        window.addEventListener('resize', adjustTopMargin);
+        window.addEventListener('resize', () => checkScrollAndResize());
 
         function showConcept(index) {
             currentConceptIndex = index;
@@ -1113,14 +1510,37 @@
             syncFootnotes(concepts[index].footnotes || {});
             
             const slug = concepts[index].title.toLowerCase().replace(/\s+/g, '');
-            document.getElementById('bottom-concept').textContent = slug;
+            document.getElementById('url-concept').textContent = slug;
             updateURL(slug);
             
             // Scroll to top when changing concepts
             if (window.innerWidth <= 850) {
                 window.scrollTo(0, 0);
             }
-            adjustTopMargin();
+            checkScrollAndResize();
+        }
+
+        function showSettings() {
+            currentConceptIndex = -3;
+            document.getElementById('concept-title').innerText = "Controls";
+            
+            const descContainer = document.getElementById('concept-description');
+            
+            const renderKey = (letter) => `<span class="shortcut-key"><svg viewBox="0 0 100 100" class="key-svg"><g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="90" height="90" rx="14" /><rect x="24" y="16" width="52" height="50" rx="5" /><line x1="13" y1="13" x2="24" y2="16" /><line x1="87" y1="13" x2="76" y2="16" /><line x1="13" y1="87" x2="24" y2="66" /><line x1="87" y1="87" x2="76" y2="66" /></g></svg><span class="key-text">${letter}</span></span>`;
+
+            // HTML written on one tight line to prevent pre-wrap from adding empty gaps above the content
+            descContainer.innerHTML = `<div class="settings-content"><div style="margin-bottom: 45px;">The aesthetic of this site is adjustable via toggle shortcuts:</div><div class="settings-row">${renderKey('i')}<span class="settings-desc-text">= index (the list of concepts)</span></div><div class="settings-row">${renderKey('s')}<span class="settings-desc-text">= settings (this page)</span></div><div class="settings-row">${renderKey('t')}<span class="settings-desc-text">= light/dark theme</span></div><div class="settings-row">${renderKey('h')}<span class="settings-desc-text">= removes the heads up display (HUD) or user interface (UI)</span></div><div class="settings-row">${renderKey('a')}<span class="settings-desc-text">= changes art style or colour scheme (orange accent, black-and-white, yellow paper)</span></div><div class="settings-row">${renderKey('b')}<span class="settings-desc-text">= changes the corners to match the background</span></div><div class="settings-row">${renderKey('g')}<span class="settings-desc-text">= changes the corners to a subtle gradient with the background</span></div><div class="settings-row">${renderKey('c')}<span class="settings-desc-text">= toggles cursor style (dot+trail or dot+circle)</span></div></div>`;
+            
+            document.getElementById('concept-footnotes').style.display = 'none';
+            
+            const slug = "controls";
+            document.getElementById('url-concept').textContent = slug;
+            updateURL(slug);
+            
+            if (window.innerWidth <= 850) {
+                window.scrollTo(0, 0);
+            }
+            checkScrollAndResize();
         }
 
         function showAbout() {
@@ -1152,8 +1572,25 @@
             casDesc.id = "about-cas-desc";
             casDesc.innerHTML = aboutConcept.casDescription;
             descContainer.appendChild(casDesc);
+
+            // 3. Heading: Project Context
+            const pcHeading = document.createElement('div');
+            pcHeading.innerText = "Project Context";
+            pcHeading.style.fontFamily = "'Inter Tight', sans-serif";
+            pcHeading.style.fontWeight = "700";
+            pcHeading.style.fontSize = "1.75rem";
+            pcHeading.style.marginTop = "40px";
+            pcHeading.style.marginBottom = "15px";
+            pcHeading.style.whiteSpace = "normal";
+            descContainer.appendChild(pcHeading);
             
-            // 3. Heading: The Map
+            // Project Context Description
+            const pcDesc = document.createElement('div');
+            pcDesc.id = "about-pc-desc";
+            pcDesc.innerHTML = aboutConcept.projectContext || "";
+            descContainer.appendChild(pcDesc);
+            
+            // 4. Heading: The Map
             const mapHeading = document.createElement('div');
             mapHeading.innerText = "The Map";
             mapHeading.style.fontFamily = "'Inter Tight', sans-serif";
@@ -1168,15 +1605,16 @@
             const mapDesc = document.createElement('div');
             mapDesc.id = "about-map-desc";
             mapDesc.innerHTML = aboutConcept.mapDescription;
-            mapDesc.style.marginBottom = "10px";
+            mapDesc.style.marginBottom = "45px"; 
             descContainer.appendChild(mapDesc);
             
             // Concept Count Display
             const conceptCount = document.createElement('div');
             conceptCount.innerText = `Concept Count: ${concepts.length}`;
             conceptCount.style.fontFamily = "'Roboto Mono', monospace";
+            conceptCount.style.fontWeight = "normal";
             conceptCount.style.color = "var(--accent-color)";
-            conceptCount.style.fontSize = "1.1rem";
+            conceptCount.style.fontSize = "1.25rem"; 
             conceptCount.style.marginBottom = "25px";
             descContainer.appendChild(conceptCount);
             
@@ -1192,12 +1630,12 @@
             listContainer.appendChild(col1);
             listContainer.appendChild(col2);
             
-            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i})).sort((a, b) => a.title.localeCompare(b.title));
+            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i, indexTitle: getIndexTitle(c.title)})).sort((a, b) => a.indexTitle.localeCompare(b.indexTitle));
             
             if (sortedConcepts.length > 0) {
                 const grouped = {};
                 sortedConcepts.forEach(c => {
-                    const letter = c.title.charAt(0).toUpperCase();
+                    const letter = c.indexTitle.charAt(0).toUpperCase();
                     if (!grouped[letter]) grouped[letter] = [];
                     grouped[letter].push(c);
                 });
@@ -1221,7 +1659,7 @@
 
                     grouped[letter].forEach(c => {
                         const li = document.createElement('li');
-                        li.textContent = c.title;
+                        li.textContent = c.indexTitle;
                         li.style.fontFamily = "'Roboto Mono', monospace";
                         li.style.fontSize = "1.2rem";
                         li.style.marginBottom = "12px";
@@ -1268,13 +1706,13 @@
             syncFootnotes(aboutConcept.footnotes || {});
             
             const slug = "conceptualadaptivesystem"; 
-            document.getElementById('bottom-concept').textContent = slug;
+            document.getElementById('url-concept').textContent = slug;
             updateURL(slug);
 
             if (window.innerWidth <= 850) {
                 window.scrollTo(0, 0);
             }
-            adjustTopMargin();
+            checkScrollAndResize();
         }
 
         // --- SPLIT-SCREEN & LIST EDITOR FUNCTIONS ---
@@ -1317,7 +1755,7 @@
             descEl.contentEditable = true;
             titleEl.classList.add('editable-field');
             descEl.classList.add('editable-field');
-            adjustTopMargin();
+            checkScrollAndResize();
         }
 
         function startEditingExisting() {
@@ -1359,15 +1797,15 @@
                 emptyMsg.style.color = "var(--nav-inactive)";
                 emptyMsg.textContent = "No concepts exist yet.";
                 entryList.appendChild(emptyMsg);
-                adjustTopMargin();
+                checkScrollAndResize();
                 return;
             }
 
-            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i})).sort((a, b) => a.title.localeCompare(b.title));
+            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i, indexTitle: getIndexTitle(c.title)})).sort((a, b) => a.indexTitle.localeCompare(b.indexTitle));
             
             let currentLetter = '';
             sortedConcepts.forEach(c => {
-                const firstLetter = c.title.charAt(0).toUpperCase();
+                const firstLetter = c.indexTitle.charAt(0).toUpperCase();
                 
                 if (firstLetter !== currentLetter) {
                     currentLetter = firstLetter;
@@ -1382,7 +1820,7 @@
                 }
                 
                 const li = document.createElement('li');
-                li.textContent = c.title;
+                li.textContent = c.indexTitle;
                 li.style.fontFamily = "'Roboto Mono', monospace";
                 li.style.fontSize = "1.2rem";
                 li.style.marginBottom = "8px";
@@ -1403,10 +1841,17 @@
                 li.onclick = () => { playSound('click'); editSpecificConcept(c.originalIndex); };
                 ul.appendChild(li);
             });
-            adjustTopMargin();
+            checkScrollAndResize();
         }
 
         function editSpecificConcept(index) {
+            if (index === -3) {
+                playSound('alert');
+                alert("The Settings page cannot be edited.");
+                exitEditor();
+                return;
+            }
+
             editorState = 'active';
             resetPreviewState();
             document.getElementById('editor-entry-list').style.display = 'none';
@@ -1418,7 +1863,7 @@
                 document.getElementById('concept-title').contentEditable = true;
                 document.getElementById('concept-title').classList.add('editable-field');
                 
-                ['about-main-desc', 'about-cas-desc', 'about-map-desc'].forEach(id => {
+                ['about-main-desc', 'about-cas-desc', 'about-pc-desc', 'about-map-desc'].forEach(id => {
                     const el = document.getElementById(id);
                     if (el) {
                         el.contentEditable = true;
@@ -1434,16 +1879,23 @@
                 titleEl.classList.add('editable-field');
                 descEl.classList.add('editable-field');
             }
-            adjustTopMargin();
+            checkScrollAndResize();
         }
 
         function togglePreview() {
+            if (currentConceptIndex === -3) {
+                playSound('alert');
+                alert("The Settings page cannot be edited.");
+                return;
+            }
+
             const btn = document.getElementById('btn-preview');
             
             let fields = [document.getElementById('concept-title')];
             if (currentConceptIndex === -1) {
                 fields.push(document.getElementById('about-main-desc'));
                 fields.push(document.getElementById('about-cas-desc'));
+                fields.push(document.getElementById('about-pc-desc'));
                 fields.push(document.getElementById('about-map-desc'));
             } else {
                 fields.push(document.getElementById('concept-description'));
@@ -1471,7 +1923,7 @@
                 isPreviewing = false;
             }
             syncFootnotes(); // Recalculate footnote editability
-            adjustTopMargin();
+            checkScrollAndResize();
         }
 
         function resetPreviewState() {
@@ -1501,9 +1953,9 @@
                 el.classList.remove('editable-field');
             });
             
-            if (currentConceptIndex !== -1 && currentConceptIndex !== -2) showConcept(currentConceptIndex);
+            if (currentConceptIndex === -3) showSettings();
+            else if (currentConceptIndex !== -1 && currentConceptIndex !== -2) showConcept(currentConceptIndex);
             else showAbout();
-            adjustTopMargin();
         }
 
         function insertLink() {
@@ -1516,7 +1968,7 @@
         function insertFootnote() {
             let sups = [];
             if (currentConceptIndex === -1) {
-                ['about-main-desc', 'about-cas-desc', 'about-map-desc'].forEach(id => {
+                ['about-main-desc', 'about-cas-desc', 'about-pc-desc', 'about-map-desc'].forEach(id => {
                     const el = document.getElementById(id);
                     if(el) sups = [...sups, ...el.querySelectorAll('sup')];
                 });
@@ -1545,13 +1997,19 @@
             document.getElementById('concept-footnotes').innerHTML = "";
             document.getElementById('concept-footnotes').style.display = "none";
             currentConceptIndex = -2; // Signals a brand new unsaved concept vs Landing Page (-1)
-            adjustTopMargin();
+            checkScrollAndResize();
         }
 
         function saveCurrentConcept() {
             if (currentConceptIndex === -2) {
                 playSound('alert');
                 alert("This is a new concept. Please use 'Save as New' instead.");
+                return;
+            }
+
+            if (currentConceptIndex === -3) {
+                playSound('alert');
+                alert("The Settings page cannot be edited.");
                 return;
             }
 
@@ -1569,17 +2027,19 @@
                 // Save logic for Landing Page
                 const mainDesc = document.getElementById('about-main-desc').innerHTML.trim();
                 const casDesc = document.getElementById('about-cas-desc').innerHTML.trim();
+                const pcDesc = document.getElementById('about-pc-desc').innerHTML.trim();
                 const mapDesc = document.getElementById('about-map-desc').innerHTML.trim();
                 
                 if (title && mainDesc) {
                     aboutConcept.title = title;
                     aboutConcept.description = mainDesc;
                     aboutConcept.casDescription = casDesc;
+                    aboutConcept.projectContext = pcDesc;
                     aboutConcept.mapDescription = mapDesc;
                     aboutConcept.footnotes = fns;
                     
                     const slug = "conceptualadaptivesystem";
-                    document.getElementById('bottom-concept').textContent = slug;
+                    document.getElementById('url-concept').textContent = slug;
                     updateURL(slug);
                     
                     playSound('success');
@@ -1598,7 +2058,7 @@
                     
                     renderAlphabetNav();
                     const slug = title.toLowerCase().replace(/\s+/g, '');
-                    document.getElementById('bottom-concept').textContent = slug;
+                    document.getElementById('url-concept').textContent = slug;
                     updateURL(slug);
                     
                     playSound('success');
@@ -1658,6 +2118,9 @@
             
             const viewer = clone.querySelector('#viewer-ui');
             if (viewer) viewer.style.display = 'block';
+
+            // Clean up transient elements that shouldn't be serialized
+            clone.querySelectorAll('.cursor-trail-dot').forEach(el => el.remove());
             
             clone.querySelectorAll('.editable-field').forEach(el => {
                 el.removeAttribute('contenteditable');
@@ -1710,41 +2173,38 @@
                 return;
             }
 
-            // Toggle Dark Mode
-            if (key === 't') {
-                if (artMode !== 3) {
-                    playSound('toggle');
-                    document.body.classList.toggle('dark-mode');
-                }
-            }
+            // Display Mode Toggles
+            if (key === 't') toggleThemeMode();
             
-            // Toggle Background Match Mode
             if (key === 'b') {
                 playSound('toggle');
                 document.body.classList.toggle('bg-match-mode');
             }
 
-            // Toggle Gradient Mode
             if (key === 'g') {
                 playSound('toggle');
                 document.body.classList.toggle('gradient-mode');
             }
-            
-            // Toggle HUDless Mode
-            if (key === 'h') {
+
+            if (key === 'c') {
                 playSound('toggle');
-                document.body.classList.toggle('hudless');
+                document.body.classList.toggle('alt-cursor');
+            }
+            
+            if (key === 'h') toggleHUDMode();
+
+            if (key === 'a') cycleArtStyle();
+
+            // Open Index/Map
+            if (key === 'i') {
+                playSound('toggle');
+                showAbout();
             }
 
-            // Cycle Art Modes
-            if (key === 'a') {
+            // Open Settings
+            if (key === 's') {
                 playSound('toggle');
-                artMode = (artMode + 1) % 4;
-                document.body.classList.remove('art-orange', 'art-colorless', 'art-yellow');
-                
-                if (artMode === 1) document.body.classList.add('art-orange');
-                if (artMode === 2) document.body.classList.add('art-colorless');
-                if (artMode === 3) document.body.classList.add('art-yellow');
+                showSettings();
             }
             
             // Editor Mode Trigger
@@ -1773,6 +2233,8 @@
                     showConcept(index);
                 } else if (titleToMatch === 'conceptualadaptivesystem') {
                     showAbout();
+                } else if (titleToMatch === 'controls' || titleToMatch === 'settings') {
+                    showSettings();
                 } else {
                     showAbout();
                 }
@@ -1790,6 +2252,8 @@
                     showConcept(index);
                 } else if (titleToMatch === 'conceptualadaptivesystem') {
                     showAbout();
+                } else if (titleToMatch === 'controls' || titleToMatch === 'settings') {
+                    showSettings();
                 } else {
                     showAbout();
                 }
@@ -1798,7 +2262,36 @@
             }
         });
 
-        loadConcepts();
+        // Initialize App safely regardless of parsing state
+        document.addEventListener("DOMContentLoaded", () => {
+            // Initiate trailing cursor immediately
+            initCursorTrail();
+
+            // Handle loading sequence purely based on DOM presence 
+            const loader = document.getElementById('loading-screen');
+            if(loader) {
+                setTimeout(() => document.body.classList.toggle('dark-mode'), 1125); 
+                setTimeout(() => document.body.classList.toggle('dark-mode'), 2625);
+                
+                setTimeout(() => {
+                    loader.classList.add('hidden');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        initUIAutoHide();
+                    }, 500); 
+                }, 3000); 
+            } else {
+                initUIAutoHide();
+            }
+
+            // Safe parsing trigger
+            try {
+                loadConcepts();
+            } catch (e) {
+                console.error("Critical routing error intercepted:", e);
+            }
+        });
+
     </script>
 </body>
 </html>
