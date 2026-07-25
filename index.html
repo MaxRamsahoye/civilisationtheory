@@ -22,7 +22,7 @@
             --nav-inactive: #b0b0b0;
             --nav-border: #777777;
             --diamond-bg: #ffffff; /* White Diamond for Light Theme */
-            --tab-bg: rgba(0, 0, 0, 0.08); /* Middle ground shade for tabs in light theme */
+            --tab-bg: rgba(0, 0, 0, 0.12); /* Slightly darker shade for tabs in light theme */
             
             /* Cursors */
             --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%233CB371'/></svg>") 12 12, auto;
@@ -104,7 +104,7 @@
             pointer-events: none !important;
         }
 
-        /* HUDless mode (Leaves bottom bar and text untouched) */
+        /* HUDless mode (Leaves minimap untouched) */
         body.hudless #topbar,
         body.hudless #alphabet-nav,
         body.hudless #bottom-right-footer,
@@ -420,7 +420,8 @@
         /* Alphabet Nav Vertical Left Tab */
         #alphabet-nav { 
             position: absolute;
-            top: 25vh; 
+            top: 22vh; 
+            height: 65vh; /* Fixed height to match minimap */
             bottom: 0;
             left: 0; 
             transform: none;
@@ -436,7 +437,6 @@
             padding: 10px 0; 
             z-index: 100;
             transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
-            max-height: 70vh; 
             overflow-y: auto; 
         }
         
@@ -470,8 +470,87 @@
         
         .inactive-letter { color: var(--nav-inactive); }
         
+        /* Vertical Progress Bar */
+        #vertical-progress-container {
+            position: fixed;
+            top: 22vh; 
+            height: 65vh; /* Exactly matches alphabet tab */
+            left: 165px; /* Visually aligned with the 'N' in Civilisation from the top-left title */
+            width: 3px;
+            background-color: var(--tab-bg);
+            border-radius: 4px;
+            z-index: 90;
+            display: none;
+            transition: opacity 0.3s;
+        }
+
+        #vertical-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background-color: var(--accent-color);
+            border-radius: 4px;
+            transition: height 0.15s ease-out;
+        }
+
+        #vertical-progress-markers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .progress-marker {
+            position: absolute;
+            left: 15px; /* Offset to the right of the line */
+            transform: translateY(-50%);
+            font-family: 'Inter Tight', sans-serif;
+            font-size: 0.8rem;
+            color: var(--nav-inactive);
+            white-space: nowrap;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: color 0.2s, font-weight 0.2s, opacity 0.2s;
+            text-align: left;
+            opacity: 0.8;
+        }
+
+        .progress-marker::before {
+            content: '';
+            position: absolute;
+            left: -16.5px; /* Mathematically perfectly centers the dot exactly on the 3px line (15px gap + 1.5px center offset) */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 7px;
+            height: 7px;
+            background-color: var(--nav-inactive);
+            border-radius: 50%;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .progress-marker:hover, .progress-marker.active {
+            color: var(--text-color);
+            opacity: 1;
+            font-weight: 700;
+        }
+
+        .progress-marker:hover::before, .progress-marker.active::before {
+            background-color: var(--accent-color);
+            transform: translateY(-50%) scale(1.3);
+            box-shadow: 0 0 8px var(--accent-color);
+        }
+
+        @media (max-width: 1100px) {
+            .progress-marker { font-size: 0; }
+            .progress-marker::before { left: -14px; }
+        }
+
         #main-content { 
-            padding: 40px 70px 40px 85px; /* Added spacing left for alphabet tab and right for icon tab */
+            padding: 40px 85px 40px 85px; /* Fully symmetric padding to perfectly center text */
             height: 100vh;
             overflow-y: auto; 
             position: relative; 
@@ -562,7 +641,7 @@
             font-family: 'Cormorant Garamond', serif; 
             font-weight: 500; 
             font-size: 1.75rem; 
-            line-height: 1.3; 
+            line-height: 1.4; 
             white-space: pre-wrap; 
         }
 
@@ -574,12 +653,27 @@
         
         #concept-description a {
             color: var(--accent-color);
-            text-decoration: underline;
+            text-decoration: none; /* Link underline hidden by default */
             transition: opacity 0.2s;
         }
         
         #concept-description a:hover {
             opacity: 0.7;
+        }
+        
+        body.link-underline #concept-description a {
+            text-decoration: underline; /* Toggled via 'u' */
+        }
+
+        /* Hardcoded Concept Count override to definitively prevent .reduced-font div inheritance */
+        #concept-count-display {
+            font-family: 'Roboto Mono', monospace !important;
+            font-weight: normal !important;
+            color: var(--accent-color) !important;
+            font-size: 1.15rem !important; 
+            margin-bottom: 25px !important;
+            line-height: 1.4 !important;
+            white-space: normal !important;
         }
 
         /* Unordered List Styling (Line-height spacing + Normal Whitespace Fix) */
@@ -592,7 +686,7 @@
         #concept-description ul li {
             position: relative;
             margin-bottom: 0.75em; 
-            line-height: 1.3; 
+            line-height: 1.4; 
             white-space: normal; /* Disables pre-wrap gaps */
         }
         #concept-description ul li::before {
@@ -822,6 +916,10 @@
                 font-size: 0.8rem; 
             }
             
+            #vertical-progress-container {
+                display: none !important; /* Hide left-side progress bar on narrow screens */
+            }
+
             /* Main content container flows naturally */
             #main-content { 
                 position: relative;
@@ -834,6 +932,10 @@
                 overflow-y: visible;
             }
 
+            #concept-count-display {
+                font-size: 1rem !important; 
+            }
+
             #viewer-ui, #editor-entry-list { width: 100%; margin: 0 auto !important; }
             
             #concept-title { 
@@ -842,7 +944,7 @@
                 line-height: 1.2;
             }
             
-            #concept-description, #concept-description div { font-size: 1.2rem; line-height: 1.3; }
+            #concept-description, #concept-description div { font-size: 1.2rem; line-height: 1.4; }
             
             #concept-description.reduced-font, 
             #concept-description.reduced-font div { font-size: 1.1rem !important; } /* Single increment reduction for mobile */
@@ -906,9 +1008,9 @@
     <script id="about-data" type="application/json">
 {
     "title": "Civilisation Theory",
-    "description": "<i>Civilisation Theory</i> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of <i>civilisation theory</i> is that the <i>generative dynamics</i> of destruction and dystopia emerge from the <i>developmental process</i>, <i>initial conditions</i> and <i>dominant paradigm</i> of civilisation itself. Accordingly, from this macrohistorical frame of reference, the only sufficient solution is <i>civilisation design</i> <i>and transition</i>: to realise a new alternative for the 21st century.",
-    "casDescription": "This glossary site serves to create a <i>conceptual adaptive system</i> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or <i>world-model</i>. Recursively within the civilisational crisis, is an <i>epistemic crisis</i> to process it. The <i>Civilisation Theory</i> Map is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.",
-    "projectContext": "The <a href=\"https://maxramsahoye.github.io/civilisationtheory\"><i>Civilisation Theory</i> Map</a> is inspired, in substance and design, by <a href=\"https://consilienceproject.org/glossary/\">the glossary of <i>The Consilience Project</i></a> and the metacrisis frame of the <a href=\"https://civilizationresearchinstitute.org/\"><i>Civilization Research Institute</i></a>. More broadly, <i>Civilisation Theory</i> is a critical dialectical synthesis derived, in part, from three core clusters of intellectual subcultures:\n<ul>\n<li><b>The Meta-space<span style=\"color: var(--accent-color);\">:</span></b> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>\n<li><b>The PARA-academic space<span style=\"color: var(--accent-color);\">:</span></b> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>\n<li><b>The Cybernetic Economics lineage<span style=\"color: var(--accent-color);\">:</span></b> across Buckminster Fuller (1969), Jacque Fresco (1985), Stafford Beer (1971), Daniel Schmachtenberger (2017, 21), Peter Joseph (2014, 17, 25)</li>\n</ul>",
+    "description": "<i>Civilisation Theory</i> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of <i>civilisation theory</i> is that the <i>generative dynamics</i> of existential risk(s) emerge from within the <i>developmental process</i>, <i>initial conditions</i> and <i>dominant paradigm</i> of civilisation itself. From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is <i>civilisation design</i> <i>and transition</i>: to realise a new form of political economy (structure) and cultural psychology (superstucture), a <i>viable life-world-system</i> for 21st century technology (infrastructure).",
+    "casDescription": "This glossary site serves to create a <i>conceptual adaptive system</i> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or <i>world-model</i>. In other words, recursively within the civilisational crisis, is an <i>epistemic crisis</i> to process it. The <a href=\"https://maxramsahoye.github.io/civilisationtheory\"><i>Civilisation Theory Map</i></a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.",
+    "projectContext": "The Civilisation Theory Map is inspired, in substance and design, by <a href=\"https://consilienceproject.org/glossary/\">the glossary of <i>The Consilience Project</i></a> and the metacrisis frame of the <a href=\"https://civilizationresearchinstitute.org/\"><i>Civilization Research Institute</i></a>. More broadly, <i>Civilisation Theory</i> is a critical dialectical synthesis derived, in part, from three core clusters of intellectual subcultures:\n<ul>\n<li><b>The Meta-space<span style=\"color: var(--accent-color);\">:</span></b> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>\n<li><b>The PARA-academic space<span style=\"color: var(--accent-color);\">:</span></b> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>\n<li><b>The Cybernetic Economics lineage<span style=\"color: var(--accent-color);\">:</span></b> across Buckminster Fuller (1969), Jacque Fresco (1985), Stafford Beer (1971), Daniel Schmachtenberger (2017, 21), Peter Joseph (2014, 17, 25)</li>\n</ul>",
     "mapDescription": "Below is a complete index of concepts on this site. Over time, this map will extend to cover hundreds of entries.",
     "footnotes": {}
 }
@@ -980,6 +1082,12 @@
     </div>
     
     <div id="alphabet-nav"></div>
+
+    <!-- Scroll Progress Minimap -->
+    <div id="vertical-progress-container">
+        <div id="vertical-progress-fill"></div>
+        <div id="vertical-progress-markers"></div>
+    </div>
 
     <div id="main-content">
         <span id="editor-status">EDITOR MODE ACTIVE (ESC TO MENU)</span>
@@ -1059,6 +1167,97 @@
             });
         }
 
+        // --- Progress Bar Engine ---
+        function buildProgressMarkers() {
+            const container = document.getElementById('vertical-progress-markers');
+            if(!container) return;
+            container.innerHTML = ''; 
+            
+            const main = document.getElementById('main-content');
+            
+            requestAnimationFrame(() => {
+                const scrollHeight = main.scrollHeight;
+                const clientHeight = main.clientHeight;
+                const maxScroll = scrollHeight - clientHeight;
+                const progressContainer = document.getElementById('vertical-progress-container');
+                
+                if (maxScroll <= 10) { 
+                    progressContainer.style.display = 'none';
+                    return;
+                }
+                progressContainer.style.display = 'block';
+
+                // Query the exact headings safely avoiding duplication of the title
+                const titleEl = document.getElementById('concept-title');
+                const subheadings = Array.from(document.querySelectorAll('#viewer-ui h3, #viewer-ui .progress-heading'));
+                const headings = [titleEl, ...subheadings];
+                
+                const allTargets = headings.filter(el => el && el.innerText.trim() !== '');
+                
+                let lastPercent = -10; 
+
+                allTargets.forEach(el => {
+                    let relativeTop = (el.getBoundingClientRect().top + main.scrollTop) - main.getBoundingClientRect().top;
+                    
+                    let percent = (relativeTop / maxScroll) * 100;
+                    
+                    if (percent > 100) percent = 100; 
+                    if (percent < 0) percent = 0;   
+                    
+                    // Prevent overlapping text labels 
+                    if (percent - lastPercent < 4) {
+                        percent = lastPercent + 4; 
+                    }
+                    lastPercent = percent;
+                    
+                    const marker = document.createElement('div');
+                    marker.className = 'progress-marker';
+                    marker.style.top = percent + '%';
+                    marker.innerText = el.innerText || el.textContent;
+                    
+                    marker.onclick = () => {
+                        playSound('click');
+                        main.scrollTo({ top: relativeTop, behavior: 'smooth' });
+                    };
+                    
+                    container.appendChild(marker);
+                    el._marker = marker; 
+                    el._targetTop = relativeTop;
+                });
+                
+                updateProgressBar();
+            });
+        }
+
+        function updateProgressBar() {
+            const main = document.getElementById('main-content');
+            const scrollHeight = main.scrollHeight;
+            const clientHeight = main.clientHeight;
+            const maxScroll = scrollHeight - clientHeight;
+            if (maxScroll <= 0) return;
+            
+            // Map strictly to total scroll bounds
+            let percent = (main.scrollTop / maxScroll) * 100;
+            if (percent > 100) percent = 100;
+            if (percent < 0) percent = 0;
+            document.getElementById('vertical-progress-fill').style.height = percent + '%';
+            
+            const markers = document.querySelectorAll('.progress-marker');
+            markers.forEach(m => m.classList.remove('active'));
+            
+            let activeEl = null;
+            const headings = Array.from(document.querySelectorAll('#viewer-ui h2, #viewer-ui h3, #viewer-ui .progress-heading, #concept-title')).filter(el => el && el._marker);
+            
+            headings.forEach(el => {
+                if (main.scrollTop >= el._targetTop - 150) { 
+                    activeEl = el;
+                }
+            });
+            
+            if (!activeEl && headings.length > 0) activeEl = headings[0];
+            if (activeEl && activeEl._marker) activeEl._marker.classList.add('active');
+        }
+
         // --- UI Auto-Hide Engine ---
         let uiIdleTimer;
         let lastScrollY = 0;
@@ -1087,15 +1286,14 @@
         function initUIAutoHide() {
             resetUI();
             
-            // Switch to shorter idle detection after the initial 2s load visibility
             setTimeout(() => { idleDelay = 1000; }, 2000); 
 
             document.addEventListener('mousemove', resetUI);
             document.addEventListener('touchstart', resetUI);
             
-            // UI Hover protection
             const pill = document.getElementById('right-tab');
             const nav = document.getElementById('alphabet-nav');
+            
             if(pill) {
                 pill.addEventListener('mouseenter', () => isHoveringUI = true);
                 pill.addEventListener('mouseleave', () => { isHoveringUI = false; resetUI(); });
@@ -1105,18 +1303,17 @@
                 nav.addEventListener('mouseleave', () => { isHoveringUI = false; resetUI(); });
             }
 
-            // Check scroll up 
             function checkScrollDirection(scrollableElement) {
                 let currentScroll = scrollableElement.scrollTop;
                 if (currentScroll < lastScrollY) {
-                    resetUI(); // Reveal UI on scrolling up
+                    resetUI(); 
                 }
                 lastScrollY = currentScroll <= 0 ? 0 : currentScroll;
             }
 
             const mainContentEl = document.getElementById('main-content');
             if (mainContentEl) {
-                mainContentEl.addEventListener('scroll', function() { checkScrollDirection(this); });
+                mainContentEl.addEventListener('scroll', function() { checkScrollDirection(this); updateProgressBar(); });
             }
             window.addEventListener('scroll', function() {
                 let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
@@ -1365,6 +1562,7 @@
                 });
             }
             checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
         }
 
         function syncFootnotes(savedFootnotes = null) {
@@ -1500,7 +1698,10 @@
         const marginObserver = new ResizeObserver(() => adjustTopMargin());
         marginObserver.observe(document.getElementById('viewer-ui'));
         marginObserver.observe(document.getElementById('editor-entry-list'));
-        window.addEventListener('resize', () => checkScrollAndResize());
+        window.addEventListener('resize', () => {
+            checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
+        });
 
         function showConcept(index) {
             currentConceptIndex = index;
@@ -1516,8 +1717,11 @@
             // Scroll to top when changing concepts
             if (window.innerWidth <= 850) {
                 window.scrollTo(0, 0);
+            } else {
+                document.getElementById('main-content').scrollTop = 0;
             }
             checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
         }
 
         function showSettings() {
@@ -1529,7 +1733,7 @@
             const renderKey = (letter) => `<span class="shortcut-key"><svg viewBox="0 0 100 100" class="key-svg"><g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="90" height="90" rx="14" /><rect x="24" y="16" width="52" height="50" rx="5" /><line x1="13" y1="13" x2="24" y2="16" /><line x1="87" y1="13" x2="76" y2="16" /><line x1="13" y1="87" x2="24" y2="66" /><line x1="87" y1="87" x2="76" y2="66" /></g></svg><span class="key-text">${letter}</span></span>`;
 
             // HTML written on one tight line to prevent pre-wrap from adding empty gaps above the content
-            descContainer.innerHTML = `<div class="settings-content"><div style="margin-bottom: 45px;">The aesthetic of this site is adjustable via toggle shortcuts:</div><div class="settings-row">${renderKey('i')}<span class="settings-desc-text">= index (the list of concepts)</span></div><div class="settings-row">${renderKey('s')}<span class="settings-desc-text">= settings (this page)</span></div><div class="settings-row">${renderKey('t')}<span class="settings-desc-text">= light/dark theme</span></div><div class="settings-row">${renderKey('h')}<span class="settings-desc-text">= removes the heads up display (HUD) or user interface (UI)</span></div><div class="settings-row">${renderKey('a')}<span class="settings-desc-text">= changes art style or colour scheme (orange accent, black-and-white, yellow paper)</span></div><div class="settings-row">${renderKey('b')}<span class="settings-desc-text">= changes the corners to match the background</span></div><div class="settings-row">${renderKey('g')}<span class="settings-desc-text">= changes the corners to a subtle gradient with the background</span></div><div class="settings-row">${renderKey('c')}<span class="settings-desc-text">= toggles cursor style (dot+trail or dot+circle)</span></div></div>`;
+            descContainer.innerHTML = `<div class="settings-content"><div style="margin-bottom: 45px;">The aesthetic of this site is adjustable via toggle shortcuts:</div><div class="settings-row">${renderKey('i')}<span class="settings-desc-text">= index (the list of concepts)</span></div><div class="settings-row">${renderKey('s')}<span class="settings-desc-text">= settings (this page)</span></div><div class="settings-row">${renderKey('t')}<span class="settings-desc-text">= light/dark theme</span></div><div class="settings-row">${renderKey('h')}<span class="settings-desc-text">= removes the heads up display (HUD) or user interface (UI)</span></div><div class="settings-row">${renderKey('a')}<span class="settings-desc-text">= changes art style or colour scheme (orange accent, black-and-white, yellow paper)</span></div><div class="settings-row">${renderKey('b')}<span class="settings-desc-text">= changes the corners to match the background</span></div><div class="settings-row">${renderKey('g')}<span class="settings-desc-text">= changes the corners to a subtle gradient with the background</span></div><div class="settings-row">${renderKey('c')}<span class="settings-desc-text">= toggles cursor style (dot+trail or dot+circle)</span></div><div class="settings-row">${renderKey('u')}<span class="settings-desc-text">= toggles link underlines</span></div></div>`;
             
             document.getElementById('concept-footnotes').style.display = 'none';
             
@@ -1539,8 +1743,11 @@
             
             if (window.innerWidth <= 850) {
                 window.scrollTo(0, 0);
+            } else {
+                document.getElementById('main-content').scrollTop = 0;
             }
             checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
         }
 
         function showAbout() {
@@ -1558,6 +1765,7 @@
             
             // 2. Heading: A Conceptual Adaptive System
             const casHeading = document.createElement('div');
+            casHeading.className = "progress-heading";
             casHeading.innerText = "A Conceptual Adaptive System";
             casHeading.style.fontFamily = "'Inter Tight', sans-serif";
             casHeading.style.fontWeight = "700";
@@ -1575,6 +1783,7 @@
 
             // 3. Heading: Project Context
             const pcHeading = document.createElement('div');
+            pcHeading.className = "progress-heading";
             pcHeading.innerText = "Project Context";
             pcHeading.style.fontFamily = "'Inter Tight', sans-serif";
             pcHeading.style.fontWeight = "700";
@@ -1592,6 +1801,7 @@
             
             // 4. Heading: The Map
             const mapHeading = document.createElement('div');
+            mapHeading.className = "progress-heading";
             mapHeading.innerText = "The Map";
             mapHeading.style.fontFamily = "'Inter Tight', sans-serif";
             mapHeading.style.fontWeight = "700";
@@ -1610,12 +1820,10 @@
             
             // Concept Count Display
             const conceptCount = document.createElement('div');
+            conceptCount.id = "concept-count-display";
             conceptCount.innerText = `Concept Count: ${concepts.length}`;
-            conceptCount.style.fontFamily = "'Roboto Mono', monospace";
-            conceptCount.style.fontWeight = "normal";
-            conceptCount.style.color = "var(--accent-color)";
-            conceptCount.style.fontSize = "1.25rem"; 
-            conceptCount.style.marginBottom = "25px";
+            // Inline override to perfectly match user request and absolutely avoid the scaling bug
+            conceptCount.style.cssText = "font-family: 'Roboto Mono', monospace !important; font-weight: normal !important; color: var(--accent-color) !important; font-size: 1.15rem !important; margin-bottom: 25px !important; line-height: 1.4 !important; white-space: normal !important;";
             descContainer.appendChild(conceptCount);
             
             // The 2-Column Concept List with A-Z structure alternating side-to-side
@@ -1646,6 +1854,7 @@
                     const targetCol = (index % 2 === 0) ? col1 : col2;
 
                     const header = document.createElement('h3');
+                    header.className = 'progress-heading';
                     header.textContent = letter;
                     header.style.marginTop = (targetCol.children.length === 0) ? "0" : "20px";
                     header.style.marginBottom = "10px";
@@ -1711,8 +1920,11 @@
 
             if (window.innerWidth <= 850) {
                 window.scrollTo(0, 0);
+            } else {
+                document.getElementById('main-content').scrollTop = 0;
             }
             checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
         }
 
         // --- SPLIT-SCREEN & LIST EDITOR FUNCTIONS ---
@@ -1730,6 +1942,7 @@
             document.getElementById('editor-menu').style.display = 'flex';
             document.getElementById('viewer-ui').style.display = 'none';
             document.getElementById('editor-entry-list').style.display = 'none';
+            document.getElementById('vertical-progress-container').style.display = 'none';
             
             // Safely disarm fields
             const editableElements = document.querySelectorAll('.editable-field');
@@ -1756,6 +1969,7 @@
             titleEl.classList.add('editable-field');
             descEl.classList.add('editable-field');
             checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
         }
 
         function startEditingExisting() {
@@ -1763,6 +1977,7 @@
             resetPreviewState();
             document.getElementById('editor-menu').style.display = 'none';
             document.getElementById('viewer-ui').style.display = 'none';
+            document.getElementById('vertical-progress-container').style.display = 'none';
             
             const entryList = document.getElementById('editor-entry-list');
             entryList.style.display = 'block';
@@ -1880,6 +2095,7 @@
                 descEl.classList.add('editable-field');
             }
             checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
         }
 
         function togglePreview() {
@@ -1998,6 +2214,7 @@
             document.getElementById('concept-footnotes').style.display = "none";
             currentConceptIndex = -2; // Signals a brand new unsaved concept vs Landing Page (-1)
             checkScrollAndResize();
+            setTimeout(buildProgressMarkers, 100);
         }
 
         function saveCurrentConcept() {
@@ -2121,6 +2338,10 @@
 
             // Clean up transient elements that shouldn't be serialized
             clone.querySelectorAll('.cursor-trail-dot').forEach(el => el.remove());
+            const markerContainer = clone.querySelector('#vertical-progress-markers');
+            if(markerContainer) markerContainer.innerHTML = '';
+            const fill = clone.querySelector('#vertical-progress-fill');
+            if(fill) fill.style.height = '0%';
             
             clone.querySelectorAll('.editable-field').forEach(el => {
                 el.removeAttribute('contenteditable');
@@ -2189,6 +2410,11 @@
             if (key === 'c') {
                 playSound('toggle');
                 document.body.classList.toggle('alt-cursor');
+            }
+            
+            if (key === 'u') {
+                playSound('toggle');
+                document.body.classList.toggle('link-underline');
             }
             
             if (key === 'h') toggleHUDMode();
