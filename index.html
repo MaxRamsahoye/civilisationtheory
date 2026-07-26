@@ -104,12 +104,13 @@
             pointer-events: none !important;
         }
 
-        /* HUDless mode (Leaves minimap untouched) */
+        /* HUDless mode */
         body.hudless #topbar,
         body.hudless #alphabet-nav,
         body.hudless #bottom-right-footer,
         body.hudless #right-tab,
-        body.hudless #url-bar {
+        body.hudless #url-bar,
+        body.hudless #vertical-progress-container {
             opacity: 0 !important;
             visibility: hidden !important;
             pointer-events: none !important;
@@ -475,7 +476,7 @@
             position: fixed;
             top: 22vh; 
             height: 65vh; /* Exactly matches alphabet tab */
-            left: 165px; /* Visually aligned with the 'N' in Civilisation from the top-left title */
+            left: 165px; /* Locked alignment with the 'N' in Civilisation from the top-left title */
             width: 3px;
             background-color: var(--tab-bg);
             border-radius: 4px;
@@ -1187,7 +1188,6 @@
                 }
                 progressContainer.style.display = 'block';
 
-                // Query the exact headings safely avoiding duplication of the title
                 const titleEl = document.getElementById('concept-title');
                 const subheadings = Array.from(document.querySelectorAll('#viewer-ui h3, #viewer-ui .progress-heading'));
                 const headings = [titleEl, ...subheadings];
@@ -1199,17 +1199,38 @@
                 allTargets.forEach(el => {
                     let relativeTop = (el.getBoundingClientRect().top + main.scrollTop) - main.getBoundingClientRect().top;
                     
-                    let percent = (relativeTop / maxScroll) * 100;
+                    let targetScroll = relativeTop - 150; 
+                    if (targetScroll < 0) targetScroll = 0;
+                    if (targetScroll > maxScroll) targetScroll = maxScroll;
                     
-                    if (percent > 100) percent = 100; 
-                    if (percent < 0) percent = 0;   
+                    let percent = (targetScroll / maxScroll) * 100;
                     
-                    // Prevent overlapping text labels 
-                    if (percent - lastPercent < 4) {
-                        percent = lastPercent + 4; 
+                    if (percent - lastPercent < 5) {
+                        percent = lastPercent + 5; 
                     }
-                    lastPercent = percent;
                     
+                    el._percent = percent;
+                    el._targetScroll = targetScroll;
+                    lastPercent = percent;
+                });
+
+                if (lastPercent > 98) {
+                    let shift = lastPercent - 98;
+                    for (let i = allTargets.length - 1; i >= 0; i--) {
+                        allTargets[i]._percent -= shift;
+                        if (i > 0 && allTargets[i-1]._percent > allTargets[i]._percent - 5) {
+                            shift = allTargets[i-1]._percent - (allTargets[i]._percent - 5);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
+                allTargets.forEach(el => {
+                    let percent = el._percent;
+                    if (percent < 0) percent = 0;
+                    if (percent > 100) percent = 100;
+
                     const marker = document.createElement('div');
                     marker.className = 'progress-marker';
                     marker.style.top = percent + '%';
@@ -1217,12 +1238,11 @@
                     
                     marker.onclick = () => {
                         playSound('click');
-                        main.scrollTo({ top: relativeTop, behavior: 'smooth' });
+                        main.scrollTo({ top: el._targetScroll > 0 ? el._targetScroll : 0, behavior: 'smooth' });
                     };
                     
                     container.appendChild(marker);
                     el._marker = marker; 
-                    el._targetTop = relativeTop;
                 });
                 
                 updateProgressBar();
@@ -1231,12 +1251,9 @@
 
         function updateProgressBar() {
             const main = document.getElementById('main-content');
-            const scrollHeight = main.scrollHeight;
-            const clientHeight = main.clientHeight;
-            const maxScroll = scrollHeight - clientHeight;
+            const maxScroll = main.scrollHeight - main.clientHeight;
             if (maxScroll <= 0) return;
             
-            // Map strictly to total scroll bounds
             let percent = (main.scrollTop / maxScroll) * 100;
             if (percent > 100) percent = 100;
             if (percent < 0) percent = 0;
@@ -1249,7 +1266,7 @@
             const headings = Array.from(document.querySelectorAll('#viewer-ui h2, #viewer-ui h3, #viewer-ui .progress-heading, #concept-title')).filter(el => el && el._marker);
             
             headings.forEach(el => {
-                if (main.scrollTop >= el._targetTop - 150) { 
+                if (main.scrollTop >= el._targetScroll - 20) { 
                     activeEl = el;
                 }
             });
