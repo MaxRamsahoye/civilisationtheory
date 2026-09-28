@@ -1,2540 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Civilisation Theory Map</title>
-    
-    <!-- Black Triangle Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='0,0 100,0 0,100' fill='%23000'/></svg>">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=IBM+Plex+Sans+Arabic:wght@500;600;700&family=Inter+Tight:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-
-    <style>
-        :root { 
-            --bg-color: #f9f7f5; 
-            --topbar-bg: #ffffff; 
-            --text-color: #333333; 
-            --topbar-text: #000000; 
-            --accent-color: #3CB371; /* Medium Sea Green for Light Theme */
-            --nav-inactive: #b0b0b0;
-            --nav-border: #777777;
-            --diamond-bg: #ffffff; /* White Diamond for Light Theme */
-            --tab-bg: rgba(0, 0, 0, 0.12); /* Slightly darker shade for tabs in light theme */
-            
-            /* Cursors */
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%233CB371'/></svg>") 12 12, auto;
-            --cursor-alt-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2.5' fill='%23000'/></svg>") 12 12, auto;
-        }
-
-        /* Hidden Dark Theme Variables */
-        body.dark-mode {
-            --bg-color: #121212; 
-            --topbar-bg: #1a1a1a; 
-            --text-color: #e0e0e0; 
-            --topbar-text: #ffffff; 
-            --accent-color: #00BFFF; /* Deep Sky Blue for Dark Theme */
-            --nav-inactive: #555555;
-            --nav-border: #444444;
-            --diamond-bg: #000000; /* Black Diamond for Dark Theme */
-            --tab-bg: rgba(255, 255, 255, 0.08); /* Faint white tabs for dark theme */
-            
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%2300BFFF'/></svg>") 12 12, auto;
-            --cursor-alt-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23fff' stroke-width='1.5'/><circle cx='12' cy='12' r='2.5' fill='%23fff'/></svg>") 12 12, auto;
-        }
-
-        /* Art Modes overrides */
-        body.art-orange, body.dark-mode.art-orange {
-            --accent-color: #f43900;
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23f43900'/></svg>") 12 12, auto !important;
-        }
-        
-        body.art-colorless {
-            --accent-color: #000000;
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23000000'/></svg>") 12 12, auto !important;
-        }
-        
-        body.dark-mode.art-colorless {
-            --accent-color: #ffffff;
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23ffffff'/></svg>") 12 12, auto !important;
-        }
-        
-        body.art-yellow, body.dark-mode.art-yellow {
-            --bg-color: #ffe442;
-            --topbar-bg: #ffe442;
-            --text-color: #000000;
-            --topbar-text: #000000;
-            --accent-color: #000000;
-            --diamond-bg: #ffe442;
-            --nav-inactive: #888888;
-            --nav-border: #000000;
-            --tab-bg: rgba(0, 0, 0, 0.08);
-            
-            --cursor-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='3.5' fill='%23000000'/></svg>") 12 12, auto !important;
-            --cursor-alt-style: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='none' stroke='%23000' stroke-width='1.5'/><circle cx='12' cy='12' r='2.5' fill='%23000'/></svg>") 12 12, auto !important;
-        }
-
-        /* Background Match Mode */
-        body.bg-match-mode {
-            --topbar-bg: var(--bg-color);
-        }
-
-        /* Draws the black hypotenuse line specifically for Yellow Art Mode */
-        body.art-yellow #topbar {
-            background-image: linear-gradient(to top left, transparent 50%, var(--topbar-text) 50%, var(--topbar-text) calc(50% + 3px), transparent calc(50% + 3px));
-        }
-
-        /* Removes the hypotenuse lines when Background Match Mode is active alongside Yellow Art Mode */
-        body.bg-match-mode.art-yellow #topbar {
-            background-image: none;
-        }
-
-        /* Gradient Mode (Fades corners at the hypotenuse using a dynamic CSS mask) */
-        body.gradient-mode #topbar {
-            -webkit-mask-image: linear-gradient(to bottom right, black 45%, transparent 50%);
-            mask-image: linear-gradient(to bottom right, black 45%, transparent 50%);
-        }
-
-        /* UI Auto-Hide Class */
-        .ui-hidden {
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-
-        /* HUDless mode */
-        body.hudless #topbar,
-        body.hudless #alphabet-nav,
-        body.hudless #bottom-right-footer,
-        body.hudless #right-tab,
-        body.hudless #url-bar,
-        body.hudless #vertical-progress-container {
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-
-        /* HUD Hover Reveal Zone (Right Edge) */
-        #hud-hover-zone-right {
-            position: fixed;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 300px;
-            z-index: 99;
-            display: none;
-        }
-        body.hudless #hud-hover-zone-right {
-            display: block; 
-        }
-        body.hudless #hud-hover-zone-right:hover ~ #right-tab,
-        body.hudless #right-tab:hover {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
-        }
-
-        /* HUD Hover Reveal Zone (Left Edge for Alphabet) */
-        #hud-hover-zone-left {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 60vh;
-            z-index: 99;
-            display: none;
-        }
-        body.hudless #hud-hover-zone-left {
-            display: block; 
-        }
-        body.hudless #hud-hover-zone-left:hover ~ #alphabet-nav,
-        body.hudless #alphabet-nav:hover {
-            opacity: 1 !important;
-            visibility: visible !important;
-            pointer-events: auto !important;
-        }
-
-        /* Minimalist Modern Custom Cursor */
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            cursor: var(--cursor-style) !important;
-        }
-        
-        body.alt-cursor * {
-            cursor: var(--cursor-alt-style) !important;
-        }
-        
-        body { 
-            display: block; 
-            height: 100vh; 
-            overflow: hidden; /* Desktop bounded scroll */
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            line-height: 1.4; 
-            transition: background-color 0.3s, color 0.3s;
-        }
-        
-        p, h1, h2, h3 { margin-bottom: 7.5px; }
-
-        /* Cursor Trail Dot */
-        .cursor-trail-dot {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 99999;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-        }
-        
-        /* Disable trail completely in Alt Cursor Mode */
-        body.alt-cursor .cursor-trail-dot {
-            display: none !important;
-        }
-
-        /* Loading Screen overlay */
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--bg-color);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Hide cursor specifically during load */
-        #loading-screen, #loading-screen * {
-            cursor: none !important;
-        }
-
-        #loading-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        /* Diamond Wrapper */
-        .diamond-wrapper {
-            position: relative;
-            width: 400px; 
-            height: 400px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .diamond-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .diamond-path {
-            fill: var(--diamond-bg);
-            stroke: var(--accent-color);
-            stroke-width: 5px;
-            stroke-linejoin: miter; /* Ensures sharp corners */
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            transition: fill 0.3s, stroke 0.3s;
-            animation: drawOutline 3s linear forwards; 
-        }
-
-        @keyframes drawOutline {
-            0% { stroke-dashoffset: 100; }
-            100% { stroke-dashoffset: 0; }
-        }
-
-        .diamond-text {
-            position: relative;
-            z-index: 2;
-            text-align: left;
-        }
-
-        .diamond-text h1 {
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            font-weight: 600; 
-            font-size: 1.8rem; 
-            margin: 0;
-            text-transform: uppercase;
-            color: var(--topbar-text); 
-            transition: color 0.3s;
-        }
-
-        /* Top Progress Bar (Static) */
-        #top-line-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 6px; 
-            z-index: 1000;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-
-        #top-line-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background-color: var(--accent-color);
-            transition: background-color 0.3s;
-        }
-
-        /* Top Left Corner (Asymmetrical with Shorter Left Edge) */
-        #topbar { 
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 26vw; 
-            height: 14vh; 
-            background-color: var(--topbar-bg); 
-            color: var(--topbar-text); 
-            display: flex; 
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start; 
-            padding: 30px 0 0 35px; 
-            clip-path: polygon(0 0, 100% 0, 0 100%); 
-            z-index: 100;
-            transition: background-color 0.3s, color 0.3s, opacity 0.3s, visibility 0.3s;
-        }
-
-        .topbar-content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .title-container {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: flex-start; 
-            cursor: pointer;
-        }
-
-        .title-container:hover h1 {
-            color: var(--accent-color);
-            transition: color 0.2s;
-        }
-        
-        #topbar h1 { 
-            font-family: 'IBM Plex Sans Arabic', sans-serif; 
-            font-weight: 600; 
-            font-size: 1.5rem; 
-            margin: 0; 
-            text-transform: uppercase; 
-            line-height: 1.15;
-            text-align: left;
-            width: 100%;
-            white-space: nowrap; 
-            transition: color 0.3s;
-        }
-
-        /* Right Edge Icon Tab */
-        #right-tab {
-            position: absolute;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column; 
-            align-items: center;
-            gap: 15px;
-            background: var(--tab-bg);
-            backdrop-filter: blur(4px);
-            border-radius: 16px 0 0 16px; 
-            padding: 18px 10px;
-            z-index: 100;
-            transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
-        }
-
-        #info-icon, #settings-icon, #theme-icon, #color-icon, #hud-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-color);
-            transition: color 0.3s;
-            pointer-events: auto;
-            margin: 0;
-            cursor: pointer;
-        }
-
-        #info-icon svg, #settings-icon svg, #theme-icon svg, #color-icon svg, #hud-icon svg {
-            width: 20px; 
-            height: 20px;
-        }
-
-        #info-icon:hover, #settings-icon:hover, #theme-icon:hover, #color-icon:hover, #hud-icon:hover {
-            color: var(--accent-color);
-        }
-
-        /* Top Right URL Bar (Aligned to Title) */
-        #url-bar {
-            position: absolute;
-            top: 32px; 
-            right: 40px;
-            text-align: right;
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.9rem;
-            color: var(--accent-color); 
-            z-index: 100;
-            transition: color 0.3s, opacity 0.3s, visibility 0.3s;
-        }
-        
-        /* Bottom Right Footer Text */
-        #bottom-right-footer {
-            position: absolute;
-            bottom: 30px;
-            right: 30px;
-            text-align: right;
-            font-family: 'Inter Tight', sans-serif;
-            font-weight: 400;
-            font-size: 0.85rem;
-            color: var(--text-color);
-            z-index: 10;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-
-        #bottom-right-footer p {
-            margin: 0;
-        }
-        
-        /* Alphabet Nav Vertical Left Tab */
-        #alphabet-nav { 
-            position: absolute;
-            top: 22vh; 
-            height: 65vh; /* Fixed height to match minimap */
-            bottom: 0;
-            left: 0; 
-            transform: none;
-            display: flex; 
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 0; 
-            background: var(--tab-bg); 
-            backdrop-filter: blur(4px);
-            border-radius: 0 16px 16px 0; 
-            width: 40px; 
-            padding: 10px 0; 
-            z-index: 100;
-            transition: opacity 0.3s, visibility 0.3s, background-color 0.3s;
-            overflow-y: auto; 
-        }
-        
-        #alphabet-nav::-webkit-scrollbar {
-            display: none; 
-        }
-
-        .nav-letter {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 0.95rem; 
-            cursor: default;
-            width: 26px; 
-            height: 26px; 
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            transition: background-color 0.2s, color 0.2s;
-        }
-
-        .active-letter {
-            color: var(--text-color);
-            font-weight: bold;
-        }
-        
-        .active-letter:hover { 
-            background-color: rgba(128, 128, 128, 0.15); /* Faint circle hover */
-            text-decoration: underline; 
-            color: var(--accent-color);
-        }
-        
-        .inactive-letter { color: var(--nav-inactive); }
-        
-        /* Vertical Progress Bar */
-        #vertical-progress-container {
-            position: fixed;
-            top: 22vh; 
-            height: 65vh; /* Exactly matches alphabet tab */
-            left: 165px; /* Locked alignment with the 'N' in Civilisation from the top-left title */
-            width: 3px;
-            background-color: var(--tab-bg);
-            border-radius: 4px;
-            z-index: 90;
-            display: none;
-            transition: opacity 0.3s;
-        }
-
-        #vertical-progress-fill {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 0%;
-            background-color: var(--accent-color);
-            border-radius: 4px;
-            transition: height 0.15s ease-out;
-        }
-
-        #vertical-progress-markers {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .progress-marker {
-            position: absolute;
-            left: 15px; /* Offset to the right of the line */
-            transform: translateY(-50%);
-            font-family: 'Inter Tight', sans-serif;
-            font-size: 0.8rem;
-            color: var(--nav-inactive);
-            white-space: nowrap;
-            cursor: pointer;
-            pointer-events: auto;
-            transition: color 0.2s, font-weight 0.2s, opacity 0.2s;
-            text-align: left;
-            opacity: 0.8;
-        }
-
-        .progress-marker::before {
-            content: '';
-            position: absolute;
-            left: -16.5px; /* Mathematically perfectly centers the dot exactly on the 3px line (15px gap + 1.5px center offset) */
-            top: 50%;
-            transform: translateY(-50%);
-            width: 7px;
-            height: 7px;
-            background-color: var(--nav-inactive);
-            border-radius: 50%;
-            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .progress-marker:hover, .progress-marker.active {
-            color: var(--text-color);
-            opacity: 1;
-            font-weight: 700;
-        }
-
-        .progress-marker:hover::before, .progress-marker.active::before {
-            background-color: var(--accent-color);
-            transform: translateY(-50%) scale(1.3);
-            box-shadow: 0 0 8px var(--accent-color);
-        }
-
-        @media (max-width: 1100px) {
-            .progress-marker { font-size: 0; }
-            .progress-marker::before { left: -14px; }
-        }
-
-        #main-content { 
-            padding: 40px 85px 40px 85px; /* Fully symmetric padding to perfectly center text */
-            height: 100vh;
-            overflow-y: auto; 
-            position: relative; 
-        }
-
-        /* Default Landing List classes (Desktop) */
-        .landing-concept-list {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-        }
-
-        .landing-concept-col {
-            flex: 1;
-        }
-        
-        /* Split Screen Editor Menu */
-        #editor-menu {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 200;
-            display: none; /* Flex when active */
-            background-color: var(--bg-color);
-        }
-
-        .editor-menu-btn {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Inter Tight', sans-serif;
-            font-weight: 700;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .editor-menu-btn.left {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            border-right: 2px dashed var(--accent-color);
-        }
-
-        .editor-menu-btn.left:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-        }
-
-        .editor-menu-btn.right {
-            background-color: var(--text-color);
-            color: var(--bg-color);
-        }
-
-        .editor-menu-btn.right:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-color);
-        }
-
-        #viewer-ui, #editor-entry-list { 
-            width: 50%; 
-            margin: 18vh auto 0 auto; 
-            position: relative;
-        }
-
-        /* Editor A-Z Concept List */
-        #editor-entry-list {
-            display: none;
-        }
-
-        #editor-entry-list h2 {
-            font-family: 'Inter Tight', sans-serif;
-            font-weight: 700;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        #concept-title { 
-            font-family: 'Inter Tight', sans-serif; 
-            font-weight: 700; 
-            font-size: 2.5rem; 
-            white-space: nowrap; 
-        }
-        
-        #concept-description, #concept-description div { 
-            font-family: 'Cormorant Garamond', serif; 
-            font-weight: 500; 
-            font-size: 1.75rem; 
-            line-height: 1.4; 
-            white-space: pre-wrap; 
-        }
-
-        /* Dynamic Font Shrinker for Long Entries (Single Increment) */
-        #concept-description.reduced-font, 
-        #concept-description.reduced-font div {
-            font-size: 1.5rem !important; 
-        }
-        
-        #concept-description a {
-            color: var(--accent-color);
-            text-decoration: none; /* Link underline hidden by default */
-            transition: opacity 0.2s;
-        }
-        
-        #concept-description a:hover {
-            opacity: 0.7;
-        }
-        
-        body.link-underline #concept-description a {
-            text-decoration: underline; /* Toggled via 'u' */
-        }
-
-        /* Hardcoded Concept Count override to definitively prevent .reduced-font div inheritance */
-        #concept-count-display {
-            font-family: 'Roboto Mono', monospace !important;
-            font-weight: normal !important;
-            color: var(--accent-color) !important;
-            font-size: 1.15rem !important; 
-            margin-bottom: 25px !important;
-            line-height: 1.4 !important;
-            white-space: normal !important;
-        }
-
-        /* Unordered List Styling (Line-height spacing + Normal Whitespace Fix) */
-        #concept-description ul {
-            list-style: none;
-            padding-left: 25px;
-            margin: 1.25em 0; 
-            white-space: normal; /* Disables pre-wrap gaps */
-        }
-        #concept-description ul li {
-            position: relative;
-            margin-bottom: 0.75em; 
-            line-height: 1.4; 
-            white-space: normal; /* Disables pre-wrap gaps */
-        }
-        #concept-description ul li::before {
-            content: '\2B26'; /* Medium Diamond Unicode */
-            color: var(--accent-color);
-            position: absolute;
-            left: -25px;
-            font-size: 0.75em; /* Smaller diamond */
-            line-height: inherit;
-            top: 0.25em; /* Optical alignment */
-            transition: color 0.3s;
-        }
-
-        /* Exclude custom bullet styling from layout specific index lists */
-        #concept-description .landing-concept-list ul,
-        #letter-list {
-            padding-left: 0 !important;
-            margin: 0 !important;
-        }
-        #concept-description .landing-concept-list li::before,
-        #letter-list li::before {
-            display: none !important;
-        }
-
-        /* Settings Page Formatting (SVG Keyboard Keys) */
-        .settings-content {
-            white-space: normal !important;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.75rem;
-        }
-        
-        .shortcut-key {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 36px;
-            height: 36px;
-            color: var(--accent-color);
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-        .key-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        .key-text {
-            position: relative;
-            z-index: 1;
-            font-family: 'Roboto Mono', monospace !important;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            transform: translateY(-2px);
-            transition: color 0.3s;
-        }
-
-        .settings-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            line-height: 1.3;
-        }
-        
-        .settings-desc-text {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.15rem;
-            color: var(--text-color);
-            white-space: nowrap; /* Forces key descriptions onto a single line */
-        }
-
-        /* Superscript styling for footnotes in the description */
-        #concept-description sup {
-            color: var(--accent-color);
-            font-family: 'Roboto Mono', monospace;
-            font-weight: 400; /* Unbolded */
-            font-size: 0.9rem; /* Match the footnote section size */
-            transition: color 0.3s;
-        }
-
-        /* Footnotes Section */
-        #concept-footnotes {
-            margin-top: 30px;
-            padding-top: 20px;
-            display: none; /* hidden by default if no footnotes */
-        }
-
-        .footnote-entry {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.1rem; /* Smaller than description text */
-            margin-bottom: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-        }
-
-        .footnote-num {
-            color: var(--accent-color);
-            font-weight: 400; /* Unbolded */
-            font-size: 0.9rem; /* Same as the superscript above */
-        }
-
-        .footnote-text {
-            flex: 1;
-            outline: none;
-            line-height: 1.4;
-        }
-
-        .footnote-text.editable-field {
-            outline: 2px dashed var(--accent-color);
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: rgba(128, 128, 128, 0.05);
-            min-height: 1.5em;
-        }
-
-        .footnote-text:empty:before {
-            content: attr(data-placeholder);
-            color: var(--nav-inactive);
-            pointer-events: none;
-        }
-
-        /* In-Place Editor Toolbar */
-        #editor-toolbar {
-            display: none;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        #editor-toolbar button {
-            padding: 6px 14px;
-            background-color: var(--topbar-text);
-            color: var(--bg-color);
-            border: none;
-            border-radius: 4px;
-            font-family: 'Inter Tight', sans-serif;
-            font-weight: 700;
-            transition: opacity 0.3s;
-        }
-
-        #editor-toolbar button:hover {
-            opacity: 0.8;
-        }
-
-        #editor-toolbar .btn-export {
-            background-color: #0056b3;
-            color: white;
-        }
-
-        .editable-field {
-            outline: 2px dashed var(--accent-color);
-            padding: 8px;
-            border-radius: 6px;
-            background: rgba(128, 128, 128, 0.05);
-            min-height: 1.5em;
-        }
-
-        #editor-status { position: absolute; top: 20px; right: 20px; font-family: 'Inter Tight', sans-serif; font-size: 0.8rem; color: red; font-weight: 700; display: none; z-index: 300;}
-
-        /* --- MOBILE RESPONSIVE ADAPTATIONS (iPhone SE & Small Screens) --- */
-        @media (max-width: 850px) {
-            body {
-                --topbar-bg: var(--bg-color); /* Force Background Match Mode on Mobile */
-                height: auto;
-                min-height: 100vh;
-                overflow-y: auto; /* Convert to native continuous body scroll */
-                overflow-x: hidden;
-                position: relative; /* Contains absolute UI elements so they attach to document top/bottom */
-            }
-
-            body.art-yellow #topbar {
-                background-image: none; /* Hide diagonal lines for art-yellow on Mobile */
-            }
-
-            /* Convert UI corners to absolute so they scroll out of the way naturally */
-            #topbar, #alphabet-nav, #top-line-container, #url-bar, #bottom-right-footer, #editor-status, #right-tab, #hud-hover-zone-right, #hud-hover-zone-left {
-                position: absolute;
-            }
-
-            #topbar {
-                width: 85vw; 
-                height: 80px; 
-                padding: 20px 0 0 20px; 
-            }
-            
-            #topbar h1 {
-                font-size: 0.95rem;
-                margin-top: 0;
-                line-height: 1.1;
-            }
-            
-            #right-tab {
-                top: 50%;
-                right: 0;
-                padding: 12px 8px;
-                gap: 12px;
-                border-radius: 12px 0 0 12px;
-            }
-
-            #info-icon svg, #settings-icon svg, #theme-icon svg, #color-icon svg, #hud-icon svg {
-                width: 15px; 
-                height: 15px;
-            }
-            
-            #alphabet-nav {
-                top: 120px; 
-                bottom: 0;
-                left: 0;
-                width: 35px;
-                transform: none;
-                flex-direction: column;
-                flex-wrap: nowrap;
-                padding: 10px 0;
-                border-radius: 0 12px 12px 0; 
-                max-height: none; 
-                gap: 0; 
-            }
-            
-            .nav-letter { 
-                width: 20px; 
-                height: 20px;
-                font-size: 0.8rem; 
-            }
-            
-            #vertical-progress-container {
-                display: none !important; /* Hide left-side progress bar on narrow screens */
-            }
-
-            /* Main content container flows naturally */
-            #main-content { 
-                position: relative;
-                top: 0; 
-                height: auto;
-                min-height: 100vh;
-                width: 100%;
-                padding: 90px 45px 110px 45px; /* Safely avoids overlap with tabs */
-                box-sizing: border-box;
-                overflow-y: visible;
-            }
-
-            #concept-count-display {
-                font-size: 1rem !important; 
-            }
-
-            #viewer-ui, #editor-entry-list { width: 100%; margin: 0 auto !important; }
-            
-            #concept-title { 
-                font-size: 1.8rem; 
-                white-space: normal; /* Enables text wrapping for long entries */
-                line-height: 1.2;
-            }
-            
-            #concept-description, #concept-description div { font-size: 1.2rem; line-height: 1.4; }
-            
-            #concept-description.reduced-font, 
-            #concept-description.reduced-font div { font-size: 1.1rem !important; } /* Single increment reduction for mobile */
-
-            #editor-menu { 
-                position: fixed; /* Keep menu fixed so it overlays entire screen */
-                height: 100vh;
-                flex-direction: column; 
-            }
-            
-            .editor-menu-btn.left {
-                border-right: none;
-                border-bottom: 2px dashed var(--accent-color);
-            }
-            
-            .editor-menu-btn { font-size: 1.5rem; text-align: center; padding: 15px; flex: 1; }
-            
-            .diamond-wrapper {
-                width: 70vw;
-                height: 70vw;
-                max-width: 280px;
-                max-height: 280px;
-            }
-            
-            .diamond-text h1 { font-size: 1.2rem; }
-            
-            #editor-toolbar { justify-content: center; margin-bottom: 20px; }
-            
-            .landing-concept-list { flex-direction: column; gap: 15px; }
-
-            .settings-content { font-size: 1.25rem; }
-            
-            .shortcut-key { width: 30px; height: 30px; margin-right: 10px; }
-            .key-text { font-size: 0.7rem; transform: translateY(-1px); }
-            
-            .settings-desc-text { font-size: 0.75rem; white-space: nowrap; } 
-
-            .url-base {
-                display: block; /* Pushes the entry slug to the next line */
-            }
-
-            /* Safely bounds the URL to the top right side and breaks words to avoid crashes */
-            #url-bar { 
-                top: 22px; /* Aligned with mobile text padding */
-                right: 20px;
-                font-size: 0.65rem; 
-                max-width: 40vw; 
-                word-break: break-all;
-                line-height: 1.2;
-            }
-
-            #bottom-right-footer {
-                bottom: 10px;
-                right: 15px;
-                font-size: 0.65rem;
-            }
-        }
-    </style>
-
-    <!-- THIS IS YOUR EMBEDDED DATA -->
-    <script id="about-data" type="application/json">
-{
-    "title": "Civilisation Theory",
-    "description": "<i>Civilisation Theory</i> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of <i>civilisation theory</i> is that the <i>generative dynamics</i> of existential risk(s) emerge from within the <i>developmental process</i>, <i>initial conditions</i> and <i>dominant paradigm</i> of civilisation itself. From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is <i>civilisation design</i> <i>and transition</i>: to realise a new form of political economy (structure) and cultural psychology (superstucture), a <i>viable life-world-system</i> for 21st century technology (infrastructure).",
-    "casDescription": "This glossary site serves to create a <i>conceptual adaptive system</i> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or <i>world-model</i>. In other words, recursively within the civilisational crisis, is an <i>epistemic crisis</i> to process it. The <a href=\"https://maxramsahoye.github.io/civilisationtheory\"><i>Civilisation Theory Map</i></a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.",
-    "projectContext": "The Civilisation Theory Map is inspired, in substance and design, by <a href=\"https://consilienceproject.org/glossary/\">the glossary of <i>The Consilience Project</i></a> and the metacrisis frame of the <a href=\"https://civilizationresearchinstitute.org/\"><i>Civilization Research Institute</i></a>. More broadly, <i>Civilisation Theory</i> is a critical dialectical synthesis derived, in part, from three core clusters of intellectual subcultures:\n<ul>\n<li><b>The Meta-space<span style=\"color: var(--accent-color);\">:</span></b> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>\n<li><b>The PARA-academic space<span style=\"color: var(--accent-color);\">:</span></b> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>\n<li><b>The Cybernetic Economics lineage<span style=\"color: var(--accent-color);\">:</span></b> across Buckminster Fuller (1969), Jacque Fresco (1985), Stafford Beer (1971), Daniel Schmachtenberger (2017, 21), Peter Joseph (2014, 17, 25)</li>\n</ul>",
-    "mapDescription": "Below is a complete index of concepts on this site. Over time, this map will extend to cover hundreds of entries.",
-    "footnotes": {}
-}
-    </script>
-    <script id="glossary-data" type="application/json">
-[]
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Civilisation Theory Map</title>
+<meta name="description" content="A glossary of concepts for Civilisation Theory: a conceptual adaptive system for civilisation design and transition.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='0,0 100,0 0,100' fill='%23000'/></svg>">
+<script>
+  // Apply saved theme before first paint to avoid a flash.
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('ct-theme'); } catch (e) {}
+    if (t !== 'light' && t !== 'dark') {
+      t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<style>
+  /* ET Bembo (ET Book), MIT licence — https://github.com/edwardtufte/et-book */
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book-roman-old-style-figures.woff') format('woff');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book-display-italic-old-style-figures.woff') format('woff');
+    font-weight: 400; font-style: italic; font-display: swap;
+  }
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book-semi-bold-old-style-figures.woff') format('woff');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book-bold-line-figures.woff') format('woff');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+
+  :root {
+    --bg: #fffff8;
+    --bg-side: #f7f6ee;
+    --text: #111111;
+    --muted: #6b6b64;
+    --rule: #dcdad0;
+    --link: #111111;
+    --link-underline: #9a988e;
+    --active: #111111;
+    --side-w: 17rem;
+    --measure: 36rem;
+  }
+  :root[data-theme="dark"] {
+    --bg: #151515;
+    --bg-side: #1b1b1a;
+    --text: #e8e6de;
+    --muted: #8f8d85;
+    --rule: #333330;
+    --link: #e8e6de;
+    --link-underline: #6d6b64;
+    --active: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+  html { font-size: 17px; }
+  @media (min-width: 900px) { html { font-size: 19px; } }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'ET Bembo', 'ETBembo', Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    line-height: 1.55;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-variant-numeric: oldstyle-nums;
+    transition: background-color .2s ease, color .2s ease;
+  }
+
+  a {
+    color: var(--link);
+    text-decoration: underline;
+    text-decoration-color: var(--link-underline);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  a:hover { text-decoration-color: var(--text); }
+
+  button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  button:focus-visible, a:focus-visible {
+    outline: 1px solid var(--text);
+    outline-offset: 3px;
+  }
+
+  /* ---------- Controls ---------- */
+  .control {
+    position: fixed;
+    top: 1rem;
+    z-index: 30;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    color: var(--muted);
+    padding: 0.25rem 0.4rem;
+  }
+  .control:hover { color: var(--text); }
+  #sidebar-toggle { left: 1rem; }
+  #theme-toggle { right: 1rem; }
+  #theme-toggle .sep { margin: 0 0.3em; opacity: 0.6; }
+  #theme-toggle [data-t] { transition: color .2s ease; }
+  :root[data-theme="light"] #theme-toggle [data-t="light"],
+  :root[data-theme="dark"] #theme-toggle [data-t="dark"] { color: var(--text); }
+
+  /* ---------- Sidebar ---------- */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: var(--side-w);
+    background: var(--bg-side);
+    border-right: 1px solid var(--rule);
+    padding: 3.6rem 1.4rem 2rem;
+    overflow-y: auto;
+    z-index: 20;
+    transition: transform .25s ease, background-color .2s ease;
+  }
+  body.sidebar-closed #sidebar { transform: translateX(-100%); }
+
+  .side-title {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    color: var(--muted);
+    margin: 0 0 0.9rem;
+    font-weight: 400;
+  }
+  .tree, .tree ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tree ul {
+    margin-left: 0.35rem;
+    padding-left: 0.85rem;
+    border-left: 1px solid var(--rule);
+  }
+  .tree li { margin: 0.15rem 0; }
+  .tree a {
+    text-decoration: none;
+    color: var(--muted);
+    display: inline-block;
+    line-height: 1.35;
+    padding: 0.1rem 0;
+  }
+  .tree a:hover { color: var(--text); }
+  .tree a[aria-current="page"] { color: var(--active); font-style: italic; }
+  .tree .empty {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-top: 0.35rem;
+  }
+
+  /* ---------- Main ---------- */
+  main {
+    padding: 5rem 1.5rem 6rem;
+    transition: padding-left .25s ease;
+  }
+  @media (min-width: 900px) {
+    body:not(.sidebar-closed) main { padding-left: calc(var(--side-w) + 1.5rem); }
+  }
+  article {
+    max-width: var(--measure);
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .tree-string {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    color: var(--muted);
+    margin: 0 0 1.2rem;
+  }
+  .tree-string a { color: var(--muted); text-decoration: none; }
+  .tree-string a:hover { color: var(--text); }
+  .tree-string .sep { margin: 0 0.45em; }
+
+  h1 {
+    font-weight: 400;
+    font-size: 2.6rem;
+    line-height: 1.1;
+    margin: 0 0 1.6rem;
+    letter-spacing: -0.005em;
+  }
+  h2 {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.45rem;
+    line-height: 1.2;
+    margin: 2.4rem 0 0.8rem;
+  }
+  p { margin: 0 0 1.1rem; }
+  .description ul { padding-left: 1.3rem; margin: 0 0 1.1rem; }
+  .description li { margin-bottom: 0.55rem; padding-left: 0.2rem; }
+  .description li strong { font-weight: 600; }
+
+  .count {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+    padding-top: 0.8rem;
+    margin-top: 1.4rem;
+  }
+  .index-list { list-style: none; padding: 0; margin: 0.6rem 0 0; }
+  .index-list li { margin: 0.2rem 0; }
+
+  /* Mobile: sidebar overlays the page */
+  #scrim {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.25);
+    z-index: 15;
+  }
+  @media (max-width: 899px) {
+    body:not(.sidebar-closed) #scrim { display: block; }
+    h1 { font-size: 2.1rem; }
+  }
+</style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="diamond-wrapper">
-            <svg class="diamond-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-                <path class="diamond-path" d="M 435 165 L 570 300 L 300 570 L 30 300 L 300 30 Z" pathLength="100"/>
-            </svg>
-            <div class="diamond-text">
-                <h1>Civilisation<br>Theory Map</h1>
-            </div>
-        </div>
-    </div>
 
-    <!-- Main Content -->
-    <div id="top-line-container">
-        <div id="top-line-bar"></div>
-    </div>
-
-    <div id="topbar">
-        <div class="topbar-content">
-            <div class="title-container" onclick="playSound('click'); showAbout();" title="Return to Civilisation Theory Map">
-                <h1>Civilisation<br>Theory</h1>
-            </div>
-        </div>
-    </div>
-    
-    <!-- HUD Hover Revealer Zones -->
-    <div id="hud-hover-zone-right"></div>
-    <div id="hud-hover-zone-left"></div>
-    
-    <div id="right-tab">
-        <span id="info-icon" onmouseenter="playSound('hover')" onclick="playSound('click'); showAbout()" title="About Civilisation Theory Map">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
-        </span>
-        <span id="settings-icon" onmouseenter="playSound('hover')" onclick="playSound('click'); showSettings()" title="Site Controls">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            </svg>
-        </span>
-        <span id="theme-icon" onmouseenter="playSound('hover')" onclick="toggleThemeMode()" title="Toggle Theme (Light/Dark)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-        </span>
-        <span id="color-icon" onmouseenter="playSound('hover')" onclick="cycleArtStyle()" title="Cycle Art Style">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-            </svg>
-        </span>
-        <span id="hud-icon" onmouseenter="playSound('hover')" onclick="toggleHUDMode()" title="Toggle HUD">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                <line x1="1" y1="1" x2="23" y2="23"></line>
-            </svg>
-        </span>
-    </div>
-    
-    <div id="alphabet-nav"></div>
-
-    <!-- Scroll Progress Minimap -->
-    <div id="vertical-progress-container">
-        <div id="vertical-progress-fill"></div>
-        <div id="vertical-progress-markers"></div>
-    </div>
-
-    <div id="main-content">
-        <span id="editor-status">EDITOR MODE ACTIVE (ESC TO MENU)</span>
-
-        <!-- Split Screen Editor Overlay -->
-        <div id="editor-menu">
-            <div class="editor-menu-btn left" onmouseenter="playSound('hover')" onclick="playSound('click'); startAddingNew()">
-                Add a New<br>Concept
-            </div>
-            <div class="editor-menu-btn right" onmouseenter="playSound('hover')" onclick="playSound('click'); startEditingExisting()">
-                Edit an Existing<br>Entry
-            </div>
-        </div>
-
-        <!-- Editor A-Z Concept Selection List -->
-        <div id="editor-entry-list"></div>
-
-        <div id="viewer-ui">
-            <!-- Inline Editor Toolbar -->
-            <div id="editor-toolbar">
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); document.execCommand('bold', false, null)" title="Bold Selection"><b>B</b></button>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); document.execCommand('insertUnorderedList', false, null)" title="Bulleted List">List</button>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); insertLink()" title="Insert Link">Link</button>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); insertFootnote()" title="Insert Footnote Marker">Footnote</button>
-                <button type="button" id="btn-preview" onmouseenter="playSound('hover')" onclick="playSound('click'); togglePreview()" style="background-color: #8e44ad; color: white;" title="Toggle Preview Mode">Preview</button>
-                <span style="width: 10px;"></span>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); saveCurrentConcept()">Save Edits</button>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); saveNewConcept()">Save as New</button>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); clearFields()" style="background-color: #666;">Clear</button>
-                <span style="width: 10px;"></span>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); exportHTML()" class="btn-export">Export HTML</button>
-                <button type="button" onmouseenter="playSound('hover')" onclick="playSound('click'); exitEditor()" style="background-color: #999; color: #fff;">Exit</button>
-            </div>
-
-            <h2 id="concept-title"></h2>
-            <div id="concept-description"></div>
-            <div id="concept-footnotes"></div>
-        </div>
-    </div>
-    
-    <div id="url-bar"><span class="url-base">civilisationtheory/</span><span id="url-concept"></span></div>
-    
-    <div id="bottom-right-footer">
-        <p>A research project by Max Ramsahoye</p>
-    </div>
-
-    <script>
-        // --- Custom Cursor Trail System ---
-        function initCursorTrail() {
-            const numDots = 12;
-            const dots = [];
-            for (let i = 0; i < numDots; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'cursor-trail-dot';
-                document.body.appendChild(dot);
-                dots.push({ el: dot });
-            }
-
-            let currentDotIndex = 0;
-
-            document.addEventListener('mousemove', (e) => {
-                const dot = dots[currentDotIndex].el;
-                dot.style.transition = 'none';
-                dot.style.left = e.clientX + 'px';
-                dot.style.top = e.clientY + 'px';
-                dot.style.opacity = '0.6';
-                dot.style.transform = 'translate(-50%, -50%) scale(1)';
-                
-                // Force reflow to restart CSS animation properly
-                void dot.offsetWidth;
-                
-                dot.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
-                dot.style.opacity = '0';
-                dot.style.transform = 'translate(-50%, -50%) scale(0.1)';
-                
-                currentDotIndex = (currentDotIndex + 1) % numDots;
-            });
-        }
-
-        // --- Progress Bar Engine ---
-        function buildProgressMarkers() {
-            const container = document.getElementById('vertical-progress-markers');
-            if(!container) return;
-            container.innerHTML = ''; 
-            
-            const main = document.getElementById('main-content');
-            
-            requestAnimationFrame(() => {
-                const scrollHeight = main.scrollHeight;
-                const clientHeight = main.clientHeight;
-                const maxScroll = scrollHeight - clientHeight;
-                const progressContainer = document.getElementById('vertical-progress-container');
-                
-                if (maxScroll <= 10) { 
-                    progressContainer.style.display = 'none';
-                    return;
-                }
-                progressContainer.style.display = 'block';
-
-                const titleEl = document.getElementById('concept-title');
-                const subheadings = Array.from(document.querySelectorAll('#viewer-ui h3, #viewer-ui .progress-heading'));
-                const headings = [titleEl, ...subheadings];
-                
-                const allTargets = headings.filter(el => el && el.innerText.trim() !== '');
-                
-                let lastPercent = -10; 
-
-                allTargets.forEach(el => {
-                    let relativeTop = (el.getBoundingClientRect().top + main.scrollTop) - main.getBoundingClientRect().top;
-                    
-                    let targetScroll = relativeTop - 150; 
-                    if (targetScroll < 0) targetScroll = 0;
-                    if (targetScroll > maxScroll) targetScroll = maxScroll;
-                    
-                    let percent = (targetScroll / maxScroll) * 100;
-                    
-                    if (percent - lastPercent < 5) {
-                        percent = lastPercent + 5; 
-                    }
-                    
-                    el._percent = percent;
-                    el._targetScroll = targetScroll;
-                    lastPercent = percent;
-                });
-
-                if (lastPercent > 98) {
-                    let shift = lastPercent - 98;
-                    for (let i = allTargets.length - 1; i >= 0; i--) {
-                        allTargets[i]._percent -= shift;
-                        if (i > 0 && allTargets[i-1]._percent > allTargets[i]._percent - 5) {
-                            shift = allTargets[i-1]._percent - (allTargets[i]._percent - 5);
-                        } else {
-                            break;
-                        }
-                    }
-                }
-
-                allTargets.forEach(el => {
-                    let percent = el._percent;
-                    if (percent < 0) percent = 0;
-                    if (percent > 100) percent = 100;
-
-                    const marker = document.createElement('div');
-                    marker.className = 'progress-marker';
-                    marker.style.top = percent + '%';
-                    marker.innerText = el.innerText || el.textContent;
-                    
-                    marker.onclick = () => {
-                        playSound('click');
-                        main.scrollTo({ top: el._targetScroll > 0 ? el._targetScroll : 0, behavior: 'smooth' });
-                    };
-                    
-                    container.appendChild(marker);
-                    el._marker = marker; 
-                });
-                
-                updateProgressBar();
-            });
-        }
-
-        function updateProgressBar() {
-            const main = document.getElementById('main-content');
-            const maxScroll = main.scrollHeight - main.clientHeight;
-            if (maxScroll <= 0) return;
-            
-            let percent = (main.scrollTop / maxScroll) * 100;
-            if (percent > 100) percent = 100;
-            if (percent < 0) percent = 0;
-            document.getElementById('vertical-progress-fill').style.height = percent + '%';
-            
-            const markers = document.querySelectorAll('.progress-marker');
-            markers.forEach(m => m.classList.remove('active'));
-            
-            let activeEl = null;
-            const headings = Array.from(document.querySelectorAll('#viewer-ui h2, #viewer-ui h3, #viewer-ui .progress-heading, #concept-title')).filter(el => el && el._marker);
-            
-            headings.forEach(el => {
-                if (main.scrollTop >= el._targetScroll - 20) { 
-                    activeEl = el;
-                }
-            });
-            
-            if (!activeEl && headings.length > 0) activeEl = headings[0];
-            if (activeEl && activeEl._marker) activeEl._marker.classList.add('active');
-        }
-
-        // --- UI Auto-Hide Engine ---
-        let uiIdleTimer;
-        let lastScrollY = 0;
-        let isHoveringUI = false;
-        let idleDelay = 1000; // Fast 1 second disappear time globally
-
-        function resetUI() {
-            const pill = document.getElementById('right-tab');
-            const nav = document.getElementById('alphabet-nav');
-            
-            if (pill) pill.classList.remove('ui-hidden');
-            if (nav) nav.classList.remove('ui-hidden');
-            
-            clearTimeout(uiIdleTimer);
-            
-            if (!isHoveringUI) {
-                uiIdleTimer = setTimeout(() => {
-                    if (!document.body.classList.contains('hudless')) {
-                        if (pill) pill.classList.add('ui-hidden');
-                        if (nav) nav.classList.add('ui-hidden');
-                    }
-                }, idleDelay); 
-            }
-        }
-
-        function initUIAutoHide() {
-            resetUI();
-            
-            setTimeout(() => { idleDelay = 1000; }, 2000); 
-
-            document.addEventListener('mousemove', resetUI);
-            document.addEventListener('touchstart', resetUI);
-            
-            const pill = document.getElementById('right-tab');
-            const nav = document.getElementById('alphabet-nav');
-            
-            if(pill) {
-                pill.addEventListener('mouseenter', () => isHoveringUI = true);
-                pill.addEventListener('mouseleave', () => { isHoveringUI = false; resetUI(); });
-            }
-            if(nav) {
-                nav.addEventListener('mouseenter', () => isHoveringUI = true);
-                nav.addEventListener('mouseleave', () => { isHoveringUI = false; resetUI(); });
-            }
-
-            function checkScrollDirection(scrollableElement) {
-                let currentScroll = scrollableElement.scrollTop;
-                if (currentScroll < lastScrollY) {
-                    resetUI(); 
-                }
-                lastScrollY = currentScroll <= 0 ? 0 : currentScroll;
-            }
-
-            const mainContentEl = document.getElementById('main-content');
-            if (mainContentEl) {
-                mainContentEl.addEventListener('scroll', function() { checkScrollDirection(this); updateProgressBar(); });
-            }
-            window.addEventListener('scroll', function() {
-                let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-                if (currentScroll < lastScrollY) {
-                    resetUI();
-                }
-                lastScrollY = currentScroll <= 0 ? 0 : currentScroll;
-            });
-        }
-
-        // --- Helper: Strip "The " for Indexing ---
-        function getIndexTitle(title) {
-            const t = title.trim();
-            if (t.toLowerCase().startsWith("the ") && t.length > 4) {
-                return t.substring(4).trim();
-            }
-            return t;
-        }
-
-        // --- Web Audio API Synthesizer ---
-        let audioCtx;
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-
-        // Catch initial user interaction to unlock audio context in browsers
-        document.addEventListener('click', initAudio, { once: true });
-        document.addEventListener('keydown', initAudio, { once: true });
-
-        function playSound(type) {
-            try {
-                initAudio();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                
-                const now = audioCtx.currentTime;
-                
-                if (type === 'hover') {
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(400, now);
-                    gainNode.gain.setValueAtTime(0.015, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-                    oscillator.start(now);
-                    oscillator.stop(now + 0.05);
-                } else if (type === 'click') {
-                    oscillator.type = 'triangle';
-                    oscillator.frequency.setValueAtTime(600, now);
-                    oscillator.frequency.exponentialRampToValueAtTime(800, now + 0.1);
-                    gainNode.gain.setValueAtTime(0.03, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-                    oscillator.start(now);
-                    oscillator.stop(now + 0.1);
-                } else if (type === 'toggle') {
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(300, now);
-                    oscillator.frequency.exponentialRampToValueAtTime(400, now + 0.15);
-                    gainNode.gain.setValueAtTime(0.03, now);
-                    gainNode.gain.linearRampToValueAtTime(0, now + 0.15);
-                    oscillator.start(now);
-                    oscillator.stop(now + 0.15);
-                } else if (type === 'success') {
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(500, now);
-                    oscillator.frequency.setValueAtTime(750, now + 0.1);
-                    gainNode.gain.setValueAtTime(0.03, now);
-                    gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
-                    oscillator.start(now);
-                    oscillator.stop(now + 0.3);
-                } else if (type === 'alert') {
-                    oscillator.type = 'square';
-                    oscillator.frequency.setValueAtTime(250, now);
-                    oscillator.frequency.linearRampToValueAtTime(200, now + 0.2);
-                    gainNode.gain.setValueAtTime(0.02, now);
-                    gainNode.gain.linearRampToValueAtTime(0, now + 0.2);
-                    oscillator.start(now);
-                    oscillator.stop(now + 0.2);
-                }
-            } catch (e) {
-                // Silently fail if audio is unsupported or blocked by browser policy
-            }
-        }
-        // ---------------------------------
-
-        let concepts = [];
-        let aboutConcept = {};
-        
-        // Tracks actively viewed concept (-1 = About Page, -2 = New Concept, -3 = Settings Menu)
-        let currentConceptIndex = -1; 
-        
-        // State machine for Editor Mode
-        let isEditorMode = false;
-        let editorState = 'inactive'; // 'inactive' -> 'menu' -> 'list' -> 'active'
-        let isPreviewing = false;
-        
-        let artMode = 0; // 0: Default, 1: Orange, 2: Colorless, 3: Yellow
-
-        function toggleThemeMode() {
-            if (artMode !== 3) {
-                playSound('toggle');
-                document.body.classList.toggle('dark-mode');
-            } else {
-                playSound('alert'); // Blocked by Yellow Paper mode
-            }
-        }
-
-        function cycleArtStyle() {
-            playSound('toggle');
-            artMode = (artMode + 1) % 4;
-            document.body.classList.remove('art-orange', 'art-colorless', 'art-yellow');
-            
-            if (artMode === 1) document.body.classList.add('art-orange');
-            if (artMode === 2) document.body.classList.add('art-colorless');
-            if (artMode === 3) document.body.classList.add('art-yellow');
-        }
-
-        function toggleHUDMode() {
-            playSound('toggle');
-            document.body.classList.toggle('hudless');
-        }
-
-        function loadConcepts() {
-            // Load Landing Page Data
-            const aboutElement = document.getElementById('about-data');
-            try {
-                if (aboutElement && aboutElement.textContent.trim()) {
-                    aboutConcept = JSON.parse(aboutElement.textContent);
-                }
-            } catch (e) {
-                console.error("Failed to parse about data", e);
-            }
-            
-            // Load Standard Glossary Data
-            const dataElement = document.getElementById('glossary-data');
-            try {
-                if (dataElement && dataElement.textContent.trim()) {
-                    concepts = JSON.parse(dataElement.textContent);
-                }
-            } catch (e) {
-                console.error("Failed to parse glossary data", e);
-            }
-            renderAlphabetNav();
-            
-            // Hash routing approach (Works natively with GitHub Pages)
-            let titleToMatch = window.location.hash.replace('#', '');
-            
-            if (titleToMatch && titleToMatch !== '') {
-                const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
-                
-                if (index !== -1) {
-                    showConcept(index);
-                } else if (titleToMatch === 'controls' || titleToMatch === 'settings') {
-                    showSettings();
-                } else {
-                    showAbout();
-                }
-            } else {
-                showAbout();
-            }
-        }
-        
-        function updateURL(slug) {
-            try {
-                if (window.location.hash !== '#' + slug) {
-                    window.history.pushState({ slug: slug }, "", "#" + slug);
-                }
-            } catch(e) {
-                console.warn("Routing safely caught to prevent execution halt:", e);
-            }
-        }
-
-        function renderAlphabetNav() {
-            const nav = document.getElementById('alphabet-nav');
-            nav.innerHTML = '';
-            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-
-            const availableLetters = new Set(concepts.map(c => getIndexTitle(c.title).charAt(0).toUpperCase()));
-
-            alphabet.forEach(letter => {
-                const span = document.createElement('span');
-                span.textContent = letter;
-                span.className = 'nav-letter';
-                
-                if (availableLetters.has(letter)) {
-                    span.classList.add('active-letter');
-                    span.onmouseenter = () => playSound('hover');
-                    span.onclick = () => { playSound('click'); showLetter(letter); };
-                } else {
-                    span.classList.add('inactive-letter');
-                }
-                
-                nav.appendChild(span);
-            });
-        }
-
-        function showLetter(letter) {
-            currentConceptIndex = -1; // Unbind from strict concept editing
-            const filtered = concepts.filter(c => getIndexTitle(c.title).charAt(0).toUpperCase() === letter);
-            
-            if (filtered.length === 1) {
-                showConcept(concepts.indexOf(filtered[0]));
-            } 
-            else if (filtered.length > 1) {
-                document.getElementById('concept-title').innerText = `Concepts starting with '${letter}'`;
-                
-                const slug = `conceptsstartingwith'${letter.toLowerCase()}'`;
-                document.getElementById('url-concept').textContent = slug;
-                updateURL(slug.replace(/'/g, ''));
-                
-                // Inject list dynamically
-                const descContainer = document.getElementById('concept-description');
-                descContainer.innerHTML = `<ul id="letter-list"></ul>`;
-                document.getElementById('concept-footnotes').style.display = 'none'; 
-                
-                const ul = document.getElementById('letter-list');
-                
-                filtered.forEach(c => {
-                    const li = document.createElement('li');
-                    li.textContent = getIndexTitle(c.title);
-                    li.style.fontFamily = "'Roboto Mono', monospace";
-                    li.style.fontSize = "1.2rem";
-                    li.style.marginBottom = "15px";
-                    li.style.color = "var(--text-color)"; 
-                    li.style.transition = "color 0.2s";
-                    li.style.cursor = "pointer";
-                    
-                    li.onmouseenter = () => { 
-                        playSound('hover');
-                        li.style.textDecoration = 'underline';
-                        li.style.color = "var(--accent-color)";
-                    };
-                    li.onmouseleave = () => { 
-                        li.style.textDecoration = 'none';
-                        li.style.color = "var(--text-color)";
-                    };
-                    
-                    li.onclick = () => { playSound('click'); showConcept(concepts.indexOf(c)); };
-                    ul.appendChild(li);
-                });
-            }
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        }
-
-        function syncFootnotes(savedFootnotes = null) {
-            let sups = [];
-            // Dynamically scan for superscript tags exactly where they are permitted
-            if (currentConceptIndex === -1) {
-                ['about-main-desc', 'about-cas-desc', 'about-pc-desc', 'about-map-desc'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) sups = [...sups, ...el.querySelectorAll('sup')];
-                });
-            } else if (currentConceptIndex !== -3) {
-                const descEl = document.getElementById('concept-description');
-                if(descEl) sups = Array.from(descEl.querySelectorAll('sup'));
-            }
-
-            const markers = sups.map(sup => sup.innerText.trim()).filter(m => m !== '');
-            const uniqueMarkers = [...new Set(markers)];
-
-            const fnContainer = document.getElementById('concept-footnotes');
-            
-            // Preserve typed footnote texts during live re-renders
-            let currentTexts = {};
-            if (savedFootnotes) {
-                currentTexts = savedFootnotes;
-            } else {
-                const existingRows = fnContainer.querySelectorAll('.footnote-entry');
-                existingRows.forEach(row => {
-                    const marker = row.getAttribute('data-marker');
-                    const textEl = row.querySelector('.footnote-text');
-                    currentTexts[marker] = textEl ? textEl.innerHTML : '';
-                });
-            }
-
-            if (uniqueMarkers.length === 0) {
-                fnContainer.style.display = 'none';
-                fnContainer.innerHTML = '';
-                return;
-            }
-
-            fnContainer.style.display = 'block';
-            fnContainer.innerHTML = ''; // Rebuild list cleanly
-
-            uniqueMarkers.forEach(marker => {
-                const row = document.createElement('div');
-                row.className = 'footnote-entry';
-                row.setAttribute('data-marker', marker);
-
-                const numSpan = document.createElement('sup');
-                numSpan.className = 'footnote-num';
-                numSpan.innerText = marker;
-
-                const textSpan = document.createElement('div');
-                textSpan.className = 'footnote-text';
-                
-                if (isEditorMode && editorState === 'active' && !isPreviewing) {
-                    textSpan.classList.add('editable-field');
-                    textSpan.contentEditable = true;
-                }
-                
-                textSpan.setAttribute('data-placeholder', 'Enter footnote text...');
-                if (currentTexts[marker]) {
-                    textSpan.innerHTML = currentTexts[marker];
-                }
-
-                row.appendChild(numSpan);
-                row.appendChild(textSpan);
-
-                fnContainer.appendChild(row);
-            });
-        }
-
-        // Use event delegation on the viewer UI to handle dynamic edits across all fields
-        document.getElementById('viewer-ui').addEventListener('input', (e) => {
-            if (isEditorMode && editorState === 'active') {
-                if (e.target.classList.contains('editable-field') && !e.target.classList.contains('footnote-text')) {
-                    syncFootnotes();
-                }
-            }
-        });
-
-        // Dynamic Margin Resizing & Font Shrinking logic
-        function checkScrollAndResize() {
-            const mainContent = document.getElementById('main-content');
-            const desc = document.getElementById('concept-description');
-            const isMobile = window.innerWidth <= 850;
-            
-            // Reset state to measure cleanly
-            desc.classList.remove('reduced-font');
-            
-            requestAnimationFrame(() => {
-                let isOverflowing = false;
-                if (isMobile) {
-                    // Test if native body scroll is longer than window
-                    isOverflowing = document.documentElement.scrollHeight > window.innerHeight;
-                } else {
-                    // Test if fixed viewport is overflowing
-                    isOverflowing = mainContent.scrollHeight > mainContent.clientHeight;
-                }
-                
-                if (isOverflowing) {
-                    desc.classList.add('reduced-font');
-                }
-                
-                // Allow style to paint then adjust vertical centering
-                requestAnimationFrame(() => adjustTopMargin());
-            });
-        }
-
-        function adjustTopMargin() {
-            const viewer = document.getElementById('viewer-ui');
-            const list = document.getElementById('editor-entry-list');
-            
-            let activeEl = null;
-            if (window.getComputedStyle(viewer).display !== 'none' && viewer.offsetHeight > 0) activeEl = viewer;
-            else if (window.getComputedStyle(list).display !== 'none' && list.offsetHeight > 0) activeEl = list;
-            
-            if (activeEl) {
-                const isMobile = window.innerWidth <= 850;
-                
-                if (isMobile) {
-                    // Mobile uses CSS top padding on #main-content to avoid overlapping topbar
-                    activeEl.style.marginTop = '0px'; 
-                } else {
-                    const contentHeight = activeEl.offsetHeight;
-                    const vh20 = window.innerHeight * 0.20;
-                    const centeredMargin = (window.innerHeight - contentHeight) / 2 - 40; 
-                    activeEl.style.marginTop = Math.max(vh20, centeredMargin) + 'px';
-                }
-            }
-        }
-
-        // Attach observer to gracefully animate the center positioning on content changes
-        const marginObserver = new ResizeObserver(() => adjustTopMargin());
-        marginObserver.observe(document.getElementById('viewer-ui'));
-        marginObserver.observe(document.getElementById('editor-entry-list'));
-        window.addEventListener('resize', () => {
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        });
-
-        function showConcept(index) {
-            currentConceptIndex = index;
-            document.getElementById('concept-title').innerText = concepts[index].title;
-            document.getElementById('concept-description').innerHTML = concepts[index].description;
-            
-            syncFootnotes(concepts[index].footnotes || {});
-            
-            const slug = concepts[index].title.toLowerCase().replace(/\s+/g, '');
-            document.getElementById('url-concept').textContent = slug;
-            updateURL(slug);
-            
-            // Scroll to top when changing concepts
-            if (window.innerWidth <= 850) {
-                window.scrollTo(0, 0);
-            } else {
-                document.getElementById('main-content').scrollTop = 0;
-            }
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        }
-
-        function showSettings() {
-            currentConceptIndex = -3;
-            document.getElementById('concept-title').innerText = "Controls";
-            
-            const descContainer = document.getElementById('concept-description');
-            
-            const renderKey = (letter) => `<span class="shortcut-key"><svg viewBox="0 0 100 100" class="key-svg"><g fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="90" height="90" rx="14" /><rect x="24" y="16" width="52" height="50" rx="5" /><line x1="13" y1="13" x2="24" y2="16" /><line x1="87" y1="13" x2="76" y2="16" /><line x1="13" y1="87" x2="24" y2="66" /><line x1="87" y1="87" x2="76" y2="66" /></g></svg><span class="key-text">${letter}</span></span>`;
-
-            // HTML written on one tight line to prevent pre-wrap from adding empty gaps above the content
-            descContainer.innerHTML = `<div class="settings-content"><div style="margin-bottom: 45px;">The aesthetic of this site is adjustable via toggle shortcuts:</div><div class="settings-row">${renderKey('i')}<span class="settings-desc-text">= index (the list of concepts)</span></div><div class="settings-row">${renderKey('s')}<span class="settings-desc-text">= settings (this page)</span></div><div class="settings-row">${renderKey('t')}<span class="settings-desc-text">= light/dark theme</span></div><div class="settings-row">${renderKey('h')}<span class="settings-desc-text">= removes the heads up display (HUD) or user interface (UI)</span></div><div class="settings-row">${renderKey('a')}<span class="settings-desc-text">= changes art style or colour scheme (orange accent, black-and-white, yellow paper)</span></div><div class="settings-row">${renderKey('b')}<span class="settings-desc-text">= changes the corners to match the background</span></div><div class="settings-row">${renderKey('g')}<span class="settings-desc-text">= changes the corners to a subtle gradient with the background</span></div><div class="settings-row">${renderKey('c')}<span class="settings-desc-text">= toggles cursor style (dot+trail or dot+circle)</span></div><div class="settings-row">${renderKey('u')}<span class="settings-desc-text">= toggles link underlines</span></div></div>`;
-            
-            document.getElementById('concept-footnotes').style.display = 'none';
-            
-            const slug = "controls";
-            document.getElementById('url-concept').textContent = slug;
-            updateURL(slug);
-            
-            if (window.innerWidth <= 850) {
-                window.scrollTo(0, 0);
-            } else {
-                document.getElementById('main-content').scrollTop = 0;
-            }
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        }
-
-        function showAbout() {
-            currentConceptIndex = -1; // Unbind to protect hardcoded structure
-            document.getElementById('concept-title').innerText = aboutConcept.title;
-            
-            const descContainer = document.getElementById('concept-description');
-            descContainer.innerHTML = ''; // Clear out the generic description
-            
-            // 1. Main Description
-            const mainDesc = document.createElement('div');
-            mainDesc.id = "about-main-desc";
-            mainDesc.innerHTML = aboutConcept.description;
-            descContainer.appendChild(mainDesc);
-            
-            // 2. Heading: A Conceptual Adaptive System
-            const casHeading = document.createElement('div');
-            casHeading.className = "progress-heading";
-            casHeading.innerText = "A Conceptual Adaptive System";
-            casHeading.style.fontFamily = "'Inter Tight', sans-serif";
-            casHeading.style.fontWeight = "700";
-            casHeading.style.fontSize = "1.75rem";
-            casHeading.style.marginTop = "40px";
-            casHeading.style.marginBottom = "15px";
-            casHeading.style.whiteSpace = "normal";
-            descContainer.appendChild(casHeading);
-            
-            // CAS Description
-            const casDesc = document.createElement('div');
-            casDesc.id = "about-cas-desc";
-            casDesc.innerHTML = aboutConcept.casDescription;
-            descContainer.appendChild(casDesc);
-
-            // 3. Heading: Project Context
-            const pcHeading = document.createElement('div');
-            pcHeading.className = "progress-heading";
-            pcHeading.innerText = "Project Context";
-            pcHeading.style.fontFamily = "'Inter Tight', sans-serif";
-            pcHeading.style.fontWeight = "700";
-            pcHeading.style.fontSize = "1.75rem";
-            pcHeading.style.marginTop = "40px";
-            pcHeading.style.marginBottom = "15px";
-            pcHeading.style.whiteSpace = "normal";
-            descContainer.appendChild(pcHeading);
-            
-            // Project Context Description
-            const pcDesc = document.createElement('div');
-            pcDesc.id = "about-pc-desc";
-            pcDesc.innerHTML = aboutConcept.projectContext || "";
-            descContainer.appendChild(pcDesc);
-            
-            // 4. Heading: The Map
-            const mapHeading = document.createElement('div');
-            mapHeading.className = "progress-heading";
-            mapHeading.innerText = "The Map";
-            mapHeading.style.fontFamily = "'Inter Tight', sans-serif";
-            mapHeading.style.fontWeight = "700";
-            mapHeading.style.fontSize = "1.75rem";
-            mapHeading.style.marginTop = "40px";
-            mapHeading.style.marginBottom = "15px";
-            mapHeading.style.whiteSpace = "normal";
-            descContainer.appendChild(mapHeading);
-            
-            // Map Description
-            const mapDesc = document.createElement('div');
-            mapDesc.id = "about-map-desc";
-            mapDesc.innerHTML = aboutConcept.mapDescription;
-            mapDesc.style.marginBottom = "45px"; 
-            descContainer.appendChild(mapDesc);
-            
-            // Concept Count Display
-            const conceptCount = document.createElement('div');
-            conceptCount.id = "concept-count-display";
-            conceptCount.innerText = `Concept Count: ${concepts.length}`;
-            // Inline override to perfectly match user request and absolutely avoid the scaling bug
-            conceptCount.style.cssText = "font-family: 'Roboto Mono', monospace !important; font-weight: normal !important; color: var(--accent-color) !important; font-size: 1.15rem !important; margin-bottom: 25px !important; line-height: 1.4 !important; white-space: normal !important;";
-            descContainer.appendChild(conceptCount);
-            
-            // The 2-Column Concept List with A-Z structure alternating side-to-side
-            const listContainer = document.createElement('div');
-            listContainer.className = 'landing-concept-list';
-
-            const col1 = document.createElement('div');
-            col1.className = 'landing-concept-col';
-            const col2 = document.createElement('div');
-            col2.className = 'landing-concept-col';
-
-            listContainer.appendChild(col1);
-            listContainer.appendChild(col2);
-            
-            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i, indexTitle: getIndexTitle(c.title)})).sort((a, b) => a.indexTitle.localeCompare(b.indexTitle));
-            
-            if (sortedConcepts.length > 0) {
-                const grouped = {};
-                sortedConcepts.forEach(c => {
-                    const letter = c.indexTitle.charAt(0).toUpperCase();
-                    if (!grouped[letter]) grouped[letter] = [];
-                    grouped[letter].push(c);
-                });
-
-                const sortedLetters = Object.keys(grouped).sort();
-
-                sortedLetters.forEach((letter, index) => {
-                    const targetCol = (index % 2 === 0) ? col1 : col2;
-
-                    const header = document.createElement('h3');
-                    header.className = 'progress-heading';
-                    header.textContent = letter;
-                    header.style.marginTop = (targetCol.children.length === 0) ? "0" : "20px";
-                    header.style.marginBottom = "10px";
-                    header.style.color = "var(--nav-inactive)";
-                    header.style.fontFamily = "'Inter Tight', sans-serif";
-                    header.style.fontSize = "1.75rem";
-
-                    const ul = document.createElement('ul');
-                    ul.style.listStyleType = "none";
-                    ul.style.padding = "0";
-
-                    grouped[letter].forEach(c => {
-                        const li = document.createElement('li');
-                        li.textContent = c.indexTitle;
-                        li.style.fontFamily = "'Roboto Mono', monospace";
-                        li.style.fontSize = "1.2rem";
-                        li.style.marginBottom = "12px";
-                        li.style.color = "var(--text-color)"; 
-                        li.style.transition = "color 0.2s";
-                        li.style.cursor = "pointer";
-                        li.style.breakInside = "avoid";
-                        
-                        li.onmouseenter = () => { 
-                            playSound('hover');
-                            li.style.textDecoration = 'underline';
-                            li.style.color = "var(--accent-color)";
-                        };
-                        li.onmouseleave = () => { 
-                            li.style.textDecoration = 'none';
-                            li.style.color = "var(--text-color)";
-                        };
-                        
-                        li.onclick = () => {
-                            playSound('click');
-                            if (isEditorMode && editorState === 'active') {
-                                editSpecificConcept(c.originalIndex);
-                            } else {
-                                showConcept(c.originalIndex);
-                            }
-                        };
-                        ul.appendChild(li);
-                    });
-
-                    targetCol.appendChild(header);
-                    targetCol.appendChild(ul);
-                });
-            } else {
-                const emptyMsg = document.createElement('p');
-                emptyMsg.textContent = "No concepts have been mapped yet.";
-                emptyMsg.style.fontFamily = "'Roboto Mono', monospace";
-                emptyMsg.style.fontSize = "1.1rem";
-                emptyMsg.style.color = "var(--nav-inactive)";
-                col1.appendChild(emptyMsg);
-            }
-            
-            descContainer.appendChild(listContainer);
-            
-            syncFootnotes(aboutConcept.footnotes || {});
-            
-            const slug = "conceptualadaptivesystem"; 
-            document.getElementById('url-concept').textContent = slug;
-            updateURL(slug);
-
-            if (window.innerWidth <= 850) {
-                window.scrollTo(0, 0);
-            } else {
-                document.getElementById('main-content').scrollTop = 0;
-            }
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        }
-
-        // --- SPLIT-SCREEN & LIST EDITOR FUNCTIONS ---
-
-        function enterEditor() {
-            playSound('success');
-            isEditorMode = true;
-            document.getElementById('editor-status').style.display = 'block';
-            showEditorMenu();
-        }
-
-        function showEditorMenu() {
-            editorState = 'menu';
-            resetPreviewState();
-            document.getElementById('editor-menu').style.display = 'flex';
-            document.getElementById('viewer-ui').style.display = 'none';
-            document.getElementById('editor-entry-list').style.display = 'none';
-            document.getElementById('vertical-progress-container').style.display = 'none';
-            
-            // Safely disarm fields
-            const editableElements = document.querySelectorAll('.editable-field');
-            editableElements.forEach(el => {
-                el.contentEditable = false;
-                el.classList.remove('editable-field');
-            });
-        }
-
-        function startAddingNew() {
-            editorState = 'active';
-            resetPreviewState();
-            document.getElementById('editor-menu').style.display = 'none';
-            document.getElementById('editor-entry-list').style.display = 'none';
-            document.getElementById('viewer-ui').style.display = 'block';
-            document.getElementById('editor-toolbar').style.display = 'flex';
-            
-            clearFields();
-            
-            const titleEl = document.getElementById('concept-title');
-            const descEl = document.getElementById('concept-description');
-            titleEl.contentEditable = true;
-            descEl.contentEditable = true;
-            titleEl.classList.add('editable-field');
-            descEl.classList.add('editable-field');
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        }
-
-        function startEditingExisting() {
-            editorState = 'list';
-            resetPreviewState();
-            document.getElementById('editor-menu').style.display = 'none';
-            document.getElementById('viewer-ui').style.display = 'none';
-            document.getElementById('vertical-progress-container').style.display = 'none';
-            
-            const entryList = document.getElementById('editor-entry-list');
-            entryList.style.display = 'block';
-            
-            entryList.innerHTML = '<h2>Select an Entry to Edit</h2><ul id="full-concept-list" style="list-style-type: none; padding: 0; margin-top: 20px;"></ul>';
-            const ul = document.getElementById('full-concept-list');
-            
-            // Add Top-Level Landing Page Option
-            const aboutLi = document.createElement('li');
-            aboutLi.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 5px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> Civilisation Theory (Landing Page)`;
-            aboutLi.style.fontFamily = "'Roboto Mono', monospace";
-            aboutLi.style.fontSize = "1.2rem";
-            aboutLi.style.marginBottom = "25px";
-            aboutLi.style.color = "var(--accent-color)";
-            aboutLi.style.cursor = "pointer";
-            
-            aboutLi.onmouseenter = () => { 
-                playSound('hover');
-                aboutLi.style.textDecoration = 'underline';
-            };
-            aboutLi.onmouseleave = () => { 
-                aboutLi.style.textDecoration = 'none';
-            };
-            
-            aboutLi.onclick = () => { playSound('click'); editSpecificConcept(-1); };
-            ul.appendChild(aboutLi);
-
-            if (concepts.length === 0) {
-                const emptyMsg = document.createElement('p');
-                emptyMsg.style.fontFamily = "'Cormorant Garamond', serif";
-                emptyMsg.style.fontSize = "1.5rem";
-                emptyMsg.style.color = "var(--nav-inactive)";
-                emptyMsg.textContent = "No concepts exist yet.";
-                entryList.appendChild(emptyMsg);
-                checkScrollAndResize();
-                return;
-            }
-
-            const sortedConcepts = concepts.map((c, i) => ({...c, originalIndex: i, indexTitle: getIndexTitle(c.title)})).sort((a, b) => a.indexTitle.localeCompare(b.indexTitle));
-            
-            let currentLetter = '';
-            sortedConcepts.forEach(c => {
-                const firstLetter = c.indexTitle.charAt(0).toUpperCase();
-                
-                if (firstLetter !== currentLetter) {
-                    currentLetter = firstLetter;
-                    const header = document.createElement('h3');
-                    header.textContent = currentLetter;
-                    header.style.marginTop = '20px';
-                    header.style.marginBottom = '10px';
-                    header.style.color = 'var(--nav-inactive)';
-                    header.style.fontFamily = "'Inter Tight', sans-serif";
-                    header.style.fontSize = "1.75rem";
-                    ul.appendChild(header);
-                }
-                
-                const li = document.createElement('li');
-                li.textContent = c.indexTitle;
-                li.style.fontFamily = "'Roboto Mono', monospace";
-                li.style.fontSize = "1.2rem";
-                li.style.marginBottom = "8px";
-                li.style.color = "var(--text-color)"; 
-                li.style.transition = "color 0.2s";
-                li.style.cursor = "pointer";
-                
-                li.onmouseenter = () => { 
-                    playSound('hover');
-                    li.style.textDecoration = 'underline';
-                    li.style.color = "var(--accent-color)";
-                };
-                li.onmouseleave = () => { 
-                    li.style.textDecoration = 'none';
-                    li.style.color = "var(--text-color)";
-                };
-                
-                li.onclick = () => { playSound('click'); editSpecificConcept(c.originalIndex); };
-                ul.appendChild(li);
-            });
-            checkScrollAndResize();
-        }
-
-        function editSpecificConcept(index) {
-            if (index === -3) {
-                playSound('alert');
-                alert("The Settings page cannot be edited.");
-                exitEditor();
-                return;
-            }
-
-            editorState = 'active';
-            resetPreviewState();
-            document.getElementById('editor-entry-list').style.display = 'none';
-            document.getElementById('viewer-ui').style.display = 'block';
-            document.getElementById('editor-toolbar').style.display = 'flex';
-            
-            if (index === -1) {
-                showAbout(); // Renders the specialized landing page structure
-                document.getElementById('concept-title').contentEditable = true;
-                document.getElementById('concept-title').classList.add('editable-field');
-                
-                ['about-main-desc', 'about-cas-desc', 'about-pc-desc', 'about-map-desc'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) {
-                        el.contentEditable = true;
-                        el.classList.add('editable-field');
-                    }
-                });
-            } else {
-                showConcept(index);
-                const titleEl = document.getElementById('concept-title');
-                const descEl = document.getElementById('concept-description');
-                titleEl.contentEditable = true;
-                descEl.contentEditable = true;
-                titleEl.classList.add('editable-field');
-                descEl.classList.add('editable-field');
-            }
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        }
-
-        function togglePreview() {
-            if (currentConceptIndex === -3) {
-                playSound('alert');
-                alert("The Settings page cannot be edited.");
-                return;
-            }
-
-            const btn = document.getElementById('btn-preview');
-            
-            let fields = [document.getElementById('concept-title')];
-            if (currentConceptIndex === -1) {
-                fields.push(document.getElementById('about-main-desc'));
-                fields.push(document.getElementById('about-cas-desc'));
-                fields.push(document.getElementById('about-pc-desc'));
-                fields.push(document.getElementById('about-map-desc'));
-            } else {
-                fields.push(document.getElementById('concept-description'));
-            }
-
-            if (!isPreviewing) {
-                fields.forEach(el => {
-                    if(el) {
-                        el.contentEditable = false;
-                        el.classList.remove('editable-field');
-                    }
-                });
-                btn.innerText = "Keep Editing";
-                btn.style.backgroundColor = "#e67e22";
-                isPreviewing = true;
-            } else {
-                fields.forEach(el => {
-                    if(el) {
-                        el.contentEditable = true;
-                        el.classList.add('editable-field');
-                    }
-                });
-                btn.innerText = "Preview";
-                btn.style.backgroundColor = "#8e44ad";
-                isPreviewing = false;
-            }
-            syncFootnotes(); // Recalculate footnote editability
-            checkScrollAndResize();
-        }
-
-        function resetPreviewState() {
-            isPreviewing = false;
-            const btn = document.getElementById('btn-preview');
-            if(btn) {
-                btn.innerText = "Preview";
-                btn.style.backgroundColor = "#8e44ad";
-            }
-        }
-
-        function exitEditor() {
-            playSound('success');
-            isEditorMode = false;
-            editorState = 'inactive';
-            resetPreviewState();
-            
-            document.getElementById('editor-menu').style.display = 'none';
-            document.getElementById('editor-entry-list').style.display = 'none';
-            document.getElementById('viewer-ui').style.display = 'block';
-            document.getElementById('editor-toolbar').style.display = 'none';
-            document.getElementById('editor-status').style.display = 'none';
-            
-            // Clean up all edit fields globally just to be safe
-            document.querySelectorAll('.editable-field').forEach(el => {
-                el.contentEditable = false;
-                el.classList.remove('editable-field');
-            });
-            
-            if (currentConceptIndex === -3) showSettings();
-            else if (currentConceptIndex !== -1 && currentConceptIndex !== -2) showConcept(currentConceptIndex);
-            else showAbout();
-        }
-
-        function insertLink() {
-            const url = prompt("Enter the URL to link to:", "https://");
-            if (url) {
-                document.execCommand('createLink', false, url);
-            }
-        }
-
-        function insertFootnote() {
-            let sups = [];
-            if (currentConceptIndex === -1) {
-                ['about-main-desc', 'about-cas-desc', 'about-pc-desc', 'about-map-desc'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) sups = [...sups, ...el.querySelectorAll('sup')];
-                });
-            } else {
-                const descEl = document.getElementById('concept-description');
-                if(descEl) sups = Array.from(descEl.querySelectorAll('sup'));
-            }
-            
-            let nextNum = 1;
-            if (sups.length > 0) {
-                let max = 0;
-                sups.forEach(sup => {
-                    let num = parseInt(sup.innerText, 10);
-                    if (!isNaN(num) && num > max) max = num;
-                });
-                nextNum = max + 1;
-            }
-            
-            document.execCommand('insertHTML', false, `<sup>${nextNum}</sup>`);
-            syncFootnotes(); // Force sync immediately so the box appears
-        }
-
-        function clearFields() {
-            document.getElementById('concept-title').innerText = "New Concept Title";
-            document.getElementById('concept-description').innerHTML = "Start typing here...";
-            document.getElementById('concept-footnotes').innerHTML = "";
-            document.getElementById('concept-footnotes').style.display = "none";
-            currentConceptIndex = -2; // Signals a brand new unsaved concept vs Landing Page (-1)
-            checkScrollAndResize();
-            setTimeout(buildProgressMarkers, 100);
-        }
-
-        function saveCurrentConcept() {
-            if (currentConceptIndex === -2) {
-                playSound('alert');
-                alert("This is a new concept. Please use 'Save as New' instead.");
-                return;
-            }
-
-            if (currentConceptIndex === -3) {
-                playSound('alert');
-                alert("The Settings page cannot be edited.");
-                return;
-            }
-
-            const title = document.getElementById('concept-title').innerText.trim();
-
-            const fnContainer = document.getElementById('concept-footnotes');
-            const fns = {};
-            fnContainer.querySelectorAll('.footnote-entry').forEach(row => {
-                const marker = row.getAttribute('data-marker');
-                const text = row.querySelector('.footnote-text').innerHTML.trim();
-                if (text) fns[marker] = text;
-            });
-
-            if (currentConceptIndex === -1) {
-                // Save logic for Landing Page
-                const mainDesc = document.getElementById('about-main-desc').innerHTML.trim();
-                const casDesc = document.getElementById('about-cas-desc').innerHTML.trim();
-                const pcDesc = document.getElementById('about-pc-desc').innerHTML.trim();
-                const mapDesc = document.getElementById('about-map-desc').innerHTML.trim();
-                
-                if (title && mainDesc) {
-                    aboutConcept.title = title;
-                    aboutConcept.description = mainDesc;
-                    aboutConcept.casDescription = casDesc;
-                    aboutConcept.projectContext = pcDesc;
-                    aboutConcept.mapDescription = mapDesc;
-                    aboutConcept.footnotes = fns;
-                    
-                    const slug = "conceptualadaptivesystem";
-                    document.getElementById('url-concept').textContent = slug;
-                    updateURL(slug);
-                    
-                    playSound('success');
-                    alert("Landing Page updated in temporary memory. Click 'Export HTML' to permanently save.");
-                } else {
-                    playSound('alert');
-                    alert("Please ensure title and main description are properly filled.");
-                }
-            } else {
-                // Save logic for normal Concept
-                const description = document.getElementById('concept-description').innerHTML.trim();
-                if (title && description && title !== "New Concept Title") {
-                    concepts[currentConceptIndex].title = title;
-                    concepts[currentConceptIndex].description = description;
-                    concepts[currentConceptIndex].footnotes = fns;
-                    
-                    renderAlphabetNav();
-                    const slug = title.toLowerCase().replace(/\s+/g, '');
-                    document.getElementById('url-concept').textContent = slug;
-                    updateURL(slug);
-                    
-                    playSound('success');
-                    alert("Concept updated in temporary memory. Click 'Export HTML' to permanently save.");
-                } else {
-                    playSound('alert');
-                    alert("Please ensure both title and description are properly filled.");
-                }
-            }
-        }
-
-        function saveNewConcept() {
-            const title = document.getElementById('concept-title').innerText.trim();
-            const description = document.getElementById('concept-description').innerHTML.trim();
-
-            const fnContainer = document.getElementById('concept-footnotes');
-            const fns = {};
-            fnContainer.querySelectorAll('.footnote-entry').forEach(row => {
-                const marker = row.getAttribute('data-marker');
-                const text = row.querySelector('.footnote-text').innerHTML.trim();
-                if (text) fns[marker] = text;
-            });
-
-            if (title && description && title !== "New Concept Title") {
-                concepts.push({ title, description, footnotes: fns });
-                renderAlphabetNav();
-                showConcept(concepts.length - 1); // Bind to newly created concept
-                playSound('success');
-                alert("New concept added to temporary memory. Click 'Export HTML' to permanently save to disk.");
-            } else {
-                playSound('alert');
-                alert("Please ensure both title and description are properly filled.");
-            }
-        }
-
-        function exportHTML() {
-            const clone = document.documentElement.cloneNode(true);
-            
-            let dataScript = clone.querySelector('#glossary-data');
-            dataScript.textContent = '\n' + JSON.stringify(concepts, null, 4) + '\n    ';
-
-            let aboutScript = clone.querySelector('#about-data');
-            aboutScript.textContent = '\n' + JSON.stringify(aboutConcept, null, 4) + '\n    ';
-            
-            // Strip out editor states globally
-            const menu = clone.querySelector('#editor-menu');
-            if (menu) menu.style.display = 'none';
-
-            const entryList = clone.querySelector('#editor-entry-list');
-            if (entryList) entryList.style.display = 'none';
-            
-            const toolbar = clone.querySelector('#editor-toolbar');
-            if (toolbar) toolbar.style.display = 'none';
-            
-            const status = clone.querySelector('#editor-status');
-            if (status) status.style.display = 'none';
-            
-            const viewer = clone.querySelector('#viewer-ui');
-            if (viewer) viewer.style.display = 'block';
-
-            // Clean up transient elements that shouldn't be serialized
-            clone.querySelectorAll('.cursor-trail-dot').forEach(el => el.remove());
-            const markerContainer = clone.querySelector('#vertical-progress-markers');
-            if(markerContainer) markerContainer.innerHTML = '';
-            const fill = clone.querySelector('#vertical-progress-fill');
-            if(fill) fill.style.height = '0%';
-            
-            clone.querySelectorAll('.editable-field').forEach(el => {
-                el.removeAttribute('contenteditable');
-                el.classList.remove('editable-field');
-            });
-
-            // Strip visual toggles so the exported file opens natively
-            clone.querySelector('body').className = ''; 
-            
-            // Remove the loading screen from exported HTML so it doesn't replay when reopening from local file 
-            const loadingScreen = clone.querySelector('#loading-screen');
-            if (loadingScreen) {
-                loadingScreen.remove();
-            }
-            
-            const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'civilisationtheory.html'; 
-            document.body.appendChild(a); 
-            a.click();
-            
-            a.remove();
-            URL.revokeObjectURL(url);
-        }
-
-        document.addEventListener('keydown', function(event) {
-            const key = event.key.toLowerCase();
-            
-            // Esc handling for Editor Logic
-            if (event.key === 'Escape' && isEditorMode) {
-                if (editorState === 'active' || editorState === 'list') {
-                    playSound('click');
-                    showEditorMenu();
-                } else if (editorState === 'menu') {
-                    exitEditor();
-                }
-                return;
-            }
-
-            // Ignore styling hotkeys if actively typing in inputs
-            if (event.target.isContentEditable || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
-                if (event.ctrlKey && event.shiftKey && (key === 'e')) {
-                    event.preventDefault(); 
-                    exitEditor();
-                }
-                return;
-            }
-
-            // Display Mode Toggles
-            if (key === 't') toggleThemeMode();
-            
-            if (key === 'b') {
-                playSound('toggle');
-                document.body.classList.toggle('bg-match-mode');
-            }
-
-            if (key === 'g') {
-                playSound('toggle');
-                document.body.classList.toggle('gradient-mode');
-            }
-
-            if (key === 'c') {
-                playSound('toggle');
-                document.body.classList.toggle('alt-cursor');
-            }
-            
-            if (key === 'u') {
-                playSound('toggle');
-                document.body.classList.toggle('link-underline');
-            }
-            
-            if (key === 'h') toggleHUDMode();
-
-            if (key === 'a') cycleArtStyle();
-
-            // Open Index/Map
-            if (key === 'i') {
-                playSound('toggle');
-                showAbout();
-            }
-
-            // Open Settings
-            if (key === 's') {
-                playSound('toggle');
-                showSettings();
-            }
-            
-            // Editor Mode Trigger
-            if (event.ctrlKey && event.shiftKey && (key === 'e')) {
-                event.preventDefault(); 
-                if (!isEditorMode) {
-                    const password = prompt("Enter Editor Password:");
-                    if (password === 'changingcivilisation') {
-                        enterEditor();
-                    } else if (password !== null) {
-                        playSound('alert');
-                        alert("Incorrect password.");
-                    }
-                } else {
-                    exitEditor();
-                }
-            }
-        });
-        
-        window.addEventListener('popstate', function(event) {
-            let titleToMatch = window.location.hash.replace('#', '');
-
-            if (titleToMatch) {
-                const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
-                if(index !== -1) {
-                    showConcept(index);
-                } else if (titleToMatch === 'conceptualadaptivesystem') {
-                    showAbout();
-                } else if (titleToMatch === 'controls' || titleToMatch === 'settings') {
-                    showSettings();
-                } else {
-                    showAbout();
-                }
-            } else {
-                showAbout();
-            }
-        });
-        
-        window.addEventListener('hashchange', function() {
-            let titleToMatch = window.location.hash.replace('#', '');
-            
-            if (titleToMatch) {
-                const index = concepts.findIndex(c => c.title.toLowerCase().replace(/\s+/g, '') === titleToMatch);
-                if(index !== -1) {
-                    showConcept(index);
-                } else if (titleToMatch === 'conceptualadaptivesystem') {
-                    showAbout();
-                } else if (titleToMatch === 'controls' || titleToMatch === 'settings') {
-                    showSettings();
-                } else {
-                    showAbout();
-                }
-            } else {
-                showAbout();
-            }
-        });
-
-        // Initialize App safely regardless of parsing state
-        document.addEventListener("DOMContentLoaded", () => {
-            // Initiate trailing cursor immediately
-            initCursorTrail();
-
-            // Handle loading sequence purely based on DOM presence 
-            const loader = document.getElementById('loading-screen');
-            if(loader) {
-                setTimeout(() => document.body.classList.toggle('dark-mode'), 1125); 
-                setTimeout(() => document.body.classList.toggle('dark-mode'), 2625);
-                
-                setTimeout(() => {
-                    loader.classList.add('hidden');
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                        initUIAutoHide();
-                    }, 500); 
-                }, 3000); 
-            } else {
-                initUIAutoHide();
-            }
-
-            // Safe parsing trigger
-            try {
-                loadConcepts();
-            } catch (e) {
-                console.error("Critical routing error intercepted:", e);
-            }
-        });
-
-    </script>
+<button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true">Hide map</button>
+<button id="theme-toggle" class="control" type="button" aria-label="Toggle light and dark theme">
+  <span data-t="light">Light</span><span class="sep">/</span><span data-t="dark">Dark</span>
+</button>
+
+<nav id="sidebar" aria-label="Concept tree">
+  <p class="side-title">The Map</p>
+  <ul class="tree" id="tree"></ul>
+</nav>
+<div id="scrim"></div>
+
+<main>
+  <article id="entry"></article>
+</main>
+
+<script>
+  /*
+   * Concept entries.
+   * Each entry: id (URL slug), title, parent (id of parent concept, or null for the root),
+   * and html (the description). The root entry is the homepage.
+   * To add a concept, append an object with a parent id — the tree, tree string,
+   * index and concept count all update automatically.
+   */
+  var CONCEPTS = [
+    {
+      id: 'civilisation-theory',
+      title: 'Civilisation Theory',
+      parent: null,
+      html: [
+        '<p>Civilisation Theory is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the developmental process, initial conditions and dominant paradigm of civilisation itself. From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>',
+
+        '<h2>A Conceptual Adaptive System</h2>',
+        '<p>This glossary site serves to create a conceptual adaptive system for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
+
+        '<h2>Project Context</h2>',
+        '<p>The Civilisation Theory Map is inspired, in substance and design, by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>. More broadly, Civilisation Theory is a critical dialectical synthesis derived, in part, from three core clusters of intellectual subcultures:</p>',
+        '<ul>',
+        '<li><strong>The Meta-space:</strong> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>',
+        '<li><strong>The PARA-academic space:</strong> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>',
+        '<li><strong>The Cybernetic Economics lineage:</strong> across Buckminster Fuller (1969), Jacque Fresco (1985), Stafford Beer (1971), Daniel Schmachtenberger (2017, 21), Peter Joseph (2014, 17, 25)</li>',
+        '</ul>',
+
+        '<h2>The Map</h2>',
+        '<p>Below is a complete index of concepts on this site. Over time, this map will extend to cover hundreds of entries.</p>',
+        '<!--INDEX-->'
+      ].join('\n')
+    }
+  ];
+
+  var byId = {};
+  CONCEPTS.forEach(function (c) { byId[c.id] = c; });
+  var ROOT = CONCEPTS.filter(function (c) { return !c.parent; })[0];
+
+  function childrenOf(id) {
+    return CONCEPTS.filter(function (c) { return c.parent === id; })
+      .sort(function (a, b) { return a.title.localeCompare(b.title); });
+  }
+  function pathTo(c) {
+    var path = [];
+    while (c) { path.unshift(c); c = c.parent ? byId[c.parent] : null; }
+    return path;
+  }
+  function esc(s) {
+    return s.replace(/[&<>"]/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+    });
+  }
+  function href(c) { return c === ROOT ? '#' : '#' + c.id; }
+
+  // ---------- Sidebar tree ----------
+  function buildTree(c) {
+    var kids = childrenOf(c.id);
+    var html = '<li><a href="' + href(c) + '" data-id="' + c.id + '">' + esc(c.title) + '</a>';
+    if (kids.length) html += '<ul>' + kids.map(buildTree).join('') + '</ul>';
+    return html + '</li>';
+  }
+  var treeEl = document.getElementById('tree');
+  treeEl.innerHTML = buildTree(ROOT) +
+    (CONCEPTS.length === 1 ? '<li class="empty">Concepts forthcoming.</li>' : '');
+
+  // ---------- Entry rendering ----------
+  function indexHtml() {
+    var concepts = CONCEPTS.filter(function (c) { return c !== ROOT; })
+      .sort(function (a, b) { return a.title.localeCompare(b.title); });
+    var list = concepts.length
+      ? '<ul class="index-list">' + concepts.map(function (c) {
+          return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>';
+        }).join('') + '</ul>'
+      : '';
+    return '<p class="count">Concept Count: ' + concepts.length + '</p>' + list;
+  }
+
+  function render() {
+    var id = decodeURIComponent(location.hash.replace(/^#/, ''));
+    var c = byId[id] || ROOT;
+    var crumbs = pathTo(c).map(function (p, i, arr) {
+      return i === arr.length - 1
+        ? '<span>' + esc(p.title) + '</span>'
+        : '<a href="' + href(p) + '">' + esc(p.title) + '</a>';
+    }).join('<span class="sep">›</span>');
+
+    document.getElementById('entry').innerHTML =
+      '<p class="tree-string">' + crumbs + '</p>' +
+      '<h1>' + esc(c.title) + '</h1>' +
+      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()) + '</div>';
+
+    document.title = c === ROOT ? 'Civilisation Theory Map' : c.title + ' · Civilisation Theory Map';
+    treeEl.querySelectorAll('a').forEach(function (a) {
+      if (a.getAttribute('data-id') === c.id) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    if (window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', render);
+
+  // ---------- Sidebar toggle ----------
+  var sideBtn = document.getElementById('sidebar-toggle');
+  function setSidebar(open, remember) {
+    document.body.classList.toggle('sidebar-closed', !open);
+    sideBtn.textContent = open ? 'Hide map' : 'Show map';
+    sideBtn.setAttribute('aria-expanded', String(open));
+    if (remember) { try { localStorage.setItem('ct-sidebar', open ? 'open' : 'closed'); } catch (e) {} }
+  }
+  sideBtn.addEventListener('click', function () {
+    setSidebar(document.body.classList.contains('sidebar-closed'), true);
+  });
+  document.getElementById('scrim').addEventListener('click', function () { setSidebar(false, false); });
+
+  var savedSide = null;
+  try { savedSide = localStorage.getItem('ct-sidebar'); } catch (e) {}
+  var narrow = window.matchMedia('(max-width: 899px)').matches;
+  setSidebar(narrow ? false : savedSide !== 'closed', false);
+
+  // ---------- Theme toggle ----------
+  document.getElementById('theme-toggle').addEventListener('click', function () {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('ct-theme', next); } catch (e) {}
+  });
+
+  render();
+</script>
 </body>
 </html>
