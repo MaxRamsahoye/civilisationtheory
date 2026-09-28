@@ -328,13 +328,13 @@
 <body>
 
 <div id="progress" aria-hidden="true"></div>
-<button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide concept map">
+<button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide concept map" aria-keyshortcuts="Space">
   <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
 </button>
-<button id="theme-toggle" class="control" type="button" aria-label="Toggle light and dark theme">
+<button id="theme-toggle" class="control" type="button" aria-label="Toggle light and dark theme" aria-keyshortcuts="T">
   <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40"/><path class="fill" d="M50 10 A40 40 0 0 1 50 90 Z"/></svg>
 </button>
-<button id="to-top" class="control" type="button" aria-label="Back to top">
+<button id="to-top" class="control" type="button" aria-label="Back to top" aria-keyshortcuts="Backspace">
   <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
 </button>
 
@@ -518,6 +518,22 @@
     var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     try { localStorage.setItem('ct-theme', next); } catch (e) {}
+  });
+
+  // ---------- Keyboard shortcuts: Backspace = top, Space = map, T = theme ----------
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var el = e.target;
+    if (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+    if (e.key === 'Backspace') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (e.key === ' ' || e.code === 'Space') {
+      e.preventDefault();
+      if (!e.repeat) sideBtn.click();
+    } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
+      document.getElementById('theme-toggle').click();
+    }
   });
 
   render();
