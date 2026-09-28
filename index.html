@@ -653,6 +653,8 @@
     }
   });
 
+  // Every load or refresh opens the homepage: drop any concept slug left in the URL.
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
   render();
 
   // ---------- Loading screen: type the title, then fade out (any key or click skips) ----------
