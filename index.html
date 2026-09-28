@@ -1268,7 +1268,8 @@
     if (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.documentElement.classList.contains('snap-slides')) {
       e.preventDefault();
-      (e.key === 'ArrowDown' ? nextBtn : prevBtn).click();
+      // One step per press: holding an arrow key does not repeat.
+      if (!e.repeat) (e.key === 'ArrowDown' ? nextBtn : prevBtn).click();
     } else if (e.key === 'Backspace') {
       e.preventDefault();
       topBtn.click();
