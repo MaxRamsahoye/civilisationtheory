@@ -51,6 +51,9 @@
     --active: #111111;
     --side-w: 17rem;
     --measure: 36rem;
+    /* Arrow cursors: outline by default, filled over links and buttons */
+    --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><g stroke-linejoin='miter' stroke-linecap='square'><g stroke='%23fffff8' stroke-width='4' fill='%23fffff8'><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6'/></g><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6' fill='none' stroke='%23111111' stroke-width='1.6'/><line x1='2' y1='2' x2='13.1' y2='13.1' stroke='%23111111' stroke-width='1.6'/></g></svg>") 2 2, auto;
+    --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><g stroke-linejoin='miter' stroke-linecap='square'><g stroke='%23fffff8' stroke-width='4' fill='%23fffff8'><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6'/></g><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6' fill='%23111111' stroke='%23111111' stroke-width='1.6'/><line x1='2' y1='2' x2='13.1' y2='13.1' stroke='%23fffff8' stroke-width='1.6'/></g></svg>") 2 2, pointer;
   }
   :root[data-theme="dark"] {
     --bg: #151515;
@@ -61,12 +64,17 @@
     --link: #e8e6de;
     --link-underline: #6d6b64;
     --active: #ffffff;
+    --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><g stroke-linejoin='miter' stroke-linecap='square'><g stroke='%23151515' stroke-width='4' fill='%23151515'><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6'/></g><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6' fill='none' stroke='%23e8e6de' stroke-width='1.6'/><line x1='2' y1='2' x2='13.1' y2='13.1' stroke='%23e8e6de' stroke-width='1.6'/></g></svg>") 2 2, auto;
+    --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><g stroke-linejoin='miter' stroke-linecap='square'><g stroke='%23151515' stroke-width='4' fill='%23151515'><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6'/></g><polygon points='2,2 25.6,9.6 13.1,13.1 9.6,25.6' fill='%23e8e6de' stroke='%23e8e6de' stroke-width='1.6'/><line x1='2' y1='2' x2='13.1' y2='13.1' stroke='%23151515' stroke-width='1.6'/></g></svg>") 2 2, pointer;
   }
 
   * { box-sizing: border-box; }
   html { font-size: 17px; scrollbar-width: none; }
   html::-webkit-scrollbar { display: none; }
   @media (min-width: 900px) { html { font-size: 19px; } }
+
+  html, body { cursor: var(--cursor); }
+  a, button, a *, button * { cursor: var(--cursor-link); }
 
   body {
     margin: 0;
@@ -95,7 +103,7 @@
     background: none;
     border: 0;
     padding: 0;
-    cursor: pointer;
+    cursor: var(--cursor-link);
   }
   button:focus-visible, a:focus-visible {
     outline: 1px solid var(--text);
@@ -280,7 +288,7 @@
   p { margin: 0 0 1.1rem; }
   .description ul { padding-left: 1.3rem; margin: 0 0 1.1rem; }
   .description li { margin-bottom: 0.55rem; padding-left: 0.2rem; }
-  .description li strong { font-weight: 600; }
+  .description li strong { font-weight: 700; font-size: 1em; }
 
   .count {
     font-size: 0.85rem;
@@ -348,10 +356,10 @@
       title: 'Civilisation Theory',
       parent: null,
       html: [
-        '<p>Civilisation Theory is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the developmental process, initial conditions and dominant paradigm of civilisation itself. From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>',
+        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the developmental process, initial conditions and dominant paradigm of civilisation itself. From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>',
 
         '<h2>A Conceptual Adaptive System</h2>',
-        '<p>This glossary site serves to create a conceptual adaptive system for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
+        '<p>This glossary site serves to create a <em>conceptual adaptive system</em> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
 
         '<h2>Project Context</h2>',
         '<p>The Civilisation Theory Map is inspired, in substance and design, by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>. More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
