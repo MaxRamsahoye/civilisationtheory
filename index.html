@@ -64,7 +64,8 @@
   }
 
   * { box-sizing: border-box; }
-  html { font-size: 17px; }
+  html { font-size: 17px; scrollbar-width: none; }
+  html::-webkit-scrollbar { display: none; }
   @media (min-width: 900px) { html { font-size: 19px; } }
 
   body {
@@ -104,22 +105,53 @@
   /* ---------- Controls ---------- */
   .control {
     position: fixed;
-    top: 1rem;
     z-index: 30;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    font-variant: small-caps;
-    text-transform: lowercase;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--muted);
-    padding: 0.25rem 0.4rem;
+    transition: color .2s ease, opacity .25s ease, left .25s ease;
   }
   .control:hover { color: var(--text); }
-  #sidebar-toggle { left: 1rem; }
-  #theme-toggle { right: 1rem; }
-  #theme-toggle .sep { margin: 0 0.3em; opacity: 0.6; }
-  #theme-toggle [data-t] { transition: color .2s ease; }
-  :root[data-theme="light"] #theme-toggle [data-t="light"],
-  :root[data-theme="dark"] #theme-toggle [data-t="dark"] { color: var(--text); }
+  .control svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 7;
+    stroke-linejoin: miter;
+    transition: transform .25s ease;
+  }
+  /* Sidebar toggle: middle of the left side; points left to close, right to open */
+  #sidebar-toggle {
+    top: 50%;
+    left: calc(var(--side-w) - 2.4rem);
+    transform: translateY(-50%);
+  }
+  #sidebar-toggle svg { transform: rotate(90deg); }
+  body.sidebar-closed #sidebar-toggle { left: 0.6rem; }
+  body.sidebar-closed #sidebar-toggle svg { transform: rotate(-90deg); }
+  #theme-toggle { top: 0.8rem; right: 0.9rem; }
+  #theme-toggle svg { stroke-width: 6; }
+  #theme-toggle .fill { fill: currentColor; stroke: none; }
+  #to-top { bottom: 0.9rem; left: 0.6rem; opacity: 0; pointer-events: none; }
+  #to-top svg { transform: rotate(180deg); }
+  #to-top.visible { opacity: 1; pointer-events: auto; }
+
+  /* ---------- Reading progress (replaces the scrollbar) ---------- */
+  #progress {
+    position: fixed;
+    top: 0; right: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--text);
+    transform-origin: top;
+    transform: scaleY(0);
+    z-index: 40;
+    pointer-events: none;
+  }
 
   /* ---------- Sidebar ---------- */
   #sidebar {
@@ -130,6 +162,7 @@
     border-right: 1px solid var(--rule);
     padding: 3.6rem 1.4rem 2rem;
     overflow-y: auto;
+    scrollbar-width: none;
     z-index: 20;
     transition: transform .25s ease, background-color .2s ease;
   }
@@ -163,10 +196,9 @@
     padding: 0.1rem 0;
   }
   .tree a:hover { color: var(--text); }
-  .tree a[aria-current="page"] { color: var(--active); font-style: italic; }
+  .tree a[aria-current="page"] { color: var(--active); }
   .tree .empty {
     color: var(--muted);
-    font-style: italic;
     font-size: 0.9rem;
     margin-top: 0.35rem;
   }
@@ -175,14 +207,48 @@
   main {
     padding: 5rem 1.5rem 6rem;
     transition: padding-left .25s ease;
+    container-type: inline-size;
   }
   @media (min-width: 900px) {
-    body:not(.sidebar-closed) main { padding-left: calc(var(--side-w) + 1.5rem); }
+    main { padding-left: 2.8rem; padding-right: 2.8rem; }
+    body:not(.sidebar-closed) main { padding-left: calc(var(--side-w) + 1rem); padding-right: 1rem; }
+  }
+  .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr);
   }
   article {
-    max-width: var(--measure);
-    margin: 0 auto;
+    grid-column: 2;
     text-align: left;
+    min-width: 0;
+  }
+
+  /* ---------- Contents (left of the text column) ---------- */
+  #toc {
+    grid-column: 1;
+    justify-self: end;
+    width: 7.5rem;
+    margin-right: 1.5rem;
+    position: sticky;
+    top: 5rem;
+    align-self: start;
+    font-size: 0.85rem;
+    line-height: 1.35;
+  }
+  #toc .toc-title {
+    letter-spacing: 0.08em;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    color: var(--muted);
+    margin: 0 0 0.7rem;
+  }
+  #toc ul { list-style: none; margin: 0; padding: 0; }
+  #toc li { margin: 0 0 0.5rem; }
+  #toc li.sub { padding-left: 0.7rem; }
+  #toc a { color: var(--muted); text-decoration: none; }
+  #toc a:hover, #toc a.active { color: var(--text); }
+  @container (max-width: 54rem) {
+    #toc { display: none; }
   }
 
   .tree-string {
@@ -198,19 +264,19 @@
   .tree-string .sep { margin: 0 0.45em; }
 
   h1 {
-    font-weight: 400;
+    font-weight: 700;
     font-size: 2.6rem;
     line-height: 1.1;
     margin: 0 0 1.6rem;
     letter-spacing: -0.005em;
   }
   h2 {
-    font-weight: 400;
-    font-style: italic;
+    font-weight: 600;
     font-size: 1.45rem;
     line-height: 1.2;
     margin: 2.4rem 0 0.8rem;
   }
+  h1, h2 { scroll-margin-top: 1.5rem; }
   p { margin: 0 0 1.1rem; }
   .description ul { padding-left: 1.3rem; margin: 0 0 1.1rem; }
   .description li { margin-bottom: 0.55rem; padding-left: 0.2rem; }
@@ -244,9 +310,15 @@
 </head>
 <body>
 
-<button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true">Hide map</button>
+<div id="progress" aria-hidden="true"></div>
+<button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide concept map">
+  <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
+</button>
 <button id="theme-toggle" class="control" type="button" aria-label="Toggle light and dark theme">
-  <span data-t="light">Light</span><span class="sep">/</span><span data-t="dark">Dark</span>
+  <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40"/><path class="fill" d="M50 10 A40 40 0 0 1 50 90 Z"/></svg>
+</button>
+<button id="to-top" class="control" type="button" aria-label="Back to top">
+  <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
 </button>
 
 <nav id="sidebar" aria-label="Concept tree">
@@ -256,7 +328,10 @@
 <div id="scrim"></div>
 
 <main>
-  <article id="entry"></article>
+  <div class="page">
+    <nav id="toc" aria-label="Contents"></nav>
+    <article id="entry"></article>
+  </div>
 </main>
 
 <script>
@@ -279,7 +354,7 @@
         '<p>This glossary site serves to create a conceptual adaptive system for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
 
         '<h2>Project Context</h2>',
-        '<p>The Civilisation Theory Map is inspired, in substance and design, by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>. More broadly, Civilisation Theory is a critical dialectical synthesis derived, in part, from three core clusters of intellectual subcultures:</p>',
+        '<p>The Civilisation Theory Map is inspired, in substance and design, by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>. More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
         '<ul>',
         '<li><strong>The Meta-space:</strong> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>',
         '<li><strong>The PARA-academic space:</strong> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>',
@@ -350,6 +425,7 @@
       '<h1>' + esc(c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()) + '</div>';
 
+    buildToc();
     document.title = c === ROOT ? 'Civilisation Theory Map' : c.title + ' · Civilisation Theory Map';
     treeEl.querySelectorAll('a').forEach(function (a) {
       if (a.getAttribute('data-id') === c.id) a.setAttribute('aria-current', 'page');
@@ -357,14 +433,56 @@
     });
     if (window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
+    onScroll();
   }
   window.addEventListener('hashchange', render);
+
+  // ---------- Contents ----------
+  var tocEl = document.getElementById('toc');
+  var tocHeads = [];
+  function slug(s) {
+    return 'h-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+  function buildToc() {
+    tocHeads = Array.prototype.slice.call(document.querySelectorAll('#entry h1, #entry h2'));
+    tocHeads.forEach(function (h) { h.id = slug(h.textContent); });
+    tocEl.innerHTML = '<p class="toc-title">Contents</p><ul>' + tocHeads.map(function (h) {
+      return '<li class="' + (h.tagName === 'H2' ? 'sub' : '') + '"><a href="#" data-target="' + h.id + '">' +
+        esc(h.textContent) + '</a></li>';
+    }).join('') + '</ul>';
+  }
+  // Contents links scroll within the page without touching the concept route in the URL hash.
+  tocEl.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-target]');
+    if (!a) return;
+    e.preventDefault();
+    document.getElementById(a.getAttribute('data-target')).scrollIntoView({ behavior: 'smooth' });
+  });
+
+  // ---------- Scroll: progress bar, back-to-top, active contents entry ----------
+  var progressEl = document.getElementById('progress');
+  var topBtn = document.getElementById('to-top');
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var y = window.scrollY;
+    progressEl.style.transform = 'scaleY(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+    topBtn.classList.toggle('visible', y > 300);
+    var current = tocHeads[0];
+    tocHeads.forEach(function (h) { if (h.getBoundingClientRect().top < window.innerHeight * 0.3) current = h; });
+    if (max > 0 && y >= max - 2) current = tocHeads[tocHeads.length - 1];
+    tocEl.querySelectorAll('a').forEach(function (a) {
+      a.classList.toggle('active', !!current && a.getAttribute('data-target') === current.id);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   // ---------- Sidebar toggle ----------
   var sideBtn = document.getElementById('sidebar-toggle');
   function setSidebar(open, remember) {
     document.body.classList.toggle('sidebar-closed', !open);
-    sideBtn.textContent = open ? 'Hide map' : 'Show map';
+    sideBtn.setAttribute('aria-label', open ? 'Hide concept map' : 'Show concept map');
     sideBtn.setAttribute('aria-expanded', String(open));
     if (remember) { try { localStorage.setItem('ct-sidebar', open ? 'open' : 'closed'); } catch (e) {} }
   }
