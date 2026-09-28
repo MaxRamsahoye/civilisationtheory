@@ -224,6 +224,31 @@
   #to-top svg { transform: rotate(180deg); }
   #to-top.visible { opacity: 1; pointer-events: auto; }
 
+  /* ---------- Press effect (click and keyboard shortcuts) ---------- */
+  /* Icons: a squeeze and an expanding ring; text links and buttons: a highlight flash */
+  .side-icons a { position: relative; }
+  .control.pressed, .side-icons a.pressed { color: var(--text); }
+  .control.pressed svg, .side-icons a.pressed svg { animation: press-squeeze .32s ease; }
+  .control.pressed::after, .side-icons a.pressed::after {
+    content: '';
+    position: absolute;
+    inset: -0.15rem;
+    border-radius: 50%;
+    border: 1.4px solid currentColor;
+    pointer-events: none;
+    animation: press-ring .55s ease-out forwards;
+  }
+  a.pressed:not(.side-icons a), button.pressed:not(.control) {
+    animation: press-flash .6s ease-out;
+    border-radius: 2px;
+  }
+  @keyframes press-squeeze { 0% { scale: 1; } 35% { scale: 0.78; } 100% { scale: 1; } }
+  @keyframes press-ring { from { transform: scale(0.45); opacity: 0.7; } to { transform: scale(1.45); opacity: 0; } }
+  @keyframes press-flash { from { background-color: var(--select); } to { background-color: transparent; } }
+  @media (prefers-reduced-motion: reduce) {
+    .control.pressed svg, .side-icons a.pressed svg, .control.pressed::after, .side-icons a.pressed::after { animation: none; }
+  }
+
   /* ---------- Reading progress (replaces the scrollbar) ---------- */
   #progress {
     position: fixed;
@@ -1169,8 +1194,20 @@
     } catch (e) {}
   }
   document.addEventListener('click', function (e) {
-    if (e.target.closest && e.target.closest('a, button')) chime();
+    var el = e.target.closest && e.target.closest('a, button');
+    if (!el) return;
+    chime();
+    press(el);
   });
+
+  // ---------- Press effect: a clear pulse on click (and on shortcuts, which click the same controls) ----------
+  function press(el) {
+    el.classList.remove('pressed');
+    void el.offsetWidth; // restart the animation if pressed again quickly
+    el.classList.add('pressed');
+    clearTimeout(el._pressTimer);
+    el._pressTimer = setTimeout(function () { el.classList.remove('pressed'); }, 600);
+  }
 
   // ---------- Infinite: step between slides with the arrow buttons or ↑ / ↓ ----------
   var prevBtn = document.getElementById('slide-prev');
@@ -1207,10 +1244,10 @@
     if (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.documentElement.classList.contains('snap-slides')) {
       e.preventDefault();
-      stepSlide(e.key === 'ArrowDown' ? 1 : -1);
+      (e.key === 'ArrowDown' ? nextBtn : prevBtn).click();
     } else if (e.key === 'Backspace') {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      topBtn.click();
     } else if (e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
       if (!e.repeat) sideBtn.click();
