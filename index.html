@@ -618,17 +618,24 @@
     transition: opacity .6s ease, visibility 0s linear .6s;
   }
   #loader.done { opacity: 0; visibility: hidden; }
-  #loader { flex-direction: column; gap: 2rem; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
-  /* Ring fills in step with the typewriter */
-  /* Ring above the title; the pair is centred together on screen */
-  .loader-ring { order: -1; width: 7.6rem; height: 7.6rem; transform: rotate(-90deg); }
-  .loader-ring circle { fill: none; stroke-width: 0.45; }
+  /* Ring encircles the title, scaled from the title's width, and fills in step with the typewriter */
+  .loader-mark { position: relative; display: inline-block; }
+  .loader-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(122% / 0.9);  /* circle (90% of the box) spans 122% of the title */
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    overflow: visible;
+  }
+  .loader-ring circle { fill: none; stroke-width: 1.1; }
   .loader-ring .track { stroke: var(--rule); }
   .loader-ring .fill {
     stroke: var(--text);
-    stroke-dasharray: 100.531;
-    stroke-dashoffset: 100.531;
+    stroke-dasharray: 1130.97;
+    stroke-dashoffset: 1130.97;
     transition: stroke-dashoffset 75ms linear;
   }
   /* The invisible full title fixes the width, so typing grows from a stable left edge */
@@ -655,8 +662,10 @@
 <body>
 
 <div id="loader" aria-hidden="true">
-  <h1><span class="ghost">Civilisation Theory</span><span class="typed"><span id="loader-text"></span></span></h1>
-  <svg class="loader-ring" viewBox="0 0 40 40"><circle class="track" cx="20" cy="20" r="16"/><circle id="loader-fill" class="fill" cx="20" cy="20" r="16"/></svg>
+  <div class="loader-mark">
+    <svg class="loader-ring" viewBox="0 0 400 400"><circle class="track" cx="200" cy="200" r="180"/><circle id="loader-fill" class="fill" cx="200" cy="200" r="180"/></svg>
+    <h1><span class="ghost">Civilisation Theory</span><span class="typed"><span id="loader-text"></span></span></h1>
+  </div>
 </div>
 <noscript><style>#loader { display: none; }</style></noscript>
 
@@ -1502,7 +1511,7 @@
     document.addEventListener('pointerdown', skip, true);
 
     var ring = document.getElementById('loader-fill');
-    var RING_C = 2 * Math.PI * 16;
+    var RING_C = 2 * Math.PI * 180;
     function fillRing(i) {
       ring.style.strokeDashoffset = String(RING_C * (1 - i / title.length));
       // Once complete, draw a solid circle so no seam or gap can remain at the join.
