@@ -34,7 +34,11 @@
     }
     document.documentElement.setAttribute('data-theme', t);
     setFavicon(t);
-    try { if (localStorage.getItem('ct-accent') === 'on') document.documentElement.classList.add('accent'); } catch (e) {}
+    try {
+      var a = localStorage.getItem('ct-accent');
+      if (a === 'on' || a === 'alt') document.documentElement.classList.add('accent');
+      if (a === 'alt') document.documentElement.classList.add('accent-alt');
+    } catch (e) {}
     var v = null;
     try { v = localStorage.getItem('ct-index'); } catch (e) {}
     document.documentElement.setAttribute('data-index', v === 'az' ? 'az' : 'tree');
@@ -92,14 +96,14 @@
     --side-w: 17rem;
     --measure: 36rem;
     --select: #d9e3ec;
-    --accent: #a8402a;
+    --accent: #16a34a;
     /* Arrow cursors: outline by default, filled over links and buttons */
     --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='%23fffff8' stroke='%23fffff8' stroke-width='3.4'/><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='none' stroke='%23111111' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='9.01' y2='9.01' stroke='%23111111' stroke-width='1.4'/></g></svg>") 2 2, auto;
     --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='%23fffff8' stroke='%23fffff8' stroke-width='3.4'/><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='%23111111' stroke='%23111111' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='9.01' y2='9.01' stroke='%23fffff8' stroke-width='1.4'/></g></svg>") 2 2, pointer;
   }
   :root[data-theme="dark"] {
     --select: #3b4757;
-    --accent: #e3a857;
+    --accent: #f08a6c;
     --bg: #151515;
     --bg-side: #1b1b1a;
     --text: #e8e6de;
@@ -114,7 +118,7 @@
 
   :root[data-theme="sepia"] {
     --select: #e4cc9c;
-    --accent: #8c3a14;
+    --accent: #1f6f6b;
     --bg: #f4ecd8;
     --bg-side: #ece2c8;
     --text: #3b2e1e;
@@ -143,6 +147,8 @@
 
   * { box-sizing: border-box; }
   /* Accent links (toggled with C, off by default) */
+  /* White has a second accent (C cycles: off → first → second → off) */
+  :root[data-theme="light"].accent-alt { --accent: #a8402a; }
   :root.accent .description a {
     color: var(--accent);
     text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
@@ -1451,8 +1457,14 @@
     } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
       document.getElementById('theme-toggle').click();
     } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
-      var on = document.documentElement.classList.toggle('accent');
-      try { localStorage.setItem('ct-accent', on ? 'on' : 'off'); } catch (err) {}
+      // Cycle: off → first accent → second accent (themes that have one) → off
+      var root = document.documentElement, state;
+      if (!root.classList.contains('accent')) state = 'on';
+      else if (!root.classList.contains('accent-alt') && root.getAttribute('data-theme') === 'light') state = 'alt';
+      else state = 'off';
+      root.classList.toggle('accent', state !== 'off');
+      root.classList.toggle('accent-alt', state === 'alt');
+      try { localStorage.setItem('ct-accent', state); } catch (err) {}
     } else if (e.key === '/') {
       e.preventDefault();
       if (document.body.classList.contains('sidebar-closed')) setSidebar(true, false);
