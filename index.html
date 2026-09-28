@@ -394,8 +394,10 @@
     padding-top: 1.6rem;
     margin-top: 2.4rem;
   }
-  .index-list { list-style: none; padding: 0; margin: 1.4rem 0 0; }
-  .index-list li { margin: 0.2rem 0; }
+  .description .index-list, .description .index-list ul { list-style: none; padding: 0; margin: 0; }
+  .description .index-list { margin-top: 1.4rem; }
+  .description .index-list ul { padding-left: 1.2rem; }
+  .description .index-list li { margin: 0.2rem 0; padding: 0; }
 
   /* ---------- Loading screen ---------- */
   #loader {
@@ -670,11 +672,13 @@
   function indexHtml() {
     var concepts = CONCEPTS.filter(function (c) { return c !== ROOT; })
       .sort(function (a, b) { return a.title.localeCompare(b.title); });
-    var list = concepts.length
-      ? '<ul class="index-list">' + concepts.map(function (c) {
-          return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>';
-        }).join('') + '</ul>'
-      : '';
+    // Same nested tree as the sidebar: the root, with each concept under its parent.
+    function branch(c) {
+      var kids = childrenOf(c.id);
+      return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a>' +
+        (kids.length ? '<ul>' + kids.map(branch).join('') + '</ul>' : '') + '</li>';
+    }
+    var list = concepts.length ? '<ul class="index-list">' + branch(ROOT) + '</ul>' : '';
     return '<p class="count">Concept Count: ' + concepts.length + '</p>' + list;
   }
 
