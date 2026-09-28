@@ -446,6 +446,85 @@
         '<p>Below is a complete index of concepts on this site. Over time, this map will extend to cover hundreds of entries.</p>',
         '<!--INDEX-->'
       ].join('\n')
+    },
+    {
+      id: 'metacrisis',
+      title: 'Metacrisis',
+      parent: 'civilisation-theory',
+      html: [
+        '<p>The <em>metacrisis</em> is the underlying pattern that connects the many crises of the 21st century – ecological, technological, political, economic and psychological – as expressions of shared generative dynamics, rather than as separate problems. Where a polycrisis names the interaction of many crises, the metacrisis names what lies beneath them: the developmental process, initial conditions and dominant paradigm of civilisation itself.</p>',
+
+        '<h2>Generator Functions</h2>',
+        '<p>From the frame of Civilisation Theory, the metacrisis is produced by a small number of generative dynamics built into the dominant paradigm: rivalrous competition under conditions of exponential technology (see <a href="#multipolar-trap">Multipolar Trap</a>), and the extraction of value from complex systems faster than those systems can regenerate. Addressing the symptoms without addressing these generators tends to relocate harm rather than remove it.</p>',
+
+        '<h2>Origins of the Term</h2>',
+        '<p>The term is most closely associated with Daniel Schmachtenberger and the work of <em>The Consilience Project</em> and the <em>Civilization Research Institute</em>, and has developed within the Meta-space alongside metamodernism and metatheory.</p>',
+
+        '<h2>Relation to Civilisation Theory</h2>',
+        '<p>The metacrisis is the problem statement of Civilisation Theory. Its most acute expression is <a href="#existential-risk">existential risk</a>; its sufficient response is <a href="#civilisation-design">civilisation design</a> and transition.</p>'
+      ].join('\n')
+    },
+    {
+      id: 'existential-risk',
+      title: 'Existential Risk',
+      parent: 'metacrisis',
+      html: [
+        '<p>An <em>existential risk</em> is a risk that threatens the extinction of humanity, or the permanent and drastic curtailment of its potential. Civilisation Theory extends the concept from discrete events to the processes that produce them: existential risks are treated as emergent outcomes of the <a href="#metacrisis">metacrisis</a>, not as isolated hazards.</p>',
+
+        '<h2>Origins of the Term</h2>',
+        '<p>The concept was formalised by Nick Bostrom (2002) and has since been developed within existential risk studies and the wider PARA-academic space. Commonly cited sources of risk include advanced AI, engineered pandemics, nuclear war and severe climate change.</p>',
+
+        '<h2>Destruction and Dystopia</h2>',
+        '<p>Civilisation Theory identifies two failure modes. Destruction follows when powerful technology remains distributed among uncoordinated, competing actors; dystopia follows when that risk is controlled through concentrated, unaccountable power. A sufficient response must avoid both at once, which is why it cannot be reduced to the mitigation of individual risks.</p>'
+      ].join('\n')
+    },
+    {
+      id: 'multipolar-trap',
+      title: 'Multipolar Trap',
+      parent: 'metacrisis',
+      html: [
+        '<p>A <em>multipolar trap</em> is a situation in which each actor, acting rationally in competition with others, is driven towards an outcome that is worse for everyone – including itself. No single actor can stop without losing ground to the rest, so the race continues even when all would prefer that it ended.</p>',
+
+        '<h2>Game-Theoretic Structure</h2>',
+        '<p>The multipolar trap generalises the prisoner’s dilemma and the tragedy of the commons to many actors. Familiar instances include arms races, regulatory races to the bottom, the attention economy, and competition to deploy powerful technologies before they are understood.</p>',
+
+        '<h2>Origins of the Term</h2>',
+        '<p>The term was popularised by Scott Alexander’s essay <em>Meditations on Moloch</em> (2014), and developed by Daniel Schmachtenberger as one of the generator functions of the <a href="#metacrisis">metacrisis</a>.</p>',
+
+        '<h2>Exponential Technology</h2>',
+        '<p>Under exponential technology, multipolar traps shift from producing slow harms to producing <a href="#existential-risk">existential risk</a>, since the capacities being raced towards grow faster than the institutions able to coordinate them. Escaping the trap requires changing the incentive structure itself – a problem of <a href="#civilisation-design">civilisation design</a>.</p>'
+      ].join('\n')
+    },
+    {
+      id: 'civilisation-design',
+      title: 'Civilisation Design',
+      parent: 'civilisation-theory',
+      html: [
+        '<p><em>Civilisation design</em> is the deliberate design of the basic structures of civilisation – its political economy, cultural psychology and technological infrastructure – as one integrated system, rather than reform within the existing one. In Civilisation Theory, it is the only sufficient response to the <a href="#metacrisis">metacrisis</a>.</p>',
+
+        '<h2>Structure, Superstructure and Infrastructure</h2>',
+        '<p>Civilisation design works across three layers: political economy (structure), cultural psychology (superstructure) and technology (infrastructure). A design that changes one layer while leaving the others intact tends to be reabsorbed by them; the layers must be made compatible with one another.</p>',
+
+        '<h2>Lineage</h2>',
+        '<p>The project draws on the Cybernetic Economics lineage: Buckminster Fuller’s design science (1969), Stafford Beer’s management cybernetics (1971), Jacque Fresco’s resource-based economy (1985), and the more recent work of Daniel Schmachtenberger and Peter Joseph.</p>',
+
+        '<h2>Design and Transition</h2>',
+        '<p>A design is not sufficient on its own: it also requires a viable path of transition from the present civilisation, one that avoids both destruction and dystopia along the way. The end state that design and transition aim at is a <a href="#life-world-system">life-world-system</a>.</p>'
+      ].join('\n')
+    },
+    {
+      id: 'life-world-system',
+      title: 'Life-World-System',
+      parent: 'civilisation-design',
+      html: [
+        '<p>A <em>life-world-system</em> is the aim of <a href="#civilisation-design">civilisation design</a>: a civilisation that is viable at every level – for life (the biosphere), for the world of human meaning and experience (the life-world), and for the structures that coordinate society as a whole (the system).</p>',
+
+        '<h2>Life-World and System</h2>',
+        '<p>The term draws on Jürgen Habermas’s distinction between the lifeworld – the shared background of meaning, culture and relationships – and the system of money and administrative power, and on his account of the lifeworld’s colonisation by the system. In a life-world-system the two are integrated rather than in conflict.</p>',
+
+        '<h2>Viability</h2>',
+        '<p>Following Stafford Beer, a viable system is one able to maintain its identity and adapt within a changing environment. A life-world-system is viable in this sense, and compatible with 21st century technology, without depending on the dynamics that generate the <a href="#metacrisis">metacrisis</a>.</p>'
+      ].join('\n')
     }
   ];
 
@@ -499,7 +578,7 @@
       return i === arr.length - 1
         ? '<span>' + esc(p.title) + '</span>'
         : '<a href="' + href(p) + '">' + esc(p.title) + '</a>';
-    }).join('<span class="sep">›</span>');
+    }).join('<span class="sep">/</span>');
 
     document.getElementById('entry').innerHTML =
       '<p class="tree-string">' + crumbs + '</p>' +
