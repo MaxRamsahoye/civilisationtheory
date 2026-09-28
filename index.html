@@ -625,7 +625,9 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    width: calc(122% / 0.9);  /* circle (90% of the box) spans 122% of the title */
+    /* Circle (90% of the box) is 125% of the screen's shorter side: it runs off the top and bottom on
+       landscape screens, and off the sides on portrait ones (where a taller ring would be entirely off screen). */
+    width: calc(min(125vh, 125vw) / 0.9);
     aspect-ratio: 1;
     transform: translate(-50%, -50%) rotate(-90deg);
     overflow: visible;
@@ -1511,6 +1513,14 @@
     document.addEventListener('pointerdown', skip, true);
 
     var ring = document.getElementById('loader-fill');
+    // Keep the ring's line about 1.4px thick whatever its (very large) size.
+    var ringSvg = document.querySelector('.loader-ring');
+    function ringStroke() {
+      var w = ringSvg.getBoundingClientRect().width || 1;
+      ringSvg.querySelectorAll('circle').forEach(function (c) { c.style.strokeWidth = String(1.4 * 400 / w); });
+    }
+    ringStroke();
+    window.addEventListener('resize', ringStroke);
     var RING_C = 2 * Math.PI * 180;
     function fillRing(i) {
       ring.style.strokeDashoffset = String(RING_C * (1 - i / title.length));
