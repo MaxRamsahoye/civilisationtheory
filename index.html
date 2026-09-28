@@ -692,7 +692,8 @@
       if (a.getAttribute('data-id') === c.id) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
     });
-    if (window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
+    // The homepage and the Map page carry the full index themselves, so the sidebar collapses there.
+    if (c === ROOT || c.id === 'the-map' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
     onScroll();
   }
