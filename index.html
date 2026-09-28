@@ -7,6 +7,10 @@
 <meta name="description" content="A glossary of concepts for Civilisation Theory: a conceptual adaptive system for civilisation design and transition.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='0,0 100,0 0,100' fill='%23000'/></svg>">
 <script>
+  // Never restore the previous scroll position: every load starts at the top.
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.addEventListener('pageshow', function () { window.scrollTo(0, 0); });
+
   // Apply saved theme before first paint to avoid a flash.
   (function () {
     var t = null;
