@@ -320,7 +320,7 @@
     padding: 0.1rem 0;
   }
   .tree a:hover { color: var(--text); }
-  .tree a[aria-current="page"] { color: var(--active); }
+  .tree a[aria-current] { color: var(--active); }
   .tree .empty {
     color: var(--muted);
     margin-top: 0.35rem;
@@ -1029,7 +1029,7 @@
       .sort(function (a, b) { return a.title.localeCompare(b.title); });
     function deck(list, cls) {
       return '<div class="slides ' + cls + '">' + list.map(function (c, i) {
-        return '<section class="slide">' +
+        return '<section class="slide" data-id="' + c.id + '">' +
           '<p class="tree-string slide-meta"><span class="crumbs">' + crumbsHtml(c) + '</span>' +
           '<span class="slide-count">' + (i + 1) + ' / ' + list.length + '</span></p>' +
           '<h2 class="slide-title"><a href="' + href(c) + '">' + esc(c.title) + '</a></h2>' +
@@ -1068,6 +1068,7 @@
     if (c === ROOT || c.id === 'the-map' || c.id === 'infinite' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
     onScroll();
+    trackedId = undefined;
     if (c.id === 'infinite') updateSlideNav();
   }
   window.addEventListener('hashchange', render);
@@ -1232,6 +1233,29 @@
     if (!list.length) return;
     prevBtn.disabled = window.scrollY < 4;
     nextBtn.disabled = list[list.length - 1].getBoundingClientRect().top <= 4;
+    trackSlide(list);
+  }
+
+  // The sidebar tree follows the slide in view: it is marked current and kept visible in the sidebar.
+  var trackedId = null;
+  function trackSlide(list) {
+    var mid = window.innerHeight / 2, id = null;
+    list.forEach(function (sl) { if (sl.getBoundingClientRect().top <= mid) id = sl.getAttribute('data-id'); });
+    if (id === trackedId) return;
+    trackedId = id;
+    var sidebar = document.getElementById('sidebar');
+    treeEl.querySelectorAll('a').forEach(function (a) {
+      var on = a.getAttribute('data-id') === id;
+      if (on) {
+        a.setAttribute('aria-current', 'true');
+        var r = a.getBoundingClientRect(), sr = sidebar.getBoundingClientRect();
+        if (r.top < sr.top + 40 || r.bottom > sr.bottom - 40) {
+          sidebar.scrollTo({ top: sidebar.scrollTop + (r.top - sr.top) - sidebar.clientHeight / 2, behavior: 'smooth' });
+        }
+      } else {
+        a.removeAttribute('aria-current');
+      }
+    });
   }
   prevBtn.addEventListener('click', function () { stepSlide(-1); });
   nextBtn.addEventListener('click', function () { stepSlide(1); });
