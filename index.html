@@ -621,15 +621,15 @@
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
   /* Ring encircles the title, scaled from the title's width, and fills in step with the typewriter */
   .loader-mark { position: relative; display: inline-block; }
+  /* Small ring at the bottom middle of the screen; the title stays centred on its own */
   .loader-ring {
-    position: absolute;
+    position: fixed;
     left: 50%;
-    top: 50%;
-    /* Circle (90% of the box) is 115% of the screen width, so it runs off both sides at the middle */
-    width: calc(115vw / 0.9);
+    bottom: 2.6rem;
+    width: 2.6rem;
     aspect-ratio: 1;
     /* Start at the top and fill anti-clockwise (the flip mirrors the stroke's direction) */
-    transform: translate(-50%, -50%) rotate(-90deg) scaleY(-1);
+    transform: translateX(-50%) rotate(-90deg) scaleY(-1);
     overflow: visible;
   }
   .loader-ring circle { fill: none; stroke-width: 1.1; }
