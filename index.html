@@ -417,6 +417,40 @@
   :root[data-index="tree"] .az-list,
   :root[data-index="az"] .index-list { display: none; }
 
+  /* ---------- Slides: one concept per full-screen slide ---------- */
+  :root[data-index="tree"] .slides-az,
+  :root[data-index="az"] .slides-tree { display: none; }
+  html.snap-slides { scroll-snap-type: y proximity; }
+  .slide {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 0;
+    border-bottom: 1px solid var(--rule);
+    scroll-snap-align: start;
+  }
+  .slide:last-child { border-bottom: 0; }
+  .slides { margin-top: 1rem; }
+  .description .slide-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    margin: 0 0 1.2rem;
+  }
+  .slide-meta .crumbs { flex: 1 1 auto; min-width: 0; }
+  .slide-count { white-space: nowrap; }
+  .description .slide-title {
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 1.6rem;
+  }
+  .slide-title a { color: inherit; text-decoration: none; }
+  .slide-title a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); }
+  @media (max-width: 899px) { .description .slide-title { font-size: 2.1rem; } }
+
   /* A–Z view: letter groups in three columns, each group kept whole */
   .az-list { columns: 3; column-gap: 1.4rem; margin-top: 2.4rem; font-size: 0.9em; line-height: 1.3; }
   .az-group { break-inside: avoid; padding-bottom: 1.3rem; }
@@ -520,6 +554,7 @@
   <div class="side-icons">
     <a href="#" data-page="home" aria-label="Home"><svg viewBox="-4.1 -3.1 108.1 108.1" aria-hidden="true"><polyline points="10,46 50,12 90,46"/><polyline points="22,36 22,90 78,90 78,36"/><polyline points="42,90 42,64 58,64 58,90"/></svg></a>
     <a href="#the-map" data-page="the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
+    <a href="#slides" data-page="slides" aria-label="Slides"><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
   </div>
   <p class="side-title"><a href="#the-map" data-page="the-map">The Map</a></p>
   <ul class="tree" id="tree"></ul>
@@ -877,7 +912,9 @@
 
   // Site pages: routed like concepts, but not part of the tree, index or concept count.
   var PAGES = {
-    'the-map': { id: 'the-map', title: 'The Map', parent: ROOT.id, html: MAP_INTRO + '\n<!--INDEX-->' }
+    'the-map': { id: 'the-map', title: 'The Map', parent: ROOT.id, html: MAP_INTRO + '\n<!--INDEX-->' },
+    'slides': { id: 'slides', title: 'Slides', parent: ROOT.id,
+      html: '<p>Every concept on the map in one continuous sequence of slides. Scroll to move from one to the next, in tree or A–Z order.</p>\n<!--SLIDES-->' }
   };
 
   function childrenOf(id) {
@@ -936,19 +973,45 @@
       '<button type="button" data-view="az">A–Z</button></span></p>' + tree + (concepts.length ? az : '');
   }
 
-  function render() {
-    var id = decodeURIComponent(location.hash.replace(/^#/, ''));
-    var c = byId[id] || PAGES[id] || ROOT;
-    var crumbs = pathTo(c).map(function (p, i, arr) {
+  function crumbsHtml(c) {
+    return pathTo(c).map(function (p, i, arr) {
       return i === arr.length - 1
         ? '<span>' + esc(p.title) + '</span>'
         : '<a href="' + href(p) + '">' + esc(p.title) + '</a>';
-    }).join('<span class="sep">&gt;</span>');
+    }).join('<span class="sep">&gt;</span><wbr>');
+  }
 
+  // Continuous slide view: every concept as a full-screen slide, in tree or A–Z order.
+  function slidesHtml() {
+    var tree = [];
+    (function walk(c) { childrenOf(c.id).forEach(function (k) { tree.push(k); walk(k); }); })(ROOT);
+    var az = CONCEPTS.filter(function (c) { return c !== ROOT; })
+      .sort(function (a, b) { return a.title.localeCompare(b.title); });
+    function deck(list, cls) {
+      return '<div class="slides ' + cls + '">' + list.map(function (c, i) {
+        return '<section class="slide">' +
+          '<p class="tree-string slide-meta"><span class="crumbs">' + crumbsHtml(c) + '</span>' +
+          '<span class="slide-count">' + (i + 1) + ' / ' + list.length + '</span></p>' +
+          '<h2 class="slide-title"><a href="' + href(c) + '">' + esc(c.title) + '</a></h2>' +
+          c.html + '</section>';
+      }).join('') + '</div>';
+    }
+    return '<p class="count"><span>Slides: ' + tree.length + '</span>' +
+      '<span class="index-view" role="group" aria-label="Slide order">' +
+      '<button type="button" data-view="tree">Tree</button><span class="sep">/</span>' +
+      '<button type="button" data-view="az">A–Z</button></span></p>' +
+      deck(tree, 'slides-tree') + deck(az, 'slides-az');
+  }
+
+  function render() {
+    var id = decodeURIComponent(location.hash.replace(/^#/, ''));
+    var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
-      '<p class="tree-string">' + crumbs + '</p>' +
+      '<p class="tree-string">' + crumbsHtml(c) + '</p>' +
       '<h1>' + esc(c.title) + '</h1>' +
-      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()) + '</div>';
+      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()) + '</div>';
+    // Slides snap gently into place as you scroll.
+    document.documentElement.classList.toggle('snap-slides', c.id === 'slides');
 
     buildToc();
     document.title = c === ROOT ? 'Civilisation Theory Map' : c.title + ' · Civilisation Theory Map';
@@ -962,7 +1025,7 @@
       else a.removeAttribute('aria-current');
     });
     // The homepage and the Map page carry the full index themselves, so the sidebar collapses there.
-    if (c === ROOT || c.id === 'the-map' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
+    if (c === ROOT || c.id === 'the-map' || c.id === 'slides' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
     onScroll();
   }
@@ -984,7 +1047,7 @@
     return 'h-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   }
   function buildToc() {
-    tocHeads = Array.prototype.slice.call(document.querySelectorAll('#entry h1, #entry h2'));
+    tocHeads = Array.prototype.slice.call(document.querySelectorAll('#entry h1, #entry h2:not(.slide-title)'));
     tocHeads.forEach(function (h) { h.id = slug(h.textContent); });
     // The concept heading titles the contents; its subheadings are listed beneath.
     var head = tocHeads[0];
