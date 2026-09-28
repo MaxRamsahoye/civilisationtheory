@@ -185,7 +185,8 @@
   /* Sidebar toggle: middle of the left side; points left to close, right to open */
   #sidebar-toggle {
     top: 50%;
-    left: calc(var(--side-w) - 2.4rem);
+    /* Open: just outside the sidebar's right edge */
+    left: calc(var(--side-w) + 0.4rem);
     transform: translateY(-50%);
   }
   body.sidebar-closed #sidebar-toggle { left: 1.4rem; }
@@ -301,6 +302,12 @@
     display: grid;
     grid-template-columns: minmax(1.5rem, 1fr) minmax(0, var(--measure)) minmax(1.5rem, 1fr);
   }
+  /* Map open on desktop: keep the text clear of the close arrow beside the sidebar edge */
+  @media (min-width: 900px) {
+    body:not(.sidebar-closed) .page {
+      grid-template-columns: minmax(3.4rem, 1fr) minmax(0, var(--measure)) minmax(1.5rem, 1fr);
+    }
+  }
   article {
     grid-column: 2;
     text-align: left;
@@ -407,6 +414,8 @@
   @media (max-width: 899px) {
     /* Phones: the text column reaches the edge, so the map toggle moves to the top-left corner */
     body.sidebar-closed #sidebar-toggle { top: 0.8rem; left: 0.9rem; transform: none; }
+    /* Open over the dimmed page: give the close arrow a solid backing so it stays visible */
+    body:not(.sidebar-closed) #sidebar-toggle { background: var(--bg); color: var(--text); border-radius: 50%; }
     body:not(.sidebar-closed) #scrim { display: block; }
     h1 { font-size: 2.1rem; }
   }
