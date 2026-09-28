@@ -615,8 +615,9 @@
   #loader { flex-direction: column; gap: 2rem; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
   /* Ring fills in step with the typewriter */
-  .loader-ring { width: 1.9rem; height: 1.9rem; transform: rotate(-90deg); }
-  .loader-ring circle { fill: none; stroke-width: 1.6; }
+  /* Ring above the title; the pair is centred together on screen */
+  .loader-ring { order: -1; width: 3.8rem; height: 3.8rem; transform: rotate(-90deg); }
+  .loader-ring circle { fill: none; stroke-width: 0.8; }
   .loader-ring .track { stroke: var(--rule); }
   .loader-ring .fill {
     stroke: var(--text);
