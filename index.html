@@ -15,6 +15,7 @@
       t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     document.documentElement.setAttribute('data-theme', t);
+    try { if (localStorage.getItem('ct-accent') === 'on') document.documentElement.classList.add('accent'); } catch (e) {}
   })();
 </script>
 <style>
@@ -69,12 +70,14 @@
     --side-w: 17rem;
     --measure: 36rem;
     --select: #d9e3ec;
+    --accent: #a8402a;
     /* Arrow cursors: outline by default, filled over links and buttons */
     --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='%23fffff8' stroke='%23fffff8' stroke-width='3.4'/><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='none' stroke='%23111111' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='9.01' y2='9.01' stroke='%23111111' stroke-width='1.4'/></g></svg>") 2 2, auto;
     --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='%23fffff8' stroke='%23fffff8' stroke-width='3.4'/><polygon points='2.0,2.0 6.84,16.99 9.01,9.01 16.99,6.84' fill='%23111111' stroke='%23111111' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='9.01' y2='9.01' stroke='%23fffff8' stroke-width='1.4'/></g></svg>") 2 2, pointer;
   }
   :root[data-theme="dark"] {
     --select: #3b4757;
+    --accent: #e3a857;
     --bg: #151515;
     --bg-side: #1b1b1a;
     --text: #e8e6de;
@@ -89,6 +92,7 @@
 
   :root[data-theme="sepia"] {
     --select: #e4cc9c;
+    --accent: #8c3a14;
     --bg: #f4ecd8;
     --bg-side: #ece2c8;
     --text: #3b2e1e;
@@ -102,6 +106,7 @@
   }
   :root[data-theme="midnight"] {
     --select: #3a4d7c;
+    --accent: #8cc4f5;
     --bg: #161f36;
     --bg-side: #121a2e;
     --text: #e4e8f2;
@@ -115,6 +120,12 @@
   }
 
   * { box-sizing: border-box; }
+  /* Accent links (toggled with C, off by default) */
+  :root.accent .description a {
+    color: var(--accent);
+    text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+  :root.accent .description a:hover { text-decoration-color: var(--accent); }
   ::selection { background: var(--select); color: var(--text); }
   html { font-size: 17px; scrollbar-width: none; }
   html::-webkit-scrollbar { display: none; }
@@ -380,10 +391,10 @@
 
   .count {
     border-top: 1px solid var(--rule);
-    padding-top: 0.8rem;
-    margin-top: 1.4rem;
+    padding-top: 1.6rem;
+    margin-top: 2.4rem;
   }
-  .index-list { list-style: none; padding: 0; margin: 0.6rem 0 0; }
+  .index-list { list-style: none; padding: 0; margin: 1.4rem 0 0; }
   .index-list li { margin: 0.2rem 0; }
 
   /* ---------- Loading screen ---------- */
@@ -771,7 +782,7 @@
     try { localStorage.setItem('ct-theme', next); } catch (e) {}
   });
 
-  // ---------- Keyboard shortcuts: Backspace = top, Space = map, T = theme ----------
+  // ---------- Keyboard shortcuts: Backspace = top, Space = map, T = theme, C = accent links ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
@@ -784,6 +795,9 @@
       if (!e.repeat) sideBtn.click();
     } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
       document.getElementById('theme-toggle').click();
+    } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
+      var on = document.documentElement.classList.toggle('accent');
+      try { localStorage.setItem('ct-accent', on ? 'on' : 'off'); } catch (err) {}
     }
   });
 
