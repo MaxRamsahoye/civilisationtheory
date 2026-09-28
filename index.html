@@ -11,7 +11,7 @@
   (function () {
     var t = null;
     try { t = localStorage.getItem('ct-theme'); } catch (e) {}
-    if (t !== 'light' && t !== 'dark') {
+    if (['light', 'sepia', 'midnight', 'dark'].indexOf(t) < 0) {
       t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     document.documentElement.setAttribute('data-theme', t);
@@ -66,6 +66,31 @@
     --active: #ffffff;
     --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23151515' stroke='%23151515' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='none' stroke='%23e8e6de' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%23e8e6de' stroke-width='1.4'/></g></svg>") 2 2, auto;
     --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23151515' stroke='%23151515' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23e8e6de' stroke='%23e8e6de' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%23151515' stroke-width='1.4'/></g></svg>") 2 2, pointer;
+  }
+
+  :root[data-theme="sepia"] {
+    --bg: #f4ecd8;
+    --bg-side: #ece2c8;
+    --text: #3b2e1e;
+    --muted: #85735a;
+    --rule: #d8c9a8;
+    --link: #3b2e1e;
+    --link-underline: #ae9b79;
+    --active: #3b2e1e;
+    --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23f4ecd8' stroke='%23f4ecd8' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='none' stroke='%233b2e1e' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%233b2e1e' stroke-width='1.4'/></g></svg>") 2 2, auto;
+    --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23f4ecd8' stroke='%23f4ecd8' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%233b2e1e' stroke='%233b2e1e' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%23f4ecd8' stroke-width='1.4'/></g></svg>") 2 2, pointer;
+  }
+  :root[data-theme="midnight"] {
+    --bg: #24304d;
+    --bg-side: #1f2a44;
+    --text: #e4e8f2;
+    --muted: #9aa3bb;
+    --rule: #3b4868;
+    --link: #e4e8f2;
+    --link-underline: #6b7898;
+    --active: #ffffff;
+    --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%2324304d' stroke='%2324304d' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='none' stroke='%23e4e8f2' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%23e4e8f2' stroke-width='1.4'/></g></svg>") 2 2, auto;
+    --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%2324304d' stroke='%2324304d' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23e4e8f2' stroke='%23e4e8f2' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%2324304d' stroke-width='1.4'/></g></svg>") 2 2, pointer;
   }
 
   * { box-sizing: border-box; }
@@ -331,7 +356,7 @@
 <button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide concept map" aria-keyshortcuts="Space">
   <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
 </button>
-<button id="theme-toggle" class="control" type="button" aria-label="Toggle light and dark theme" aria-keyshortcuts="T">
+<button id="theme-toggle" class="control" type="button" aria-label="Change theme (light, sepia, midnight, dark)" aria-keyshortcuts="T">
   <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="40"/><path class="fill" d="M50 10 A40 40 0 0 1 50 90 Z"/></svg>
 </button>
 <button id="to-top" class="control" type="button" aria-label="Back to top" aria-keyshortcuts="Backspace">
@@ -515,7 +540,9 @@
 
   // ---------- Theme toggle ----------
   document.getElementById('theme-toggle').addEventListener('click', function () {
-    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    // Cycle: light → sepia → midnight → dark
+    var order = ['light', 'sepia', 'midnight', 'dark'];
+    var next = order[(order.indexOf(document.documentElement.getAttribute('data-theme')) + 1) % order.length];
     document.documentElement.setAttribute('data-theme', next);
     try { localStorage.setItem('ct-theme', next); } catch (e) {}
   });
