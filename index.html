@@ -417,7 +417,14 @@
   :root[data-index="tree"] .az-list,
   :root[data-index="az"] .index-list { display: none; }
 
-  /* ---------- Slides: one concept per full-screen slide ---------- */
+  /* ---------- Infinite: one concept per full-screen slide ---------- */
+  .slide-nav { display: none; }
+  html.snap-slides .slide-nav { display: block; }
+  #slide-prev, #slide-next { right: 1.4rem; }
+  #slide-prev { top: calc(50% - 2.3rem); }
+  #slide-next { top: calc(50% + 0.3rem); }
+  #slide-prev svg { transform: rotate(180deg); }
+  .slide-nav .control:disabled { opacity: 0.25; pointer-events: none; }
   :root[data-index="tree"] .slides-az,
   :root[data-index="az"] .slides-tree { display: none; }
   html.snap-slides { scroll-snap-type: y proximity; }
@@ -546,6 +553,14 @@
   <svg class="i-sepia" viewBox="-3.7 -3.7 107.3 107.3" aria-hidden="true"><circle class="fill" cx="50" cy="50" r="21.5"/><line x1="81.0" y1="50.0" x2="94.0" y2="50.0"/><line x1="71.9" y1="71.9" x2="81.1" y2="81.1"/><line x1="50.0" y1="81.0" x2="50.0" y2="94.0"/><line x1="28.1" y1="71.9" x2="18.9" y2="81.1"/><line x1="19.0" y1="50.0" x2="6.0" y2="50.0"/><line x1="28.1" y1="28.1" x2="18.9" y2="18.9"/><line x1="50.0" y1="19.0" x2="50.0" y2="6.0"/><line x1="71.9" y1="28.1" x2="81.1" y2="18.9"/></svg>
   <svg class="i-midnight" viewBox="-2.8 4.7 98.6 98.6" aria-hidden="true"><path d="M40.3 18.4 A36 36 0 1 0 81.6 59.7 A30 30 0 0 1 40.3 18.4 Z"/><path class="fill" d="M72 21 L75.2 28.8 L83 32 L75.2 35.2 L72 43 L68.8 35.2 L61 32 L68.8 28.8 Z"/></svg>
 </button>
+<div class="slide-nav" aria-label="Slide navigation">
+  <button id="slide-prev" class="control" type="button" aria-label="Previous slide" aria-keyshortcuts="ArrowUp">
+  <svg viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
+  </button>
+  <button id="slide-next" class="control" type="button" aria-label="Next slide" aria-keyshortcuts="ArrowDown">
+  <svg viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
+  </button>
+</div>
 <button id="to-top" class="control" type="button" aria-label="Back to top" aria-keyshortcuts="Backspace">
   <svg viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
 </button>
@@ -554,7 +569,7 @@
   <div class="side-icons">
     <a href="#" data-page="home" aria-label="Home"><svg viewBox="-4.1 -3.1 108.1 108.1" aria-hidden="true"><polyline points="10,46 50,12 90,46"/><polyline points="22,36 22,90 78,90 78,36"/><polyline points="42,90 42,64 58,64 58,90"/></svg></a>
     <a href="#the-map" data-page="the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
-    <a href="#slides" data-page="slides" aria-label="Slides"><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
+    <a href="#infinite" data-page="infinite" aria-label="Infinite"><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
   </div>
   <p class="side-title"><a href="#the-map" data-page="the-map">The Map</a></p>
   <ul class="tree" id="tree"></ul>
@@ -913,7 +928,7 @@
   // Site pages: routed like concepts, but not part of the tree, index or concept count.
   var PAGES = {
     'the-map': { id: 'the-map', title: 'The Map', parent: ROOT.id, html: MAP_INTRO + '\n<!--INDEX-->' },
-    'slides': { id: 'slides', title: 'Slides', parent: ROOT.id,
+    'infinite': { id: 'infinite', title: 'Infinite', parent: ROOT.id,
       html: '<p>Every concept on the map in one continuous sequence of slides. Scroll to move from one to the next, in tree or A–Z order.</p>\n<!--SLIDES-->' }
   };
 
@@ -1011,7 +1026,7 @@
       '<h1>' + esc(c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()) + '</div>';
     // Slides snap gently into place as you scroll.
-    document.documentElement.classList.toggle('snap-slides', c.id === 'slides');
+    document.documentElement.classList.toggle('snap-slides', c.id === 'infinite');
 
     buildToc();
     document.title = c === ROOT ? 'Civilisation Theory Map' : c.title + ' · Civilisation Theory Map';
@@ -1025,9 +1040,10 @@
       else a.removeAttribute('aria-current');
     });
     // The homepage and the Map page carry the full index themselves, so the sidebar collapses there.
-    if (c === ROOT || c.id === 'the-map' || c.id === 'slides' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
+    if (c === ROOT || c.id === 'the-map' || c.id === 'infinite' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
     onScroll();
+    if (c.id === 'infinite') updateSlideNav();
   }
   window.addEventListener('hashchange', render);
 
@@ -1038,6 +1054,7 @@
     var view = b.getAttribute('data-view');
     document.documentElement.setAttribute('data-index', view);
     try { localStorage.setItem('ct-index', view); } catch (err) {}
+    if (document.documentElement.classList.contains('snap-slides')) updateSlideNav();
   });
 
   // ---------- Contents ----------
@@ -1155,12 +1172,43 @@
     if (e.target.closest && e.target.closest('a, button')) chime();
   });
 
+  // ---------- Infinite: step between slides with the arrow buttons or ↑ / ↓ ----------
+  var prevBtn = document.getElementById('slide-prev');
+  var nextBtn = document.getElementById('slide-next');
+  function deckSlides() {
+    var d = [].slice.call(document.querySelectorAll('#entry .slides')).filter(function (x) { return x.offsetParent; })[0];
+    return d ? [].slice.call(d.children) : [];
+  }
+  function stepSlide(dir) {
+    var list = deckSlides(), target = null, i;
+    if (!list.length) return;
+    if (dir > 0) {
+      for (i = 0; i < list.length; i++) if (list[i].getBoundingClientRect().top > 4) { target = list[i]; break; }
+    } else {
+      for (i = list.length - 1; i >= 0; i--) if (list[i].getBoundingClientRect().top < -4) { target = list[i]; break; }
+    }
+    if (target) window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top, behavior: 'smooth' });
+    else if (dir < 0) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function updateSlideNav() {
+    var list = deckSlides();
+    if (!list.length) return;
+    prevBtn.disabled = window.scrollY < 4;
+    nextBtn.disabled = list[list.length - 1].getBoundingClientRect().top <= 4;
+  }
+  prevBtn.addEventListener('click', function () { stepSlide(-1); });
+  nextBtn.addEventListener('click', function () { stepSlide(1); });
+  window.addEventListener('scroll', updateSlideNav, { passive: true });
+
   // ---------- Keyboard shortcuts: Backspace = top, Space = map, T = theme, C = accent links, M = sound ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
     if (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
-    if (e.key === 'Backspace') {
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.documentElement.classList.contains('snap-slides')) {
+      e.preventDefault();
+      stepSlide(e.key === 'ArrowDown' ? 1 : -1);
+    } else if (e.key === 'Backspace') {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (e.key === ' ' || e.code === 'Space') {
