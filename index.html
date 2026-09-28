@@ -336,6 +336,35 @@
   .index-list { list-style: none; padding: 0; margin: 0.6rem 0 0; }
   .index-list li { margin: 0.2rem 0; }
 
+  /* ---------- Loading screen ---------- */
+  #loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.5rem;
+    background: var(--bg);
+    transition: opacity .6s ease, visibility 0s linear .6s;
+  }
+  #loader.done { opacity: 0; visibility: hidden; }
+  #loader h1 { position: relative; margin: 0; white-space: nowrap; }
+  /* The invisible full title fixes the width, so typing grows from a stable left edge */
+  #loader .ghost { visibility: hidden; }
+  #loader .typed { position: absolute; left: 0; top: 0; }
+  #loader .caret {
+    display: inline-block;
+    width: 2px;
+    height: 0.9em;
+    margin-left: 0.06em;
+    vertical-align: -0.08em;
+    background: var(--text);
+    animation: blink 1s steps(1) infinite;
+  }
+  #loader.typing .caret { animation: none; }
+  @keyframes blink { 50% { opacity: 0; } }
+
   /* Mobile: sidebar overlays the page */
   #scrim {
     display: none;
@@ -350,6 +379,11 @@
 </style>
 </head>
 <body>
+
+<div id="loader" aria-hidden="true">
+  <h1><span class="ghost">Civilisation Theory</span><span class="typed"><span id="loader-text"></span><span class="caret"></span></span></h1>
+</div>
+<noscript><style>#loader { display: none; }</style></noscript>
 
 <div id="progress" aria-hidden="true"></div>
 <button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide concept map" aria-keyshortcuts="Space">
@@ -563,6 +597,43 @@
   });
 
   render();
+
+  // ---------- Loading screen: type the title, then fade out (any key or click skips) ----------
+  (function () {
+    var loader = document.getElementById('loader');
+    var out = document.getElementById('loader-text');
+    var title = 'Civilisation Theory';
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var finished = false, timer;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      out.textContent = title;
+      loader.classList.remove('typing');
+      loader.classList.add('done');
+      document.removeEventListener('keydown', skip, true);
+      document.removeEventListener('pointerdown', skip, true);
+    }
+    function skip(e) { e.preventDefault(); e.stopPropagation(); finish(); }
+    document.addEventListener('keydown', skip, true);
+    document.addEventListener('pointerdown', skip, true);
+
+    function type(i) {
+      out.textContent = title.slice(0, i);
+      if (i < title.length) { timer = setTimeout(function () { type(i + 1); }, 75); return; }
+      loader.classList.remove('typing');
+      timer = setTimeout(finish, 700);
+    }
+    // Wait for ET Bembo so the title doesn't reflow mid-animation (capped so a slow font never blocks).
+    var fontsReady = document.fonts && document.fonts.load ? document.fonts.load('700 1em "ET Bembo"') : Promise.resolve();
+    Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 1500); })]).then(function () {
+      if (finished) return;
+      if (reduce) { out.textContent = title; timer = setTimeout(finish, 600); return; }
+      loader.classList.add('typing');
+      timer = setTimeout(function () { type(1); }, 250);
+    });
+  })();
 </script>
 </body>
 </html>
