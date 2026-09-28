@@ -335,6 +335,7 @@
   .tree-string { margin: 0 0 1.2rem; }
   .tree-string a { color: var(--muted); text-decoration: none; }
   .tree-string a:hover { color: var(--text); }
+  .tree-string > a, .tree-string > span:not(.sep) { white-space: nowrap; }
   .tree-string .sep { margin: 0 0.45em; }
 
   h1 {
@@ -352,6 +353,7 @@
   }
   h1, h2 { scroll-margin-top: 1.5rem; }
   p { margin: 0 0 1.1rem; }
+  .description { font-size: 1.1rem; line-height: 1.6; }
   .description ul { padding-left: 1.3rem; margin: 0 0 1.1rem; }
   .description li { margin-bottom: 0.55rem; padding-left: 0.2rem; }
   .description li strong { font-weight: 700; font-size: 1em; }
@@ -546,7 +548,7 @@
       return i === arr.length - 1
         ? '<span>' + esc(p.title) + '</span>'
         : '<a href="' + href(p) + '">' + esc(p.title) + '</a>';
-    }).join('<span class="sep">/</span>');
+    }).join('<span class="sep">&gt;</span>');
 
     document.getElementById('entry').innerHTML =
       '<p class="tree-string">' + crumbs + '</p>' +
