@@ -40,6 +40,23 @@
     font-weight: 700; font-style: normal; font-display: swap;
   }
 
+  /* IBM Plex Sans Arabic (latin subset), SIL Open Font Licence — interface labels */
+  @font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('fonts/ibm-plex-sans-arabic-latin-400-normal.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('fonts/ibm-plex-sans-arabic-latin-500-normal.woff2') format('woff2');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: 'IBM Plex Sans Arabic';
+    src: url('fonts/ibm-plex-sans-arabic-latin-600-normal.woff2') format('woff2');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+
   :root {
     --bg: #fffff8;
     --bg-side: #f7f6ee;
@@ -51,11 +68,13 @@
     --active: #111111;
     --side-w: 17rem;
     --measure: 36rem;
+    --select: #d9e3ec;
     /* Arrow cursors: outline by default, filled over links and buttons */
     --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23fffff8' stroke='%23fffff8' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='none' stroke='%23111111' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%23111111' stroke-width='1.4'/></g></svg>") 2 2, auto;
     --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23fffff8' stroke='%23fffff8' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23111111' stroke='%23111111' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%23fffff8' stroke-width='1.4'/></g></svg>") 2 2, pointer;
   }
   :root[data-theme="dark"] {
+    --select: #3b4757;
     --bg: #151515;
     --bg-side: #1b1b1a;
     --text: #e8e6de;
@@ -69,6 +88,7 @@
   }
 
   :root[data-theme="sepia"] {
+    --select: #e4cc9c;
     --bg: #f4ecd8;
     --bg-side: #ece2c8;
     --text: #3b2e1e;
@@ -81,6 +101,7 @@
     --cursor-link: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><g stroke-linejoin='miter' stroke-linecap='square'><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%23f4ecd8' stroke='%23f4ecd8' stroke-width='3.4'/><polygon points='2.0,2.0 7.64,19.49 10.18,10.18 19.49,7.64' fill='%233b2e1e' stroke='%233b2e1e' stroke-width='1.4'/><line x1='2.0' y1='2.0' x2='10.18' y2='10.18' stroke='%23f4ecd8' stroke-width='1.4'/></g></svg>") 2 2, pointer;
   }
   :root[data-theme="midnight"] {
+    --select: #46598a;
     --bg: #24304d;
     --bg-side: #1f2a44;
     --text: #e4e8f2;
@@ -94,6 +115,7 @@
   }
 
   * { box-sizing: border-box; }
+  ::selection { background: var(--select); color: var(--text); }
   html { font-size: 17px; scrollbar-width: none; }
   html::-webkit-scrollbar { display: none; }
   @media (min-width: 900px) { html { font-size: 19px; } }
@@ -204,15 +226,20 @@
   }
   body.sidebar-closed #sidebar { transform: translateX(-100%); }
 
-  .side-title {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    font-variant: small-caps;
-    text-transform: lowercase;
-    color: var(--muted);
-    margin: 0 0 0.9rem;
-    font-weight: 400;
+  /* Interface labels (map, tree string, contents) are set in IBM Plex Sans Arabic */
+  #sidebar, .tree-string, #toc {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-variant-numeric: normal;
   }
+  #sidebar { font-size: 0.8rem; }
+  .side-title, .tree-string {
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .side-title { margin: 0 0 1rem; }
   .tree, .tree ul {
     list-style: none;
     margin: 0;
@@ -228,14 +255,13 @@
     text-decoration: none;
     color: var(--muted);
     display: inline-block;
-    line-height: 1.35;
-    padding: 0.1rem 0;
+    line-height: 1.4;
+    padding: 0.15rem 0;
   }
   .tree a:hover { color: var(--text); }
   .tree a[aria-current="page"] { color: var(--active); }
   .tree .empty {
     color: var(--muted);
-    font-size: 0.9rem;
     margin-top: 0.35rem;
   }
 
@@ -269,19 +295,16 @@
     top: 50vh;
     transform: translateY(-50%);
     align-self: start;
-    font-size: 0.85rem;
-    line-height: 1.35;
+    font-size: 0.72rem;
+    line-height: 1.4;
   }
   #toc .toc-title {
-    letter-spacing: 0.08em;
-    font-variant: small-caps;
-    text-transform: lowercase;
-    color: var(--muted);
-    margin: 0 0 0.7rem;
+    display: block;
+    font-weight: 600;
+    margin: 0 0 0.8rem;
   }
   #toc ul { list-style: none; margin: 0; padding: 0; }
-  #toc li { margin: 0 0 0.5rem; }
-  #toc li.sub { padding-left: 0.7rem; }
+  #toc li { margin: 0 0 0.55rem; }
   #toc a { color: var(--muted); text-decoration: none; }
   #toc a:hover, #toc a.active { color: var(--text); }
   /* Contents only show while the map is closed */
@@ -291,18 +314,11 @@
     body.sidebar-closed #toc { display: none; }
   }
   /* Map closed and room to spare: widen so every entry fits on one line */
-  @container (min-width: 75rem) {
-    body.sidebar-closed #toc { max-width: 12rem; }
+  @container (min-width: 70rem) {
+    body.sidebar-closed #toc { max-width: 10.5rem; }
   }
 
-  .tree-string {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    font-variant: small-caps;
-    text-transform: lowercase;
-    color: var(--muted);
-    margin: 0 0 1.2rem;
-  }
+  .tree-string { margin: 0 0 1.2rem; }
   .tree-string a { color: var(--muted); text-decoration: none; }
   .tree-string a:hover { color: var(--text); }
   .tree-string .sep { margin: 0 0.45em; }
@@ -356,17 +372,6 @@
   /* The invisible full title fixes the width, so typing grows from a stable left edge */
   #loader .ghost { visibility: hidden; }
   #loader .typed { position: absolute; left: 0; top: 0; }
-  #loader .caret {
-    display: inline-block;
-    width: 2px;
-    height: 0.9em;
-    margin-left: 0.06em;
-    vertical-align: -0.08em;
-    background: var(--text);
-    animation: blink 1s steps(1) infinite;
-  }
-  #loader.typing .caret { animation: none; }
-  @keyframes blink { 50% { opacity: 0; } }
 
   /* Mobile: sidebar overlays the page */
   #scrim {
@@ -384,7 +389,7 @@
 <body>
 
 <div id="loader" aria-hidden="true">
-  <h1><span class="ghost">Civilisation Theory</span><span class="typed"><span id="loader-text"></span><span class="caret"></span></span></h1>
+  <h1><span class="ghost">Civilisation Theory</span><span class="typed"><span id="loader-text"></span></span></h1>
 </div>
 <noscript><style>#loader { display: none; }</style></noscript>
 
@@ -606,10 +611,12 @@
   function buildToc() {
     tocHeads = Array.prototype.slice.call(document.querySelectorAll('#entry h1, #entry h2'));
     tocHeads.forEach(function (h) { h.id = slug(h.textContent); });
-    tocEl.innerHTML = '<p class="toc-title">Contents</p><ul>' + tocHeads.map(function (h) {
-      return '<li class="' + (h.tagName === 'H2' ? 'sub' : '') + '"><a href="#" data-target="' + h.id + '">' +
-        esc(h.textContent) + '</a></li>';
-    }).join('') + '</ul>';
+    // The concept heading titles the contents; its subheadings are listed beneath.
+    var head = tocHeads[0];
+    tocEl.innerHTML = '<a href="#" class="toc-title" data-target="' + head.id + '">' + esc(head.textContent) + '</a><ul>' +
+      tocHeads.slice(1).map(function (h) {
+        return '<li><a href="#" data-target="' + h.id + '">' + esc(h.textContent) + '</a></li>';
+      }).join('') + '</ul>';
   }
   // Contents links scroll within the page without touching the concept route in the URL hash.
   tocEl.addEventListener('click', function (e) {
@@ -695,7 +702,6 @@
       finished = true;
       clearTimeout(timer);
       out.textContent = title;
-      loader.classList.remove('typing');
       loader.classList.add('done');
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
@@ -707,7 +713,6 @@
     function type(i) {
       out.textContent = title.slice(0, i);
       if (i < title.length) { timer = setTimeout(function () { type(i + 1); }, 75); return; }
-      loader.classList.remove('typing');
       timer = setTimeout(finish, 700);
     }
     // Wait for ET Bembo so the title doesn't reflow mid-animation (capped so a slow font never blocks).
@@ -715,7 +720,6 @@
     Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 1500); })]).then(function () {
       if (finished) return;
       if (reduce) { out.textContent = title; timer = setTimeout(finish, 600); return; }
-      loader.classList.add('typing');
       timer = setTimeout(function () { type(1); }, 250);
     });
   })();
