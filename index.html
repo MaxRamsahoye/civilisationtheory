@@ -629,7 +629,8 @@
        landscape screens, and off the sides on portrait ones (where a taller ring would be entirely off screen). */
     width: calc(min(125vh, 125vw) / 0.9);
     aspect-ratio: 1;
-    transform: translate(-50%, -50%) rotate(-90deg);
+    /* Start at the top and fill anti-clockwise (the flip mirrors the stroke's direction) */
+    transform: translate(-50%, -50%) rotate(-90deg) scaleY(-1);
     overflow: visible;
   }
   .loader-ring circle { fill: none; stroke-width: 1.1; }
