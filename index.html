@@ -1211,6 +1211,7 @@
   }
 
   // ---------- Infinite: step between slides with the arrow buttons or ↑ / ↓ ----------
+  var lastSlideStep = 0;
   var prevBtn = document.getElementById('slide-prev');
   var nextBtn = document.getElementById('slide-next');
   function deckSlides() {
@@ -1268,8 +1269,13 @@
     if (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.documentElement.classList.contains('snap-slides')) {
       e.preventDefault();
-      // One step per press: holding an arrow key does not repeat.
-      if (!e.repeat) (e.key === 'ArrowDown' ? nextBtn : prevBtn).click();
+      // Holding an arrow key steps slide by slide at a steady pace (each step pressing the button),
+      // rather than firing on every key repeat.
+      var now = Date.now();
+      if (!e.repeat || now - lastSlideStep >= 650) {
+        lastSlideStep = now;
+        (e.key === 'ArrowDown' ? nextBtn : prevBtn).click();
+      }
     } else if (e.key === 'Backspace') {
       e.preventDefault();
       topBtn.click();
