@@ -249,19 +249,12 @@
     .control.pressed svg, .side-icons a.pressed svg, .control.pressed::after, .side-icons a.pressed::after { animation: none; }
   }
 
-  /* ---------- Search (homepage, Map and Infinite only) ---------- */
+  /* ---------- Search (top of the sidebar) ---------- */
   #search {
-    display: none;
-    position: fixed;
-    top: 0.85rem;
-    left: 1.4rem;
-    z-index: 35;
-    width: 13rem;
+    position: relative;
+    margin: 0 0 1.3rem;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    transition: left .25s ease;
   }
-  html.main-page #search { display: block; }
-  body:not(.sidebar-closed) #search { left: calc(var(--side-w) + 1.4rem); }
   #search > svg {
     position: absolute;
     left: 0;
@@ -296,8 +289,7 @@
     list-style: none;
     margin: 0.4rem 0 0;
     padding: 0.3rem 0;
-    width: 18rem;
-    max-height: 60vh;
+    max-height: 50vh;
     overflow-y: auto;
     background: var(--bg);
     border: 1px solid var(--rule);
@@ -314,8 +306,6 @@
   #search-results .r-path { display: block; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 0.1rem; }
   #search-results .r-none { padding: 0.4rem 0.8rem; font-size: 0.72rem; color: var(--muted); }
   @media (max-width: 899px) {
-    #search, body:not(.sidebar-closed) #search { left: 3.3rem; width: calc(100vw - 7rem); }
-    #search-results { width: calc(100vw - 7rem); }
   }
 
   /* ---------- Reading progress (replaces the scrollbar) ---------- */
@@ -338,7 +328,7 @@
     width: var(--side-w);
     background: var(--bg-side);
     border-right: 1px solid var(--rule);
-    padding: 3.6rem 1.4rem 2rem;
+    padding: 1.6rem 1.4rem 2rem;
     overflow-y: auto;
     scrollbar-width: none;
     z-index: 20;
@@ -637,11 +627,6 @@
 <noscript><style>#loader { display: none; }</style></noscript>
 
 <div id="progress" aria-hidden="true"></div>
-<div id="search" role="search">
-  <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
-  <input id="search-input" type="search" placeholder="Search concepts" aria-label="Search concepts" aria-keyshortcuts="/" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-expanded="false">
-  <ul id="search-results" role="listbox" hidden></ul>
-</div>
 <button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide concept map" aria-keyshortcuts="Space">
   <svg class="i-map" viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg>
   <svg class="i-close" viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
@@ -665,6 +650,11 @@
 </button>
 
 <nav id="sidebar" aria-label="Concept tree">
+  <div id="search" role="search">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
+    <input id="search-input" type="search" placeholder="Search concepts" aria-label="Search concepts" aria-keyshortcuts="/" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-expanded="false">
+    <ul id="search-results" role="listbox" hidden></ul>
+  </div>
   <div class="side-icons">
     <a href="#" data-page="home" aria-label="Home"><svg viewBox="-4.1 -3.1 108.1 108.1" aria-hidden="true"><polyline points="10,46 50,12 90,46"/><polyline points="22,36 22,90 78,90 78,36"/><polyline points="42,90 42,64 58,64 58,90"/></svg></a>
     <a href="#the-map" data-page="the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
@@ -1145,6 +1135,7 @@
     if (c === ROOT || c.id === 'the-map' || c.id === 'infinite' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
     onScroll();
+    document.getElementById('sidebar').scrollTop = 0;
     trackedId = undefined;
     if (c.id === 'infinite') updateSlideNav();
   }
@@ -1208,6 +1199,11 @@
   // ---------- Sidebar toggle ----------
   var sideBtn = document.getElementById('sidebar-toggle');
   function setSidebar(open, remember) {
+    if (open && document.body.classList.contains('sidebar-closed')) {
+      // Opening always starts the concept list from the top (Infinite then re-tracks the slide in view).
+      document.getElementById('sidebar').scrollTop = 0;
+      if (document.documentElement.classList.contains('snap-slides')) { trackedId = undefined; updateSlideNav(); }
+    }
     document.body.classList.toggle('sidebar-closed', !open);
     sideBtn.setAttribute('aria-label', open ? 'Hide concept map' : 'Show concept map');
     sideBtn.setAttribute('aria-expanded', String(open));
@@ -1428,8 +1424,9 @@
     } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
       var on = document.documentElement.classList.toggle('accent');
       try { localStorage.setItem('ct-accent', on ? 'on' : 'off'); } catch (err) {}
-    } else if (e.key === '/' && document.documentElement.classList.contains('main-page')) {
+    } else if (e.key === '/') {
       e.preventDefault();
+      if (document.body.classList.contains('sidebar-closed')) setSidebar(true, false);
       searchInput.focus();
     } else if ((e.key === 'm' || e.key === 'M') && !e.repeat) {
       soundOn = !soundOn;
