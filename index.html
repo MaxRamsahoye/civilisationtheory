@@ -213,17 +213,16 @@
 
   /* ---------- Main ---------- */
   main {
-    padding: 5rem 1.5rem 6rem;
+    padding: 5rem 0 6rem;
     transition: padding-left .25s ease;
     container-type: inline-size;
   }
   @media (min-width: 900px) {
-    main { padding-left: 2.8rem; padding-right: 2.8rem; }
-    body:not(.sidebar-closed) main { padding-left: calc(var(--side-w) + 1rem); padding-right: 1rem; }
+    body:not(.sidebar-closed) main { padding-left: var(--side-w); }
   }
   .page {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)) minmax(0, 1fr);
+    grid-template-columns: minmax(1.5rem, 1fr) minmax(0, var(--measure)) minmax(1.5rem, 1fr);
   }
   article {
     grid-column: 2;
@@ -234,9 +233,10 @@
   /* ---------- Contents (left of the text column) ---------- */
   #toc {
     grid-column: 1;
-    justify-self: end;
-    width: 7rem;
-    margin-right: 3rem;
+    /* Centred in the left column: equal space to the screen (or map) edge and to the text */
+    justify-self: center;
+    width: max-content;
+    max-width: 7rem;
     position: sticky;
     top: 50vh;
     transform: translateY(-50%);
