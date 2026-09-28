@@ -782,7 +782,50 @@
     try { localStorage.setItem('ct-theme', next); } catch (e) {}
   });
 
-  // ---------- Keyboard shortcuts: Backspace = top, Space = map, T = theme, C = accent links ----------
+  // ---------- Click sounds: a soft, quiet chime on links and buttons (M mutes) ----------
+  var audioCtx = null;
+  var soundOn = true;
+  try { soundOn = localStorage.getItem('ct-sound') !== 'off'; } catch (e) {}
+  // Pentatonic notes (C5–A5), so any sequence of clicks stays consonant.
+  var NOTES = [523.25, 587.33, 659.25, 783.99, 880.00];
+  var lastNote = -1;
+  function chime() {
+    if (!soundOn) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    try {
+      audioCtx = audioCtx || new AC();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      var i;
+      do { i = Math.floor(Math.random() * NOTES.length); } while (i === lastNote);
+      lastNote = i;
+      var t = audioCtx.currentTime;
+      var out = audioCtx.createGain();
+      var filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.value = 2200;
+      out.gain.setValueAtTime(0.0001, t);
+      out.gain.exponentialRampToValueAtTime(0.045, t + 0.012);
+      out.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
+      // Fundamental plus a faint octave for a bell-like, rounded tone.
+      [[1, 1], [2, 0.18]].forEach(function (h) {
+        var osc = audioCtx.createOscillator();
+        var g = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = NOTES[i] * h[0];
+        g.gain.value = h[1];
+        osc.connect(g).connect(filter);
+        osc.start(t);
+        osc.stop(t + 0.95);
+      });
+      filter.connect(out).connect(audioCtx.destination);
+    } catch (e) {}
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('a, button')) chime();
+  });
+
+  // ---------- Keyboard shortcuts: Backspace = top, Space = map, T = theme, C = accent links, M = sound ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
@@ -798,6 +841,10 @@
     } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
       var on = document.documentElement.classList.toggle('accent');
       try { localStorage.setItem('ct-accent', on ? 'on' : 'off'); } catch (err) {}
+    } else if ((e.key === 'm' || e.key === 'M') && !e.repeat) {
+      soundOn = !soundOn;
+      try { localStorage.setItem('ct-sound', soundOn ? 'on' : 'off'); } catch (err) {}
+      if (soundOn) chime();
     }
   });
 
