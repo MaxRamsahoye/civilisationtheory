@@ -259,6 +259,14 @@
   @container (max-width: 56rem) {
     #toc { display: none; }
   }
+  /* Map closed: the map arrow sits at the screen edge, so keep clear of it */
+  @container (max-width: 66rem) {
+    body.sidebar-closed #toc { display: none; }
+  }
+  /* Map closed and room to spare: widen so every entry fits on one line */
+  @container (min-width: 75rem) {
+    body.sidebar-closed #toc { max-width: 12rem; }
+  }
 
   .tree-string {
     font-size: 0.85rem;
