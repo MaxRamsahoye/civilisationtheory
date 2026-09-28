@@ -625,9 +625,8 @@
     position: absolute;
     left: 50%;
     top: 50%;
-    /* Circle (90% of the box) is 125% of the screen's shorter side: it runs off the top and bottom on
-       landscape screens, and off the sides on portrait ones (where a taller ring would be entirely off screen). */
-    width: calc(min(125vh, 125vw) / 0.9);
+    /* Circle (90% of the box) is 115% of the screen width, so it runs off both sides at the middle */
+    width: calc(115vw / 0.9);
     aspect-ratio: 1;
     /* Start at the top and fill anti-clockwise (the flip mirrors the stroke's direction) */
     transform: translate(-50%, -50%) rotate(-90deg) scaleY(-1);
