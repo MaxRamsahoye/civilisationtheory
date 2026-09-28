@@ -281,9 +281,8 @@
   #toc li.sub { padding-left: 0.7rem; }
   #toc a { color: var(--muted); text-decoration: none; }
   #toc a:hover, #toc a.active { color: var(--text); }
-  @container (max-width: 56rem) {
-    #toc { display: none; }
-  }
+  /* Contents only show while the map is closed */
+  body:not(.sidebar-closed) #toc { display: none; }
   /* Map closed: the map arrow sits at the screen edge, so keep clear of it */
   @container (max-width: 66rem) {
     body.sidebar-closed #toc { display: none; }
