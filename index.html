@@ -249,6 +249,75 @@
     .control.pressed svg, .side-icons a.pressed svg, .control.pressed::after, .side-icons a.pressed::after { animation: none; }
   }
 
+  /* ---------- Search (homepage, Map and Infinite only) ---------- */
+  #search {
+    display: none;
+    position: fixed;
+    top: 0.85rem;
+    left: 1.4rem;
+    z-index: 35;
+    width: 13rem;
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    transition: left .25s ease;
+  }
+  html.main-page #search { display: block; }
+  body:not(.sidebar-closed) #search { left: calc(var(--side-w) + 1.4rem); }
+  #search > svg {
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.4px;
+    pointer-events: none;
+  }
+  #search > svg * { vector-effect: non-scaling-stroke; }
+  #search-input {
+    width: 100%;
+    font: inherit;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.35rem 0 0.35rem 1.3rem;
+    border-radius: 0;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  #search-input::placeholder { color: var(--muted); }
+  #search-input:focus { border-bottom-color: var(--text); }
+  #search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  #search-results {
+    list-style: none;
+    margin: 0.4rem 0 0;
+    padding: 0.3rem 0;
+    width: 18rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+  #search-results li a {
+    display: block;
+    padding: 0.4rem 0.8rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+  #search-results li a[aria-selected="true"], #search-results li a:hover { background: var(--select); }
+  #search-results .r-title { display: block; font-family: 'ET Bembo', Georgia, serif; font-size: 0.95rem; line-height: 1.25; }
+  #search-results .r-path { display: block; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 0.1rem; }
+  #search-results .r-none { padding: 0.4rem 0.8rem; font-size: 0.72rem; color: var(--muted); }
+  @media (max-width: 899px) {
+    #search, body:not(.sidebar-closed) #search { left: 3.3rem; width: calc(100vw - 7rem); }
+    #search-results { width: calc(100vw - 7rem); }
+  }
+
   /* ---------- Reading progress (replaces the scrollbar) ---------- */
   #progress {
     position: fixed;
@@ -568,6 +637,11 @@
 <noscript><style>#loader { display: none; }</style></noscript>
 
 <div id="progress" aria-hidden="true"></div>
+<div id="search" role="search">
+  <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
+  <input id="search-input" type="search" placeholder="Search concepts" aria-label="Search concepts" aria-keyshortcuts="/" autocomplete="off" spellcheck="false" aria-controls="search-results" aria-expanded="false">
+  <ul id="search-results" role="listbox" hidden></ul>
+</div>
 <button id="sidebar-toggle" class="control" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide concept map" aria-keyshortcuts="Space">
   <svg class="i-map" viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg>
   <svg class="i-close" viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
@@ -1052,6 +1126,9 @@
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()) + '</div>';
     // Slides snap gently into place as you scroll.
     document.documentElement.classList.toggle('snap-slides', c.id === 'infinite');
+    // Search appears on the three main pages only, not on individual concept entries.
+    document.documentElement.classList.toggle('main-page', c === ROOT || c.id === 'the-map' || c.id === 'infinite');
+    closeSearch(true);
 
     buildToc();
     document.title = c === ROOT ? 'Civilisation Theory Map' : c.title + ' · Civilisation Theory Map';
@@ -1262,6 +1339,70 @@
   nextBtn.addEventListener('click', function () { stepSlide(1); });
   window.addEventListener('scroll', updateSlideNav, { passive: true });
 
+  // ---------- Search ----------
+  var searchInput = document.getElementById('search-input');
+  var searchList = document.getElementById('search-results');
+  var searchIndex = CONCEPTS.filter(function (c) { return c !== ROOT; }).map(function (c) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = c.html;
+    return { c: c, title: c.title.toLowerCase(), text: tmp.textContent.toLowerCase() };
+  });
+  var searchSel = -1;
+  function searchResults(q) {
+    q = q.trim().toLowerCase();
+    if (!q) return [];
+    return searchIndex.map(function (e) {
+      var score = e.title.indexOf(q) === 0 ? 4
+        : (' ' + e.title).indexOf(' ' + q) >= 0 ? 3
+        : e.title.indexOf(q) >= 0 ? 2
+        : e.text.indexOf(q) >= 0 ? 1 : 0;
+      return { c: e.c, score: score };
+    }).filter(function (r) { return r.score; })
+      .sort(function (a, b) { return b.score - a.score || a.c.title.localeCompare(b.c.title); })
+      .slice(0, 10);
+  }
+  function renderSearch() {
+    var q = searchInput.value;
+    var res = searchResults(q);
+    searchSel = res.length ? 0 : -1;
+    if (!q.trim()) { closeSearch(false); return; }
+    searchList.innerHTML = res.length ? res.map(function (r, i) {
+      var path = pathTo(r.c).slice(0, -1).map(function (p) { return esc(p.title); }).join(' &gt; ');
+      return '<li><a href="' + href(r.c) + '" role="option" aria-selected="' + (i === 0) + '">' +
+        '<span class="r-title">' + esc(r.c.title) + '</span><span class="r-path">' + path + '</span></a></li>';
+    }).join('') : '<li class="r-none">No matching concepts</li>';
+    searchList.hidden = false;
+    searchInput.setAttribute('aria-expanded', 'true');
+  }
+  function moveSearch(d) {
+    var items = searchList.querySelectorAll('a');
+    if (!items.length) return;
+    searchSel = (searchSel + d + items.length) % items.length;
+    items.forEach(function (a, i) { a.setAttribute('aria-selected', String(i === searchSel)); });
+    items[searchSel].scrollIntoView({ block: 'nearest' });
+  }
+  function closeSearch(clear) {
+    searchList.hidden = true;
+    searchInput.setAttribute('aria-expanded', 'false');
+    if (clear) searchInput.value = '';
+  }
+  searchInput.addEventListener('input', renderSearch);
+  searchInput.addEventListener('focus', function () { if (searchInput.value.trim()) renderSearch(); });
+  searchInput.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); moveSearch(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); moveSearch(-1); }
+    else if (e.key === 'Enter') {
+      var items = searchList.querySelectorAll('a');
+      if (searchSel >= 0 && items[searchSel]) { e.preventDefault(); items[searchSel].click(); }
+    } else if (e.key === 'Escape') { closeSearch(true); searchInput.blur(); }
+  });
+  searchList.addEventListener('click', function (e) {
+    if (e.target.closest('a')) { closeSearch(true); searchInput.blur(); }
+  });
+  document.addEventListener('pointerdown', function (e) {
+    if (!e.target.closest('#search')) closeSearch(false);
+  });
+
   // ---------- Keyboard shortcuts: Backspace = top, Space = map, T = theme, C = accent links, M = sound ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -1287,6 +1428,9 @@
     } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
       var on = document.documentElement.classList.toggle('accent');
       try { localStorage.setItem('ct-accent', on ? 'on' : 'off'); } catch (err) {}
+    } else if (e.key === '/' && document.documentElement.classList.contains('main-page')) {
+      e.preventDefault();
+      searchInput.focus();
     } else if ((e.key === 'm' || e.key === 'M') && !e.repeat) {
       soundOn = !soundOn;
       try { localStorage.setItem('ct-sound', soundOn ? 'on' : 'off'); } catch (err) {}
