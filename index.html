@@ -680,14 +680,8 @@
     position: absolute;
     inset: 0;
     background: var(--bg);
-    clip-path: circle(0 at 50% 50%);
-    animation: loader-reveal 1.5s cubic-bezier(.7, 0, .3, 1) .2s forwards;
-  }
-  @keyframes loader-reveal {
-    0%   { clip-path: circle(0 at 50% 50%); }
-    18%  { clip-path: circle(5px at 50% 50%); }
-    40%  { clip-path: circle(5px at 50% 50%); }
-    100% { clip-path: circle(75vmax at 50% 50%); }
+    /* Grown by script: from a single pixel to exactly the screen's corners at a constant speed */
+    clip-path: circle(0.5px at 50% 50%);
   }
   .loader-mark, .loader-ring { z-index: 2; }
   .loader-ring { opacity: 0; transition: opacity .4s ease; }
@@ -3200,10 +3194,22 @@
     }
     // Wait for ET Bembo so the title doesn't reflow mid-animation (capped so a slow font never blocks).
     var fontsReady = document.fonts && document.fonts.load ? document.fonts.load('700 1em "ET Bembo"') : Promise.resolve();
-    // The dot-to-circle reveal runs first (1.7s); typing starts once it has filled the screen.
-    var revealDone = new Promise(function (r) { setTimeout(r, reduce ? 0 : 1700); }).then(function () {
-      loader.classList.add('revealed');
-    });
+    // The reveal runs first: a single pixel grows at a constant speed (linear) until the circle
+    // reaches the screen's corners; typing starts once it has filled the screen.
+    var REVEAL_MS = 3200;
+    var dot = loader.querySelector('.loader-dot');
+    var revealDone;
+    if (reduce || !dot.animate) {
+      revealDone = Promise.resolve();
+    } else {
+      var R = Math.ceil(Math.hypot(window.innerWidth, window.innerHeight) / 2) + 1;
+      var anim = dot.animate(
+        [{ clipPath: 'circle(0.5px at 50% 50%)' }, { clipPath: 'circle(' + R + 'px at 50% 50%)' }],
+        { duration: REVEAL_MS, delay: 300, easing: 'linear', fill: 'forwards' }
+      );
+      revealDone = anim.finished.catch(function () {});
+    }
+    revealDone = revealDone.then(function () { loader.classList.add('revealed'); });
     var fontsOrTimeout = Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 1500); })]);
     Promise.all([fontsOrTimeout, revealDone]).then(function () {
       if (finished) return;
