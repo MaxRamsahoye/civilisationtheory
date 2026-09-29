@@ -592,6 +592,7 @@
   .foot-col li { white-space: nowrap; }
   .foot-col ul { list-style: none; margin: 0; padding: 0; }
   .foot-col ul + .foot-head { margin-top: 1.9rem; }
+  .foot-icons { margin: -0.45rem 0 0 -0.5rem; gap: 0.2rem; }  /* first icon's stroke in line with the heading */
   .foot-col li { display: flex; align-items: baseline; margin: 0 0 0.6rem; font-size: 0.92rem; line-height: 1.3; }
   .foot-col a { color: var(--text); text-decoration: none; }
   .foot-col a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 0.15em; }
@@ -3860,7 +3861,9 @@
         '<p class="foot-stats"><span>' + concepts.length + ' Concepts</span> <span>' + coined + ' Conceptual Engineerings</span></p>' +
       '</div>' +
       '<div class="foot-cols"><div class="foot-col">' +
-        group('Explore', [li('<a href="#">Home</a>'), li('<a href="#the-map">The Map</a>')].concat(SHOW_INFINITE ? [li('<a href="#infinite">Infinite</a>')] : [])) +
+        // Explore: the same icons as the header (home, map, search)
+        '<p class="foot-head">Explore</p><nav class="head-icons foot-icons" aria-label="Explore">' +
+          document.querySelector('#site-header .head-icons').innerHTML.replace(/ data-page="[^"]*"/g, '') + '</nav>' +
         '</div><div class="foot-col foot-sections"><p class="foot-head">Sections</p><div class="foot-secs">' +
         [0, 3, 6].map(function (k) {
           return '<ul>' + sections.slice(k, k + 3).map(function (d, j) {
