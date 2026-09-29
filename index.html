@@ -2085,6 +2085,26 @@
       ref: 'Daniel Schmachtenberger',
       html: '<p><em>Civilization Emerging</em> was an earlier project of Daniel Schmachtenberger’s: a body of essays, talks and interviews from the late 2010s on the drivers of existential risk and the design criteria for a civilisation capable of surviving its own technological power. Much of the vocabulary that later shaped discussion of the <a href="#metacrisis">metacrisis</a> was worked out there – <a href="#generator-functions">generator functions</a>, the <a href="#multipolar-trap">multipolar trap</a>, and the <a href="#third-attractor">third attractor</a> between catastrophe and dystopia – together with the argument that only a civilisation redesigned at the level of its underlying incentives and institutions can be both safe and free.</p>'
     },
+    {
+      id: 'metanarrative',
+      title: 'Metanarrative',
+      parent: 'metamodernism',
+      ref: 'Lyotard, The Postmodern Condition (1979)',
+      html: '<p>A <em>metanarrative</em> (or grand narrative) is an overarching story that claims to explain history as a whole and to give every event its place and meaning – the progress of reason, the triumph of the free market, the dialectic of class struggle. Jean-François Lyotard defined the postmodern condition (1979) as “incredulity toward metanarratives”: the loss of faith in any single story able to legitimate knowledge and politics for everyone. <a href="#metamodernism">Metamodernism</a> takes up the question that postmodernity left open – whether, knowing that every grand narrative is partial and constructed, a civilisation can still hold a sincere story about where it is going. Without one, societies drift into <a href="#the-meaning-crisis">the meaning crisis</a>; with a naive one, into <a href="#the-age-of-ideology">ideology</a>.</p>'
+    },
+    {
+      id: 'metaphysics',
+      title: 'Metaphysics',
+      parent: 'metatheory',
+      html: '<p><em>Metaphysics</em> is the branch of philosophy concerned with the most basic features of reality: what exists, what it is to be something, the nature of causation, time, mind and matter, and how they relate. Every civilisation rests on a metaphysics, usually unexamined – assumptions about what is real and what counts, which shape its science, economics and ethics long before anyone argues about them. The <a href="#dominant-paradigm">dominant paradigm</a> of the present civilisation carries a largely mechanistic and materialist metaphysics, in which the world is a store of separable objects to be used; many proposals for civilisational transition argue that a different, more relational metaphysics is a precondition for a different way of living. See also <a href="#epistemology">epistemology</a>.</p>'
+    },
+    {
+      id: 'metapsychology',
+      title: 'Metapsychology',
+      parent: 'metatheory',
+      ref: 'Zachary Stein; Freud',
+      html: '<p><em>Metapsychology</em> is theory about the psyche as a whole – not one school of psychology among others, but a framework for how minds are structured, develop and relate to culture, within which particular psychologies can be placed. The term was Sigmund Freud’s; the philosopher of education Zachary Stein has renewed it as an integrative account of human development, arguing that a civilisation in crisis needs an explicit, shared understanding of what people are and can become in order to educate, govern and care for them well. On this view the metacrisis is also a crisis of human development, and the transition to a new civilisation is as much psychological and educational as it is technological or political. See also <a href="#psychology">psychology</a> and <a href="#pedagogy">pedagogy</a>.</p>'
+    },
     // ---- From the Consilience Project glossary (tagged 'consilience')
     {
       id: 'cp-commons',
@@ -4170,7 +4190,7 @@
     return [
       { name: 'Foundation', items: [byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
       { name: 'Civilisational', items: sections.slice(0, 3) },
-      { name: 'Meta', items: sections.slice(3, 6) },
+      { name: 'Meta', items: sections.slice(3, 6).concat([byId['metanarrative'], byId['metaphysics'], byId['metarationality'], byId['metapsychology']]) },
       { name: 'Macro', items: sections.slice(6, 9) },
       { name: 'Core', items: [byId['life-world-system']] }
     ].map(function (g) { g.items = g.items.filter(Boolean); return g; });
