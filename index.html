@@ -738,6 +738,17 @@
     margin: 0 0 1.6rem;
     letter-spacing: -0.005em;
   }
+  /* Tags under an entry's title: small outlined labels in the interface face */
+  .entry-tags { margin: -0.7rem 0 1.6rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .entry-tag {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    border: 1px solid var(--rule); border-radius: 999px; padding: 0.25rem 0.7rem 0.2rem;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  a.entry-tag:hover { color: var(--text); border-color: var(--muted); }
+  html.hudless .entry-tags { opacity: 0 !important; visibility: hidden !important; }
   h2 {
     font-weight: 600;
     font-size: 1.45rem;
@@ -1415,6 +1426,7 @@
     {
       id: 'sensemaking',
       title: 'Sensemaking',
+      tags: ['consilience'],
       parent: 'epistemic-crisis',
       html: '<p><em>Sensemaking</em> is the process by which individuals and groups construct an understanding of their situation, so that they can act within it. The term was developed in organisational theory by Karl Weick (1995), and has since been used more broadly for the collective capacity of a society to perceive reality accurately, reason about it together and make good choices. The breakdown of collective sensemaking is the <a href="#epistemic-crisis">epistemic crisis</a>, and restoring it is a precondition for any coordinated response to the <a href="#metacrisis">metacrisis</a>.</p>'
     },
@@ -1541,6 +1553,7 @@
     {
       id: 'commons',
       title: 'Commons',
+      tags: ['consilience'],
       parent: 'political-economy',
       html: '<p>A <em>commons</em> is a resource held and managed collectively by a community, according to rules its members make for themselves, rather than by the market or the state. Elinor Ostrom’s <em>Governing the Commons</em> (1990) identified the design principles by which commons can endure, answering the <a href="#tragedy-of-the-commons">tragedy of the commons</a>. The idea has been extended to knowledge and software, as in Yochai Benkler’s account of commons-based peer production. The commons offers a form of <a href="#political-economy">political economy</a> that is neither market nor state, and a model for coordination without centralisation.</p>'
     },
@@ -1871,6 +1884,319 @@
       ref: 'von Neumann & Morgenstern, Theory of Games and Economic Behavior (1944)',
       html: '<p>A <em>zero-sum game</em>, formalised by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944), is one in which any gain for one party is exactly matched by a loss for another, so the total stays fixed. Many real situations are not zero-sum – trade, cooperation and innovation can enlarge the total – yet <em>zero-sum thinking</em>, the habit of treating them as if they were, drives rivalry, arms races and the <a href="#multipolar-trap">multipolar trap</a>. Shifting from zero-sum to positive-sum games is a recurring theme in visions of a <a href="#win-win">win-win</a> civilisation.</p>'
     },
+    // ---- From the Consilience Project glossary (tagged 'consilience')
+    {
+      id: 'affordance',
+      title: 'Affordance',
+      parent: 'theories-of-technology',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary; Gibson',
+      html: '<p>An <em>affordance</em> is an available use or purpose of a thing: a couch affords being sat on, a button affords being pressed, and a social media platform affords users sharing with one another. The term was coined by the ecological psychologist James J. Gibson for the study of how animals interact with their environments, and has since become central to the study of how people interact with technology – and to how a technology’s design shapes the behaviour it invites.</p>'
+    },
+    {
+      id: 'agent-provocateur',
+      title: 'Agent Provocateur',
+      parent: 'power-and-control',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>An <em>agent provocateur</em> (French for “inciting agent”) is someone who tries to persuade an individual or group into a crime or rash act, or to implicate them in one, in order to defame, delegitimise or criminalise the target – for example, starting a fight at a peaceful protest, or trying to implicate a political figure in a crime.</p>'
+    },
+    {
+      id: 'information-warfare',
+      title: 'Information Warfare',
+      parent: 'power-and-control',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Information warfare</em> is war fought with bits and memes instead of guns and bombs, and a primary aspect of fourth- and fifth-generation warfare. It includes psychological operations such as disinformation, propaganda and manufactured media, as well as non-kinetic interference with an enemy’s capacity to communicate. See also <a href="#non-kinetic-warfare">non-kinetic warfare</a> and <a href="#mad-information-war">MAD information war</a>.</p>'
+    },
+    {
+      id: 'non-kinetic-warfare',
+      title: 'Non-Kinetic Warfare',
+      parent: 'power-and-control',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Non-kinetic warfare</em> is rivalry between states or other groups in which tactical aims are achieved by means other than direct physical violence – election meddling, the blackmail of politicians, or <a href="#information-warfare">information warfare</a>.</p>'
+    },
+    {
+      id: 'sock-puppet',
+      title: 'Sock Puppet',
+      parent: 'power-and-control',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A <em>sock puppet</em> is a fake online persona crafted to manipulate public opinion without implicating its creator, the puppeteer. Anyone from private citizens to political organisations and information-warfare operatives can use them, and a single person can run many. Combined with AI-generated text and automation, propagandists can mimic many seemingly legitimate voices at once, creating the illusion of organic popular trends in public discourse.</p>'
+    },
+    {
+      id: 'plausible-deniability',
+      title: 'Plausible Deniability',
+      parent: 'power-and-control',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Plausible deniability</em> is the ability of a person or institution to deny knowing about unethical or illegal activity because there is no evidence to the contrary, or because no such information was ever passed to them – a condition that can be deliberately arranged.</p>'
+    },
+    {
+      id: 'algorithmic-radicalisation',
+      title: 'Algorithmic Radicalisation',
+      parent: 'attention-economy',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Algorithmic radicalisation</em> is the ideological polarisation generated as a side-effect of recommendation algorithms optimising for engagement and advertising revenue. Because content that reinforces existing views – and filters out countervailing information – keeps people on a platform longer, the algorithms promote it, producing increasingly polarised perspectives founded on a biased information landscape.</p>'
+    },
+    {
+      id: 'limbic-hijack',
+      title: 'Limbic Hijack',
+      parent: 'attention-economy',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A <em>limbic hijack</em> is the capture of attention by emotionally triggering stimuli that target the limbic system – the brain’s centre for emotion and arousal, which we share with other mammals. Online recommendation systems exploit it deliberately to drive engagement, and content that provokes disgust or rage is especially effective because those feelings are so salient.</p>'
+    },
+    {
+      id: 'microtargeting',
+      title: 'Microtargeting',
+      parent: 'attention-economy',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Microtargeting</em> is an advertising strategy that builds psychometric profiles of individual users from the trace data of their online activity, then shows each person content matched to their particular interests at the moments they are most susceptible to it. Where traditional advertising appeals to demographics, microtargeting is tailored to individuals, and grows more personal with every new piece of data.</p>'
+    },
+    {
+      id: 'sensationalism',
+      title: 'Sensationalism',
+      parent: 'attention-economy',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Sensationalism</em> is the practice, common in mass media and journalism, of choosing and wording stories to excite the largest possible audience, usually at the expense of accuracy – through exaggeration, the omission of facts, or deliberately obscuring the truth to spark controversy.</p>'
+    },
+    {
+      id: 'misinformation',
+      title: 'Misinformation',
+      parent: 'epistemic-crisis',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Misinformation</em> is false or misleading information, regardless of any intent to mislead; <em>disinformation</em> is misinformation spread deliberately. Because the public expects news media to meet higher standards of integrity and editorial care, misinformation in the news is often called “fake news”.</p>'
+    },
+    {
+      id: 'deep-fakes',
+      title: 'Deep Fakes',
+      parent: 'epistemic-crisis',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A <em>deep fake</em> is a recording of a person digitally altered by AI, made for propaganda, sexual objectification, defamation or parody. They are becoming progressively harder for an untrained eye to tell apart from reality.</p>'
+    },
+    {
+      id: 'epistemic-nihilism',
+      title: 'Epistemic Nihilism',
+      parent: 'epistemic-crisis',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Epistemic nihilism</em> is a diffuse, usually unconscious feeling that it is impossible to really know anything – because “the science is too complex”, or “there is fake news everywhere”. Without a shared ability to make sense of the world, only the game of power is left, and every claim to truth is treated as unwarranted, a manipulation, or a weapon.</p>'
+    },
+    {
+      id: 'epistemic-hubris',
+      title: 'Epistemic Hubris',
+      parent: 'epistemic-crisis',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Epistemic hubris</em> is inadvertent, emotionally or politically motivated closed-mindedness, showing up as certainty or overconfidence in the face of complex, indeterminate problems. It appears in the convictions of people shaped by highly politicised groups, in corporate and bureaucratic settings that demand compressed and certain answers, and in media that rewards polarised rhetoric for its ability to grab attention. It is not the same as justified confidence, which some problems require. Its counterpart is <a href="#epistemic-humility">epistemic humility</a>.</p>'
+    },
+    {
+      id: 'frame-control',
+      title: 'Frame Control',
+      parent: 'epistemic-crisis',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Frame control</em> is the power to shape how an issue is perceived by setting its narrative and the context of debate – the language, images, assumptions and perspectives used to present it. Because the frames it creates often quietly serve the interests of whoever set them, it confers great social and political power: politicians who favour tax cuts, for instance, may call wealthy corporations “job creators” to suggest that their concern is with people’s livelihoods.</p>'
+    },
+    {
+      id: 'cherry-picking',
+      title: 'Cherry Picking',
+      parent: 'sensemaking',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Cherry picking</em> is selectively presenting the evidence that supports one’s position or desired outcome while ignoring or omitting the evidence against it.</p>'
+    },
+    {
+      id: 'confirmation-bias',
+      title: 'Confirmation Bias',
+      parent: 'sensemaking',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Confirmation bias</em> is the tendency to seek out or recall only the evidence that supports what one already believes or values, to interpret ambiguous information in its favour, and to ignore anything to the contrary. It is strongest where the issue matters most to one’s identity.</p>'
+    },
+    {
+      id: 'strawman-arguments',
+      title: 'Strawman Arguments',
+      parent: 'sensemaking',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A <em>strawman argument</em> presents the views of those one disagrees with in their weakest form, then, having knocked that down, claims to have discredited their position as a whole.</p>'
+    },
+    {
+      id: 'thought-terminating-cliches',
+      title: 'Thought-Terminating Clichés',
+      parent: 'sensemaking',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Thought-terminating clichés</em> are brief, highly reductive, definitive-sounding phrases – advertising jingles and catchphrases, certain political slogans – used in propaganda and advertising to stop further questioning. They are often used where social approval depends on repeating them unreflectively, which can breed confusion in individuals and groups alike.</p>'
+    },
+    {
+      id: 'villainisation',
+      title: 'Villainisation',
+      parent: 'sensemaking',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Villainisation</em> is creating an image of an anti-hero who epitomises the worst of a group one disagrees with, and contrasts with the best of one’s own, and then treating every member of that group as if they were identical to the image.</p>'
+    },
+    {
+      id: 'epistemic-humility',
+      title: 'Epistemic Humility',
+      parent: 'sensemaking',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Epistemic humility</em> is an ethos of learning that balances confidence with openness to new ideas. It is neither hubristic – overconfident or arrogant – nor nihilistic, holding that nothing can be known. It seeks new learning, recognises the limits of one’s own knowledge, and avoids absolutisms and fundamentalisms, embracing truths where they can be reached while continually updating beliefs in the light of new information. Compare <a href="#epistemic-hubris">epistemic hubris</a> and <a href="#epistemic-nihilism">epistemic nihilism</a>.</p>'
+    },
+    {
+      id: 'good-faith-communications',
+      title: 'Good Faith Communications',
+      parent: 'sensemaking',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Good faith communication</em> is discourse aimed at mutual understanding and coordinated action, which leaves its participants with more faith in the value of communicating. Its goal is not consensus, but to make it possible for every party to change position, learn, and keep interacting productively.</p>'
+    },
+    {
+      id: 'consilience',
+      title: 'Consilience',
+      parent: 'metatheory',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Consilience</em> is the principle that evidence from independent, unrelated sources can converge on strong conclusions: when several lines of evidence agree, the conclusion can be very strong even if none of them is strong on its own. The idea runs through the sciences and history, and gives the Consilience Project its name.</p>'
+    },
+    {
+      id: 'epistemology',
+      title: 'Epistemology',
+      parent: 'metatheory',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Epistemology</em> is the branch of philosophy that studies knowing and the nature of knowledge, asking questions such as “how does one know?” and “what are knowing, the known and knowledge?”. It is traditionally counted among the four main branches of philosophy, with ethics, logic and metaphysics.</p>'
+    },
+    {
+      id: 'empiricism',
+      title: 'Empiricism',
+      parent: 'metatheory',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary; Locke',
+      html: '<p><em>Empiricism</em> is the philosophical view that knowledge derives from sensory experience, relying heavily on evidence to arrive at truth. John Locke argued that, rather than being born with innate ideas, a person begins life as a “blank slate”, and comes to understand the world only through the senses.</p>'
+    },
+    {
+      id: 'paradigm',
+      title: 'Paradigm',
+      parent: 'metatheory',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary; Kuhn',
+      html: '<p>The modern sense of <em>paradigm</em> comes from Thomas Kuhn’s <em>The Structure of Scientific Revolutions</em> (1962): the set of concepts and practices that define a scientific discipline at a particular time. Behaviourism, for example, was a paradigm under which only externally observable behaviour counted as legitimate psychology. Kuhn argued that science advances through <em>paradigm shifts</em>, as when psychology moved from behaviourism to cognitivism and its view of the mind as an information processor. See also <a href="#dominant-paradigm">dominant paradigm</a>.</p>'
+    },
+    {
+      id: 'unverifiable',
+      title: 'Unverifiable',
+      parent: 'metatheory',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A proposition or state of affairs is <em>unverifiable</em> when it cannot be proven true. It may be unverifiable for now – for instance, because of the limits of current technology – or unverifiable in principle, meaning there is no possible way to verify it.</p>'
+    },
+    {
+      id: 'closed-society',
+      title: 'Closed Society',
+      parent: 'coordination-and-governance',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A <em>closed society</em> restricts the free exchange of information and public discourse, and imposes decisions on its people from the top down. In contrast to the open communication and dissent that characterise an <a href="#open-society">open society</a>, it favours opaque governance and suppresses the public opposition that free discourse would allow.</p>'
+    },
+    {
+      id: 'civic-virtue',
+      title: 'Civic Virtue',
+      parent: 'coordination-and-governance',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Civic virtue</em> is the ethical conduct of people acting to better their communities and their state, sometimes forgoing personal gain for the good of all. Unlike other sets of virtues, it concerns citizens’ participation in governance and civil society, and what it involves has changed over time and differs between political philosophies – in modern democracies it includes upholding every citizen’s right to vote and freedom regardless of culture, race, sex, religion, nationality, sexual orientation or gender identity. A shared understanding of civic virtue is integral to the stability of a just political system; when it wanes, people disengage from collective responsibilities, respect for the rule of law and trust between citizens and the state break down, and the passing on of civic virtue between generations degrades.</p>'
+    },
+    {
+      id: 'public-sphere',
+      title: 'Public Sphere',
+      parent: 'coordination-and-governance',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary; Habermas',
+      html: '<p>The <em>public sphere</em>, a term coined by Jürgen Habermas, is the set of common spaces where people come together to articulate publicly the matters of mutual interest to members of a society. The theory built around it holds that impartial, representative governance depends on the public sphere’s capacity to host healthy debate. See also <a href="#the-epistemic-commons">the epistemic commons</a>.</p>'
+    },
+    {
+      id: 'social-contract-theory',
+      title: 'Social Contract Theory',
+      parent: 'coordination-and-governance',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary; Hobbes; Locke; Rousseau; Rawls',
+      html: '<p><em>Social contract theory</em> holds that individuals accept some limits on their freedom, and agree to the authority of the state under shared legal rules, in exchange for the protection of their remaining rights – provided everyone else is bound by the same rules. Developed in the Age of Enlightenment by thinkers including Thomas Hobbes, John Locke and Jean-Jacques Rousseau, and revived in the twentieth century by John Rawls, it underpins modern democratic theory.</p>'
+    },
+    {
+      id: 'ethos',
+      title: 'Ethos',
+      parent: 'culture-and-meaning',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>From a Greek word meaning custom, habit or character, an <em>ethos</em> is the set of ideals or customs around which a group of people coheres – including the values from which a culture derives its ethical principles.</p>'
+    },
+    {
+      id: 'cultural-enlightenment',
+      title: 'Cultural Enlightenment',
+      parent: 'culture-and-meaning',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Cultural enlightenment</em> is a general process, of which the eighteenth-century European Enlightenment is one instance, that has occurred many times in many cultures: a period of increasing reflection by a culture on itself, which brings the awareness needed to reimagine its institutions from a new perspective. A cultural <a href="#renaissance">renaissance</a> – a period of renewed interest in a particular area – is more general, and may precede an enlightenment. See also <a href="#second-enlightenment">second enlightenment</a>.</p>'
+    },
+    {
+      id: 'renaissance',
+      title: 'Renaissance',
+      parent: 'culture-and-meaning',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Renaissance</em> is French for “rebirth”, and keeps that meaning in all its uses. It usually refers to the European Renaissance, the period of cultural, artistic, political and economic renewal that followed the Middle Ages, but can describe other periods of great social change, such as the Bengal Renaissance that began in late eighteenth-century India.</p>'
+    },
+    {
+      id: 'pedagogy',
+      title: 'Pedagogy',
+      parent: 'culture-and-meaning',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Pedagogy</em> is the theory and practice of teaching and learning, and of how that process influences – and is influenced by – the social, political and psychological development of learners.</p>'
+    },
+    {
+      id: 'intergenerational-transmission',
+      title: 'Intergenerational Transmission',
+      parent: 'culture-and-meaning',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Intergenerational transmission</em> is the foundational process of education – the passing down of values, capacities, knowledge and personality types – which underlies and enables social and cultural cohesion across generations.</p>'
+    },
+    {
+      id: 'societal-autopoiesis',
+      title: 'Societal Autopoiesis',
+      parent: 'culture-and-meaning',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Autopoiesis</em> (from the Greek for “self” and “making”) is a term from biology for a system’s ability to reproduce and maintain itself by metabolising energy to create its own parts, and eventually new emergent components; all living systems are autopoietic. <em>Societal autopoiesis</em> extends the idea to the process by which a society maintains its capacity to perpetuate and adapt itself while keeping a relatively continuous shared identity.</p>'
+    },
+    {
+      id: 'monetarism',
+      title: 'Monetarism',
+      parent: 'capital-and-growth',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Monetarism</em> is a prevailing school of economic thought that treats government control of the money supply as the primary determinant of economic growth, with central banks expanding or contracting the supply of their currency – for example, by altering interest rates.</p>'
+    },
+    {
+      id: 'technocapitalism',
+      title: 'Technocapitalism',
+      parent: 'capital-and-growth',
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Technocapitalism</em> is the worldview that holds technology – specifically technology developed by private corporations – to be the primary driver of civilisational progress. Its adherents point to steady global falls in child mortality and poverty during capitalism’s dominance as evidence of its success; but the market incentives driving that progress have also produced new, sometimes greater, problems as externalities. See also <a href="#techno-capitalist-progress-narrative">the techno-capitalist progress narrative</a>.</p>'
+    },
     {
       id: 'goodharts-law',
       title: 'Goodhart’s Law',
@@ -1958,6 +2284,7 @@
     {
       id: 'world-risk-society',
       title: 'World Risk Society: Manufactured Risk',
+      tags: ['consilience'],
       parent: 'risk-and-catastrophe',
       ref: 'Beck; Giddens',
       html: '<p>The <em>world risk society</em> is Ulrich Beck’s term, developed from <em>Risk Society</em> (1986), for a modernity preoccupied with managing the hazards it has itself produced. Unlike natural dangers, these <em>manufactured risks</em> – nuclear, chemical, ecological, financial – are consequences of industrial and technological development, and they cross borders and generations in ways existing institutions cannot contain.</p>'
@@ -1993,6 +2320,7 @@
     {
       id: 'hyperobjects',
       title: 'Hyper-Objects',
+      tags: ['consilience'],
       parent: 'risk-and-catastrophe',
       ref: 'Morton',
       html: '<p><em>Hyperobjects</em> is Timothy Morton’s term, from <em>Hyperobjects</em> (2013), for entities so vastly distributed in time and space – such as global warming, plastics or nuclear waste – that they cannot be perceived directly or grasped as a whole. They are real and pressing, yet exceed the scales at which human perception, politics and ethics ordinarily work.</p>'
@@ -2497,12 +2825,14 @@
     {
       id: 'the-epistemic-commons',
       title: 'The Epistemic Commons',
+      tags: ['consilience'],
       parent: 'coordination-and-governance',
       html: '<p>The <em>epistemic commons</em> is the shared infrastructure of knowledge on which a society depends – its trusted sources, institutions of inquiry, public discourse and common facts. Like any commons, it can be degraded by those who exploit it for private advantage. Protecting and rebuilding it is a precondition for collective <a href="#sensemaking">sensemaking</a> and self-government.</p>'
     },
     {
       id: 'open-society',
       title: 'Open Society',
+      tags: ['consilience'],
       parent: 'coordination-and-governance',
       ref: 'Popper; Consilience Project',
       html: '<p>An <em>open society</em>, in Karl Popper’s <em>The Open Society and Its Enemies</em> (1945), is one in which institutions can be criticised and changed peacefully, and in which no authority claims final truth. Renewing it for the digital age means asking how open societies can remain resilient against disinformation and coordinate effectively while staying free.</p>'
@@ -3467,13 +3797,28 @@
   // homepage. Set to true to bring it back (and remove the hidden attributes on its two icons).
   var SHOW_INFINITE = false;
 
+  // Tags: small labels under an entry's title marking where it comes from (e.g. entries taken
+  // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
+  var TAGS = {
+    consilience: { label: 'Consilience Project', href: 'https://consilienceproject.org/glossary/' }
+  };
+  function tagsHtml(c) {
+    if (!c.tags || !c.tags.length) return '';
+    return '<p class="entry-tags">' + c.tags.map(function (t) {
+      var tag = TAGS[t] || { label: t };
+      return tag.href
+        ? '<a class="entry-tag" href="' + tag.href + '" target="_blank" rel="noopener">' + esc(tag.label) + '</a>'
+        : '<span class="entry-tag">' + esc(tag.label) + '</span>';
+    }).join('') + '</p>';
+  }
+
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
-      '<h1>' + esc(c.title) + '</h1>' +
+      '<h1>' + esc(c.title) + '</h1>' + tagsHtml(c) +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
       // Categories, and concepts with nested concepts, list everything filed beneath them.
       (c !== ROOT && (c.kind === 'category' || childrenOf(c.id).length) ? categoryHtml(c) : '') + '</div>';
