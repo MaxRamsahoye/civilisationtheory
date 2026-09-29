@@ -494,8 +494,13 @@
   .tree-string { margin: 0 0 1.2rem; line-height: 1.4; }  /* same line spacing as the main body */
   .tree-string a { color: var(--muted); text-decoration: none; }
   .tree-string a:hover { color: var(--text); }
-  .tree-string > a, .tree-string > span:not(.sep) { white-space: nowrap; }
+  .tree-string .node { white-space: nowrap; }
   .tree-string .sep { margin: 0 0.45em; }
+  /* When the string would run onto a second line, its earliest nodes step out above it as a
+     smaller, fainter vertical stack – just enough of them for the rest to fit on one line */
+  .ts-stack { display: block; font-size: 0.86em; opacity: 0.6; line-height: 1.5; margin-bottom: 0.2rem; }
+  .ts-stack .node { display: block; }
+  .ts-line { display: block; }
 
   h1 {
     font-weight: 700;
@@ -608,6 +613,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    align-items: last baseline;  /* the count sits level with the single line, below any stack */
     gap: 1rem;
     margin: 0 0 1.2rem;
   }
@@ -2924,12 +2930,45 @@
     return '<p class="count"><span>Concepts: ' + n + '</span></p><ul class="branch-list">' + list + '</ul>';
   }
 
-  function crumbsHtml(c) {
-    return pathTo(c).map(function (p, i, arr) {
+  // k = how many of the earliest nodes step out into the vertical stack above the line.
+  function crumbsHtml(c, k) {
+    var nodes = pathTo(c).map(function (p, i, arr) {
       return i === arr.length - 1
-        ? '<span>' + esc(p.title) + '</span>'
-        : '<a href="' + href(p) + '">' + esc(p.title) + '</a>';
-    }).join('<span class="sep">&gt;</span><wbr>');
+        ? '<span class="node">' + esc(p.title) + '</span>'
+        : '<a class="node" href="' + href(p) + '">' + esc(p.title) + '</a>';
+    });
+    if (!k) return nodes.join('<span class="sep">&gt;</span><wbr>');
+    return '<span class="ts-stack">' + nodes.slice(0, k).join('') + '</span>' +
+      '<span class="ts-line">' + nodes.slice(k).join('<span class="sep">&gt;</span><wbr>') + '</span>';
+  }
+
+  // Keep each tree string to a single line: if it wraps, move its earliest nodes into the stack,
+  // one at a time, until the remainder fits. Only strings that actually wrap are touched.
+  function crumbTarget(el) {
+    var host = el.closest('[data-id]');
+    var id = host ? host.getAttribute('data-id') : el.getAttribute('data-for');
+    return byId[id] || PAGES[id];
+  }
+  function fitCrumbs() {
+    var els = [].slice.call(document.querySelectorAll('#entry p.tree-string:not(.slide-meta), #entry .slide-meta .crumbs'));
+    els.forEach(function (el) {
+      var c = crumbTarget(el);
+      if (c && el.querySelector('.ts-stack')) el.innerHTML = crumbsHtml(c, 0);
+    });
+    var wrapping = els.filter(function (el) {
+      var nodes = el.querySelectorAll('.node');
+      return nodes.length > 1 && nodes[0].getBoundingClientRect().top !== nodes[nodes.length - 1].getBoundingClientRect().top;
+    });
+    wrapping.forEach(function (el) {
+      var c = crumbTarget(el);
+      if (!c) return;
+      var n = pathTo(c).length;
+      for (var k = 1; k < n; k++) {
+        el.innerHTML = crumbsHtml(c, k);
+        var line = el.querySelectorAll('.ts-line .node');
+        if (line[0].getBoundingClientRect().top === line[line.length - 1].getBoundingClientRect().top) break;
+      }
+    });
   }
 
   // Continuous slide view: every concept as a full-screen slide, in tree or A–Z order.
@@ -2957,7 +2996,7 @@
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
-      '<p class="tree-string">' + crumbsHtml(c) + '</p>' +
+      '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
       '<h1>' + esc(c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()) +
       // Categories, and concepts with nested concepts, list everything filed beneath them.
@@ -2969,6 +3008,7 @@
     document.documentElement.classList.toggle('page-map', c.id === 'the-map');
     document.documentElement.classList.toggle('page-home', c === ROOT);
     closeSearch(true);
+    fitCrumbs();
 
     buildToc();
     document.title = c === ROOT ? 'Civilisation Theory Map' : c.title + ' · Civilisation Theory Map';
@@ -3077,6 +3117,9 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
+  if (document.fonts) document.fonts.ready.then(fitCrumbs);
+  var fitTimer;
+  window.addEventListener('resize', function () { clearTimeout(fitTimer); fitTimer = setTimeout(fitCrumbs, 120); });
   topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
   // ---------- Sidebar toggle ----------
