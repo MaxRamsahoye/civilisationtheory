@@ -676,15 +676,15 @@
   /* Opening: the screen starts in the theme's text colour (black on the white theme); a dot of the
      background colour appears at the centre and expands until it fills the screen. */
   .loader-base { position: absolute; inset: 0; background: var(--text); }
-  /* A circle sized to reach the screen's corners, scaled from a single pixel at a constant speed.
-     Scaling (a transform) runs on the compositor, so it stays smooth while the page is being built. */
+  /* A rectangle with the screen's own proportions, scaled from a single pixel at a constant speed
+     until it fills the screen. Scaling (a transform) runs on the compositor, so it stays smooth
+     while the page is being built. */
   .loader-dot {
     position: absolute;
     left: 50%;
     top: 50%;
     width: 1px;
     height: 1px;
-    border-radius: 50%;
     background: var(--bg);
     transform: scale(0);
     will-change: transform;
@@ -750,18 +750,22 @@
   </div>
 </div>
 <script>
-  // Start the reveal at once, before the rest of the page is built.
+  // Start the reveal at once, before the rest of the page is built: a screen-shaped rectangle
+  // grows from a single pixel at the centre until it fills the screen.
   (function () {
     var dot = document.querySelector('#loader .loader-dot');
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !dot.animate) {
       window.__loaderReveal = Promise.resolve();
       return;
     }
-    var R = Math.ceil(Math.hypot(window.innerWidth, window.innerHeight) / 2) + 2, D = 2 * R;
-    dot.style.width = dot.style.height = D + 'px';
-    dot.style.marginLeft = dot.style.marginTop = -R + 'px';
+    var W = window.innerWidth, H = window.innerHeight;
+    dot.style.width = W + 'px';
+    dot.style.height = H + 'px';
+    dot.style.marginLeft = -W / 2 + 'px';
+    dot.style.marginTop = -H / 2 + 'px';
+    // Starts one pixel across on its shorter side, keeping the screen's proportions throughout.
     var anim = dot.animate(
-      [{ transform: 'scale(' + (1 / D) + ')' }, { transform: 'scale(1)' }],
+      [{ transform: 'scale(' + (1 / Math.min(W, H)) + ')' }, { transform: 'scale(1)' }],
       { duration: 1800, delay: 150, easing: 'linear', fill: 'forwards' }
     );
     window.__loaderReveal = anim.finished.catch(function () {});
