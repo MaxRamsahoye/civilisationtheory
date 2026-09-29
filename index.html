@@ -1038,6 +1038,12 @@
   .description .seq-list li { margin: 0 0 0.95rem; padding: 0; }
   /* Group names in Bembo, bold and a step larger than the entries beneath them */
   .description .seq-head { font-size: 1.18em; font-weight: 700; line-height: 1.2; color: var(--text); margin: 0 0 0.85rem; }
+  /* Numbered sub-groups within a group (Meta I, II) */
+  .description .seq-sub {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; color: var(--muted); margin: 0 0 0.7rem;
+  }
+  .description .seq-group + .seq-sub { margin-top: 1.4rem; }
   .description .seq-list li[aria-current] span { font-weight: 700; }
   @media (max-width: 640px) { .description .seq-list { font-size: 1em; } }
   /* The Curated Sequence reads as a single column, in order, on the Map and on its entries */
@@ -4190,20 +4196,32 @@
     return [
       { name: 'Foundation', items: [byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
       { name: 'Civilisational', items: sections.slice(0, 3) },
-      { name: 'Meta', items: sections.slice(3, 6).concat([byId['metanarrative'], byId['metaphysics'], byId['metarationality'], byId['metapsychology']]) },
+      { name: 'Meta', subs: [
+        { name: 'I', items: sections.slice(3, 6) },
+        { name: 'II', items: [byId['metanarrative'], byId['metaphysics'], byId['metarationality'], byId['metapsychology'], byId['metamathics']] }
+      ] },
       { name: 'Macro', items: sections.slice(6, 9) },
       { name: 'Core', items: [byId['life-world-system']] }
-    ].map(function (g) { g.items = g.items.filter(Boolean); return g; });
+    ].map(function (g) {
+      // A group may be divided into numbered sub-groups (I, II, …); its items are theirs in order.
+      if (g.subs) g.subs.forEach(function (sg) { sg.items = sg.items.filter(Boolean); });
+      g.items = g.subs ? g.subs.reduce(function (all, sg) { return all.concat(sg.items); }, []) : g.items.filter(Boolean);
+      return g;
+    });
   }
   function curatedSequence() {
     return curatedGroups().reduce(function (all, g) { return all.concat(g.items); }, []);
   }
   // The sequence as a single column under its subheadings; `current` (if given) is marked, not linked.
   function sequenceListHtml(current) {
-    return curatedGroups().map(function (g) {
-      return '<div class="seq-block"><p class="seq-head">' + g.name + '</p><ul class="seq-group">' + g.items.map(function (s) {
+    function list(items) {
+      return '<ul class="seq-group">' + items.map(function (s) {
         return s === current ? '<li aria-current="step"><span>' + esc(s.title) + '</span></li>' : '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>';
-      }).join('') + '</ul></div>';
+      }).join('') + '</ul>';
+    }
+    return curatedGroups().map(function (g) {
+      return '<div class="seq-block"><p class="seq-head">' + g.name + '</p>' +
+        (g.subs ? g.subs.map(function (sg) { return '<p class="seq-sub">' + sg.name + '</p>' + list(sg.items); }).join('') : list(g.items)) + '</div>';
     }).join('');
   }
   // On an entry in the sequence: the whole sequence, with this entry marked, at the foot of its text.
