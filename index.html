@@ -550,12 +550,13 @@
   /* The Map page's index is more generously spaced */
   html.page-map .description .index-cols,
   html.page-map .description .ce-list ul { column-gap: 2.4rem; line-height: 1.4; }
-  html.page-map .description .az-list ul { column-gap: 2.4rem; row-gap: 0.35rem; line-height: 1.4; }
+  html.page-map .description .az-list ul { column-gap: 2.4rem; line-height: 1.4; }
   html.page-map .description .index-cols li,
-  html.page-map .description .ce-list li,
   html.page-map .description .az-list li { margin-bottom: 0.7rem; }
+  html.page-map .description .ce-list li { margin-bottom: 1.1rem; }
   html.page-map .description .index-cols ul { margin-top: 0.7rem; }
-  html.page-map .description .index-cols > li { padding-bottom: 1.8rem; }
+  html.page-map .description .index-cols > li.has-kids { padding-bottom: 1.8rem; }
+  html.page-map .description .index-cols > li:not(.has-kids) + li.has-kids { padding-top: 1.1rem; }
   html.page-map .description .index-domain { margin-top: 3.6rem; padding-top: 2.8rem; }
   html.page-map .description .index-domain.set-start { margin-top: 4.8rem; }
   html.page-map .description .domain-desc { margin-bottom: 2.4rem; }
@@ -566,8 +567,8 @@
   html.page-map .description .az-letter { margin-bottom: 1rem; }
   /* Conceptual Engineerings list */
   .ce-list { margin-top: 2.4rem; }
-  .description .ce-title { font-size: 1.7rem; font-weight: 700; line-height: 1.15; margin: 0 0 0.7rem; }
-  .description .ce-desc { color: var(--muted); font-size: 0.92em; line-height: 1.45; margin: 0 0 1.6rem; max-width: 36rem; }
+  .description .ce-title { font-size: 1.7rem; font-weight: 700; line-height: 1.15; margin: 3.4rem 0 0.8rem; }
+  .description .ce-desc { color: var(--muted); font-size: 0.92em; line-height: 1.45; margin: 0 0 2.8rem; max-width: 36rem; }
   .description .ce-intro {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.62rem;
@@ -578,7 +579,7 @@
     margin: 0 0 1.4rem;
   }
   .description .ce-list ul { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 1.4rem; font-size: 0.9em; line-height: 1.3; }
-  .description .ce-list li { margin: 0 0 0.55rem; padding: 0; break-inside: avoid; }
+  .description .ce-list li { margin: 0 0 0.95rem; padding: 0; break-inside: avoid; }
   @media (max-width: 640px) { .description .ce-list ul { columns: 1; font-size: 1em; } }
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
@@ -623,15 +624,12 @@
   @media (max-width: 899px) { .description .slide-title { font-size: 2.1rem; } }
 
   /* A–Z view: letter groups in three columns, each group kept whole */
-  /* A–Z: each letter heads a block; its concepts fill even rows of three, left to right */
+  /* A–Z: each letter heads a block; its concepts flow down three balanced columns, so a title that
+     wraps onto two lines only pushes down its own column (no gaps opening beside it) */
   .az-list { margin-top: 2.4rem; font-size: 0.9em; line-height: 1.3; }
   .az-group { padding: 1.2rem 0 1.3rem; border-top: 1px solid var(--rule); }
   .az-group:first-child { border-top: 0; padding-top: 0; }
-  .description .az-list ul {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: 1.4rem;
-  }
+  .description .az-list ul { columns: 3; column-gap: 1.4rem; }
   .description .az-letter {
     font-size: 1.31em;
     font-weight: 700;
@@ -639,7 +637,7 @@
     margin: 0 0 0.6rem;
   }
   .description .az-list ul { list-style: none; padding: 0; margin: 0; }
-  .description .az-list li { margin: 0 0 0.4rem; padding: 0; }
+  .description .az-list li { margin: 0 0 0.4rem; padding: 0; break-inside: avoid; }
   .az-list li a { font-size: 1.01em; }
   /* ---------- Tree index: one section per domain, groups in columns ---------- */
   .description .index-list { margin-top: 2.4rem; }
@@ -706,7 +704,10 @@
   .description .index-cols ul { padding-left: 0.9rem; margin-top: 0.4rem; }
   .description .index-cols li { margin: 0 0 0.4rem; padding: 0; }
   /* Each group (a sub-category or a concept with its children) stays whole in one column */
-  .description .index-cols > li { break-inside: avoid; padding-bottom: 1.1rem; margin: 0; }
+  .description .index-cols > li { break-inside: avoid; padding-bottom: 0.4rem; margin: 0; }
+  /* Only groups (items with nested concepts) are spaced apart; single concepts sit together */
+  .description .index-cols > li.has-kids { padding-bottom: 1.1rem; }
+  .description .index-cols > li:not(.has-kids) + li.has-kids { padding-top: 0.7rem; }
   /* Type steps down with depth: group heading, concept, sub-concept */
   .description .index-cols > li > a { font-size: 1.04em; font-weight: 600; }
   .description .index-cols > li.is-category > a { font-weight: 700; }
@@ -715,7 +716,7 @@
   @media (max-width: 640px) {
     .description .index-cols { columns: 1; font-size: 1em; }
     .az-list { font-size: 1em; }
-    .description .az-list ul { grid-template-columns: minmax(0, 1fr); }
+    .description .az-list ul { columns: 1; }
   }
 
   /* Category pages: nested list of members */
@@ -2824,7 +2825,8 @@
     // Same nested tree as the sidebar: the root, with each concept under its parent.
     function branch(c) {
       var kids = childrenOf(c.id);
-      return '<li' + (c.kind === 'category' ? ' class="is-category" id="idx-' + c.id + '"' : '') + '><a href="' + href(c) + '">' + esc(c.title) + '</a>' +
+      var cls = (c.kind === 'category' ? 'is-category' : '') + (kids.length ? ' has-kids' : '');
+      return '<li' + (cls ? ' class="' + cls.trim() + '"' : '') + (c.kind === 'category' ? ' id="idx-' + c.id + '"' : '') + '><a href="' + href(c) + '">' + esc(c.title) + '</a>' +
         (kids.length ? '<ul>' + kids.map(branch).join('') + '</ul>' : '') + '</li>';
     }
     // Menu of the sections and their categories, in three columns (one per set of three sections).
