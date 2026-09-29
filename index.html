@@ -520,6 +520,29 @@
     transition: color .2s ease;
   }
   .head-icons a:hover, .head-icons button:hover, .head-icons a[aria-current="page"] { color: var(--text); }
+  /* Entries: shortly after the page opens, the header icons (and the theme toggle) slide right and
+     fade into a single menu icon in the corner; hovering it slides them back out */
+  #site-header .head-icons a, #site-header .head-icons button, #theme-toggle {
+    transition: color .2s ease, transform .5s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
+  }
+  html.icons-folded:not(.icons-open) #site-header .head-icons a,
+  html.icons-folded:not(.icons-open) #site-header .head-icons button {
+    transform: translateX(var(--fold-x, 0px)); opacity: 0; pointer-events: none;
+  }
+  html.icons-folded:not(.icons-open) #theme-toggle { opacity: 0; pointer-events: none; }
+  #head-menu {
+    position: fixed; top: 0.8rem; right: 0.9rem; z-index: 29;
+    width: 2rem; height: 2rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); background: none;
+    opacity: 0; pointer-events: none;
+    transition: opacity .4s ease;
+  }
+  #head-menu svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.4px; overflow: visible; }
+  #head-menu svg * { vector-effect: non-scaling-stroke; }
+  html.icons-folded:not(.icons-open) #head-menu { opacity: 1; pointer-events: auto; transition-delay: .2s; }
+  html.icons-folded #head-menu:hover { color: var(--text); }
+  html.hudless #head-menu { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
   /* The current page: a short rule beneath its icon */
   .head-icons a[aria-current="page"]::before {
     content: ''; position: absolute; left: 0.55rem; right: 0.55rem; bottom: -0.1rem;
@@ -3465,6 +3488,12 @@
     // The stacked part of the tree string folds away shortly after the entry opens.
     var ts = document.querySelector('#entry > p.tree-string');
     setTimeout(function () { if (ts.isConnected) ts.classList.add('ts-folded'); }, 1600);
+    // …and on entries the header icons fold into the menu icon.
+    document.documentElement.classList.remove('icons-folded', 'icons-open');
+    clearTimeout(foldIconsTimer);
+    if (!document.documentElement.classList.contains('main-page')) {
+      foldIconsTimer = setTimeout(function () { measureIconFold(); document.documentElement.classList.add('icons-folded'); }, 1600);
+    }
     if (c.id === 'infinite') { var dk = 'az'; try { dk = localStorage.getItem('ct-deck') || 'az'; } catch (err) {} showDeck(dk); }
     fitCrumbs();
 
@@ -3907,6 +3936,37 @@
     clearTimeout(hudTimer);
     hudTimer = setTimeout(function () { root.classList.remove('hud-fade'); }, 650);
   }
+
+  // ---------- Entry header: icons folded into a menu icon, unfolded while the pointer is near ----------
+  var foldIconsTimer;
+  var headMenu = document.createElement('button');
+  headMenu.id = 'head-menu';
+  headMenu.type = 'button';
+  headMenu.setAttribute('aria-label', 'Show menu');
+  headMenu.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true"><line x1="12" y1="26" x2="88" y2="26"/><line x1="12" y1="50" x2="88" y2="50"/><line x1="12" y1="74" x2="88" y2="74"/></svg>';
+  document.body.appendChild(headMenu);
+  // How far each icon travels: from where it sits to the corner, where the menu icon appears.
+  function measureIconFold() {
+    var target = headMenu.getBoundingClientRect();
+    var cx = target.left + target.width / 2;
+    document.querySelectorAll('#site-header .head-icons > *').forEach(function (el) {
+      if (!el.offsetParent) return;
+      el.style.setProperty('--fold-x', '0px');
+      var r = el.getBoundingClientRect();
+      el.style.setProperty('--fold-x', (cx - (r.left + r.width / 2)) + 'px');
+    });
+  }
+  function openIcons() { document.documentElement.classList.add('icons-open'); }
+  headMenu.addEventListener('mouseenter', openIcons);
+  headMenu.addEventListener('click', openIcons);   // touch screens
+  // Folds again once the pointer leaves the strip holding the icons and the theme toggle.
+  document.addEventListener('mousemove', function (e) {
+    var root = document.documentElement;
+    if (!root.classList.contains('icons-open') || !root.classList.contains('icons-folded')) return;
+    var nav = document.querySelector('#site-header .head-icons').getBoundingClientRect();
+    if (e.clientX < nav.left - 16 || e.clientY > nav.bottom + 16) root.classList.remove('icons-open');
+  });
+  window.addEventListener('resize', function () { if (document.documentElement.classList.contains('icons-folded')) measureIconFold(); });
 
   // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless ----------
   document.addEventListener('keydown', function (e) {
