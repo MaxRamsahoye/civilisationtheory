@@ -571,27 +571,39 @@
   @media (min-width: 900px) {
     body:not(.sidebar-closed) #site-footer { padding-left: var(--side-w); }
   }
-  .foot-inner { width: min(54rem, 100% - 3rem); margin: 0 auto; }
+  #site-footer { container-type: inline-size; }
+  .foot-inner { width: min(84rem, 100% - 4rem); margin: 0 auto; }
   /* Title and description on the left; the menus in two columns on the right */
-  .foot-main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 3rem; }
+  .foot-main { display: grid; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: 3.4rem; }
   .foot-title { margin: 0 0 0.9rem; font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
   .foot-title a { color: inherit; text-decoration: none; }
   .foot-desc { margin: 0 0 1.4rem; color: var(--muted); font-size: 1.02rem; line-height: 1.5; }
   .foot-stats, .foot-head, .foot-num {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
   }
-  .foot-stats { margin: 0; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); line-height: 1.8; }
+  .foot-stats { margin: 0; font-size: 0.74rem; font-weight: 500; letter-spacing: 0.01em; color: var(--muted); line-height: 1.8; }
+  .foot-stats span { white-space: nowrap; }
   .foot-stats span + span::before { content: '·'; margin: 0 0.7em; }
-  .foot-cols { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 2rem; padding-top: 0.5rem; }
-  .foot-head { margin: 0 0 1rem; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .foot-cols { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 2.8rem; padding-top: 0.5rem; }
+  .foot-head { margin: 0 0 0.9rem; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.01em; color: var(--muted); }
+  .foot-secs { display: grid; grid-template-columns: repeat(3, max-content); gap: 0 2rem; }
+  .foot-col li { white-space: nowrap; }
   .foot-col ul { list-style: none; margin: 0; padding: 0; }
   .foot-col ul + .foot-head { margin-top: 1.9rem; }
   .foot-col li { display: flex; align-items: baseline; margin: 0 0 0.55rem; font-size: 0.98rem; line-height: 1.3; }
   .foot-col a { color: var(--text); text-decoration: none; }
   .foot-col a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 0.15em; }
-  .foot-num { flex: none; width: 2.1rem; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
+  .foot-num { flex: none; width: 1.9rem; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
+  /* Not wide enough for everything in one row: title and description above, menus beneath */
+  @container (max-width: 1320px) {
+    .foot-main { grid-template-columns: 1fr; gap: 2.2rem; }
+    .foot-lede { max-width: 40rem; }
+  }
   @media (max-width: 899px) {
     .foot-main { grid-template-columns: 1fr; gap: 2.4rem; }
+    .foot-cols { grid-template-columns: 1fr; gap: 2rem; }
+    .foot-secs { grid-template-columns: 1fr; }
+    .foot-col li { white-space: normal; }
   }
   @media (max-width: 640px) {
     #site-footer { padding-bottom: 4.6rem; }  /* clear of the back-to-top arrow */
@@ -3814,14 +3826,18 @@
       '<div class="foot-lede">' +
         '<p class="foot-title"><a href="#">Civilisation Theory Map</a></p>' +
         '<p class="foot-desc">A conceptual adaptive system: a map of the concepts needed to understand civilisation – its mechanics, its crises and its possible transition – built as a collective knowledge base for collective understanding, and in turn, collective action.</p>' +
-        '<p class="foot-stats"><span>' + concepts.length + ' concepts</span><span>' + sections.length + ' sections</span><span>' + coined + ' conceptual engineerings</span></p>' +
+        '<p class="foot-stats"><span>' + concepts.length + ' Concepts</span><span>' + sections.length + ' Sections</span><span>' + coined + ' Conceptual Engineerings</span></p>' +
       '</div>' +
       '<div class="foot-cols"><div class="foot-col">' +
         group('Explore', [li('<a href="#">Home</a>'), li('<a href="#the-map">The Map</a>')].concat(SHOW_INFINITE ? [li('<a href="#infinite">Infinite</a>')] : [])) +
         group('Index', [li('<a href="#the-map" data-view-link="tree">Category Tree</a>'), li('<a href="#the-map" data-view-link="az">Alphabetical A–Z</a>'), li('<a href="#the-map" data-view-link="ce">Conceptual Engineerings</a>')]) +
-        '</div><div class="foot-col">' +
-        group('Sections', sections.map(function (d, i) { return li('<span class="foot-num">' + NUM[i] + '</span><a href="' + href(d) + '">' + esc(d.title) + '</a>'); })) +
-      '</div></div></div>' +
+        '</div><div class="foot-col foot-sections"><p class="foot-head">Sections</p><div class="foot-secs">' +
+        [0, 3, 6].map(function (k) {
+          return '<ul>' + sections.slice(k, k + 3).map(function (d, j) {
+            return li('<span class="foot-num">' + NUM[k + j] + '</span><a href="' + href(d) + '">' + esc(d.title) + '</a>');
+          }).join('') + '</ul>';
+        }).join('') +
+      '</div></div></div></div>' +
       '</div>';
     f.addEventListener('click', function (e) {
       var v = e.target.closest('[data-view-link]');
