@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Civilisation Theory Map</title>
+<title>Civilisational: The Civilisation Theory Map</title>
 <meta name="description" content="A glossary of concepts for Civilisation Theory: a conceptual adaptive system for civilisation design and transition.">
 <link id="favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='0,0 100,0 0,100' fill='%23000'/></svg>">
 <script>
@@ -4047,6 +4047,8 @@
   // Infinite (the slide view) is hidden for now: its links are hidden and its address opens the
   // homepage. Set to true to bring it back (and remove the hidden attributes on its two icons).
   var SHOW_INFINITE = false;
+  // The homepage's own title (the root concept stays “Civilisation Theory” in tree strings).
+  var HOME_TITLE = 'Civilisational: The Civilisation Theory Map';
 
   // Tags: small labels under an entry's title marking where it comes from (e.g. entries taken
   // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
@@ -4069,7 +4071,7 @@
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
-      tagsHtml(c) + '<h1>' + esc(c.title) + '</h1>' +
+      tagsHtml(c) + '<h1>' + esc(c === ROOT ? HOME_TITLE : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
       // Categories, and concepts with nested concepts, list everything filed beneath them.
       (c !== ROOT && (c.kind === 'category' || childrenOf(c.id).length) ? categoryHtml(c) : '') + '</div>';
@@ -4095,7 +4097,7 @@
     fitCrumbs();
 
     buildToc();
-    document.title = c === ROOT ? 'Civilisation Theory Map' : c.title + ' · Civilisation Theory Map';
+    document.title = c === ROOT ? HOME_TITLE : c.title + ' · Civilisation Theory Map';
     var pageId = c === ROOT ? 'home' : c.id;
     pageLinks.forEach(function (a) {
       if (a.getAttribute('data-page') === pageId) a.setAttribute('aria-current', 'page');
