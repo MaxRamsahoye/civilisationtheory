@@ -3846,7 +3846,6 @@
       '</div>' +
       '<div class="foot-cols"><div class="foot-col">' +
         group('Explore', [li('<a href="#">Home</a>'), li('<a href="#the-map">The Map</a>')].concat(SHOW_INFINITE ? [li('<a href="#infinite">Infinite</a>')] : [])) +
-        group('Index', [li('<a href="#the-map" data-view-link="tree">Category Tree</a>'), li('<a href="#the-map" data-view-link="az">Alphabetical A–Z</a>'), li('<a href="#the-map" data-view-link="ce">Conceptual Engineerings</a>')]) +
         '</div><div class="foot-col foot-sections"><p class="foot-head">Sections</p><div class="foot-secs">' +
         [0, 3, 6].map(function (k) {
           return '<ul>' + sections.slice(k, k + 3).map(function (d, j) {
