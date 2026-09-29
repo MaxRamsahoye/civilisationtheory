@@ -1018,12 +1018,20 @@
   /* An entry's Curated Sequence section: the sequence in the concept-list format, this entry unlinked and dark */
   .description .seq-section .count a { color: inherit; text-decoration: none; }
   .description .seq-section .count a:hover { color: var(--text); }
-  .description .seq-list { list-style: none; padding: 0; margin: 2rem 0 0; font-size: 0.9em; line-height: 1.3; }
-  .description .seq-list li { margin: 0 0 0.95rem; padding: 0; break-inside: avoid; }
+  .description .seq-list { margin: 2rem 0 0; font-size: 0.9em; line-height: 1.3; }
+  .description .seq-list .seq-group { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+  .description .seq-list .seq-group:last-child { margin-bottom: 0; }
+  .description .seq-list li { margin: 0 0 0.95rem; padding: 0; }
+  .description .seq-head {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+    margin: 0 0 0.8rem;
+  }
   .description .seq-list li[aria-current] span { font-weight: 700; }
   @media (max-width: 640px) { .description .seq-list { font-size: 1em; } }
   /* The Curated Sequence reads as a single column, in order, on the Map and on its entries */
   .description .ce-list.cs-list ul, html.page-map .description .ce-list.cs-list ul { columns: 1; }
+  .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
@@ -3933,10 +3941,8 @@
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Curated Sequence</h3>' +
-      '<p class="ce-desc">A reading path through the map, in order: begin with the civilisation research paradigm, then follow its nine sections from civilisational mechanics to macrostrategy.</p>' +
-      '<p class="ce-intro">Entries: ' + seq.length + '</p><ul>' +
-      seq.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
-      '</ul></div>';
+      '<p class="ce-desc">A reading path through the map, in order: begin with the core – the civilisation research paradigm and the viable life-world-system it aims at – then follow its nine sections through the civilisational, meta and macro sets.</p>' +
+      '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div></div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
@@ -4126,18 +4132,33 @@
     cs: { label: 'Curated Sequence', view: 'cs' }                // entries in the Curated Sequence (added automatically)
   };
   // The Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
+  // Grouped under subheadings: Core (the paradigm and its aim), then the three sets of sections.
+  function curatedGroups() {
+    var sections = childrenOf(ROOT.id);
+    return [
+      { name: 'Core', items: [byId['civilisation-research-paradigm'], byId['life-world-system']] },
+      { name: 'Civilisational', items: sections.slice(0, 3) },
+      { name: 'Meta', items: sections.slice(3, 6) },
+      { name: 'Macro', items: sections.slice(6, 9) }
+    ].map(function (g) { g.items = g.items.filter(Boolean); return g; });
+  }
   function curatedSequence() {
-    return [byId['civilisation-research-paradigm']].concat(childrenOf(ROOT.id)).filter(Boolean);
+    return curatedGroups().reduce(function (all, g) { return all.concat(g.items); }, []);
+  }
+  // The sequence as a single column under its subheadings; `current` (if given) is marked, not linked.
+  function sequenceListHtml(current) {
+    return curatedGroups().map(function (g) {
+      return '<p class="seq-head">' + g.name + '</p><ul class="seq-group">' + g.items.map(function (s) {
+        return s === current ? '<li aria-current="step"><span>' + esc(s.title) + '</span></li>' : '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>';
+      }).join('') + '</ul>';
+    }).join('');
   }
   // On an entry in the sequence: the whole sequence, with this entry marked, at the foot of its text.
   function sequenceHtml(c) {
     var seq = curatedSequence(), at = seq.indexOf(c);
     if (at < 0) return '';
     return '<div class="seq-section"><p class="count"><a href="#the-map" data-view-link="cs">Curated Sequence</a>' +
-      '<span>' + (at + 1) + ' / ' + seq.length + '</span></p><ol class="seq-list">' +
-      seq.map(function (s) {
-        return s === c ? '<li aria-current="step"><span>' + esc(s.title) + '</span></li>' : '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>';
-      }).join('') + '</ol></div>';
+      '<span>' + (at + 1) + ' / ' + seq.length + '</span></p><div class="seq-list">' + sequenceListHtml(c) + '</div></div>';
   }
   function tagsHtml(c) {
     var tags = (curatedSequence().indexOf(c) >= 0 ? ['cs'] : []).concat(c.tags || []);
