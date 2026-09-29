@@ -237,7 +237,9 @@
   /* Back arrow: top-left corner of the page area (beside the sidebar when it is open) */
   #back-btn { top: 0.8rem; left: 1.4rem; transition: left .25s ease, opacity .2s ease; }
   body:not(.sidebar-closed) #back-btn { left: calc(var(--side-w) + 1rem); }
-  #back-btn svg { transform: rotate(90deg); }
+  /* U-turn arrow: square ends and a finer line than the other icons */
+  #back-btn svg { stroke-linecap: butt; stroke-width: 1.1px; }
+  html.page-home #back-btn { display: none; }
   #back-btn:disabled { opacity: 0.25; pointer-events: none; }
   /* One icon per theme: sun (white), moon (black), filled sun (sepia), moon and star (blue) */
   #theme-toggle svg { display: none; width: 1.25rem; height: 1.25rem; }
@@ -778,8 +780,8 @@
   <svg class="i-map" viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg>
   <svg class="i-close" viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
 </button>
-<button id="back-btn" class="control" type="button" aria-label="Back to the previous page" aria-keyshortcuts="Tab" disabled>
-  <svg viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg>
+<button id="back-btn" class="control" type="button" aria-label="Back to the previous page" aria-keyshortcuts="Backspace" disabled>
+  <svg viewBox="-3.0 -10.0 100.0 100.0" aria-hidden="true"><path d="M36 20 L22 32 L36 44 M22 32 H70 A14 14 0 0 1 70 60 H10"/></svg>
 </button>
 <button id="theme-toggle" class="control" type="button" aria-label="Change theme (white, black, sepia, blue)" aria-keyshortcuts="T">
   <svg class="i-light" viewBox="-3.7 -3.7 107.3 107.3" aria-hidden="true"><circle cx="50" cy="50" r="18"/><line x1="81.0" y1="50.0" x2="94.0" y2="50.0"/><line x1="71.9" y1="71.9" x2="81.1" y2="81.1"/><line x1="50.0" y1="81.0" x2="50.0" y2="94.0"/><line x1="28.1" y1="71.9" x2="18.9" y2="81.1"/><line x1="19.0" y1="50.0" x2="6.0" y2="50.0"/><line x1="28.1" y1="28.1" x2="18.9" y2="18.9"/><line x1="50.0" y1="19.0" x2="50.0" y2="6.0"/><line x1="71.9" y1="28.1" x2="81.1" y2="18.9"/></svg>
@@ -2924,6 +2926,7 @@
     // Search appears on the three main pages only, not on individual concept entries.
     document.documentElement.classList.toggle('main-page', c === ROOT || c.id === 'the-map' || c.id === 'infinite');
     document.documentElement.classList.toggle('page-map', c.id === 'the-map');
+    document.documentElement.classList.toggle('page-home', c === ROOT);
     closeSearch(true);
 
     buildToc();
@@ -3239,15 +3242,12 @@
     if (!e.target.closest('#search')) closeSearch(false);
   });
 
-  // ---------- Keyboard shortcuts: Tab = back, Backspace = top, Space = map, T = theme, C = accent links, M = sound ----------
+  // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
     if (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
-    if (e.key === 'Tab' && !e.shiftKey) {
-      e.preventDefault();
-      backBtn.click();
-    } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.documentElement.classList.contains('snap-slides')) {
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.documentElement.classList.contains('snap-slides')) {
       e.preventDefault();
       // Holding an arrow key steps slide by slide at a steady pace (each step pressing the button),
       // rather than firing on every key repeat.
@@ -3257,8 +3257,10 @@
         (e.key === 'ArrowDown' ? nextBtn : prevBtn).click();
       }
     } else if (e.key === 'Backspace') {
+      // First to the top of the page; once already at the top, back to the previous page.
       e.preventDefault();
-      topBtn.click();
+      if (window.scrollY > 4) topBtn.click();
+      else if (!document.documentElement.classList.contains('page-home')) backBtn.click();
     } else if (e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
       if (!e.repeat) sideBtn.click();
