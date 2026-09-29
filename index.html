@@ -455,6 +455,7 @@
   #tree.tree-az > li > ul > li > a[aria-current] {
     color: var(--text); font-size: 1.12em; font-weight: 700; background: var(--hl);
     border-radius: 5px; padding: 0.12em 0.4em; margin-left: -0.4em; margin-right: -0.4em;
+    animation: none !important;   /* the click's flash settles straight into the box, without fading first */
   }
   #tree.tree-az.filtering > li > ul > li > a:not(.hit) { opacity: 0.75 !important; }
   #tree.tree-az > li > ul > li > a.hit { color: var(--text); }
@@ -4006,7 +4007,7 @@
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Curated Sequence</h3>' +
-      '<p class="ce-desc">A reading path through the map, in order.</p>' +
+      '<p class="ce-desc">A reading path through the map.</p>' +
       '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div></div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
@@ -4497,6 +4498,12 @@
     var el = e.target.closest && e.target.closest('a, button');
     if (!el) return;
     chime();
+    // A concept chosen in the sidebar takes its lasting box at once, instead of flashing first.
+    if (el.matches('#tree a[data-id]')) {
+      treeEl.querySelectorAll('a[aria-current]').forEach(function (a) { a.removeAttribute('aria-current'); });
+      el.setAttribute('aria-current', 'page');
+      return;
+    }
     press(el);
   });
 
