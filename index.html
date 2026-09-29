@@ -469,6 +469,34 @@
     margin-top: 0.35rem;
   }
 
+  /* Sidebar search results */
+  #side-results { font-size: 1rem; }
+  #side-results .sr-count, #side-results .sr-head {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  #side-results .sr-count { margin: 0 0 0.6rem; }
+  #side-results .sr-head { margin: 1.1rem 0 0.35rem; font-weight: 500; }
+  #side-results .sr-item {
+    display: block; margin: 0 -0.55rem; padding: 0.42rem 0.55rem 0.48rem; border-radius: 5px;
+    color: var(--text); text-decoration: none; line-height: 1.3;
+  }
+  #side-results .sr-item.sel { background: color-mix(in srgb, var(--hl) 55%, transparent); }
+  #side-results .sr-title { display: block; }
+  #side-results .sr-path {
+    display: block; margin-top: 0.18rem;
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.56rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  #side-results .sr-snip { display: block; margin-top: 0.25rem; font-size: 0.84rem; line-height: 1.4; color: var(--muted); }
+  #side-results mark { background: var(--hl); color: inherit; border-radius: 2px; }
+  #side-results .sr-more {
+    display: block; margin: 0.9rem 0 0;
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-decoration: none;
+  }
+  #side-results .sr-more:hover { color: var(--text); }
+
   /* ---------- Main ---------- */
   /* Short entries sit centred on screen; long ones start at the 5rem top cap */
   main {
@@ -4399,64 +4427,122 @@
       .sort(function (a, b) { return b.score - a.score || a.c.title.localeCompare(b.c.title); })
       .slice(0, limit || 10);
   }
-  // The sidebar's search filters the sidebar tree in place: matching concepts stay, with the
-  // sections and categories above them for context; everything else is folded away.
-  var treeHits = [], treeSel = -1;
-  function filterTree() {
-    var q = searchInput.value.trim().toLowerCase();
-    var lis = treeEl.querySelectorAll('li');
-    treeEl.querySelectorAll('a.hit').forEach(function (a) { a.classList.remove('hit', 'sel'); a.textContent = byId[a.getAttribute('data-id')].title; });
-    var none = document.getElementById('tree-none');
-    treeHits = []; treeSel = -1;
-    if (!q) {
-      treeEl.classList.remove('filtering');
-      lis.forEach(function (li) { li.classList.remove('f-out'); });
-      if (none) none.hidden = true;
-      return;
-    }
-    treeEl.classList.add('filtering');
-    var hit = {};
-    searchResults(q, Infinity).forEach(function (r) { hit[r.c.id] = true; });
-    // Post-order: a branch stays if it is a hit or holds one.
-    function keep(li) {
-      var a = li.querySelector(':scope > a'), id = a && a.getAttribute('data-id');
-      var any = false;
-      li.querySelectorAll(':scope > ul > li').forEach(function (k) { if (keep(k)) any = true; });
-      var self = !!hit[id];
-      li.classList.toggle('f-out', !(self || any));
-      if (self) {
-        var t = byId[id].title, i = t.toLowerCase().indexOf(q);
-        a.innerHTML = i < 0 ? esc(t) : esc(t.slice(0, i)) + '<mark>' + esc(t.slice(i, i + q.length)) + '</mark>' + esc(t.slice(i + q.length));
-        a.classList.add('hit');
+  // ---------- Sidebar search: ranked results in place of the A–Z list ----------
+  // Matching ignores case, accents, punctuation and hyphens ("hyperobjects" finds Hyper-Objects),
+  // and every word of the query must match. Results come in two groups: concepts whose title
+  // matches, best first (exact, then starts-with, then word-starts, then anywhere), and concepts
+  // that only mention the query in their description, each with a short extract.
+  function normText(t) {
+    return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
+      .replace(/[‘’'`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+  var sideIndex = searchIndex.map(function (e) {
+    var t = normText(e.c.title), bare = normText(sortKey(e.c));
+    return { c: e.c, t: t, bare: bare, compact: t.replace(/ /g, ''), words: t.split(' '), text: normText(e.raw), raw: e.raw };
+  });
+  function rankSide(q) {
+    var nq = normText(q);
+    if (!nq) return null;
+    var tokens = nq.split(' '), cq = nq.replace(/ /g, '');
+    var titles = [], mentions = [];
+    sideIndex.forEach(function (e) {
+      var score = 0;
+      if (e.t === nq || e.bare === nq) score = 100;
+      else if (e.bare.indexOf(nq) === 0 || e.t.indexOf(nq) === 0) score = 90;
+      else if (e.compact.indexOf(cq) === 0) score = 85;
+      else if (tokens.every(function (k) { return e.words.some(function (w) { return w.indexOf(k) === 0; }); })) score = 70;
+      else if (tokens.every(function (k) { return e.t.indexOf(k) >= 0; })) score = 50;
+      else if (cq.length > 3 && e.compact.indexOf(cq) >= 0) score = 45;
+      if (score) { titles.push({ e: e, s: score }); return; }
+      if (tokens.every(function (k) { return e.text.indexOf(k) >= 0; })) {
+        var n = 0, i = -1;
+        while ((i = e.text.indexOf(tokens[0], i + 1)) >= 0) n++;
+        mentions.push({ e: e, s: n });
       }
-      return self || any;
+    });
+    function order(a, b) { return b.s - a.s || byTitle(a.e.c, b.e.c); }
+    return { titles: titles.sort(order), mentions: mentions.sort(order), tokens: q.trim().toLowerCase().split(/\s+/) };
+  }
+  // Wrap each query word where it appears in a piece of plain text.
+  function markWords(text, words) {
+    var parts = words.filter(Boolean).map(function (w) { return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); });
+    if (!parts.length) return esc(text);
+    return text.split(new RegExp('(' + parts.join('|') + ')', 'gi')).map(function (piece, i) {
+      return i % 2 ? '<mark>' + esc(piece) + '</mark>' : esc(piece);
+    }).join('');
+  }
+  var sideResults = document.createElement('div');
+  sideResults.id = 'side-results';
+  sideResults.hidden = true;
+  treeEl.after(sideResults);
+  var sideHits = [], sideSel = -1, MENTION_LIMIT = 12;
+  function sideItem(c, words, withSnip) {
+    var path = pathTo(c).slice(1, -1).slice(-2).map(function (p) { return esc(p.title); }).join(' › ');
+    var snip = '';
+    if (withSnip) {
+      var raw = searchIndex.filter(function (x) { return x.c === c; })[0].raw;
+      snip = '<span class="sr-snip">' + markWords(snippetText(raw, words), words) + '</span>';
     }
-    treeEl.querySelectorAll(':scope > li').forEach(keep);
-    treeHits = [].slice.call(treeEl.querySelectorAll('a.hit'));
-    if (treeHits.length) { treeSel = 0; treeHits[0].classList.add('sel'); }
-    if (!none) {
-      none = document.createElement('p');
-      none.id = 'tree-none';
-      none.textContent = 'No matching concepts';
-      treeEl.after(none);
+    return '<a class="sr-item" href="' + href(c) + '" data-id="' + c.id + '"><span class="sr-title">' + markWords(c.title, words) + '</span>' +
+      (path ? '<span class="sr-path">' + path + '</span>' : '') + snip + '</a>';
+  }
+  // A short extract of a description around the first query word.
+  function snippetText(raw, words) {
+    var low = raw.toLowerCase(), i = -1;
+    words.some(function (w) { i = low.indexOf(w); return i >= 0; });
+    if (i < 0) return raw.length > 110 ? raw.slice(0, 110).replace(/\s+\S*$/, '') + ' …' : raw;
+    var a = Math.max(0, i - 40), b = Math.min(raw.length, i + 70);
+    if (a > 0) a = raw.indexOf(' ', a) + 1;
+    if (b < raw.length) { var sp = raw.lastIndexOf(' ', b); if (sp > i) b = sp; }
+    return (a > 0 ? '… ' : '') + raw.slice(a, b) + (b < raw.length ? ' …' : '');
+  }
+  function filterTree() {
+    var r = rankSide(searchInput.value);
+    sideHits = []; sideSel = -1;
+    if (!r) { sideResults.hidden = true; sideResults.innerHTML = ''; treeEl.hidden = false; return; }
+    treeEl.hidden = true;
+    sideResults.hidden = false;
+    var total = r.titles.length + r.mentions.length, html = '';
+    html += '<p class="sr-count">' + (total ? total + (total === 1 ? ' result' : ' results') : 'No matching concepts') + '</p>';
+    if (r.titles.length) {
+      html += '<p class="sr-head">Concepts</p>' + r.titles.map(function (x) { return sideItem(x.e.c, r.tokens, false); }).join('');
     }
-    none.hidden = !!treeHits.length;
+    if (r.mentions.length) {
+      html += '<p class="sr-head">Mentioned in</p>' + r.mentions.slice(0, MENTION_LIMIT).map(function (x) { return sideItem(x.e.c, r.tokens, true); }).join('');
+      if (r.mentions.length > MENTION_LIMIT) {
+        html += '<a class="sr-more" href="#search">All ' + total + ' results on the Search page →</a>';
+      }
+    }
+    sideResults.innerHTML = html;
+    sideHits = [].slice.call(sideResults.querySelectorAll('.sr-item'));
+    if (sideHits.length) { sideSel = 0; sideHits[0].classList.add('sel'); }
     document.getElementById('sidebar').scrollTo({ top: 0 });
   }
   function moveTreeSel(d) {
-    if (!treeHits.length) return;
-    treeHits[treeSel].classList.remove('sel');
-    treeSel = (treeSel + d + treeHits.length) % treeHits.length;
-    treeHits[treeSel].classList.add('sel');
-    treeHits[treeSel].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    if (!sideHits.length) return;
+    sideHits[sideSel].classList.remove('sel');
+    sideSel = (sideSel + d + sideHits.length) % sideHits.length;
+    sideHits[sideSel].classList.add('sel');
+    sideHits[sideSel].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
+  sideResults.addEventListener('mousemove', function (e) {
+    var a = e.target.closest('.sr-item');
+    if (!a || a.classList.contains('sel')) return;
+    if (sideHits[sideSel]) sideHits[sideSel].classList.remove('sel');
+    sideSel = sideHits.indexOf(a);
+    a.classList.add('sel');
+  });
+  sideResults.addEventListener('click', function (e) {
+    if (e.target.closest('.sr-more')) lastQuery = searchInput.value;
+  });
   function closeSearch() {}
-  searchInput.addEventListener('input', filterTree);
+  var sideTimer;
+  searchInput.addEventListener('input', function () { clearTimeout(sideTimer); sideTimer = setTimeout(filterTree, 80); });
   searchInput.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowDown') { e.preventDefault(); moveTreeSel(1); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); moveTreeSel(-1); }
     else if (e.key === 'Enter') {
-      if (treeHits[treeSel]) { e.preventDefault(); treeHits[treeSel].click(); }
+      if (sideHits[sideSel]) { e.preventDefault(); sideHits[sideSel].click(); }
     } else if (e.key === 'Escape') { searchInput.value = ''; filterTree(); searchInput.blur(); }
   });
 
