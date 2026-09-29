@@ -977,7 +977,8 @@
   :root[data-index="ce"] .index-tabs [data-view="ce"],
   :root[data-index="cp"] .index-tabs [data-view="cp"],
   :root[data-index="rl"] .index-tabs [data-view="rl"],
-  :root[data-index="cs"] .index-tabs [data-view="cs"] {
+  :root[data-index="cs"] .index-tabs [data-view="cs"],
+  :root[data-index="tree"] .index-tabs [data-view="cs"] {
     color: var(--text);
     border-top-color: var(--text);
     box-shadow: inset 0 1px 0 var(--text);
@@ -1066,6 +1067,16 @@
   .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
   .description .cs-list .ce-intro { margin-bottom: 2.6rem; }
   .description .rl-empty { color: var(--muted); font-style: italic; }
+  /* Within the Civilisation Research Paradigm tab: New / Original structure */
+  .description .crp-switch { display: flex; gap: 1.6rem; margin: 0 0 1.4rem; }
+  .description .crp-switch button {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.2rem 0; color: var(--muted); border-bottom: 1px solid transparent;
+  }
+  .description .crp-switch button:hover { color: var(--text); }
+  :root[data-index="cs"] .crp-switch [data-view="cs"],
+  :root[data-index="tree"] .crp-switch [data-view="tree"] { color: var(--text); border-bottom-color: var(--text); }
   /* The nine sections beneath the sequence, three to a row (one column on phones) */
   .description .cs-list .seq-sections-intro { margin-top: 3.4rem; }
   .description .seq-sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 2.4rem; }
@@ -3953,8 +3964,13 @@
       (function walk(x) { childrenOf(x).forEach(function (k) { if (isConcept(k)) n++; walk(k.id); }); })(id);
       return n;
     }
+    // The Civilisation Research Paradigm tab holds two structures of the paradigm: the new one
+    // (being built, from the curated sequence) and the original, kept alongside for reference.
+    var crpSwitch = '<nav class="index-view crp-switch" aria-label="Structure">' +
+      '<button type="button" data-view="cs">New Structure</button>' +
+      '<button type="button" data-view="tree">Original Structure</button></nav>';
     // Overview above the menu, in the same form as the Conceptual Engineerings introduction.
-    var overview = '<h3 class="ce-title">Civilisation Research Paradigm</h3>' +
+    var overview = '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + crpSwitch +
       '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation: ' + (sections.length === 9 ? 'nine' : sections.length) + ' fields in three sets – ' +
       '<em>civilisational</em> (mechanics, design, transition), <em>meta</em> (crisis, modernism, theory) ' +
       'and <em>macro</em> (history, sociology, strategy). ' +
@@ -4020,7 +4036,7 @@
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
-      '<h3 class="ce-title">Curated Sequence</h3>' +
+      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + crpSwitch +
       '<p class="ce-desc">A reading path through the map.</p>' +
       '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div>' +
       // Beneath it, the paradigm's nine sections, each to receive its own reading path of concepts.
@@ -4043,8 +4059,7 @@
         '<span class="tab-meta">' + meta + '</span></button>';
     }
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
-      tab('cs', 'Curated Sequence', seq.length + ' entries') +
-      tab('tree', 'Civilisation Research Paradigm', sections.length + ' sections') +
+      tab('cs', 'Civilisation Research Paradigm', sections.length + ' sections') +
       tab('rl', 'Civilisation Research Landscape', rlTerms.length + ' entries') +
       tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') +
       tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
