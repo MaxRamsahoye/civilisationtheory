@@ -560,7 +560,7 @@
   html.page-map .description .index-domain { margin-top: 3.6rem; padding-top: 2.8rem; }
   html.page-map .description .index-domain.set-start { margin-top: 4.8rem; }
   html.page-map .description .domain-desc { margin-bottom: 2.4rem; }
-  html.page-map .description .index-menu { margin-top: 2.4rem; padding-bottom: 2rem; }
+  html.page-map .description .index-menu { padding-bottom: 2rem; }
   html.page-map .description .menu-cols { gap: 2.4rem; }
   @media (min-width: 641px) { html.page-map .description .menu-col + .menu-col { padding-left: 2.4rem; } }
   html.page-map .description .menu-sec { margin-bottom: 1.4rem; }
@@ -643,34 +643,22 @@
   .az-list li a { font-size: 1.01em; }
   /* ---------- Tree index: one section per domain, groups in columns ---------- */
   .description .index-list { margin-top: 2.4rem; }
-  .description .index-root { margin: 0 0 0.4rem; }
-  .description .index-root a { font-size: 1.22em; font-weight: 600; }
-  /* Section menu under the root: a contents page. Open, ruled top and bottom, one column per set
-     (Civilisational / Meta / Macro); each section numbered as in the index below, with its
-     categories run on beneath it. */
+  /* Section menu at the head of the tree: one column per set (Civilisational / Meta / Macro),
+     each section numbered as in the index below, with its categories run on beneath it.
+     Set in the interface face, IBM Plex Sans Arabic. */
   .description .index-menu {
-    margin: 2rem 0 0;
-    padding: 0.9rem 0 1.6rem;
-    border-top: 2px solid var(--text);
-  }
-  .description .menu-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+    margin: 0;
+    padding: 0 0 1.6rem;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+  }
+  .description .menu-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
+  .description .menu-col { min-width: 0; }
+  .description .menu-col + .menu-col { border-left: 1px solid var(--rule); padding-left: 1.4rem; }
+  .description .menu-set {
     font-size: 0.62rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--muted);
-    margin: 0 0 1.5rem;
-  }
-  .description .menu-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
-  .description .menu-col + .menu-col { border-left: 1px solid var(--rule); padding-left: 1.4rem; }
-  .description .menu-col { min-width: 0; }
-  .description .menu-set {
-    font-size: 1.05rem;
-    font-style: italic;
     color: var(--muted);
     margin: 0 0 1.1rem;
     line-height: 1;
@@ -684,12 +672,12 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     color: var(--muted);
-    padding-top: 0.28rem;
+    padding-top: 0.2rem;
   }
   .description .index-menu a { text-decoration: none; color: inherit; }
   .description .index-menu a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 0.15em; }
-  .description .menu-section { display: block; font-size: 1.02rem; font-weight: 700; line-height: 1.2; }
-  .description .menu-cats { margin-top: 0.35rem; font-size: 0.8rem; line-height: 1.45; color: var(--muted); }
+  .description .menu-section { display: block; font-size: 0.86rem; font-weight: 600; line-height: 1.25; }
+  .description .menu-cats { margin-top: 0.35rem; font-size: 0.72rem; line-height: 1.5; color: var(--muted); }
   .description .menu-cats a { color: var(--muted); }
   .description .menu-cats a:hover { color: var(--text); }
   .description .menu-cats span + span::before { content: '·'; margin: 0 0.4em; color: var(--rule); }
@@ -2852,7 +2840,7 @@
     var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
     var sections = childrenOf(ROOT.id);
     var menu = '<nav class="index-menu" aria-label="Sections">' +
-      '<p class="menu-head"><span>Contents</span><span>' + sections.length + ' sections</span></p><div class="menu-cols">' +
+      '<div class="menu-cols">' +
       SETS.map(function (label, k) {
         return '<div class="menu-col"><p class="menu-set">' + label + '</p><ul>' +
           sections.slice(k * 3, k * 3 + 3).map(function (d, j) {
@@ -2872,7 +2860,7 @@
       return n;
     }
     var tree = concepts.length ? '<div class="index-list">' +
-      '<p class="index-root"><a href="' + href(ROOT) + '">' + esc(ROOT.title) + '</a></p>' + menu +
+      menu +
       childrenOf(ROOT.id).map(function (d, i) {
         var tmp = document.createElement('div');
         tmp.innerHTML = d.html;
