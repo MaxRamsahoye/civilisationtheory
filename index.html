@@ -41,7 +41,7 @@
     } catch (e) {}
     var v = null;
     try { v = localStorage.getItem('ct-index'); } catch (e) {}
-    document.documentElement.setAttribute('data-index', v === 'az' || v === 'ce' ? v : 'tree');
+    document.documentElement.setAttribute('data-index', v === 'az' || v === 'ce' || v === 'cp' ? v : 'tree');
   })();
 </script>
 <style>
@@ -748,6 +748,7 @@
     transition: color .2s ease, border-color .2s ease;
   }
   a.entry-tag:hover { color: var(--text); border-color: var(--muted); }
+  .description .cp-note { margin-top: 1.6rem; font-size: 0.92em; color: var(--muted); }
   html.hudless .entry-tags { opacity: 0 !important; visibility: hidden !important; }
   h2 {
     font-weight: 600;
@@ -787,7 +788,11 @@
   :root[data-index="az"] .index-list,
   :root[data-index="az"] .ce-list,
   :root[data-index="ce"] .index-list,
-  :root[data-index="ce"] .az-view { display: none; }
+  :root[data-index="ce"] .az-view,
+  :root:not([data-index="cp"]) .cp-list,
+  :root[data-index="cp"] .index-list,
+  :root[data-index="cp"] .az-view,
+  :root[data-index="cp"] .ce-list:not(.cp-list) { display: none; }
   .az-view { margin-top: 2.4rem; }
   .az-view .az-list { margin-top: 0; }
   :root[data-index="ce"] .index-view [data-view="ce"] { color: var(--text); }
@@ -795,7 +800,7 @@
      darkens under the view in use; name in Bembo, tally in the interface face beneath */
   .description .index-tabs {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.4rem;
     margin: 3.4rem 0 0;
   }
@@ -831,7 +836,8 @@
   }
   :root[data-index="tree"] .index-tabs [data-view="tree"],
   :root[data-index="az"] .index-tabs [data-view="az"],
-  :root[data-index="ce"] .index-tabs [data-view="ce"] {
+  :root[data-index="ce"] .index-tabs [data-view="ce"],
+  :root[data-index="cp"] .index-tabs [data-view="cp"] {
     color: var(--text);
     border-top-color: var(--text);
     box-shadow: inset 0 1px 0 var(--text);
@@ -1426,7 +1432,6 @@
     {
       id: 'sensemaking',
       title: 'Sensemaking',
-      tags: ['consilience'],
       parent: 'epistemic-crisis',
       html: '<p><em>Sensemaking</em> is the process by which individuals and groups construct an understanding of their situation, so that they can act within it. The term was developed in organisational theory by Karl Weick (1995), and has since been used more broadly for the collective capacity of a society to perceive reality accurately, reason about it together and make good choices. The breakdown of collective sensemaking is the <a href="#epistemic-crisis">epistemic crisis</a>, and restoring it is a precondition for any coordinated response to the <a href="#metacrisis">metacrisis</a>.</p>'
     },
@@ -1553,7 +1558,6 @@
     {
       id: 'commons',
       title: 'Commons',
-      tags: ['consilience'],
       parent: 'political-economy',
       html: '<p>A <em>commons</em> is a resource held and managed collectively by a community, according to rules its members make for themselves, rather than by the market or the state. Elinor Ostrom’s <em>Governing the Commons</em> (1990) identified the design principles by which commons can endure, answering the <a href="#tragedy-of-the-commons">tragedy of the commons</a>. The idea has been extended to knowledge and software, as in Yochai Benkler’s account of commons-based peer production. The commons offers a form of <a href="#political-economy">political economy</a> that is neither market nor state, and a model for coordination without centralisation.</p>'
     },
@@ -1885,6 +1889,60 @@
       html: '<p>A <em>zero-sum game</em>, formalised by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944), is one in which any gain for one party is exactly matched by a loss for another, so the total stays fixed. Many real situations are not zero-sum – trade, cooperation and innovation can enlarge the total – yet <em>zero-sum thinking</em>, the habit of treating them as if they were, drives rivalry, arms races and the <a href="#multipolar-trap">multipolar trap</a>. Shifting from zero-sum to positive-sum games is a recurring theme in visions of a <a href="#win-win">win-win</a> civilisation.</p>'
     },
     // ---- From the Consilience Project glossary (tagged 'consilience')
+    {
+      id: 'cp-commons',
+      title: 'Commons',
+      parent: 'political-economy',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A <em>commons</em> is a collective resource in which every member of the collective has an equal interest. Prominent examples are air, nature, culture – and the quality of our shared sensemaking, the information commons.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#commons">Commons</a>.</p>'
+    },
+    {
+      id: 'cp-epistemic-commons',
+      title: 'Epistemic Commons',
+      parent: 'coordination-and-governance',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>The <em>epistemic commons</em> is both the public spaces (a town hall, a social network) and the private spaces where people come together to pursue a mutual understanding of issues critical to their society, and the norms, systems and institutions that underpin this society-wide process of learning. It is a public resource: its spaces and norms are available to all, shaped by all, and in turn shape how all of us learn with each other. Open societies and democratic governance depend on an epistemic commons in which groups and individuals can reflect and communicate together in ways that promote mutual learning, so that decisions can be informed and consensual.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#the-epistemic-commons">The Epistemic Commons</a>.</p>'
+    },
+    {
+      id: 'cp-hyperobjects',
+      title: 'Hyperobjects',
+      parent: 'risk-and-catastrophe',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Hyperobjects</em>, a concept introduced by Timothy Morton, are processes that occupy vast expanses of time and space, defying the traditional sense of an object as something that can be singled out. They are difficult to measure, always around us, globally distributed and only ever observed in pieces – climate change, ocean pollution, the internet, and global nuclear armaments and their risks.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#hyperobjects">Hyper-Objects</a>.</p>'
+    },
+    {
+      id: 'cp-open-society',
+      title: 'Open Society',
+      parent: 'coordination-and-governance',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>An <em>open society</em> promotes the free exchange of information and public discourse, and democratic governance based on people’s participation in shared choices about their social futures. In contrast to the tight control of communication and suppression of dissent that characterise a <a href="#closed-society">closed society</a>, it favours transparent governance and welcomes good-faith public scrutiny.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#open-society">Open Society</a>.</p>'
+    },
+    {
+      id: 'cp-risk-society',
+      title: 'Risk Society',
+      parent: 'risk-and-catastrophe',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Risk society</em> is a term proposed by sociologists to describe the emergent character of social systems after the Second World War: societies increasingly preoccupied with securing the future against widespread, unpredictable risks. What distinguishes them from earlier modern societies is that these risks are by-products of modernity’s own scientific, industrial and economic advances – and the preoccupation with them sets off a feedback loop of change in politics, culture and technology.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#world-risk-society">World Risk Society: Manufactured Risk</a>.</p>'
+    },
+    {
+      id: 'cp-sensemaking',
+      title: 'Sensemaking',
+      parent: 'epistemic-crisis',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p><em>Sensemaking</em> is the process by which people interpret information and experience, and structure their understanding of a domain. It is the basis of decision-making: how we interpret events informs what we do next, and as we act we gather feedback that improves both our sensemaking and our capacity to learn. It happens individually, through interaction with one’s environment; collectively, in groups in discussion; and through the socially distributed reasoning of public discourse.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#sensemaking">Sensemaking</a>.</p>'
+    },
     {
       id: 'affordance',
       title: 'Affordance',
@@ -2284,7 +2342,6 @@
     {
       id: 'world-risk-society',
       title: 'World Risk Society: Manufactured Risk',
-      tags: ['consilience'],
       parent: 'risk-and-catastrophe',
       ref: 'Beck; Giddens',
       html: '<p>The <em>world risk society</em> is Ulrich Beck’s term, developed from <em>Risk Society</em> (1986), for a modernity preoccupied with managing the hazards it has itself produced. Unlike natural dangers, these <em>manufactured risks</em> – nuclear, chemical, ecological, financial – are consequences of industrial and technological development, and they cross borders and generations in ways existing institutions cannot contain.</p>'
@@ -2320,7 +2377,6 @@
     {
       id: 'hyperobjects',
       title: 'Hyper-Objects',
-      tags: ['consilience'],
       parent: 'risk-and-catastrophe',
       ref: 'Morton',
       html: '<p><em>Hyperobjects</em> is Timothy Morton’s term, from <em>Hyperobjects</em> (2013), for entities so vastly distributed in time and space – such as global warming, plastics or nuclear waste – that they cannot be perceived directly or grasped as a whole. They are real and pressing, yet exceed the scales at which human perception, politics and ethics ordinarily work.</p>'
@@ -2825,14 +2881,12 @@
     {
       id: 'the-epistemic-commons',
       title: 'The Epistemic Commons',
-      tags: ['consilience'],
       parent: 'coordination-and-governance',
       html: '<p>The <em>epistemic commons</em> is the shared infrastructure of knowledge on which a society depends – its trusted sources, institutions of inquiry, public discourse and common facts. Like any commons, it can be degraded by those who exploit it for private advantage. Protecting and rebuilding it is a precondition for collective <a href="#sensemaking">sensemaking</a> and self-government.</p>'
     },
     {
       id: 'open-society',
       title: 'Open Society',
-      tags: ['consilience'],
       parent: 'coordination-and-governance',
       ref: 'Popper; Consilience Project',
       html: '<p>An <em>open society</em>, in Karl Popper’s <em>The Open Society and Its Enemies</em> (1945), is one in which institutions can be criticised and changed peacefully, and in which no authority claims final truth. Renewing it for the digital age means asking how open societies can remain resilient against disinformation and coordinate effectively while staying free.</p>'
@@ -3532,9 +3586,11 @@
   // Alphabetical order ignores a leading “The”, “A” or “An”.
   function sortKey(c) { return c.title.replace(/^(the|an?)\s+/i, ''); }
   function byTitle(a, b) { return sortKey(a).localeCompare(sortKey(b)); }
-  function isConcept(c) { return c !== ROOT && c.kind !== 'category'; }
+  // cpOnly: the Consilience Project's own version of a concept the map already has; it appears
+  // only in the Consilience Project view, never in the tree, A–Z, counts or search.
+  function isConcept(c) { return c !== ROOT && c.kind !== 'category' && !c.cpOnly; }
   function childrenOf(id) {
-    return CONCEPTS.filter(function (c) { return c.parent === id; })
+    return CONCEPTS.filter(function (c) { return c.parent === id && !c.cpOnly; })
       .sort(function (a, b) { return ((a.order || 1000) - (b.order || 1000)) || byTitle(a, b); });
   }
   function pathTo(c) {
@@ -3596,11 +3652,11 @@
       return n;
     }
     // Overview above the menu, in the same form as the Conceptual Engineerings introduction.
-    var overview = '<h3 class="ce-title">Category Tree</h3>' +
-      '<p class="ce-desc">The map is organised as a tree. Its ' + (sections.length === 9 ? 'nine' : sections.length) + ' sections come in three sets – ' +
+    var overview = '<h3 class="ce-title">Civilisation Research Paradigm</h3>' +
+      '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation: ' + (sections.length === 9 ? 'nine' : sections.length) + ' fields in three sets – ' +
       '<em>civilisational</em> (mechanics, design, transition), <em>meta</em> (crisis, modernism, theory) ' +
       'and <em>macro</em> (history, sociology, strategy). ' +
-      'Each section is divided into categories, and each concept sits under the category it belongs to, ' +
+      'Each field is divided into categories, and each concept sits within the category it belongs to, ' +
       'with closely related concepts nested beneath it. Use the menu below to navigate.</p>';
     var tree = concepts.length ? '<div class="index-list">' + overview +
       menu +
@@ -3646,16 +3702,25 @@
       '<p class="ce-intro">Novel terms: ' + coined.length + '</p><ul>' +
       coined.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
       '</ul></div>';
-    // The three views as a row of tabs, each with its own tally beneath its name.
+    // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
+    var cpTerms = CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); }).sort(byTitle);
+    var cp = '<div class="ce-list cp-list">' +
+      '<h3 class="ce-title">Consilience Project</h3>' +
+      '<p class="ce-desc">The terms of the <a href="https://consilienceproject.org/glossary/" target="_blank" rel="noopener">glossary</a> of <em>The Consilience Project</em>, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations. Where the map already had its own entry for a term, the Consilience Project’s definition is given as a separate entry here.</p>' +
+      '<p class="ce-intro">Glossary terms: ' + cpTerms.length + '</p><ul>' +
+      cpTerms.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
+      '</ul></div>';
+    // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
         '<span class="tab-meta">' + meta + '</span></button>';
     }
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
-      tab('tree', 'Category Tree', sections.length + ' sections · ' + concepts.length + ' concepts') +
+      tab('tree', 'Civilisation Research Paradigm', sections.length + ' sections · ' + concepts.length + ' concepts') +
       tab('az', 'Alphabetical A–Z', nLetters + ' letters · ' + concepts.length + ' concepts') +
-      tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') + '</nav>' +
-      tree + (concepts.length ? az + ce : '');
+      tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
+      tab('cp', 'Consilience Project', cpTerms.length + ' glossary terms') + '</nav>' +
+      tree + (concepts.length ? az + ce + cp : '');
   }
 
   // A category page lists everything filed under it, nested as in the tree.
