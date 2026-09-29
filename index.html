@@ -277,7 +277,7 @@
   }
   a.pressed:not(.side-icons a):not(.head-icons a), button.pressed:not(.control):not(.head-icons button) {
     animation: press-flash .6s ease-out;
-    border-radius: 2px;
+    border-radius: 5px;   /* the accent-tinted flash has softly rounded corners */
   }
   @keyframes press-squeeze { 0% { scale: 1; } 35% { scale: 0.78; } 100% { scale: 1; } }
   @keyframes press-ring { from { transform: scale(0.45); opacity: 0.7; } to { transform: scale(1.45); opacity: 0; } }
