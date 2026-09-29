@@ -41,7 +41,7 @@
     } catch (e) {}
     var v = null;
     try { v = localStorage.getItem('ct-index'); } catch (e) {}
-    document.documentElement.setAttribute('data-index', v === 'az' || v === 'ce' || v === 'cp' ? v : 'tree');
+    document.documentElement.setAttribute('data-index', v === 'tree' || v === 'az' || v === 'ce' || v === 'cp' ? v : 'cs');
   })();
 </script>
 <style>
@@ -911,6 +911,22 @@
   :root[data-index="cp"] .index-list,
   :root[data-index="cp"] .az-view,
   :root[data-index="cp"] .ce-list:not(.cp-list) { display: none; }
+  /* Curated Sequence view */
+  :root:not([data-index="cs"]) .cs-list,
+  :root[data-index="cs"] .index-list,
+  :root[data-index="cs"] .az-view,
+  :root[data-index="cs"] .ce-list:not(.cs-list) { display: none; }
+  .description .cs-list ol { list-style: none; padding: 0; margin: 0; max-width: 39rem; counter-reset: none; }
+  .description .cs-list li { display: grid; grid-template-columns: 2.6rem 1fr; margin: 0; padding: 1.15rem 0 1.2rem; border-top: 1px solid var(--rule); }
+  .description .cs-list li:last-child { border-bottom: 1px solid var(--rule); }
+  .cs-num {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); padding-top: 0.35rem;
+  }
+  .description .cs-title { font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
+  :root .description .cs-title a { color: var(--text); text-decoration: underline; text-decoration-color: var(--link-underline); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  :root .description .cs-title a:hover { text-decoration-color: var(--text); }
+  .description .cs-gist { display: block; margin-top: 0.4rem; font-size: 0.92em; line-height: 1.45; color: var(--muted); }
   .az-view { margin-top: 2.4rem; }
   .az-view .az-list { margin-top: 0; }
   :root[data-index="ce"] .index-view [data-view="ce"] { color: var(--text); }
@@ -920,7 +936,7 @@
      width available (container units), and the spare width is shared out between the tabs */
   .description .index-tabs {
     display: grid;
-    grid-template-columns: repeat(4, auto);
+    grid-template-columns: repeat(5, auto);
     gap: 1.4rem;
     margin: 3.4rem 0 0;
     container-type: inline-size;
@@ -941,7 +957,7 @@
   .index-tabs button:hover { color: var(--text); border-top-color: var(--muted); }
   .index-tabs .tab-name {
     font-family: inherit;
-    font-size: clamp(0.62rem, 2.05cqi, 1.22rem);
+    font-size: clamp(0.58rem, 1.72cqi, 1.22rem);
     white-space: nowrap;
     font-weight: 600;
     line-height: 1.15;
@@ -949,8 +965,9 @@
     text-transform: none;
   }
   .index-tabs .tab-meta {
+    white-space: nowrap;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.6rem;
+    font-size: clamp(0.45rem, 1.05cqi, 0.6rem);
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -959,7 +976,8 @@
   :root[data-index="tree"] .index-tabs [data-view="tree"],
   :root[data-index="az"] .index-tabs [data-view="az"],
   :root[data-index="ce"] .index-tabs [data-view="ce"],
-  :root[data-index="cp"] .index-tabs [data-view="cp"] {
+  :root[data-index="cp"] .index-tabs [data-view="cp"],
+  :root[data-index="cs"] .index-tabs [data-view="cs"] {
     color: var(--text);
     border-top-color: var(--text);
     box-shadow: inset 0 1px 0 var(--text);
@@ -2011,6 +2029,20 @@
       parent: 'game-theory',
       ref: 'von Neumann & Morgenstern, Theory of Games and Economic Behavior (1944)',
       html: '<p>A <em>zero-sum game</em>, formalised by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944), is one in which any gain for one party is exactly matched by a loss for another, so the total stays fixed. Many real situations are not zero-sum – trade, cooperation and innovation can enlarge the total – yet <em>zero-sum thinking</em>, the habit of treating them as if they were, drives rivalry, arms races and the <a href="#multipolar-trap">multipolar trap</a>. Shifting from zero-sum to positive-sum games is a recurring theme in visions of a <a href="#win-win">win-win</a> civilisation.</p>'
+    },
+    {
+      id: 'civilisation-research-paradigm',
+      title: 'Civilisation Research Paradigm',
+      parent: 'metatheory',
+      order: 0,
+      coined: true,
+      html: '<p>The <em>civilisation research paradigm</em> is the framework by which this map organises the study of civilisation: a set of shared questions, divisions and methods – a paradigm in Thomas Kuhn’s sense – for treating civilisation as a single object of inquiry rather than a background to other subjects. It divides the field into nine sections in three sets of three, each set approaching civilisation from a different altitude.</p>'
+        + '<ul>'
+        + '<li><strong>Civilisational:</strong> how a civilisation works (<a href="#civilisational-mechanics">civilisational mechanics</a>), how it could be designed (<a href="#civilisation-design">civilisation design</a>), and how it could change from one form to another (<a href="#civilisation-transition">civilisational transition</a>).</li>'
+        + '<li><strong>Meta:</strong> the crisis it faces (<a href="#metacrisis">metacrisis</a>), the culture through which it makes meaning (<a href="#metamodernism">metamodernism</a>), and the theories through which it understands itself (<a href="#metatheory">metatheory</a>).</li>'
+        + '<li><strong>Macro:</strong> civilisation at the largest scales of time, society and action – its history (<a href="#macrohistory">macrohistory</a>), its social structures (<a href="#macrosociology">macrosociology</a>), and the strategy by which its long-run trajectory might be steered (<a href="#macrostrategy">macrostrategy</a>).</li>'
+        + '</ul>'
+        + '<p>Read together, the three sets move from mechanism to meaning to scale: what civilisation is and could be, how it is framed and experienced, and where it has come from and might go. The paradigm is the backbone of <a href="#the-map">the map</a>, and the starting point of its curated sequence.</p>'
     },
     // ---- From the Consilience Project glossary (tagged 'consilience')
     {
@@ -3899,17 +3931,34 @@
         return '<section class="cp-def" id="cpd-' + c.id + '"><h4 class="cp-def-title"><a href="' + href(c) + '">' + esc(c.title) + '</a></h4>' +
           c.html.replace(/<p class="cp-note">[\s\S]*?<\/p>/, '') + '</section>';
       }).join('') + '</div></div>';
+    // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
+    var SEQUENCE = ['civilisation-research-paradigm'].concat(sections.map(function (d) { return d.id; }));
+    var seq = SEQUENCE.map(function (id) { return byId[id]; }).filter(Boolean);
+    function gist(c) {
+      var tmp = document.createElement('div');
+      tmp.innerHTML = c.html;
+      return tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0];
+    }
+    var cs = '<div class="ce-list cs-list">' +
+      '<h3 class="ce-title">Curated Sequence</h3>' +
+      '<p class="ce-desc">A reading path through the map, in order: begin with the civilisation research paradigm, then follow its nine sections from civilisational mechanics to macrostrategy.</p>' +
+      '<p class="ce-intro">Entries: ' + seq.length + '</p><ol>' +
+      seq.map(function (c, i) {
+        return '<li><span class="cs-num">' + (i + 1 < 10 ? '0' : '') + (i + 1) + '</span><div><span class="cs-title"><a href="' + href(c) + '">' + esc(c.title) + '</a></span>' +
+          '<span class="cs-gist">' + esc(gist(c)) + '</span></div></li>';
+      }).join('') + '</ol></div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
         '<span class="tab-meta">' + meta + '</span></button>';
     }
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
-      tab('tree', 'Civilisation Research Paradigm', sections.length + ' sections · ' + concepts.length + ' concepts') +
-      tab('az', 'Alphabetical A–Z', nLetters + ' letters · ' + concepts.length + ' concepts') +
+      tab('cs', 'Curated Sequence', seq.length + ' entries') +
+      tab('tree', 'Civilisation Research Paradigm', sections.length + ' sections') +
+      tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') +
       tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
       tab('cp', 'Consilience Project', cpTerms.length + ' glossary terms') + '</nav>' +
-      tree + (concepts.length ? az + ce + cp : '');
+      tree + (concepts.length ? az + ce + cp + cs : '');
   }
 
   // A category page lists everything filed under it, nested as in the tree.
