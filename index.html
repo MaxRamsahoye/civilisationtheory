@@ -546,9 +546,28 @@
   :root[data-index="ce"] .index-view [data-view="ce"] { color: var(--text); }
   :root[data-index="ce"] .slides-az { display: none; }
   /* The Map page: a much wider text column, with four columns in each index view */
-  html.page-map { --measure: 62rem; }
+  html.page-map { --measure: 54rem; }
+  /* The Map page's index is more generously spaced */
+  html.page-map .description .index-cols,
+  html.page-map .description .ce-list ul { column-gap: 2.4rem; line-height: 1.4; }
+  html.page-map .description .az-list ul { column-gap: 2.4rem; row-gap: 0.35rem; line-height: 1.4; }
+  html.page-map .description .index-cols li,
+  html.page-map .description .ce-list li,
+  html.page-map .description .az-list li { margin-bottom: 0.7rem; }
+  html.page-map .description .index-cols ul { margin-top: 0.7rem; }
+  html.page-map .description .index-cols > li { padding-bottom: 1.8rem; }
+  html.page-map .description .index-domain { margin-top: 3.6rem; padding-top: 2.8rem; }
+  html.page-map .description .index-domain.set-start { margin-top: 4.8rem; }
+  html.page-map .description .domain-desc { margin-bottom: 2.4rem; }
+  html.page-map .description .index-menu { gap: 2.4rem; margin-top: 2.2rem; }
+  html.page-map .description .index-menu li { margin-bottom: 0.8rem; }
+  html.page-map .az-group { padding: 1.8rem 0 1.9rem; }
+  html.page-map .az-group:first-child { padding-top: 0; }
+  html.page-map .description .az-letter { margin-bottom: 1rem; }
   /* Conceptual Engineerings list */
   .ce-list { margin-top: 2.4rem; }
+  .description .ce-title { font-size: 1.7rem; font-weight: 700; line-height: 1.15; margin: 0 0 0.7rem; }
+  .description .ce-desc { color: var(--muted); font-size: 0.92em; line-height: 1.45; margin: 0 0 1.6rem; max-width: 36rem; }
   .description .ce-intro {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.62rem;
@@ -606,7 +625,8 @@
   /* A–Z view: letter groups in three columns, each group kept whole */
   /* A–Z: each letter heads a block; its concepts fill even rows of three, left to right */
   .az-list { margin-top: 2.4rem; font-size: 0.9em; line-height: 1.3; }
-  .az-group { padding-bottom: 1.3rem; }
+  .az-group { padding: 1.2rem 0 1.3rem; border-top: 1px solid var(--rule); }
+  .az-group:first-child { border-top: 0; padding-top: 0; }
   .description .az-list ul {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2851,7 +2871,10 @@
     }).join('') + '</div>';
     // Conceptual Engineerings: the author's own novel terms, alphabetically.
     var coined = concepts.filter(function (c) { return c.coined; });
-    var ce = '<div class="ce-list"><p class="ce-intro">Novel terms coined for the map: ' + coined.length + '</p><ul>' +
+    var ce = '<div class="ce-list">' +
+      '<h3 class="ce-title">Conceptual Engineerings</h3>' +
+      '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
+      '<p class="ce-intro">Novel terms: ' + coined.length + '</p><ul>' +
       coined.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
       '</ul></div>';
     return '<p class="count"><span>Concept Count: ' + concepts.length + '</span>' +
