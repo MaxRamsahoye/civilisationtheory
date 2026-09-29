@@ -742,7 +742,19 @@
     letter-spacing: -0.005em;
   }
   /* Tags under an entry's title: small outlined labels in the interface face */
-  .entry-tags { margin: -0.7rem 0 1.6rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  /* Narrow screens: the tags sit just above the title */
+  .entry-tags { margin: 0 0 0.9rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  /* Wider screens: in the margin to the left of the title, level with its first line (placed
+     before the title, so it keeps the title's position without taking any space) */
+  @media (min-width: 900px) {
+    #entry { position: relative; }
+    .entry-tags {
+      position: absolute; right: 100%; margin: 0.95rem 1.4rem 0 0;
+      flex-direction: column; align-items: flex-end; white-space: nowrap;
+    }
+    /* …unless the margin is too narrow (e.g. with the sidebar open): then above the title */
+    .entry-tags.tags-inline { position: static; margin: 0 0 0.9rem; flex-direction: row; }
+  }
   .entry-tag {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
@@ -3830,7 +3842,20 @@
     main.style.justifyContent = 'flex-start';
     main.style.paddingTop = Math.max(5 * rem, (H - own) / 2) + 'px';
   }
+  // The tags sit in the left margin only when it has room for them clear of the sidebar and the
+  // icons at the page's left edge.
+  function fitTags() {
+    var el = document.querySelector('#entry > .entry-tags');
+    if (!el) return;
+    el.classList.remove('tags-inline');
+    if (getComputedStyle(el).position !== 'absolute') return;
+    var sidebar = document.getElementById('sidebar');
+    var edge = document.body.classList.contains('sidebar-closed') ? 0 : sidebar.getBoundingClientRect().right;
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    if (el.getBoundingClientRect().left < edge + 3.6 * rem) el.classList.add('tags-inline');
+  }
   function fitCrumbs() {
+    fitTags();
     fitTitle();
     fitCrumbsOnly();
     centreEntry();
@@ -3940,7 +3965,7 @@
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
-      '<h1>' + esc(c.title) + '</h1>' + tagsHtml(c) +
+      tagsHtml(c) + '<h1>' + esc(c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
       // Categories, and concepts with nested concepts, list everything filed beneath them.
       (c !== ROOT && (c.kind === 'category' || childrenOf(c.id).length) ? categoryHtml(c) : '') + '</div>';
