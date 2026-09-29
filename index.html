@@ -1019,21 +1019,28 @@
   .description .ce-list ul { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 1.4rem; font-size: 0.9em; line-height: 1.3; }
   .description .ce-list li { margin: 0 0 0.95rem; padding: 0; break-inside: avoid; }
   @media (max-width: 640px) { .description .ce-list ul { columns: 1; font-size: 1em; } }
-  /* The groups sit in a grid of four columns: Foundation, Civilisational, Meta, Macro across the
-     first row, Core beneath Foundation in the second */
+  /* Four columns – Foundation (with Core beneath it), Civilisational, Meta, Macro – each stacking
+     its groups at their own height, as in the alphabetical list */
   .description .seq-list {
     margin: 2rem 0 0; font-size: 0.9em; line-height: 1.3;
     /* Columns as wide as their longest title (so none wraps while there is room), spread across */
     display: grid; grid-template-columns: repeat(4, minmax(0, max-content)); justify-content: space-between; gap: 1.8rem 1.4rem;
   }
   .description .seq-list .seq-group { list-style: none; padding: 0; margin: 0; }
+  .description .seq-col { min-width: 0; display: flex; flex-direction: column; gap: 1.8rem; }
   .description .seq-list li { white-space: nowrap; }   /* every title on one line */
   @media (max-width: 640px) {
-    .description .seq-list { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
+    /* Foundation and Core span the width (so their titles stay on one line); Macro sits directly
+       under Civilisational beside the longer Meta, the spare height falling below Macro */
+    .description .seq-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch;
+      grid-template-rows: auto auto 1fr auto; grid-template-areas: "f f" "c m" "x m" "k k";
+    }
+    .description .seq-col { display: contents; }
     .description .seq-list li { white-space: normal; }
-    /* Foundation and Core span the width, so their titles stay on one line */
-    .description .seq-list .seq-block:first-child, .description .seq-list .seq-block:last-child { grid-column: 1 / -1; }
-    .description .seq-list .seq-block:first-child li, .description .seq-list .seq-block:last-child li { white-space: nowrap; }
+    .description .seq-foundation { grid-area: f; } .description .seq-core { grid-area: k; }
+    .description .seq-civilisational { grid-area: c; } .description .seq-meta { grid-area: m; } .description .seq-macro { grid-area: x; }
+    .description .seq-foundation li, .description .seq-core li { white-space: nowrap; }
   }
   .description .seq-list li { margin: 0 0 0.95rem; padding: 0; }
   /* Group names in Bembo, bold and a step larger than the entries beneath them */
@@ -4200,9 +4207,14 @@
         return s === current ? '<li aria-current="step"><span>' + esc(s.title) + '</span></li>' : '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>';
       }).join('') + '</ul>';
     }
-    return curatedGroups().map(function (g) {
-      return '<div class="seq-block"><p class="seq-head">' + g.name + '</p>' +
+    function block(g) {
+      return '<div class="seq-block seq-' + g.name.toLowerCase() + '"><p class="seq-head">' + g.name + '</p>' +
         (g.subs ? g.subs.map(function (sg) { return '<p class="seq-sub">' + sg.name + '</p>' + list(sg.items); }).join('') : list(g.items)) + '</div>';
+    }
+    // Four columns, each stacking its own groups at their own height (Core directly beneath Foundation).
+    var gs = curatedGroups();
+    return [[gs[0], gs[4]], [gs[1]], [gs[2]], [gs[3]]].map(function (col) {
+      return '<div class="seq-col">' + col.filter(Boolean).map(block).join('') + '</div>';
     }).join('');
   }
 
