@@ -1065,7 +1065,14 @@
   html.page-map .description .ce-list.cs-list .seq-list { column-gap: 2.4rem; }
   .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
   .description .cs-list .ce-intro { margin-bottom: 2.6rem; }
-  .description .rl-empty { color: var(--muted); font-style: italic; }   /* room after the entries counter */
+  .description .rl-empty { color: var(--muted); font-style: italic; }
+  /* The nine sections beneath the sequence, three to a row (one column on phones) */
+  .description .cs-list .seq-sections-intro { margin-top: 3.4rem; }
+  .description .seq-sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 2.4rem; }
+  .description .seq-sections .seq-head a { color: inherit; text-decoration: none; }
+  .description .seq-sections .seq-head a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
+  .description .seq-sections .rl-empty { margin: 0; font-size: 0.95em; }
+  @media (max-width: 640px) { .description .seq-sections { grid-template-columns: 1fr; gap: 1.4rem; } }   /* room after the entries counter */
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
@@ -4015,7 +4022,13 @@
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Curated Sequence</h3>' +
       '<p class="ce-desc">A reading path through the map.</p>' +
-      '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div></div>';
+      '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div>' +
+      // Beneath it, the paradigm's nine sections, each to receive its own reading path of concepts.
+      '<p class="ce-intro seq-sections-intro">Sections: ' + sections.length + '</p><div class="seq-sections">' +
+      sections.map(function (sec) {
+        return '<div class="seq-block"><p class="seq-head"><a href="' + href(sec) + '">' + esc(sec.title) + '</a></p>' +
+          '<p class="rl-empty">Concepts to be added.</p></div>';
+      }).join('') + '</div></div>';
     // Civilisation Research Landscape: the field around the paradigm (entries tagged 'landscape').
     var rlTerms = concepts.filter(function (c) { return c.tags && c.tags.indexOf('landscape') >= 0; });
     var rl = '<div class="ce-list rl-list">' +
