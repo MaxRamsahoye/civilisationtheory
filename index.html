@@ -623,13 +623,15 @@
   .slide-title a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); }
   @media (max-width: 899px) { .description .slide-title { font-size: 2.1rem; } }
 
-  /* A–Z: letters laid out across in rows of three (A, B, C, then D, E, F below), each letter's
-     concepts listed down beneath it */
+  /* A–Z: letters dealt across three columns (A, B, C, then D under A, E under B…), each letter's
+     concepts listed down beneath it; each column keeps its own height, so no row gaps */
   .az-list {
     margin-top: 2.4rem; font-size: 0.9em; line-height: 1.3;
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 1.4rem; row-gap: 2rem;
     align-items: start;
   }
+  .az-col { min-width: 0; display: flex; flex-direction: column; gap: 2rem; }
+  html.page-map .az-col { gap: 2.8rem; }
   .az-group { min-width: 0; }
   .description .az-letter {
     font-size: 1.31em;
@@ -722,7 +724,9 @@
   @media (max-width: 640px) {
     .description .index-cols { columns: 1; font-size: 1em; }
     .az-list { font-size: 1em; }
-    .az-list { grid-template-columns: minmax(0, 1fr); }
+    /* One column: the letters back in plain A–Z order */
+    .az-list { display: flex; flex-direction: column; gap: 2rem; }
+    .az-col { display: contents; }
   }
 
   /* Category pages: nested list of members */
@@ -2880,13 +2884,17 @@
       if (!/[A-Z]/.test(L)) L = '0–9';  // numbers gathered after Z
       (letters[L] = letters[L] || []).push(c);
     });
-    var az = '<div class="az-list">' + Object.keys(letters).sort(function (a, b) {
+    // Letters are dealt across three columns in turn (A, B, C, then D under A…), and each column
+    // stacks at its own height, so a short letter leaves no gap beside a long one.
+    var azCols = ['', '', ''];
+    Object.keys(letters).sort(function (a, b) {
       return (a === '0–9') - (b === '0–9') || a.localeCompare(b);
-    }).map(function (L) {
-      return '<section class="az-group"><h3 class="az-letter">' + L + '</h3><ul>' +
+    }).forEach(function (L, i) {
+      azCols[i % 3] += '<section class="az-group" style="order:' + i + '"><h3 class="az-letter">' + L + '</h3><ul>' +
         letters[L].map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
         '</ul></section>';
-    }).join('') + '</div>';
+    });
+    var az = '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div>';
     // Conceptual Engineerings: the author's own novel terms, alphabetically.
     var coined = concepts.filter(function (c) { return c.coined; });
     var ce = '<div class="ce-list">' +
