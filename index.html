@@ -484,7 +484,17 @@
      (ending beside the theme toggle, which completes the row) ---------- */
   #site-header { border-bottom: 1px solid var(--rule); background: var(--bg-side); }
   /* Header and footer frame the main pages only; concept entries stand alone */
-  html:not(.main-page) #site-header, html:not(.main-page) #site-footer { display: none; }
+  html:not(.main-page) #site-footer { display: none; }
+  /* On entries the header sits over the top of the page in the page's own colour, with no rule,
+     and takes no space, so entries stay centred on screen */
+  html:not(.main-page) #site-header {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 2;
+    background: var(--bg); border-bottom: 0;
+  }
+  /* Hudless mode (H): only the text itself – no header, footer, sidebar, icons, contents or tree string */
+  html.hudless #site-header, html.hudless #site-footer, html.hudless #sidebar, html.hudless #scrim,
+  html.hudless .control, html.hudless #progress, html.hudless #toc,
+  html.hudless #entry > p.tree-string { display: none !important; }
   .head-inner {
     display: flex;
     justify-content: flex-end;
@@ -3883,7 +3893,7 @@
     setTimeout(function () { input.focus({ preventScroll: true }); input.setSelectionRange(input.value.length, input.value.length); }, 0);
   }
 
-  // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound ----------
+  // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
@@ -3904,7 +3914,7 @@
       else if (!document.documentElement.classList.contains('page-home')) backBtn.click();
     } else if (e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
-      if (!e.repeat && !document.body.classList.contains('footer-in-view')) sideBtn.click();
+      if (!e.repeat && !document.body.classList.contains('footer-in-view') && !document.documentElement.classList.contains('hudless')) sideBtn.click();
     } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
       document.getElementById('theme-toggle').click();
     } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
@@ -3919,6 +3929,14 @@
     } else if (e.key === '/') {
       e.preventDefault();
       openSearchPage('');
+    } else if ((e.key === 'h' || e.key === 'H') && !e.repeat) {
+      // Hudless: hide every piece of interface and the tree string, leaving only the page itself.
+      var on = document.documentElement.classList.toggle('hudless');
+      if (on) setSidebar(false, false);
+      fitCrumbs();
+    } else if (e.key === 'Escape' && document.documentElement.classList.contains('hudless')) {
+      document.documentElement.classList.remove('hudless');
+      fitCrumbs();
     } else if ((e.key === 'm' || e.key === 'M') && !e.repeat) {
       soundOn = !soundOn;
       try { localStorage.setItem('ct-sound', soundOn ? 'on' : 'off'); } catch (err) {}
