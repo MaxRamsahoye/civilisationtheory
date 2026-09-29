@@ -1015,6 +1015,13 @@
   .description .ce-list ul { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 1.4rem; font-size: 0.9em; line-height: 1.3; }
   .description .ce-list li { margin: 0 0 0.95rem; padding: 0; break-inside: avoid; }
   @media (max-width: 640px) { .description .ce-list ul { columns: 1; font-size: 1em; } }
+  /* An entry's Curated Sequence section: the sequence in the concept-list format, this entry unlinked and dark */
+  .description .seq-section .count a { color: inherit; text-decoration: none; }
+  .description .seq-section .count a:hover { color: var(--text); }
+  .description .seq-list { list-style: none; padding: 0; margin: 2rem 0 0; columns: 3; column-gap: 1.4rem; font-size: 0.9em; line-height: 1.3; }
+  .description .seq-list li { margin: 0 0 0.95rem; padding: 0; break-inside: avoid; }
+  .description .seq-list li[aria-current] span { font-weight: 700; }
+  @media (max-width: 640px) { .description .seq-list { columns: 1; font-size: 1em; } }
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
@@ -3921,8 +3928,7 @@
           c.html.replace(/<p class="cp-note">[\s\S]*?<\/p>/, '') + '</section>';
       }).join('') + '</div></div>';
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
-    var SEQUENCE = ['civilisation-research-paradigm'].concat(sections.map(function (d) { return d.id; }));
-    var seq = SEQUENCE.map(function (id) { return byId[id]; }).filter(Boolean);
+    var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Curated Sequence</h3>' +
       '<p class="ce-desc">A reading path through the map, in order: begin with the civilisation research paradigm, then follow its nine sections from civilisational mechanics to macrostrategy.</p>' +
@@ -4114,11 +4120,27 @@
   // Tags: small labels under an entry's title marking where it comes from (e.g. entries taken
   // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
   var TAGS = {
-    consilience: { label: 'Consilience Project', view: 'cp' }   // opens the Map's Consilience Project view
+    consilience: { label: 'Consilience Project', view: 'cp' },   // opens the Map's Consilience Project view
+    cs: { label: 'Curated Sequence', view: 'cs' }                // entries in the Curated Sequence (added automatically)
   };
+  // The Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
+  function curatedSequence() {
+    return [byId['civilisation-research-paradigm']].concat(childrenOf(ROOT.id)).filter(Boolean);
+  }
+  // On an entry in the sequence: the whole sequence, with this entry marked, at the foot of its text.
+  function sequenceHtml(c) {
+    var seq = curatedSequence(), at = seq.indexOf(c);
+    if (at < 0) return '';
+    return '<div class="seq-section"><p class="count"><a href="#the-map" data-view-link="cs">Curated Sequence</a>' +
+      '<span>' + (at + 1) + ' / ' + seq.length + '</span></p><ol class="seq-list">' +
+      seq.map(function (s) {
+        return s === c ? '<li aria-current="step"><span>' + esc(s.title) + '</span></li>' : '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>';
+      }).join('') + '</ol></div>';
+  }
   function tagsHtml(c) {
-    if (!c.tags || !c.tags.length) return '';
-    return '<p class="entry-tags">' + c.tags.map(function (t) {
+    var tags = (curatedSequence().indexOf(c) >= 0 ? ['cs'] : []).concat(c.tags || []);
+    if (!tags.length) return '';
+    return '<p class="entry-tags">' + tags.map(function (t) {
       var tag = TAGS[t] || { label: t };
       if (tag.view) return '<a class="entry-tag" href="#the-map" data-view-link="' + tag.view + '">' + esc(tag.label) + '</a>';
       return tag.href
@@ -4135,6 +4157,7 @@
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
       tagsHtml(c) + '<h1>' + esc(c === ROOT ? HOME_TITLE : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
+      sequenceHtml(c) +
       // Categories, and concepts with nested concepts, list everything filed beneath them.
       (c !== ROOT && (c.kind === 'category' || childrenOf(c.id).length) ? categoryHtml(c) : '') + '</div>';
     // Slides snap gently into place as you scroll.
