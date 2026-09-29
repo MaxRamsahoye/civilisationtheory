@@ -741,6 +741,13 @@
     margin: 0 0 1.6rem;
     letter-spacing: -0.005em;
   }
+  /* Section headings with a line icon before them (the homepage's Map and Cartographer) */
+  h2.has-icon { display: flex; align-items: center; gap: 0.6rem; }
+  h2 .h-icon {
+    width: 0.8em; height: 0.8em; flex: none;
+    fill: none; stroke: currentColor; stroke-width: 1.4px; stroke-linejoin: miter; overflow: visible;
+  }
+  h2 .h-icon * { vector-effect: non-scaling-stroke; }
   /* Tags under an entry's title: small outlined labels in the interface face */
   /* Narrow screens: the tags sit just above the title */
   .entry-tags { margin: 0 0 0.9rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -1291,10 +1298,10 @@
         '<li><strong>The Cybernetic Economics lineage:</strong> across Buckminster Fuller (1969), Jacque Fresco (1985), Stafford Beer (1971), Daniel Schmachtenberger (2017, 21), Peter Joseph (2014, 17, 25)</li>',
         '</ul>',
 
-        '<h2>The Map</h2>',
+        '<h2 class="has-icon"><svg class="h-icon" viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg>The Map</h2>',
         '<p><a href="#the-map">The Map</a> is a complete index of the concepts on this site. Over time, it will extend to cover hundreds of entries. It can be read in four views – the civilisation research paradigm, an alphabetical A–Z, the map’s own conceptual engineerings, and the glossary of <em>The Consilience Project</em> – and browsed at any time from the sidebar.</p>',
 
-        '<h2>The Cartographer</h2>',
+        '<h2 class="has-icon"><svg class="h-icon" viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polyline points="12,90 12,10 50,62 88,10 88,90"/></svg>The Cartographer</h2>',
         '<p><em>Civilisational</em> (The Civilisation Theory Map) is a conceptual artifact created by <a href="https://maxramsahoye.github.io/max/">Max Ramsahoye</a>.</p>'
       ].join('\n')
     },
