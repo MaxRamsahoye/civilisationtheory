@@ -41,7 +41,7 @@
     } catch (e) {}
     var v = null;
     try { v = localStorage.getItem('ct-index'); } catch (e) {}
-    document.documentElement.setAttribute('data-index', v === 'tree' || v === 'az' || v === 'ce' || v === 'cp' ? v : 'cs');
+    document.documentElement.setAttribute('data-index', ['tree', 'rl', 'az', 'ce', 'cp'].indexOf(v) >= 0 ? v : 'cs');
   })();
 </script>
 <style>
@@ -921,6 +921,11 @@
   :root[data-index="cs"] .index-list,
   :root[data-index="cs"] .az-view,
   :root[data-index="cs"] .ce-list:not(.cs-list) { display: none; }
+  /* Civilisation Research Landscape view */
+  :root:not([data-index="rl"]) .rl-list,
+  :root[data-index="rl"] .index-list,
+  :root[data-index="rl"] .az-view,
+  :root[data-index="rl"] .ce-list:not(.rl-list) { display: none; }
   .az-view { margin-top: 2.4rem; }
   .az-view .az-list { margin-top: 0; }
   :root[data-index="ce"] .index-view [data-view="ce"] { color: var(--text); }
@@ -930,12 +935,12 @@
      width available (container units), and the spare width is shared out between the tabs */
   .description .index-tabs {
     display: grid;
-    grid-template-columns: repeat(5, auto);
-    gap: 1.4rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));   /* two rows of three */
+    gap: 1.8rem 1.4rem;
     margin: 3.4rem 0 0;
     container-type: inline-size;
   }
-  html.page-map .description .index-tabs { gap: 2.4rem; }
+  html.page-map .description .index-tabs { gap: 2.2rem 2.4rem; }
   .index-tabs button {
     display: flex;
     flex-direction: column;
@@ -951,7 +956,7 @@
   .index-tabs button:hover { color: var(--text); border-top-color: var(--muted); }
   .index-tabs .tab-name {
     font-family: inherit;
-    font-size: clamp(0.58rem, 1.72cqi, 1.22rem);
+    font-size: clamp(0.58rem, 1.95cqi, 1.22rem);
     white-space: nowrap;
     font-weight: 600;
     line-height: 1.15;
@@ -961,7 +966,7 @@
   .index-tabs .tab-meta {
     white-space: nowrap;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(0.45rem, 1.05cqi, 0.6rem);
+    font-size: clamp(0.45rem, 1.5cqi, 0.6rem);
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -971,6 +976,7 @@
   :root[data-index="az"] .index-tabs [data-view="az"],
   :root[data-index="ce"] .index-tabs [data-view="ce"],
   :root[data-index="cp"] .index-tabs [data-view="cp"],
+  :root[data-index="rl"] .index-tabs [data-view="rl"],
   :root[data-index="cs"] .index-tabs [data-view="cs"] {
     color: var(--text);
     border-top-color: var(--text);
@@ -1058,7 +1064,8 @@
   .description .ce-list.cs-list ul, html.page-map .description .ce-list.cs-list ul { columns: 1; margin: 0; }
   html.page-map .description .ce-list.cs-list .seq-list { column-gap: 2.4rem; }
   .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
-  .description .cs-list .ce-intro { margin-bottom: 2.6rem; }   /* room after the entries counter */
+  .description .cs-list .ce-intro { margin-bottom: 2.6rem; }
+  .description .rl-empty { color: var(--muted); font-style: italic; }   /* room after the entries counter */
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
@@ -4009,7 +4016,15 @@
       '<h3 class="ce-title">Curated Sequence</h3>' +
       '<p class="ce-desc">A reading path through the map.</p>' +
       '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div></div>';
-    // The views as a row of tabs, each with its own tally beneath its name.
+    // Civilisation Research Landscape: the field around the paradigm (entries tagged 'landscape').
+    var rlTerms = concepts.filter(function (c) { return c.tags && c.tags.indexOf('landscape') >= 0; });
+    var rl = '<div class="ce-list rl-list">' +
+      '<h3 class="ce-title">Civilisation Research Landscape</h3>' +
+      '<p class="ce-desc">The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' +
+      '<p class="ce-intro">Entries: ' + rlTerms.length + '</p>' +
+      (rlTerms.length ? '<ul>' + rlTerms.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul>'
+        : '<p class="rl-empty">Concept entries to be added.</p>') + '</div>';
+    // The views as two rows of three tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
         '<span class="tab-meta">' + meta + '</span></button>';
@@ -4017,10 +4032,11 @@
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
       tab('cs', 'Curated Sequence', seq.length + ' entries') +
       tab('tree', 'Civilisation Research Paradigm', sections.length + ' sections') +
+      tab('rl', 'Civilisation Research Landscape', rlTerms.length + ' entries') +
       tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') +
       tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
       tab('cp', 'Consilience Project', cpTerms.length + ' glossary terms') + '</nav>' +
-      tree + (concepts.length ? az + ce + cp + cs : '');
+      tree + (concepts.length ? az + ce + cp + cs + rl : '');
   }
 
   // k = how many of the earliest nodes step out into the vertical stack above the line.
