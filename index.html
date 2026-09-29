@@ -455,6 +455,69 @@
     min-width: 0;
   }
 
+  /* ---------- Header: wordmark and tagline left; site menu and search right ---------- */
+  #site-header {
+    border-bottom: 1px solid var(--rule);
+    transition: padding-left .25s ease;
+    container-type: inline-size;
+  }
+  @media (min-width: 900px) {
+    body:not(.sidebar-closed) #site-header { padding-left: var(--side-w); }
+  }
+  .head-inner {
+    width: min(54rem, 100% - 8rem);
+    margin: 0 auto;
+    padding: 1.05rem 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+  .head-mark { display: flex; flex-direction: column; gap: 0.2rem; color: var(--text); text-decoration: none; white-space: nowrap; flex-shrink: 0; }
+  .head-title { font-size: 1.22rem; font-weight: 700; line-height: 1.05; letter-spacing: 0.005em; }
+  .head-title em { font-weight: 400; }
+  .head-tag {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.56rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+  }
+  .head-nav {
+    display: flex; align-items: center; gap: 1.6rem;
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.64rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .head-nav a {
+    white-space: nowrap;
+    color: var(--muted); text-decoration: none;
+    padding: 0.35rem 0; border-bottom: 1px solid transparent;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .head-nav a:hover { color: var(--text); }
+  .head-nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--text); }
+  .head-search {
+    display: flex; align-items: center; gap: 0.55rem;
+    font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted);
+    background: none; padding: 0.35rem 0 0.35rem 1.6rem; border-left: 1px solid var(--rule);
+  }
+  .head-search:hover { color: var(--text); }
+  .head-search svg { width: 0.8rem; height: 0.8rem; fill: none; stroke: currentColor; stroke-width: 7; }
+  .head-search kbd {
+    font-family: inherit; font-size: 0.9em; letter-spacing: 0; color: var(--text);
+    border: 1px solid var(--rule); border-radius: 3px; padding: 0.05rem 0.35rem;
+  }
+  /* Tight (e.g. a small laptop with the map open, whose own search box is then in view):
+     the header's search steps aside */
+  @container (max-width: 820px) {
+    .head-nav { gap: 1.2rem; }
+    .head-search { display: none; }
+  }
+  /* Narrow screens: wordmark centred between the corner controls, menu on a row beneath */
+  @media (max-width: 899px) {
+    .head-inner { width: calc(100% - 3rem); flex-direction: column; gap: 0.8rem; padding: 0.95rem 0 0.85rem; }
+    .head-mark { align-items: center; text-align: center; }
+    .head-title { font-size: 1.1rem; }
+    .head-search { display: none; }
+  }
+
   /* ---------- Footer ---------- */
   #site-footer {
     border-top: 1px solid var(--rule);
@@ -1014,6 +1077,24 @@
   <ul class="tree" id="tree"></ul>
 </nav>
 <div id="scrim"></div>
+
+<header id="site-header">
+  <div class="head-inner">
+    <a class="head-mark" href="#" data-page="home">
+      <span class="head-title">Civilisation Theory <em>Map</em></span>
+      <span class="head-tag">A conceptual adaptive system</span>
+    </a>
+    <nav class="head-nav" aria-label="Site">
+      <a href="#" data-page="home">Home</a>
+      <a href="#the-map" data-page="the-map">The Map</a>
+      <a href="#infinite" data-page="infinite">Infinite</a>
+      <button type="button" class="head-search" aria-label="Search concepts" aria-keyshortcuts="/">
+        <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
+        <span>Search</span><kbd>/</kbd>
+      </button>
+    </nav>
+  </div>
+</header>
 
 <main>
   <div class="page">
@@ -2994,7 +3075,11 @@
     return html + '</li>';
   }
   var treeEl = document.getElementById('tree');
-  var pageLinks = document.querySelectorAll('#sidebar [data-page]');
+  var pageLinks = document.querySelectorAll('#sidebar [data-page], #site-header .head-nav [data-page]');
+  document.querySelector('#site-header .head-search').addEventListener('click', function () {
+    if (document.body.classList.contains('sidebar-closed')) setSidebar(true, false);
+    searchInput.focus();
+  });
   treeEl.innerHTML = buildTree(ROOT) +
     (CONCEPTS.length === 1 ? '<li class="empty">Concepts forthcoming.</li>' : '');
 
@@ -3342,6 +3427,8 @@
     sideBtn.setAttribute('aria-label', open ? 'Hide concept map' : 'Show concept map');
     sideBtn.setAttribute('aria-expanded', String(open));
     if (remember) { try { localStorage.setItem('ct-sidebar', open ? 'open' : 'closed'); } catch (e) {} }
+    // The text column changes width as the sidebar slides: refit tree strings once it settles.
+    if (typeof fitCrumbs === 'function') setTimeout(fitCrumbs, 300);
   }
   sideBtn.addEventListener('click', function () {
     setSidebar(document.body.classList.contains('sidebar-closed'), true);
