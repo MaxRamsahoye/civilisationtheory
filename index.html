@@ -4040,7 +4040,7 @@
       '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + crpSwitch + overviewDesc +
       '<p class="ce-intro">Curated sequence: ' + seq.length + ' entries</p><div class="seq-list">' + sequenceListHtml(null) + '</div>' +
       // Then the same sections as the original structure, each still to receive its concepts.
-      '<div class="seq-structure">' + menu.replace(/data-jump="idx-/g, 'data-jump="nidx-') + sectionsHtml(true) + '</div></div>';
+      '<div class="seq-structure">' + sectionsHtml(true) + '</div></div>';
     // Civilisation Research Landscape: the field around the paradigm (entries tagged 'landscape').
     var rlTerms = concepts.filter(function (c) { return c.tags && c.tags.indexOf('landscape') >= 0; });
     var rl = '<div class="ce-list rl-list">' +
