@@ -916,17 +916,6 @@
   :root[data-index="cs"] .index-list,
   :root[data-index="cs"] .az-view,
   :root[data-index="cs"] .ce-list:not(.cs-list) { display: none; }
-  .description .cs-list ol { list-style: none; padding: 0; margin: 0; max-width: 39rem; counter-reset: none; }
-  .description .cs-list li { display: grid; grid-template-columns: 2.6rem 1fr; margin: 0; padding: 1.15rem 0 1.2rem; border-top: 1px solid var(--rule); }
-  .description .cs-list li:last-child { border-bottom: 1px solid var(--rule); }
-  .cs-num {
-    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); padding-top: 0.35rem;
-  }
-  .description .cs-title { font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
-  :root .description .cs-title a { color: var(--text); text-decoration: underline; text-decoration-color: var(--link-underline); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-  :root .description .cs-title a:hover { text-decoration-color: var(--text); }
-  .description .cs-gist { display: block; margin-top: 0.4rem; font-size: 0.92em; line-height: 1.45; color: var(--muted); }
   .az-view { margin-top: 2.4rem; }
   .az-view .az-list { margin-top: 0; }
   :root[data-index="ce"] .index-view [data-view="ce"] { color: var(--text); }
@@ -3934,19 +3923,12 @@
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
     var SEQUENCE = ['civilisation-research-paradigm'].concat(sections.map(function (d) { return d.id; }));
     var seq = SEQUENCE.map(function (id) { return byId[id]; }).filter(Boolean);
-    function gist(c) {
-      var tmp = document.createElement('div');
-      tmp.innerHTML = c.html;
-      return tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0];
-    }
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Curated Sequence</h3>' +
       '<p class="ce-desc">A reading path through the map, in order: begin with the civilisation research paradigm, then follow its nine sections from civilisational mechanics to macrostrategy.</p>' +
-      '<p class="ce-intro">Entries: ' + seq.length + '</p><ol>' +
-      seq.map(function (c, i) {
-        return '<li><span class="cs-num">' + (i + 1 < 10 ? '0' : '') + (i + 1) + '</span><div><span class="cs-title"><a href="' + href(c) + '">' + esc(c.title) + '</a></span>' +
-          '<span class="cs-gist">' + esc(gist(c)) + '</span></div></li>';
-      }).join('') + '</ol></div>';
+      '<p class="ce-intro">Entries: ' + seq.length + '</p><ul>' +
+      seq.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
+      '</ul></div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
