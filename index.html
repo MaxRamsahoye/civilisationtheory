@@ -530,6 +530,9 @@
     transform: translateX(var(--fold-x, 0px)); opacity: 0; pointer-events: none;
   }
   html.icons-folded:not(.icons-open) #theme-toggle { opacity: 0; pointer-events: none; }
+  /* The title travels with the icons: it slides right to sit beside the menu icon, and back */
+  #site-header .head-title { transition: transform .5s cubic-bezier(.4, 0, .2, 1); }
+  html.icons-folded:not(.icons-open) #site-header .head-title { transform: translateX(var(--title-x, 0px)); }
   #head-menu {
     position: fixed; top: 0.8rem; right: 0.9rem; z-index: 29;
     width: 2rem; height: 2rem;
@@ -2721,10 +2724,10 @@
     },
     {
       id: 'coherence-of-civilisations',
-      title: 'Super-structure: Coherence of Civilisations',
+      title: 'Coherence of Civilisations',
       coined: true,
-      parent: 'civilisation-design',
-      html: '<p>The <em>coherence of civilisations</em> is the degree to which a civilisation’s layers – its economy, institutions, technology, culture and values – fit together and reinforce one another. A coherent civilisation is stable and legible to its members; an incoherent one, whose parts pursue contradictory ends, generates crisis. Designing for coherence, rather than optimising parts in isolation, is a central principle of civilisation design.</p>'
+      parent: 'super-structure',
+      html: '<p>The <em>coherence of civilisations</em> is the degree to which a civilisation’s values, narratives and sense of meaning fit together with one another and with the way it actually lives – its economy, institutions and technology. A coherent civilisation is legible and worth believing in to its members; an incoherent one, whose stated values contradict what its structures reward, breeds cynicism, nihilism and crisis. As a design principle for the <a href="#super-structure">super-structure</a>, it asks for a culture whose stories make sense of the civilisation being built, rather than optimising parts in isolation.</p>'
     },
     {
       id: 'blue-skies-social-science',
@@ -3090,10 +3093,10 @@
     },
     {
       id: 'biowisdom',
-      title: 'Intra-structure: Biowisdom',
+      title: 'Biowisdom',
       coined: true,
-      parent: 'civilisation-design',
-      html: '<p><em>Biowisdom</em> is wisdom grounded in the understanding of living systems: the recognition that human flourishing depends on the health of the biosphere, and that the principles by which life sustains itself – diversity, feedback, resilience, interdependence – can guide the design of human societies.</p>'
+      parent: 'intra-structure',
+      html: '<p><em>Biowisdom</em> is wisdom grounded in the understanding of living systems – beginning with our own bodies. It recognises that human judgement and behaviour depend on physiological health, and that the principles by which life sustains itself – diversity, feedback, resilience, interdependence – can guide the design of the environments people live in. As a design principle for the <a href="#intra-structure">intra-structure</a>, it asks for societies that nourish rather than stress, poison or deplete the people within them.</p>'
     },
     {
       id: 'science-of-morality',
@@ -3484,20 +3487,48 @@
       title: 'The Emergence Model',
       parent: 'civilisation-design',
       ref: 'The Emergence Project (Daniel Schmachtenberger et al.); Wilber, four quadrants',
-      html: '<p><em>The emergence model</em> is the conceptual framework of the Emergence Project, a think tank associated with Daniel Schmachtenberger that set out to understand why humanity’s global challenges keep arising and how to address them at their root. Its premise is that nearly all of those challenges are human-caused, and that human behaviour is not fixed by nature but <em>conditioned</em> – so lasting solutions must change the structures that condition it, rather than treat symptoms within the systems that produce them.</p><p>Adapted from Ken Wilber’s four-quadrant <a href="#integral-theory">integral</a> model, it sorts every factor that conditions human behaviour into four quadrants, each fundamental and irreducible to the others, and all bound together by feedback loops:</p><ul><li><strong>Infrastructure:</strong> modes of production, energy, agriculture, water, transport, building and waste.</li><li><strong>Social structure:</strong> economics, governance and law.</li><li><strong>Memetic structure:</strong> values, beliefs, meaning, worldview, identity, orienting narratives and definitions of success.</li><li><strong>Physiological structure:</strong> nutrition, neurobiology, endocrinology, epigenetics and toxicity.</li></ul><p>Within each quadrant, the model catalogues the “metastructures” those structures can take, as criteria for replacing harm-externalising structures with omni-considerate ones. Its aim is the intentional emergence of an omni-considerate, integrally developed and effectively self-governing global civilisation – a transition from an adolescent phase of consumption and growth to a mature one of homeostasis, synergy and regeneration. The four structures of <a href="#civilisation-design">civilisation design</a> on this map – <a href="#infra-structure-global-redesign-institute">infra-structure</a>, <a href="#inter-structure-democracy-3">inter-structure</a>, <a href="#coherence-of-civilisations">super-structure</a> and <a href="#biowisdom">intra-structure</a> – follow the same logic.</p>'
+      html: '<p><em>The emergence model</em> is the conceptual framework of the Emergence Project, a think tank associated with Daniel Schmachtenberger that set out to understand why humanity’s global challenges keep arising and how to address them at their root. Its premise is that nearly all of those challenges are human-caused, and that human behaviour is not fixed by nature but <em>conditioned</em> – so lasting solutions must change the structures that condition it, rather than treat symptoms within the systems that produce them.</p><p>Adapted from Ken Wilber’s four-quadrant <a href="#integral-theory">integral</a> model, it sorts every factor that conditions human behaviour into four quadrants, each fundamental and irreducible to the others, and all bound together by feedback loops:</p><ul><li><strong><a href="#infra-structure">Infra-structure</a></strong> (infrastructure): modes of production, energy, agriculture, water, transport, building and waste.</li><li><strong><a href="#inter-structure">Inter-structure</a></strong> (social structure): economics, governance and law.</li><li><strong><a href="#super-structure">Super-structure</a></strong> (memetic structure): values, beliefs, meaning, worldview, identity, orienting narratives and definitions of success.</li><li><strong><a href="#intra-structure">Intra-structure</a></strong> (physiological structure): nutrition, neurobiology, endocrinology, epigenetics and toxicity.</li></ul><p>Within each quadrant, the model catalogues the “metastructures” those structures can take, as criteria for replacing harm-externalising structures with omni-considerate ones. Its aim is the intentional emergence of an omni-considerate, integrally developed and effectively self-governing global civilisation – a transition from an adolescent phase of consumption and growth to a mature one of homeostasis, synergy and regeneration. On this map the four quadrants are filed as the four structures of <a href="#civilisation-design">civilisation design</a>, each with a proposal for its redesign nested beneath it.</p>'
+    },
+    {
+      id: 'infra-structure',
+      title: 'Infra-structure',
+      parent: 'the-emergence-model',
+      order: 1,
+      html: '<p>The <em>infra-structure</em> is the material base of a civilisation – the first of the four structures of <a href="#the-emergence-model">the emergence model</a>, where it is called infrastructure: its modes of production, energy, agriculture, water, transport, building and waste systems. It conditions behaviour by determining what is physically possible, cheap or easy, and so what patterns of life are rewarded; a civilisation built on extraction and disposal will predispose extractive, disposable habits whatever its values. Redesigning it – towards closed loops, renewable energy and regenerative agriculture – changes the ground on which every other structure stands. See <a href="#infra-structure-global-redesign-institute">the Global Redesign Institute</a>.</p>'
+    },
+    {
+      id: 'inter-structure',
+      title: 'Inter-structure',
+      parent: 'the-emergence-model',
+      order: 2,
+      html: '<p>The <em>inter-structure</em> is the structure of relations between people – what <a href="#the-emergence-model">the emergence model</a> calls social structure: economics, governance and law. It conditions behaviour through incentives, rules and the distribution of power, deciding which actions are rewarded, permitted or punished. Where it rewards externalising harm and winning at others’ expense, even well-meaning people are pushed towards <a href="#race-to-the-bottom">races to the bottom</a>; redesigning it aims to align individual incentive with collective wellbeing. See <a href="#inter-structure-democracy-3">Democracy 3.0</a>.</p>'
+    },
+    {
+      id: 'super-structure',
+      title: 'Super-structure',
+      parent: 'the-emergence-model',
+      order: 3,
+      html: '<p>The <em>super-structure</em> is the structure of meaning that sits above the material and social orders – what <a href="#the-emergence-model">the emergence model</a> calls memetic structure: a culture’s values, beliefs, worldview, identities, orienting narratives and definitions of success. It conditions behaviour from the inside, shaping what people want, admire and consider normal, and it both reflects and legitimates the other structures. A new civilisation needs a super-structure that makes sense of it and makes it worth wanting. See <a href="#coherence-of-civilisations">the coherence of civilisations</a>.</p>'
+    },
+    {
+      id: 'intra-structure',
+      title: 'Intra-structure',
+      parent: 'the-emergence-model',
+      order: 4,
+      html: '<p>The <em>intra-structure</em> is the structure within each person – what <a href="#the-emergence-model">the emergence model</a> calls physiological structure: nutrition, neurobiology, endocrinology, epigenetics and exposure to toxins. It conditions behaviour at its most basic level, shaping mood, attention, impulse control and the capacity for empathy and long-term thinking; a population that is chronically stressed, malnourished or poisoned cannot sustain wise collective choices. Redesigning it means building societies whose environments support healthy bodies and nervous systems. See <a href="#biowisdom">biowisdom</a>.</p>'
     },
     {
       id: 'inter-structure-democracy-3',
-      title: 'Inter-structure: Democracy 3.0',
-      parent: 'civilisation-design',
-      html: '<p><em>Democracy 3.0</em> names a next generation of democratic governance – after the direct democracy of antiquity and the representative democracy of the modern nation-state – using digital tools, deliberative processes and collective intelligence to enable participation and coordination at scales and speeds that current institutions cannot. As inter-structure, it concerns the relations between people and institutions.</p>'
+      title: 'Democracy 3.0',
+      parent: 'inter-structure',
+      html: '<p><em>Democracy 3.0</em> names a next generation of democratic governance – after the direct democracy of antiquity and the representative democracy of the modern nation-state – using digital tools, deliberative processes and <a href="#collective-intelligence">collective intelligence</a> to enable participation and coordination at scales and speeds that current institutions cannot. It is a design for the <a href="#inter-structure">inter-structure</a>: the economic, political and legal relations through which people make shared choices.</p>'
     },
     {
       id: 'infra-structure-global-redesign-institute',
-      title: 'Infra-structure: Global Redesign Institute',
-      parent: 'civilisation-design',
-      ref: 'Zeitgeist Movement',
-      html: '<p>A <em>global redesign institute</em> is an institution dedicated to the redesign of the world’s physical and technical infrastructure – energy, production, transport, housing – according to scientific and ecological principles and the needs of all people. As infra-structure, it concerns the material base on which the other layers of a civilisation rest.</p>'
+      title: 'Global Redesign Institute',
+      parent: 'infra-structure',
+      ref: 'Zeitgeist Movement; Peter Joseph',
+      html: '<p>The <em>Global Redesign Institute</em> is a proposal from Peter Joseph and The Zeitgeist Movement for an open, collaborative institution – and digital platform – devoted to redesigning the world’s physical and technical infrastructure from first principles: energy, production, distribution, transport and housing, planned according to scientific and ecological constraints and the needs of all people rather than market demand alone. It is a design for the <a href="#infra-structure">infra-structure</a>, the material base on which the other structures of a civilisation rest.</p>'
     },
     {
       id: 'capitalist-theodicy',
@@ -3765,13 +3796,19 @@
     var main = document.querySelector('main');
     main.style.paddingTop = '';
     main.style.justifyContent = '';
+    if (document.documentElement.classList.contains('main-page')) return;
     var list = document.querySelector('#entry .description > p.count');
-    if (!list || document.documentElement.classList.contains('main-page')) return;
     var article = document.getElementById('entry');
-    var own = list.getBoundingClientRect().top - article.getBoundingClientRect().top;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    var H = window.innerHeight;
+    // The entry's own part: up to its list of nested concepts, if it has one, else all of it.
+    var own = list ? list.getBoundingClientRect().top - article.getBoundingClientRect().top : article.offsetHeight;
+    // Too tall to centre whole: centre its opening instead (the first screenful or so), so long
+    // entries open at the same height as short ones rather than jumping to the top.
+    if (own > H - 10 * rem) own = Math.min(own, H * 0.62);
+    else if (!list) return;   // short, with nothing below it: the usual centring already applies
     main.style.justifyContent = 'flex-start';
-    main.style.paddingTop = Math.max(5 * rem, (window.innerHeight - own) / 2) + 'px';
+    main.style.paddingTop = Math.max(5 * rem, (H - own) / 2) + 'px';
   }
   function fitCrumbs() {
     fitTitle();
@@ -4356,15 +4393,23 @@
   headMenu.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true"><line x1="12" y1="26" x2="88" y2="26"/><line x1="12" y1="50" x2="88" y2="50"/><line x1="12" y1="74" x2="88" y2="74"/></svg>';
   document.body.appendChild(headMenu);
   // How far each icon travels: from where it sits to the corner, where the menu icon appears.
+  // An element's box as laid out, ignoring any slide it is part-way through.
+  function restingRect(el) {
+    var r = el.getBoundingClientRect(), dx = new DOMMatrix(getComputedStyle(el).transform).m41;
+    return { left: r.left - dx, right: r.right - dx, width: r.width };
+  }
   function measureIconFold() {
     var target = headMenu.getBoundingClientRect();
     var cx = target.left + target.width / 2;
     document.querySelectorAll('#site-header .head-icons > *').forEach(function (el) {
       if (!el.offsetParent) return;
-      el.style.setProperty('--fold-x', '0px');
-      var r = el.getBoundingClientRect();
+      var r = restingRect(el);
       el.style.setProperty('--fold-x', (cx - (r.left + r.width / 2)) + 'px');
     });
+    // The title closes up to sit the usual gap to the left of the menu icon.
+    var title = document.querySelector('#site-header .head-title');
+    var gap = parseFloat(getComputedStyle(document.querySelector('#site-header .head-inner')).columnGap) || 0;
+    title.style.setProperty('--title-x', Math.max(0, target.left - gap - restingRect(title).right) + 'px');
   }
   function openIcons() { document.documentElement.classList.add('icons-open'); }
   headMenu.addEventListener('mouseenter', openIcons);
