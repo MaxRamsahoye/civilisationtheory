@@ -593,6 +593,7 @@
     margin-top: 2.6rem;
     padding-top: 2rem;
   }
+  .description .index-domain.set-start { border-top-color: var(--text); margin-top: 3.6rem; }
   .description .domain-label {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.62rem;
@@ -783,8 +784,9 @@
     {
       id: 'metacrisis',
       title: 'Metacrisis',
-      parent: 'civilisational-mechanics',
-      order: 1,
+      kind: 'category',
+      parent: 'civilisation-theory',
+      order: 4,
       html: '<p>The <em>metacrisis</em> is the underlying pattern that connects the many crises of the 21st century – ecological, technological, political, economic and psychological – as expressions of shared generative dynamics rather than as separate problems. Where a polycrisis names the interaction of many crises, the metacrisis names what lies beneath them: above all, rivalrous competition under exponential technology (see <a href="#multipolar-trap">multipolar trap</a>), and the extraction of value from complex systems faster than they can regenerate. Because these dynamics are built into the dominant paradigm of civilisation itself, addressing symptoms without addressing their generators tends to relocate harm rather than remove it. Associated with Daniel Schmachtenberger, <em>The Consilience Project</em> and the <em>Civilization Research Institute</em>, the concept frames <a href="#existential-risk">existential risk</a> as its most acute expression, and a response adequate to it as a matter of <a href="#civilisation-design">civilisation design</a> rather than piecemeal reform.</p>'
     },
     {
@@ -802,8 +804,9 @@
     {
       id: 'civilisation-design',
       title: 'Civilisation Design',
-      parent: 'civilisation-design-transition',
-      order: 1,
+      kind: 'category',
+      parent: 'civilisation-theory',
+      order: 2,
       html: '<p><em>Civilisation design</em> is the deliberate design of the basic structures of civilisation – its political economy (structure), cultural psychology (superstructure) and technology (infrastructure) – as one integrated system, rather than reform within the existing one. Because a change to one layer tends to be reabsorbed by the others, the three must be designed to be compatible, and the design must include a viable path of transition that avoids both destruction and dystopia along the way. Drawing on a cybernetic lineage that runs through Buckminster Fuller, Stafford Beer and Jacque Fresco, civilisation design responds to the <a href="#metacrisis">metacrisis</a> at the level of its causes, and aims at a <a href="#life-world-system">life-world-system</a>.</p>'
     },
     {
@@ -856,14 +859,16 @@
     },
     {
       id: 'civilisation-transition',
-      title: 'Civilisation Transition',
-      parent: 'civilisation-design',
+      title: 'Civilisational Transition',
+      kind: 'category',
+      order: 3,
+      parent: 'civilisation-theory',
       html: '<p><em>Civilisation transition</em> is the process of moving from the present civilisation to a designed one: the path, rather than the destination, of <a href="#civilisation-design">civilisation design</a>. A viable transition must remain functional at every stage, keeping people fed, housed and governed while the underlying structures change, and must avoid both failure modes of <a href="#existential-risk">existential risk</a> along the way – collapse into destruction, or capture by concentrated power. Transition is therefore a design problem in its own right, rather than something that follows automatically from a good blueprint.</p>'
     },
     {
       id: 'systems-theory',
       title: 'Systems Theory',
-      parent: 'foundations',
+      parent: 'metatheory',
       html: '<p><em>Systems theory</em> is the study of wholes – how interacting parts give rise to behaviour that none of them has alone. Developed through Ludwig von Bertalanffy’s general system theory, Norbert Wiener’s cybernetics (1948) and later work such as Donella Meadows’s <em>Thinking in Systems</em> (2008), it is concerned with feedback loops, stocks and flows, emergence, self-organisation and resilience. Applied at the scale of civilisation, it shows a single complex adaptive system whose crises are properties of its structure rather than isolated failures.</p>'
     },
     {
@@ -875,25 +880,27 @@
     {
       id: 'evolutionary-theory',
       title: 'Evolutionary Theory',
-      parent: 'foundations',
+      parent: 'metatheory',
       html: '<p><em>Evolutionary theory</em> explains how complex forms arise through variation, selection and inheritance, without any designer. Beginning with Charles Darwin’s <em>On the Origin of Species</em> (1859), it has since been extended from genes to cultures, technologies and institutions. Applied to civilisation, it illuminates its developmental process: the selection pressures that have favoured some social forms over others, and why those that win in competition – as in the <a href="#multipolar-trap">multipolar trap</a> – are not necessarily those that are good for their members or can endure.</p>'
     },
     {
       id: 'critical-theory',
       title: 'Critical Theory',
-      parent: 'foundations',
+      parent: 'metatheory',
       html: '<p><em>Critical theory</em> is the tradition of social theory that examines society in order to change it, exposing the forms of power and ideology that present particular arrangements as natural or inevitable. It originated with the Frankfurt School – Max Horkheimer’s essay “Traditional and Critical Theory” (1937), Theodor Adorno, Herbert Marcuse and later Jürgen Habermas. It supplies the critique of the <a href="#dominant-paradigm">dominant paradigm</a>, and the insistence that a response to the <a href="#metacrisis">metacrisis</a> must be emancipatory, avoiding dystopia as well as destruction.</p>'
     },
     {
       id: 'game-theory',
       title: 'Game Theory',
-      parent: 'foundations',
+      parent: 'metatheory',
       html: '<p><em>Game theory</em> is the formal study of strategic interaction: how the outcome for each actor depends on the choices of all the others. Founded by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944) and extended by John Nash’s concept of equilibrium (1950), it distinguishes zero-sum from positive-sum games and shows how individually rational choices can produce collectively irrational outcomes. It provides the formal analysis of the <a href="#multipolar-trap">multipolar trap</a>, and of the coordination that any response to it must make possible.</p>'
     },
     {
       id: 'metamodernism',
       title: 'Metamodernism',
-      parent: 'foundations',
+      kind: 'category',
+      order: 5,
+      parent: 'civilisation-theory',
       html: '<p><em>Metamodernism</em> is a cultural and philosophical sensibility that moves beyond postmodernism without returning to modernism: it holds the modern capacity for sincerity, hope and grand projects together with the postmodern awareness of irony, context and multiple perspectives. The term was introduced by Timotheus Vermeulen and Robin van den Akker (2010), and developed politically by Hanzi Freinacht in <em>The Listening Society</em> (2017). Metamodernism offers a stance suited to projects of <a href="#civilisation-design">civilisation design</a>: sincere in their aims, yet aware of their own limits.</p>'
     },
     {
@@ -1083,33 +1090,17 @@
       html: '<p><em>Metarationality</em> is the capacity to reason about rationality itself: to understand how, when and why formal, systematic methods work, and how to choose between or go beyond them when they do not. The term was developed by David Chapman, who describes it as neither rejecting rationality nor treating it as universally sufficient. Alongside <a href="#metamodernism">metamodernism</a>, metarationality offers a way through the <a href="#epistemic-crisis">epistemic crisis</a>: holding multiple frameworks at once, and knowing which to use for which problem.</p>'
     },
     {
-      id: 'foundations',
-      title: 'Foundations',
-      parent: 'civilisation-theory',
-      kind: 'category',
-      order: 1,
-      html: '<p>The theoretical frameworks from which the map is built: the sciences of systems, evolution and strategy, the critical tradition, theories of technology and of history, and the metamodern sensibility that holds them together.</p>'
-    },
-    {
       id: 'civilisational-mechanics',
       title: 'Civilisational Mechanics',
       parent: 'civilisation-theory',
       kind: 'category',
-      order: 2,
+      order: 1,
       html: '<p><em>Civilisational mechanics</em> is the study of how a civilisation actually works – the dynamics, incentives, feedback loops and structures that generate its behaviour over time – and of how those same mechanics produce crisis, risk and decline. Where civilisation design asks what could be built, civilisational mechanics asks what is already running, and why its outcomes so often escape anyone’s intentions.</p>'
-    },
-    {
-      id: 'civilisation-design-transition',
-      title: 'Civilisation Design & Transition',
-      parent: 'civilisation-theory',
-      kind: 'category',
-      order: 3,
-      html: '<p>Proposals, principles and traditions concerned with designing a different civilisation and moving towards it: alternative political economies, new forms of coordination and governance, visions of desirable futures, and the ethical and spiritual foundations they require.</p>'
     },
     {
       id: 'risk-and-catastrophe',
       title: 'Risk & Catastrophe',
-      parent: 'civilisational-mechanics',
+      parent: 'metacrisis',
       kind: 'category',
       order: 2,
       html: '<p>Concepts for understanding how modern civilisation produces its own dangers: manufactured and existential risks, accidents inherent in technology, problems beyond the frame of reference, and the practices used to anticipate them.</p>'
@@ -1133,7 +1124,7 @@
     {
       id: 'power-and-control',
       title: 'Power & Control',
-      parent: 'civilisational-mechanics',
+      parent: 'macrosociology',
       kind: 'category',
       order: 5,
       html: '<p>How power is exercised, concentrated and made invisible: surveillance, discipline, state simplification, sovereignty over life and death, and the geopolitical rivalries of the present.</p>'
@@ -1141,7 +1132,7 @@
     {
       id: 'culture-and-meaning',
       title: 'Culture & Meaning',
-      parent: 'civilisational-mechanics',
+      parent: 'macrosociology',
       kind: 'category',
       order: 6,
       html: '<p>The cultural and psychological dimension of the crisis: the loss of meaning and of imagined futures, the pathologies of perception and attention, and the ideas and stories through which a civilisation understands, or fails to understand, itself.</p>'
@@ -1149,7 +1140,7 @@
     {
       id: 'ecology-and-earth-system',
       title: 'Ecology & Earth System',
-      parent: 'civilisational-mechanics',
+      parent: 'macrohistory',
       kind: 'category',
       order: 7,
       html: '<p>Civilisation as a force within the Earth system: the geological, ecological and material consequences of its growth, and the frameworks used to name and measure them.</p>'
@@ -1157,7 +1148,7 @@
     {
       id: 'post-capitalism',
       title: 'Post-Capitalism',
-      parent: 'civilisation-design-transition',
+      parent: 'civilisation-design',
       kind: 'category',
       order: 2,
       html: '<p>Economic alternatives to the present system: post-capitalist and post-scarcity economics, socialist and heterodox traditions, and frameworks for positive-sum economic life.</p>'
@@ -1165,7 +1156,7 @@
     {
       id: 'coordination-and-governance',
       title: 'Coordination & Governance',
-      parent: 'civilisation-design-transition',
+      parent: 'civilisation-design',
       kind: 'category',
       order: 3,
       html: '<p>Means by which a civilisation could coordinate at the scale of its technology: cybernetic governance, collective intelligence, mechanism design, open societies and shared epistemic infrastructure.</p>'
@@ -1173,7 +1164,7 @@
     {
       id: 'alignment-and-futures',
       title: 'Existential Futures',
-      parent: 'civilisation-design-transition',
+      parent: 'macrostrategy',
       kind: 'category',
       order: 4,
       html: '<p>Visions of desirable futures and the long-run strategy of reaching them: macrostrategy, alignment of powerful technology and of humanity itself, and utopian and post-human horizons.</p>'
@@ -1181,7 +1172,7 @@
     {
       id: 'ethics-meaning-and-spirit',
       title: 'Ethics, Meaning & Spirit',
-      parent: 'civilisation-design-transition',
+      parent: 'metamodernism',
       kind: 'category',
       order: 5,
       html: '<p>The ethical, spiritual and existential foundations a new civilisation would need: moral frameworks, forms of care and altruism, and new relations to religion, nature and meaning.</p>'
@@ -1189,7 +1180,7 @@
     {
       id: 'theories-of-technology',
       title: 'Theories of Technology',
-      parent: 'foundations',
+      parent: 'metatheory',
       kind: 'category',
       order: 2000,
       html: '<p>Frameworks for understanding the relationship between technology and society – from technology as an autonomous driver of history to technology as socially constructed, and from networks of human and non-human actors to the agency of matter itself.</p>'
@@ -1599,7 +1590,7 @@
     {
       id: 'clash-of-civilisations',
       title: 'The Clash of Civilisations',
-      parent: 'power-and-control',
+      parent: 'macrohistory',
       ref: 'Huntington',
       html: '<p><em>The Clash of Civilisations</em> is Samuel Huntington’s thesis (1993; book 1996) that after the Cold War the principal conflicts would arise between civilisations defined by culture and religion, rather than between ideologies or nations. Widely criticised for treating civilisations as fixed blocs, it remains influential as a frame for understanding identity-based conflict.</p>'
     },
@@ -1641,20 +1632,20 @@
     {
       id: 'the-age-of-ideology',
       title: 'The Age of Ideology',
-      parent: 'culture-and-meaning',
+      parent: 'macrohistory',
       html: '<p>The <em>age of ideology</em> refers to the period, running from the nineteenth century through the twentieth, in which comprehensive political doctrines – liberalism, socialism, nationalism, fascism, communism – competed to organise whole societies around a single vision. Its catastrophes and its apparent end shape the present, in which grand narratives are distrusted yet no replacement has emerged.</p>'
     },
     {
       id: 'the-end-of-history',
       title: 'The End of History',
-      parent: 'culture-and-meaning',
+      parent: 'macrohistory',
       ref: 'Fukuyama',
       html: '<p><em>The End of History</em> is Francis Fukuyama’s thesis (1989; book 1992) that, with the end of the Cold War, liberal democracy and market economics had emerged as the final form of human government, with no serious ideological rival remaining. Its reception, and the events that have since challenged it, make it a touchstone for debates about whether history has a direction.</p>'
     },
     {
       id: 'the-angel-of-history',
       title: 'The Angel of History',
-      parent: 'culture-and-meaning',
+      parent: 'macrohistory',
       ref: 'Benjamin',
       html: '<p>The <em>angel of history</em> is Walter Benjamin’s image, in his “Theses on the Philosophy of History” (1940), inspired by Paul Klee’s <em>Angelus Novus</em>. The angel faces the past and sees one single catastrophe piling wreckage upon wreckage, while a storm called progress blows it irresistibly backwards into the future. It remains a powerful counter-image to narratives of inevitable progress.</p>'
     },
@@ -1716,7 +1707,7 @@
     {
       id: 'critical-political-economy',
       title: 'Critical Political Economy',
-      parent: 'foundations',
+      parent: 'metatheory',
       html: '<p><em>Critical political economy</em> studies the economy as a system of power, social relations and history rather than as a neutral mechanism. Drawing on Marx, institutional economics and critical theory, it asks who benefits from economic arrangements, how they are maintained, and how they might be changed – treating the economy as a political and human creation.</p>'
     },
     {
@@ -1771,7 +1762,7 @@
     {
       id: 'theory-of-history',
       title: 'Theory of History',
-      parent: 'foundations',
+      parent: 'macrohistory',
       html: '<p>A <em>theory of history</em> is an account of why history unfolds as it does – what forces drive social change, whether history has a direction, and how the past constrains the future. From cyclical and providential views to Hegel, Marx and modern macrohistory, such theories shape which futures a civilisation believes are possible.</p>'
     },
     {
@@ -1783,7 +1774,7 @@
     {
       id: 'integral-theory',
       title: 'Integral Theory',
-      parent: 'foundations',
+      parent: 'metamodernism',
       ref: 'Wilber',
       html: '<p><em>Integral theory</em> is Ken Wilber’s framework for integrating knowledge across disciplines and traditions, organised around four quadrants – the interior and exterior of individuals and collectives – and developmental stages. It seeks a comprehensive map in which science, spirituality, psychology and culture each have a place, and has been influential within metamodern and integral circles.</p>'
     },
@@ -1828,7 +1819,7 @@
     {
       id: 'the-post-status-quo',
       title: 'The Post Status Quo',
-      parent: 'civilisation-design',
+      parent: 'civilisation-transition',
       html: '<p>The <em>post status quo</em> names the recognition that the present order cannot simply continue: its trajectories are unsustainable, so the real choice is not between change and stability but between different kinds of change. The concept reframes transition as unavoidable, and asks whether it will be designed and deliberate or chaotic and imposed by crisis.</p>'
     },
     {
@@ -1840,7 +1831,7 @@
     {
       id: 'super-critical-path',
       title: 'Super-Critical Path',
-      parent: 'alignment-and-futures',
+      parent: 'civilisation-transition',
       ref: 'Fuller (Critical Path)',
       html: '<p>The <em>super-critical path</em> builds on Buckminster Fuller’s <em>Critical Path</em> (1981), which traced the sequence of developments by which humanity might achieve success for all. It names the sequence of changes – technological, economic and cultural – that must happen, in the right order, for a civilisation to make its transition successfully, and the dependencies that make some steps preconditions for others.</p>'
     },
@@ -1874,7 +1865,7 @@
     {
       id: 'post-capitalist-realism',
       title: 'Post-capitalist Realism: Post-Capitalism for the 21st Century',
-      parent: 'alignment-and-futures',
+      parent: 'civilisation-transition',
       html: '<p><em>Post-capitalist realism</em> answers Mark Fisher’s “capitalist realism” – the sense that there is no alternative – by insisting on concrete, workable alternatives suited to 21st century conditions. Rather than utopian blueprints or nostalgic revivals, it seeks realistic paths beyond capitalism grounded in present technologies, institutions and constraints.</p>'
     },
     {
@@ -1986,7 +1977,7 @@
     {
       id: 'theory-of-change',
       title: 'Theory of Change',
-      parent: 'coordination-and-governance',
+      parent: 'civilisation-transition',
       html: '<p>A <em>theory of change</em> is an explicit account of how a set of actions is expected to produce a desired outcome – the causal pathway from interventions to results, and the assumptions it depends on. Making it explicit allows it to be tested and revised. At the scale of civilisation, it asks how deep structural change could actually come about.</p>'
     },
     {
@@ -2012,7 +2003,9 @@
     {
       id: 'macrostrategy',
       title: 'Macrostrategy',
-      parent: 'alignment-and-futures',
+      kind: 'category',
+      order: 9,
+      parent: 'civilisation-theory',
       ref: 'Bostrom',
       html: '<p><em>Macrostrategy</em>, as developed by Nick Bostrom and the Future of Humanity Institute, is the study of how long-term outcomes for humanity depend on present choices – which interventions matter most, in what order, and in light of which <a href="#crucial-consideration">crucial considerations</a>. It seeks the big-picture strategy by which civilisation might navigate transformative technologies safely.</p>'
     },
@@ -2085,7 +2078,7 @@
     {
       id: 'pragmatic-utopianism',
       title: 'Pragmatic Utopianism',
-      parent: 'alignment-and-futures',
+      parent: 'civilisation-transition',
       html: '<p><em>Pragmatic utopianism</em> combines the ambition of utopian thinking with a commitment to feasible steps and testable experiments. It holds that radically better societies are worth aiming for, but that they are built incrementally, through institutions and practices that work in the present and can be improved over time.</p>'
     },
     {
@@ -2206,7 +2199,7 @@
     {
       id: 'ai-alignment',
       title: 'AI Alignment',
-      parent: 'civilisation-design-transition',
+      parent: 'macrostrategy',
       kind: 'category',
       order: 4,
       html: '<p>The problem of ensuring that artificial intelligence, and the wider systems it becomes part of, pursue ends compatible with human and planetary flourishing – and what the framing of alignment reveals about intelligence itself.</p>'
@@ -2214,7 +2207,7 @@
     {
       id: 'replicators',
       title: 'Replicators',
-      parent: 'foundations',
+      parent: 'metatheory',
       kind: 'category',
       order: 1500,
       html: '<p>Frameworks for understanding self-propagating systems – genes, memes, institutions, machines – and the philosophical frames and paradigms needed to think about agency, intelligence and alignment across all of them.</p>'
@@ -2222,7 +2215,7 @@
     {
       id: 'moral-theory',
       title: 'Moral Theory',
-      parent: 'civilisation-design-transition',
+      parent: 'macrostrategy',
       kind: 'category',
       order: 6,
       html: '<p>Moral questions raised by civilisation-scale power and long-run futures: the ethics of automated violence, of cosmic stakes and plural values, of consciousness and moral status, and of how societies know what they ought to do.</p>'
@@ -2572,6 +2565,30 @@
       parent: 'moral-theory',
       ref: 'Bostrom (Vulnerable World Hypothesis)',
       html: '<p>The <em>epistemic semi-anarchic default condition</em> applies Nick Bostrom’s “semi-anarchic default condition” – a world with limited capacity for preventive policing and global governance – to knowledge. Without institutions able to coordinate what a society collectively knows and believes, its information environment defaults to a semi-anarchic state in which misinformation and manipulation go largely unchecked.</p>'
+    },
+    {
+      id: 'metatheory',
+      title: 'Metatheory',
+      parent: 'civilisation-theory',
+      kind: 'category',
+      order: 6,
+      html: '<p><em>Metatheory</em> is theory about theories: the study of the frameworks, assumptions and methods through which the world is understood, and of how different theories relate, conflict and might be integrated. It gathers the sciences of systems, evolution and strategy, the critical tradition, theories of technology and the study of replicators on which the rest of the map draws.</p>'
+    },
+    {
+      id: 'macrohistory',
+      title: 'Macrohistory',
+      parent: 'civilisation-theory',
+      kind: 'category',
+      order: 7,
+      html: '<p><em>Macrohistory</em> is the study of history at the largest scales – the long-run patterns, stages and trajectories of civilisations, and the forces that drive them. It asks whether history has a direction, how civilisations rise and fall, and where the present sits within the arc of human and planetary history.</p>'
+    },
+    {
+      id: 'macrosociology',
+      title: 'Macrosociology',
+      parent: 'civilisation-theory',
+      kind: 'category',
+      order: 8,
+      html: '<p><em>Macrosociology</em> studies societies as wholes – their structures of power, institutions, cultures and systems of meaning – and how these shape and are shaped by the people within them. It examines how power is exercised and legitimated, and how a civilisation’s culture enables, or prevents, it from understanding itself.</p>'
     }
   ];
 
@@ -2634,17 +2651,19 @@
       (function walk(x) { childrenOf(x).forEach(function (k) { if (isConcept(k)) n++; walk(k.id); }); })(id);
       return n;
     }
-    var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+    var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
     var tree = concepts.length ? '<div class="index-list">' +
       '<p class="index-root"><a href="' + href(ROOT) + '">' + esc(ROOT.title) + '</a></p>' +
       childrenOf(ROOT.id).map(function (d, i) {
         var tmp = document.createElement('div');
         tmp.innerHTML = d.html;
         var n = countIn(d.id);
-        return '<section class="index-domain">' +
+        // Sections come in sets of three; a stronger rule opens each set.
+        return '<section class="index-domain' + (i % 3 === 0 ? ' set-start' : '') + '">' +
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + (n === 1 ? ' concept' : ' concepts') + '</p>' +
           '<h3 class="domain-title"><a href="' + href(d) + '">' + esc(d.title) + '</a></h3>' +
-          (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent) + '</p>' : '') +
+          // First sentence only; the full description is on the section's own page.
+          (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
           '<ul class="index-cols">' + childrenOf(d.id).map(branch).join('') + '</ul></section>';
       }).join('') + '</div>' : '';
     // Alternative A–Z view: every concept alphabetically, grouped by first letter.
