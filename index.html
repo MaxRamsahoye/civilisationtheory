@@ -279,6 +279,8 @@
     animation: press-flash .6s ease-out;
     border-radius: 5px;   /* the accent-tinted flash has softly rounded corners */
   }
+  /* Tabs hang from a rule along their top edge: round only the lower corners so the rule stays straight */
+  .index-tabs button.pressed, .deck-menu button.pressed { border-radius: 0 0 5px 5px; }
   @keyframes press-squeeze { 0% { scale: 1; } 35% { scale: 0.78; } 100% { scale: 1; } }
   @keyframes press-ring { from { transform: scale(0.45); opacity: 0.7; } to { transform: scale(1.45); opacity: 0; } }
   @keyframes press-flash { from { background-color: var(--hl); } to { background-color: transparent; } }
