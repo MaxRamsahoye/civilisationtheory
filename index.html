@@ -572,9 +572,10 @@
     body:not(.sidebar-closed) #site-footer { padding-left: var(--side-w); }
   }
   #site-footer { container-type: inline-size; }
-  .foot-inner { width: min(84rem, 100% - 4rem); margin: 0 auto; }
+  /* Only as wide as its content, and centred, so the space either side is equal */
+  .foot-inner { width: fit-content; max-width: calc(100% - 4rem); margin: 0 auto; }
   /* Title and description on the left; the menus in two columns on the right */
-  .foot-main { display: grid; grid-template-columns: minmax(0, 20rem) minmax(0, 1fr); gap: 3.4rem; }
+  .foot-main { display: grid; grid-template-columns: 20rem auto; gap: 3.4rem; }
   .foot-title { margin: 0 0 0.9rem; font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
   .foot-title a { color: inherit; text-decoration: none; }
   .foot-desc { margin: 0 0 1.4rem; color: var(--muted); font-size: 1.02rem; line-height: 1.5; }
@@ -583,8 +584,8 @@
   }
   .foot-stats { margin: 0; font-size: 0.74rem; font-weight: 500; letter-spacing: 0.01em; color: var(--muted); line-height: 1.8; }
   .foot-stats span { white-space: nowrap; }
-  .foot-stats span + span::before { content: '·'; margin: 0 0.7em; }
-  .foot-cols { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 2.8rem; padding-top: 0.5rem; }
+  .foot-stats span + span::before { content: '·'; margin: 0 0.7em 0 0.45em; }
+  .foot-cols { display: grid; grid-template-columns: max-content max-content; gap: 2.8rem; padding-top: 0.5rem; }
   .foot-head { margin: 0 0 0.9rem; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.01em; color: var(--muted); }
   .foot-secs { display: grid; grid-template-columns: repeat(3, max-content); gap: 0 2rem; }
   .foot-col li { white-space: nowrap; }
@@ -3840,7 +3841,7 @@
       '<div class="foot-lede">' +
         '<p class="foot-title"><a href="#">Civilisation Theory Map</a></p>' +
         '<p class="foot-desc">A conceptual adaptive system: a map of the concepts needed to understand civilisation – its mechanics, its crises and its possible transition – built as a collective knowledge base for collective understanding, and in turn, collective action.</p>' +
-        '<p class="foot-stats"><span>' + concepts.length + ' Concepts</span><span>' + sections.length + ' Sections</span><span>' + coined + ' Conceptual Engineerings</span></p>' +
+        '<p class="foot-stats"><span>' + concepts.length + ' Concepts</span> <span>' + sections.length + ' Sections</span> <span>' + coined + ' Conceptual Engineerings</span></p>' +
       '</div>' +
       '<div class="foot-cols"><div class="foot-col">' +
         group('Explore', [li('<a href="#">Home</a>'), li('<a href="#the-map">The Map</a>')].concat(SHOW_INFINITE ? [li('<a href="#infinite">Infinite</a>')] : [])) +
