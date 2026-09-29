@@ -471,6 +471,8 @@
   /* ---------- Header: the title in the top-right corner, the menu icons running on to its right
      (ending beside the theme toggle, which completes the row) ---------- */
   #site-header { border-bottom: 1px solid var(--rule); }
+  /* Header and footer frame the main pages only; concept entries stand alone */
+  html:not(.main-page) #site-header, html:not(.main-page) #site-footer { display: none; }
   .head-inner {
     display: flex;
     justify-content: flex-end;
@@ -603,14 +605,14 @@
     body.sidebar-closed #toc { max-width: 11.5rem; }
   }
 
-  .tree-string { margin: 0 0 1.2rem; line-height: 1.75; }
+  .tree-string { margin: 0 0 1.8rem; line-height: 2; }
   .tree-string a { color: var(--muted); text-decoration: none; }
   .tree-string a:hover { color: var(--text); }
   .tree-string .node { white-space: nowrap; }
   .tree-string .sep { margin: 0 0.45em; }
   /* When the string would run onto a second line, its earliest nodes step out above it as a
      smaller, fainter vertical stack – just enough of them for the rest to fit on one line */
-  .ts-stack { display: block; font-size: 0.86em; opacity: 0.6; line-height: 1.85; margin-bottom: 0.15rem; }
+  .ts-stack { display: block; font-size: 0.86em; opacity: 0.6; line-height: 2.15; margin-bottom: 0.4rem; }
   .ts-stack .ts-row { display: block; }
   .ts-line { display: block; }
 
