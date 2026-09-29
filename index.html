@@ -1968,7 +1968,6 @@
     {
       id: 'military-economic-adaptationism',
       title: 'Military-Economic Adaptationism',
-      coined: true,
       parent: 'capital-and-growth',
       html: '<p><em>Military-economic adaptationism</em> is the view that the dominant institutions of civilisation have been selected above all for military and economic competitiveness. Societies that grew wealthier and stronger displaced or absorbed those that did not, so the forms that prevail are adaptations to intergroup competition – not necessarily to human wellbeing or long-term viability.</p>'
     },
@@ -2062,6 +2061,13 @@
         + '<li><strong>Macro:</strong> civilisation at the largest scales of time, society and action – its history (<a href="#macrohistory">macrohistory</a>), its social structures (<a href="#macrosociology">macrosociology</a>), and the strategy by which its long-run trajectory might be steered (<a href="#macrostrategy">macrostrategy</a>).</li>'
         + '</ul>'
         + '<p>Read together, the three sets move from mechanism to meaning to scale: what civilisation is and could be, how it is framed and experienced, and where it has come from and might go. The paradigm is the backbone of <a href="#the-map">the map</a>, and the starting point of its curated sequence.</p>'
+    },
+    {
+      id: 'the-wizarding-away-of-the-state',
+      title: 'The Wizarding Away of the State',
+      parent: 'post-capitalism',
+      coined: true,
+      html: '<p><em>The wizarding away of the state</em> plays on Marx and Engels’s prophecy of the “withering away of the state”: the idea that, once class society had been overcome, the coercive apparatus of the state would no longer be needed and would gradually fall away. In place of that slow political withering, it names the prospect of the state being superseded by technology – its functions of coordination, administration and enforcement absorbed into automated systems, platforms and artificial intelligence so capable that, in Arthur C. Clarke’s phrase, they are “indistinguishable from magic”. The question it poses is who holds the wand: whether such a transition would dissolve domination, as the socialist tradition hoped, or concentrate it in whoever owns the systems, as in <a href="#the-silicon-cage">the silicon cage</a>. See also <a href="#fully-automated-luxury-communism">fully automated luxury communism</a> and <a href="#meta-marxism">meta-Marxism</a>.</p>'
     },
     // ---- From the Consilience Project glossary (tagged 'consilience')
     {
@@ -2882,7 +2888,6 @@
     {
       id: 'axiological-design',
       title: 'Axiological Design',
-      coined: true,
       parent: 'civilisation-design',
       ref: 'Values-neutral',
       html: '<p><em>Axiological design</em> is the design of a civilisation’s value systems – the structures through which it decides what matters and how to weigh competing goods. Approached in a values-neutral way, it concerns not which values should win, but how institutions can hold and adjudicate plural values well, so that design does not simply encode the preferences of its designers.</p>'
@@ -3340,7 +3345,6 @@
     {
       id: 'critical-collapsology',
       title: 'Critical Collapsology',
-      coined: true,
       parent: 'risk-and-catastrophe',
       ref: 'Servigne & Stevens (collapsology)',
       html: '<p><em>Critical collapsology</em> builds on “collapsology”, the interdisciplinary study of the collapse of industrial civilisation popularised by Pablo Servigne and Raphaël Stevens (2015). Its critical form examines not only whether and how collapse might happen, but whose collapse is imagined, which narratives of collapse serve which interests, and how the study of collapse can inform transition rather than resignation.</p>'
@@ -3355,7 +3359,6 @@
     {
       id: 'techno-capitalist-progress-narrative',
       title: 'The Techno-Capitalist Progress Narrative',
-      coined: true,
       parent: 'culture-and-meaning',
       html: '<p>The <em>techno-capitalist progress narrative</em> is the story that technological innovation driven by markets naturally produces human progress, and that more growth and more technology are the solution to the problems they create. It functions as the unofficial creed of the present civilisation, making its trajectory seem both inevitable and benevolent.</p>'
     },
@@ -3412,7 +3415,6 @@
     {
       id: 'civilisational-sanity',
       title: 'Civilisational Sanity',
-      coined: true,
       parent: 'coordination-and-governance',
       html: '<p><em>Civilisational sanity</em> is the capacity of a civilisation to perceive reality accurately, reason about it collectively and act in its own long-term interest. By analogy with individual mental health, a civilisation can become collectively insane – pursuing self-destructive courses despite knowing better – and restoring its sanity is a precondition for any successful transition.</p>'
     },
@@ -4142,7 +4144,8 @@
   // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
   var TAGS = {
     consilience: { label: 'Consilience Project', view: 'cp' },   // opens the Map's Consilience Project view
-    cs: { label: 'Curated Sequence', view: 'cs' }                // entries in the Curated Sequence (added automatically)
+    cs: { label: 'Curated Sequence', view: 'cs' },               // entries in the Curated Sequence (added automatically)
+    ce: { label: 'Conceptual Engineering', view: 'ce' }          // the map's own novel terms, marked coined (added automatically)
   };
   // The Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
   // Grouped under subheadings: Foundation (the paradigm), the three sets of sections, then Core (its aim).
@@ -4175,7 +4178,7 @@
       '<span>' + (at + 1) + ' / ' + seq.length + '</span></p><div class="seq-list">' + sequenceListHtml(c) + '</div></div>';
   }
   function tagsHtml(c) {
-    var tags = (curatedSequence().indexOf(c) >= 0 ? ['cs'] : []).concat(c.tags || []);
+    var tags = (curatedSequence().indexOf(c) >= 0 ? ['cs'] : []).concat(c.coined ? ['ce'] : []).concat(c.tags || []);
     if (!tags.length) return '';
     return '<p class="entry-tags">' + tags.map(function (t) {
       var tag = TAGS[t] || { label: t };
