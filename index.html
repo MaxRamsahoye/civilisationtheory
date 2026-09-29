@@ -3941,7 +3941,7 @@
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Curated Sequence</h3>' +
-      '<p class="ce-desc">A reading path through the map, in order: begin with the core – the civilisation research paradigm and the viable life-world-system it aims at – then follow its nine sections through the civilisational, meta and macro sets.</p>' +
+      '<p class="ce-desc">A reading path through the map, in order: begin with its foundation, the civilisation research paradigm; follow its nine sections through the civilisational, meta and macro sets; and end at its core, the viable life-world-system.</p>' +
       '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div></div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
@@ -4132,14 +4132,15 @@
     cs: { label: 'Curated Sequence', view: 'cs' }                // entries in the Curated Sequence (added automatically)
   };
   // The Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
-  // Grouped under subheadings: Core (the paradigm and its aim), then the three sets of sections.
+  // Grouped under subheadings: Foundation (the paradigm), the three sets of sections, then Core (its aim).
   function curatedGroups() {
     var sections = childrenOf(ROOT.id);
     return [
-      { name: 'Core', items: [byId['civilisation-research-paradigm'], byId['life-world-system']] },
+      { name: 'Foundation', items: [byId['civilisation-research-paradigm']] },
       { name: 'Civilisational', items: sections.slice(0, 3) },
       { name: 'Meta', items: sections.slice(3, 6) },
-      { name: 'Macro', items: sections.slice(6, 9) }
+      { name: 'Macro', items: sections.slice(6, 9) },
+      { name: 'Core', items: [byId['life-world-system']] }
     ].map(function (g) { g.items = g.items.filter(Boolean); return g; });
   }
   function curatedSequence() {
