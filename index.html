@@ -837,6 +837,20 @@
   .description .menu-cats a { color: var(--muted); }
   .description .menu-cats a:hover { color: var(--text); }
   .description .menu-cats span + span::before { content: '·'; margin: 0 0.4em; color: var(--rule); }
+  /* Menu links and section headings: always underlined, never in the accent colour */
+  :root .description .index-menu a,
+  :root .description .domain-title a {
+    text-decoration: underline;
+    text-decoration-color: var(--link-underline);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  :root .description .index-menu a:hover,
+  :root .description .domain-title a:hover { text-decoration-color: var(--text); }
+  :root.accent .description .index-menu a { color: var(--text); }
+  :root.accent .description .index-menu .menu-cats a { color: var(--muted); }
+  :root.accent .description .index-menu .menu-cats a:hover { color: var(--text); }
+  :root.accent .description .domain-title a { color: var(--text); }
   .description .index-domain, .description .index-cols > li.is-category { scroll-margin-top: 1.5rem; }
   @media (max-width: 640px) {
     .description .menu-cols { grid-template-columns: 1fr; gap: 1.6rem; }
