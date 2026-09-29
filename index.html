@@ -432,6 +432,14 @@
   #tree > li > ul > li:first-child > a { margin-top: 0.7rem; }
   #tree > li > ul > li > a:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
   .tree a[aria-current] { color: var(--active); }
+  /* Filtering from the sidebar search: non-matches folded away; matches in full text colour */
+  .tree li.f-out { display: none; }
+  .tree.filtering a:not(.hit) { opacity: 0.75; }
+  #tree > li > ul > li > a { opacity: 1 !important; }
+  .tree a.hit { color: var(--text); }
+  .tree a.hit mark { background: var(--select); color: inherit; }
+  .tree a.hit.sel { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
+  #tree-none { margin: 0.6rem 0 0; font-size: 0.9rem; color: var(--muted); }
   .tree .empty {
     color: var(--muted);
     margin-top: 0.35rem;
@@ -3604,60 +3612,73 @@
       .sort(function (a, b) { return b.score - a.score || a.c.title.localeCompare(b.c.title); })
       .slice(0, limit || 10);
   }
-  function renderSearch() {
-    var q = searchInput.value;
-    var res = searchResults(q);
-    searchSel = res.length ? 0 : -1;
-    if (!q.trim()) { closeSearch(false); return; }
-    searchList.innerHTML = res.length ? res.map(function (r, i) {
-      var path = pathTo(r.c).slice(0, -1).map(function (p) { return esc(p.title); }).join(' &gt; ');
-      return '<li><a href="' + href(r.c) + '" role="option" aria-selected="' + (i === 0) + '">' +
-        '<span class="r-title">' + esc(r.c.title) + '</span><span class="r-path">' + path + '</span></a></li>';
-    }).join('') : '<li class="r-none">No matching concepts</li>';
-    searchList.hidden = false;
-    searchInput.setAttribute('aria-expanded', 'true');
+  // The sidebar's search filters the sidebar tree in place: matching concepts stay, with the
+  // sections and categories above them for context; everything else is folded away.
+  var treeHits = [], treeSel = -1;
+  function filterTree() {
+    var q = searchInput.value.trim().toLowerCase();
+    var lis = treeEl.querySelectorAll('li');
+    treeEl.querySelectorAll('a.hit').forEach(function (a) { a.classList.remove('hit', 'sel'); a.textContent = byId[a.getAttribute('data-id')].title; });
+    var none = document.getElementById('tree-none');
+    treeHits = []; treeSel = -1;
+    if (!q) {
+      treeEl.classList.remove('filtering');
+      lis.forEach(function (li) { li.classList.remove('f-out'); });
+      if (none) none.hidden = true;
+      return;
+    }
+    treeEl.classList.add('filtering');
+    var hit = {};
+    searchResults(q, Infinity).forEach(function (r) { hit[r.c.id] = true; });
+    // Post-order: a branch stays if it is a hit or holds one.
+    (function keep(li) {
+      var a = li.querySelector(':scope > a'), id = a && a.getAttribute('data-id');
+      var any = false;
+      li.querySelectorAll(':scope > ul > li').forEach(function (k) { if (keep(k)) any = true; });
+      var self = !!hit[id];
+      li.classList.toggle('f-out', !(self || any));
+      if (self) {
+        var t = byId[id].title, i = t.toLowerCase().indexOf(q);
+        a.innerHTML = i < 0 ? esc(t) : esc(t.slice(0, i)) + '<mark>' + esc(t.slice(i, i + q.length)) + '</mark>' + esc(t.slice(i + q.length));
+        a.classList.add('hit');
+      }
+      return self || any;
+    })(treeEl.querySelector(':scope > li'));
+    treeHits = [].slice.call(treeEl.querySelectorAll('a.hit'));
+    if (treeHits.length) { treeSel = 0; treeHits[0].classList.add('sel'); }
+    if (!none) {
+      none = document.createElement('p');
+      none.id = 'tree-none';
+      none.textContent = 'No matching concepts';
+      treeEl.after(none);
+    }
+    none.hidden = !!treeHits.length;
+    document.getElementById('sidebar').scrollTo({ top: 0 });
   }
-  function moveSearch(d) {
-    var items = searchList.querySelectorAll('a');
-    if (!items.length) return;
-    searchSel = (searchSel + d + items.length) % items.length;
-    items.forEach(function (a, i) { a.setAttribute('aria-selected', String(i === searchSel)); });
-    items[searchSel].scrollIntoView({ block: 'nearest' });
+  function moveTreeSel(d) {
+    if (!treeHits.length) return;
+    treeHits[treeSel].classList.remove('sel');
+    treeSel = (treeSel + d + treeHits.length) % treeHits.length;
+    treeHits[treeSel].classList.add('sel');
+    treeHits[treeSel].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
-  function closeSearch(clear) {
-    searchList.hidden = true;
-    searchInput.setAttribute('aria-expanded', 'false');
-    if (clear) searchInput.value = '';
-  }
-  searchInput.addEventListener('input', renderSearch);
-  searchInput.addEventListener('focus', function () { if (searchInput.value.trim()) renderSearch(); });
+  function closeSearch() {}
+  searchInput.addEventListener('input', filterTree);
   searchInput.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowDown') { e.preventDefault(); moveSearch(1); }
-    else if (e.key === 'ArrowUp') { e.preventDefault(); moveSearch(-1); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); moveTreeSel(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); moveTreeSel(-1); }
     else if (e.key === 'Enter') {
-      var items = searchList.querySelectorAll('a');
-      if (searchSel >= 0 && items[searchSel]) { e.preventDefault(); items[searchSel].click(); }
-    } else if (e.key === 'Escape') { closeSearch(true); searchInput.blur(); }
-  });
-  searchList.addEventListener('click', function (e) {
-    if (e.target.closest('a')) { closeSearch(true); searchInput.blur(); }
-  });
-  document.addEventListener('pointerdown', function (e) {
-    if (!e.target.closest('#search')) closeSearch(false);
+      if (treeHits[treeSel]) { e.preventDefault(); treeHits[treeSel].click(); }
+    } else if (e.key === 'Escape') { searchInput.value = ''; filterTree(); searchInput.blur(); }
   });
 
-  // ---------- Search page: entering the sidebar's search box (or pressing /) opens it ----------
+  // ---------- Search page (the header's search icon, or pressing /) ----------
   var lastQuery = '';
   function openSearchPage(q) {
     if (q) lastQuery = q;
     if (location.hash === '#search') { var i = document.getElementById('sp-input'); if (i) i.focus(); }
     else location.hash = '#search';
   }
-  searchInput.addEventListener('focus', function () {
-    var q = searchInput.value;
-    searchInput.blur();
-    openSearchPage(q);
-  });
   function searchPageHtml() {
     return '<div class="sp">' +
       '<div class="sp-field"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>' +
