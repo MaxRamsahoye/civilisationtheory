@@ -1022,22 +1022,29 @@
      first row, Core beneath Foundation in the second */
   .description .seq-list {
     margin: 2rem 0 0; font-size: 0.9em; line-height: 1.3;
-    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.6rem 1.4rem;
+    /* Columns as wide as their longest title (so none wraps while there is room), spread across */
+    display: grid; grid-template-columns: repeat(4, minmax(0, max-content)); justify-content: space-between; gap: 1.8rem 1.4rem;
   }
   .description .seq-list .seq-group { list-style: none; padding: 0; margin: 0; }
-  @media (max-width: 640px) { .description .seq-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .description .seq-list li { margin: 0 0 0.95rem; padding: 0; }
-  .description .seq-head {
-    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
-    margin: 0 0 0.8rem;
+  .description .seq-list li { white-space: nowrap; }   /* every title on one line */
+  .description .seq-section .seq-list { column-gap: 1rem; }
+  @media (max-width: 640px) {
+    .description .seq-list { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
+    .description .seq-list li { white-space: normal; }
+    /* Foundation and Core span the width, so their titles stay on one line */
+    .description .seq-list .seq-block:first-child, .description .seq-list .seq-block:last-child { grid-column: 1 / -1; }
+    .description .seq-list .seq-block:first-child li, .description .seq-list .seq-block:last-child li { white-space: nowrap; }
   }
+  .description .seq-list li { margin: 0 0 0.95rem; padding: 0; }
+  /* Group names in Bembo, bold and a step larger than the entries beneath them */
+  .description .seq-head { font-size: 1.18em; font-weight: 700; line-height: 1.2; color: var(--text); margin: 0 0 0.85rem; }
   .description .seq-list li[aria-current] span { font-weight: 700; }
   @media (max-width: 640px) { .description .seq-list { font-size: 1em; } }
   /* The Curated Sequence reads as a single column, in order, on the Map and on its entries */
   .description .ce-list.cs-list ul, html.page-map .description .ce-list.cs-list ul { columns: 1; margin: 0; }
   html.page-map .description .ce-list.cs-list .seq-list { column-gap: 2.4rem; }
   .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
+  .description .cs-list .ce-intro { margin-bottom: 2.6rem; }   /* room after the entries counter */
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
