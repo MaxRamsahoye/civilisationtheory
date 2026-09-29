@@ -492,9 +492,13 @@
     background: var(--bg); border-bottom: 0;
   }
   /* Hudless mode (H): only the text itself – no header, footer, sidebar, icons, contents or tree string */
+  /* The interface fades out (and back in); nothing moves, so the text stays exactly where it is */
   html.hudless #site-header, html.hudless #site-footer, html.hudless #sidebar, html.hudless #scrim,
   html.hudless .control, html.hudless #progress, html.hudless #toc,
-  html.hudless #entry > p.tree-string { display: none !important; }
+  html.hudless #entry > p.tree-string { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+  html.hud-fade #site-header, html.hud-fade #site-footer, html.hud-fade #sidebar, html.hud-fade #scrim,
+  html.hud-fade .control, html.hud-fade #progress, html.hud-fade #toc,
+  html.hud-fade #entry > p.tree-string { transition: opacity .6s ease, visibility .6s, transform .25s ease, left .25s ease !important; }
   .head-inner {
     display: flex;
     justify-content: flex-end;
@@ -3893,6 +3897,17 @@
     setTimeout(function () { input.focus({ preventScroll: true }); input.setSelectionRange(input.value.length, input.value.length); }, 0);
   }
 
+  // Hudless mode: the interface fades out on H and fades back in on a second press (or Escape).
+  var hudTimer;
+  function setHudless(on) {
+    var root = document.documentElement;
+    root.classList.add('hud-fade');
+    root.classList.toggle('hudless', on);
+    if (on) setSidebar(false, false);
+    clearTimeout(hudTimer);
+    hudTimer = setTimeout(function () { root.classList.remove('hud-fade'); }, 650);
+  }
+
   // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -3931,12 +3946,9 @@
       openSearchPage('');
     } else if ((e.key === 'h' || e.key === 'H') && !e.repeat) {
       // Hudless: hide every piece of interface and the tree string, leaving only the page itself.
-      var on = document.documentElement.classList.toggle('hudless');
-      if (on) setSidebar(false, false);
-      fitCrumbs();
+      setHudless(!document.documentElement.classList.contains('hudless'));
     } else if (e.key === 'Escape' && document.documentElement.classList.contains('hudless')) {
-      document.documentElement.classList.remove('hudless');
-      fitCrumbs();
+      setHudless(false);
     } else if ((e.key === 'm' || e.key === 'M') && !e.repeat) {
       soundOn = !soundOn;
       try { localStorage.setItem('ct-sound', soundOn ? 'on' : 'off'); } catch (err) {}
