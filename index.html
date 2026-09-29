@@ -154,7 +154,14 @@
     text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
   }
   :root.accent .description a:hover { text-decoration-color: var(--accent); }
-  ::selection { background: var(--select); color: var(--text); }
+  /* Highlighting (text selection, search and find matches) is a tint of each theme's accent,
+     mixed into its page colour at a strength that suits it: green on white (or rust with the
+     second accent), gold on black, teal on sepia, blue on midnight */
+  :root { --hl: color-mix(in srgb, var(--accent) 24%, var(--bg)); }
+  :root[data-theme="dark"] { --hl: color-mix(in srgb, var(--accent) 34%, var(--bg)); }
+  :root[data-theme="sepia"] { --hl: color-mix(in srgb, var(--accent) 22%, var(--bg)); }
+  :root[data-theme="midnight"] { --hl: color-mix(in srgb, var(--accent) 32%, var(--bg)); }
+  ::selection { background: var(--hl); color: var(--text); }
   html { font-size: 17px; scrollbar-width: none; }
   html::-webkit-scrollbar { display: none; }
   @media (min-width: 900px) { html { font-size: 19px; } }
@@ -454,7 +461,7 @@
   .tree.filtering a:not(.hit) { opacity: 0.75; }
   #tree > li > ul > li > a { opacity: 1 !important; }
   .tree a.hit { color: var(--text); }
-  .tree a.hit mark { background: var(--select); color: inherit; }
+  .tree a.hit mark { background: var(--hl); color: inherit; }
   .tree a.hit.sel { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
   #tree-none { margin: 0.6rem 0 0; font-size: 0.9rem; color: var(--muted); }
   .tree .empty {
@@ -612,7 +619,7 @@
     font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
   }
   .description .sp-snip { margin: 0.55rem 0 0; font-size: 0.95rem; line-height: 1.5; color: var(--muted); }
-  .sp-snip mark { background: var(--select); color: var(--text); }
+  .sp-snip mark { background: var(--hl); color: var(--text); }
   @media (max-width: 640px) { #sp-input { font-size: 1.5rem; } }
 
   /* ---------- Page transitions: the old page fades out, then the new one fades in ---------- */
@@ -657,7 +664,7 @@
     color: var(--muted); background: none; border-radius: 2px;
   }
   #find-bar .find-btn:hover { color: var(--text); background: var(--select); }
-  mark.find-hit { background: color-mix(in srgb, var(--select) 70%, transparent); color: inherit; border-radius: 1px; }
+  mark.find-hit { background: var(--hl); color: inherit; border-radius: 1px; }
   mark.find-hit.current { background: var(--accent); color: var(--bg); }
   html.hudless #find-bar { opacity: 1 !important; visibility: visible !important; }
 
