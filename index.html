@@ -491,15 +491,15 @@
     body.sidebar-closed #toc { max-width: 11.5rem; }
   }
 
-  .tree-string { margin: 0 0 1.2rem; line-height: 1.4; }  /* same line spacing as the main body */
+  .tree-string { margin: 0 0 1.2rem; line-height: 1.75; }
   .tree-string a { color: var(--muted); text-decoration: none; }
   .tree-string a:hover { color: var(--text); }
   .tree-string .node { white-space: nowrap; }
   .tree-string .sep { margin: 0 0.45em; }
   /* When the string would run onto a second line, its earliest nodes step out above it as a
      smaller, fainter vertical stack – just enough of them for the rest to fit on one line */
-  .ts-stack { display: block; font-size: 0.86em; opacity: 0.6; line-height: 1.5; margin-bottom: 0.2rem; }
-  .ts-stack .node { display: block; }
+  .ts-stack { display: block; font-size: 0.86em; opacity: 0.6; line-height: 1.85; margin-bottom: 0.15rem; }
+  .ts-stack .ts-row { display: block; }
   .ts-line { display: block; }
 
   h1 {
@@ -2994,7 +2994,10 @@
         : '<a class="node" href="' + href(p) + '">' + esc(p.title) + '</a>';
     });
     if (!k) return nodes.join('<span class="sep">&gt;</span><wbr>');
-    return '<span class="ts-stack">' + nodes.slice(0, k).join('') + '</span>' +
+    // Each stacked node keeps its arrow, pointing on to the next line.
+    return '<span class="ts-stack">' + nodes.slice(0, k).map(function (n) {
+      return '<span class="ts-row">' + n + '<span class="sep">&gt;</span></span>';
+    }).join('') + '</span>' +
       '<span class="ts-line">' + nodes.slice(k).join('<span class="sep">&gt;</span><wbr>') + '</span>';
   }
 
