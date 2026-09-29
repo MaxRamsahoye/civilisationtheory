@@ -229,6 +229,8 @@
     transform: translateY(-50%);
   }
   body.sidebar-closed #sidebar-toggle { left: 1.4rem; }
+  /* With the footer in view the sidebar is closed and its toggle steps away */
+  body.footer-in-view #sidebar-toggle { opacity: 0; pointer-events: none; }
   /* Open: arrow pointing left (close). Closed: map icon (open). */
   #sidebar-toggle .i-close { transform: rotate(90deg); }
   #sidebar-toggle .i-map, body.sidebar-closed #sidebar-toggle .i-close { display: none; }
@@ -3805,7 +3807,7 @@
       else if (!document.documentElement.classList.contains('page-home')) backBtn.click();
     } else if (e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
-      if (!e.repeat) sideBtn.click();
+      if (!e.repeat && !document.body.classList.contains('footer-in-view')) sideBtn.click();
     } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
       document.getElementById('theme-toggle').click();
     } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
@@ -3868,6 +3870,16 @@
       }
     });
   })();
+
+  // Once the footer scrolls into view the sidebar closes and its toggle hides, until the footer
+  // is scrolled back out of view.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      var inView = entries[entries.length - 1].isIntersecting;
+      document.body.classList.toggle('footer-in-view', inView);
+      if (inView && !document.body.classList.contains('sidebar-closed')) setSidebar(false, false);
+    }).observe(document.getElementById('site-footer'));
+  }
 
   // Every load or refresh opens the homepage: drop any concept slug left in the URL.
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
