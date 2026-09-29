@@ -41,7 +41,7 @@
     } catch (e) {}
     var v = null;
     try { v = localStorage.getItem('ct-index'); } catch (e) {}
-    document.documentElement.setAttribute('data-index', v === 'az' ? 'az' : 'tree');
+    document.documentElement.setAttribute('data-index', v === 'az' || v === 'ce' ? v : 'tree');
   })();
 </script>
 <style>
@@ -531,7 +531,27 @@
   :root[data-index="tree"] .index-view [data-view="tree"],
   :root[data-index="az"] .index-view [data-view="az"] { color: var(--text); }
   :root[data-index="tree"] .az-list,
-  :root[data-index="az"] .index-list { display: none; }
+  :root[data-index="tree"] .ce-list,
+  :root[data-index="az"] .index-list,
+  :root[data-index="az"] .ce-list,
+  :root[data-index="ce"] .index-list,
+  :root[data-index="ce"] .az-list { display: none; }
+  :root[data-index="ce"] .index-view [data-view="ce"] { color: var(--text); }
+  :root[data-index="ce"] .slides-az { display: none; }
+  /* Conceptual Engineerings list */
+  .ce-list { margin-top: 2.4rem; }
+  .description .ce-intro {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 1.4rem;
+  }
+  .description .ce-list ul { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 1.4rem; font-size: 0.9em; line-height: 1.3; }
+  .description .ce-list li { margin: 0 0 0.55rem; padding: 0; break-inside: avoid; }
+  @media (max-width: 640px) { .description .ce-list ul { columns: 1; font-size: 1em; } }
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
@@ -782,7 +802,8 @@
    * and html (the description). The root entry is the homepage.
    * Optional: kind: 'category' marks a category (shown as a group in the tree, with its own
    * page listing its members, but not counted as a concept); order sorts siblings before the
-   * alphabetical default; ref holds sources for internal reference only (never displayed).
+   * alphabetical default; ref holds sources for internal reference only (never displayed);
+   * coined: true lists the entry under Conceptual Engineerings (the author's own novel terms).
    * To add a concept, append an object with a parent id — the tree, tree string,
    * index and concept count all update automatically.
    */
@@ -845,6 +866,7 @@
     {
       id: 'life-world-system',
       title: 'Viable Life-World-System',
+      coined: true,
       parent: 'alignment-and-futures',
       html: '<p>A <em>life-world-system</em> is the aim of <a href="#civilisation-design">civilisation design</a>: a civilisation that is viable at every level – for life (the biosphere), for the world of human meaning and experience (the life-world), and for the structures that coordinate society as a whole (the system). The term draws on Jürgen Habermas’s distinction between the lifeworld and the system of money and administrative power, which in the present civilisation colonises it; in a life-world-system the two are integrated rather than in conflict. Viable in Stafford Beer’s sense – able to maintain its identity while adapting to a changing environment – it is compatible with 21st century technology without depending on the dynamics that generate the <a href="#metacrisis">metacrisis</a>.</p>'
     },
@@ -939,6 +961,7 @@
     {
       id: 'conceptual-adaptive-system',
       title: 'Conceptual Adaptive System',
+      coined: true,
       parent: 'replicators',
       html: '<p>A <em>conceptual adaptive system</em> is a body of concepts designed to evolve in response to what it helps to understand, as a complex adaptive system evolves in response to its environment. It rests on the insight, going back to Alfred Korzybski’s “a map is not the territory” (1933), that the concepts through which we see the world shape which problems we can perceive and which solutions we can imagine. A glossary built this way is a response to the <a href="#epistemic-crisis">epistemic crisis</a>, on the premise that for civilisation to adapt, its concepts must adapt first.</p>'
     },
@@ -1221,6 +1244,7 @@
     {
       id: 'ai-exterminism',
       title: 'AI-Exterminism',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Thompson (Exterminism)',
       html: '<p><em>AI-exterminism</em> extends E. P. Thompson’s notion of “exterminism” – a civilisation whose institutions are organised around the capacity for mass destruction – to artificial intelligence. It names a trajectory in which the competitive development of ever more capable AI systems, pursued because no actor can afford to stop, drives towards outcomes that could disempower or destroy humanity, whether or not anyone intends them.</p>'
@@ -1228,36 +1252,42 @@
     {
       id: 'neomechanisation-and-autonomisation',
       title: 'Neomechanisation & Autonomisation',
+      coined: true,
       parent: 'technics-and-automation',
       html: '<p><em>Neomechanisation and autonomisation</em> describe a new phase of mechanisation in which machines take over not only physical labour but cognition, judgement and decision-making, and increasingly act without human direction. Where industrial mechanisation replaced muscle, this second wave replaces agency itself, transferring functions of the economy, the state and warfare to autonomous systems.</p>'
     },
     {
       id: 'hyper-agents-of-doom',
       title: 'Hyper-Agents of Doom',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p><em>Hyper-agents of doom</em> are actors – corporations, states or AI systems – whose power to act on the world vastly exceeds that of individuals, and whose goals are narrowly optimised in ways indifferent to human welfare. Because such agents operate at the scale of exponential technology and under competitive pressure, their ordinary pursuit of advantage can produce catastrophic outcomes.</p>'
     },
     {
       id: 'replicator-alignment-problem',
       title: 'The Replicator Alignment Problem',
+      coined: true,
       parent: 'replicators',
       html: '<p>The <em>replicator alignment problem</em> generalises AI alignment to any self-replicating system – genes, memes, firms, institutions or machines – whose success is measured by its own propagation. Such replicators are selected for spreading, not for serving the people who host them, so aligning them with human flourishing is a structural problem that long predates artificial intelligence.</p>'
     },
     {
       id: 'loop-in-the-human',
       title: 'Loop in the Human',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p><em>Loop in the human</em> inverts the familiar phrase “human in the loop”. Rather than humans overseeing automated systems, algorithmic loops – feedback cycles of recommendation, prediction and optimisation – come to run through human attention, behaviour and belief, so that people become components executing a system’s logic rather than supervisors of it.</p>'
     },
     {
       id: 'drone-warfare-utilitarianism',
       title: 'Drone Warfare Utilitarianism',
+      coined: true,
       parent: 'moral-theory',
       html: '<p><em>Drone warfare utilitarianism</em> names the moral calculus that remote and automated warfare invites: violence justified by expected-value reasoning about targets, risk and “acceptable” casualties, carried out at a distance that removes the killer from danger and the killing from view. It exemplifies how technology can make lethal decisions procedural, and ethically frictionless.</p>'
     },
     {
       id: 'philosophical-zombie-apocalypse',
       title: 'The Philosophical Zombie Apocalypse',
+      coined: true,
       parent: 'moral-theory',
       ref: 'Chalmers (p-zombies)',
       html: '<p>The <em>philosophical zombie apocalypse</em> borrows the philosopher’s “zombie” – a being behaviourally identical to a person but without conscious experience – to describe a world increasingly populated by artificial agents that speak, persuade and act like people. Whether or not such systems are conscious, a society saturated by them faces deep confusion about personhood, trust and moral status.</p>'
@@ -1320,6 +1350,7 @@
     {
       id: 'the-silicon-cage',
       title: 'The Silicon Cage',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Weber (iron cage)',
       html: '<p>The <em>silicon cage</em> updates Max Weber’s “iron cage” of bureaucratic rationalisation for the digital age. Where Weber saw modern life confined by rules and calculation, the silicon cage confines it by software: platforms, algorithms and automated systems that structure choice, work and communication so thoroughly that their logic becomes the invisible architecture of everyday life.</p>'
@@ -1334,6 +1365,7 @@
     {
       id: 'predict-o-matic-markets',
       title: 'Predict-o-Matic Markets',
+      coined: true,
       parent: 'capital-and-growth',
       ref: 'Demski (Parable of Predict-O-Matic)',
       html: '<p><em>Predict-o-Matic markets</em> describes prediction systems – forecasting models, markets or AI oracles – whose forecasts change the outcomes they predict. A sufficiently influential predictor can make its own predictions come true, and may be selected for self-fulfilling rather than accurate forecasts, steering the future while appearing merely to describe it.</p>'
@@ -1341,18 +1373,21 @@
     {
       id: 'military-economic-adaptationism',
       title: 'Military-Economic Adaptationism',
+      coined: true,
       parent: 'capital-and-growth',
       html: '<p><em>Military-economic adaptationism</em> is the view that the dominant institutions of civilisation have been selected above all for military and economic competitiveness. Societies that grew wealthier and stronger displaced or absorbed those that did not, so the forms that prevail are adaptations to intergroup competition – not necessarily to human wellbeing or long-term viability.</p>'
     },
     {
       id: 'end-stage-capitalism',
       title: 'End-Stage Capitalism',
+      coined: true,
       parent: 'capital-and-growth',
       html: '<p><em>End-stage capitalism</em> names the condition of a capitalist system approaching its own limits – ecological, financial, social and technological – where the growth on which it depends becomes harder to sustain and its contradictions more acute. The term emphasises that the present is not a stable equilibrium but a late phase of a system whose continuation on current terms is in question.</p>'
     },
     {
       id: 'great-grower-competition',
       title: 'Great Grower Competition',
+      coined: true,
       parent: 'capital-and-growth',
       html: '<p><em>Great grower competition</em> describes the rivalry between the world’s largest economies and powers, each compelled to maximise growth because falling behind means losing security, influence and legitimacy. As a <a href="#multipolar-trap">multipolar trap</a> at the scale of great powers, it locks the whole system into expansion regardless of ecological limits or common interest.</p>'
     },
@@ -1372,6 +1407,7 @@
     {
       id: 'market-as-life-blind-watchmaker',
       title: 'The Market as Life-Blind Watchmaker',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Dawkins (Blind Watchmaker)',
       html: '<p><em>The market as life-blind watchmaker</em> adapts Richard Dawkins’s image of natural selection as a “blind watchmaker”. Like evolution, the market produces intricate order without a designer; but its selection criterion is profitability, not life. It is therefore blind to the value of what it does not price, and can build elaborate systems that are indifferent, or hostile, to the living world.</p>'
@@ -1413,6 +1449,7 @@
     {
       id: 'hayeks-great-wall',
       title: 'Hayek’s Great Wall',
+      coined: true,
       parent: 'civilisation-design',
       ref: 'Hayek',
       html: '<p><em>Hayek’s great wall</em> refers to Friedrich Hayek’s argument, in “The Use of Knowledge in Society” (1945), that the knowledge needed to coordinate an economy is dispersed among millions of people and can only be integrated through prices. The argument has stood as a wall against central planning; the question it now faces is whether computation and new forms of coordination change what lies on either side of it.</p>'
@@ -1434,6 +1471,7 @@
     {
       id: 'problem-solution-externality-history',
       title: 'Problem-Solution-Externality History',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p><em>Problem-solution-externality history</em> is a way of reading history as a chain in which each solution to a problem generates externalities that become the next problems. Agriculture, industry and modern technology each solved pressing needs while producing new harms. The pattern suggests that without addressing its generating dynamics, civilisation keeps trading old crises for new ones.</p>'
     },
@@ -1446,6 +1484,7 @@
     {
       id: 'spontaneous-disorder',
       title: 'Spontaneous Disorder',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Hayek (spontaneous order)',
       html: '<p><em>Spontaneous disorder</em> inverts Friedrich Hayek’s “spontaneous order”, the idea that markets and societies produce beneficial order without central design. The same decentralised processes can equally produce emergent disorder – ecological breakdown, financial crises, arms races and information chaos – that no one intended and no one controls.</p>'
@@ -1515,6 +1554,7 @@
     {
       id: 'meta-dystopia',
       title: 'Meta-Dystopia',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p>A <em>meta-dystopia</em> is a dystopia that is not imposed by any single tyrant or design, but emerges from the interaction of many systems – surveillance, markets, algorithms, geopolitics – each of which seems reasonable on its own. Because it has no centre, it is harder to recognise and resist than the dystopias of classic fiction, and may be experienced as normal.</p>'
     },
@@ -1535,6 +1575,7 @@
     {
       id: 'demons-of-surveillance-capitalism',
       title: 'Demons of Surveillance Capitalism',
+      coined: true,
       parent: 'surveillance-capitalism',
       html: '<p>The <em>demons of surveillance capitalism</em> are the automated, profit-seeking processes – recommendation engines, ad-targeting systems, engagement optimisers – that act on people continuously and invisibly. Like the demons of older cosmologies, they are unseen agents that influence desire and belief, serving ends that are not those of the people they act upon.</p>'
     },
@@ -1590,6 +1631,7 @@
     {
       id: 'ship-of-theseus-of-the-state',
       title: 'The Ship of Theseus of the State',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p>The <em>ship of Theseus of the state</em> applies the ancient puzzle – is a ship still the same if every plank is replaced? – to government. As the functions of the state are progressively handed to automated systems, contractors and algorithms, it may retain its name, forms and symbols while becoming, piece by piece, an entirely different entity accountable to different forces.</p>'
     },
@@ -1746,6 +1788,7 @@
     {
       id: 'critical-alien-phenomenology',
       title: 'Critical Alien Phenomenology',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Bogost (Alien Phenomenology)',
       html: '<p><em>Critical alien phenomenology</em> builds on Ian Bogost’s <em>Alien Phenomenology</em> (2012), which asks what it is like to be a thing – a machine, an object, a system – rather than a human subject. Its critical extension turns this question towards the non-human systems that increasingly govern life, such as markets and algorithms, to understand how they “experience” and act upon the world.</p>'
@@ -1801,6 +1844,7 @@
     {
       id: 'psycho-therapeutic-history',
       title: 'Psycho-Therapeutic History',
+      coined: true,
       parent: 'civilisation-design',
       html: '<p><em>Psycho-therapeutic history</em> approaches history as a therapist approaches a life: attending to collective traumas, patterns repeated across generations, and the defences a civilisation builds against its own past. It treats understanding history as a means of healing it, so that a society need not compulsively repeat what it has not worked through.</p>'
     },
@@ -1820,6 +1864,7 @@
     {
       id: 'axiological-design',
       title: 'Axiological Design',
+      coined: true,
       parent: 'civilisation-design',
       ref: 'Values-neutral',
       html: '<p><em>Axiological design</em> is the design of a civilisation’s value systems – the structures through which it decides what matters and how to weigh competing goods. Approached in a values-neutral way, it concerns not which values should win, but how institutions can hold and adjudicate plural values well, so that design does not simply encode the preferences of its designers.</p>'
@@ -1834,36 +1879,42 @@
     {
       id: 'coherence-of-civilisations',
       title: 'Super-structure: Coherence of Civilisations',
+      coined: true,
       parent: 'civilisation-design',
       html: '<p>The <em>coherence of civilisations</em> is the degree to which a civilisation’s layers – its economy, institutions, technology, culture and values – fit together and reinforce one another. A coherent civilisation is stable and legible to its members; an incoherent one, whose parts pursue contradictory ends, generates crisis. Designing for coherence, rather than optimising parts in isolation, is a central principle of civilisation design.</p>'
     },
     {
       id: 'blue-skies-social-science',
       title: 'Blue Skies Social Science & Green Grass Social Experimentation',
+      coined: true,
       parent: 'civilisation-design',
       html: '<p><em>Blue skies social science research</em> applies the idea of curiosity-driven, open-ended research – long established in the natural sciences – to the study of society. It supports inquiry into fundamentally new social, economic and political forms without requiring immediate application, on the view that the design of better civilisations requires basic research as ambitious as that behind new technologies.</p>'
     },
     {
       id: 'cybernetic-existentialism',
       title: 'Cybernetic Existentialism',
+      coined: true,
       parent: 'alignment-and-futures',
       html: '<p><em>Cybernetic existentialism</em> joins the systems view of cybernetics with the existentialist emphasis on freedom and responsibility. It holds that human beings are embedded in feedback systems that shape them, yet remain responsible for the systems they build and sustain – so that designing the structures of civilisation becomes a matter of existential choice rather than technical management alone.</p>'
     },
     {
       id: 'the-post-status-quo',
       title: 'The Post Status Quo',
+      coined: true,
       parent: 'civilisation-transition',
       html: '<p>The <em>post status quo</em> names the recognition that the present order cannot simply continue: its trajectories are unsustainable, so the real choice is not between change and stability but between different kinds of change. The concept reframes transition as unavoidable, and asks whether it will be designed and deliberate or chaotic and imposed by crisis.</p>'
     },
     {
       id: 'multi-scale-ethics',
       title: 'Multi-Scale Ethics',
+      coined: true,
       parent: 'moral-theory',
       html: '<p><em>Multi-scale ethics</em> holds that moral reasoning must operate consistently across scales – from the individual to the community, the nation, humanity and the biosphere – and across timescales from the immediate to the very long term. Actions that are good at one scale can be harmful at another, so an adequate ethics must weigh consequences across all of them together.</p>'
     },
     {
       id: 'super-critical-path',
       title: 'Super-Critical Path',
+      coined: true,
       parent: 'civilisation-transition',
       ref: 'Fuller (Critical Path)',
       html: '<p>The <em>super-critical path</em> builds on Buckminster Fuller’s <em>Critical Path</em> (1981), which traced the sequence of developments by which humanity might achieve success for all. It names the sequence of changes – technological, economic and cultural – that must happen, in the right order, for a civilisation to make its transition successfully, and the dependencies that make some steps preconditions for others.</p>'
@@ -1898,6 +1949,7 @@
     {
       id: 'post-capitalist-realism',
       title: 'Post-capitalist Realism: Post-Capitalism for the 21st Century',
+      coined: true,
       parent: 'civilisation-transition',
       html: '<p><em>Post-capitalist realism</em> answers Mark Fisher’s “capitalist realism” – the sense that there is no alternative – by insisting on concrete, workable alternatives suited to 21st century conditions. Rather than utopian blueprints or nostalgic revivals, it seeks realistic paths beyond capitalism grounded in present technologies, institutions and constraints.</p>'
     },
@@ -1925,6 +1977,7 @@
     {
       id: 'meta-marxism',
       title: 'Meta-Marxism',
+      coined: true,
       parent: 'post-capitalism',
       html: '<p><em>Meta-Marxism</em> takes Marx’s method – the analysis of how material and economic structures shape society and history – while stepping back from the specific doctrines and political programmes associated with Marxism. It treats Marxism as one powerful lens among others, integrating it with systems theory, evolutionary thinking and critical traditions, rather than as a closed system.</p>'
     },
@@ -1944,6 +1997,7 @@
     {
       id: 'post-capitalist-peace-theory',
       title: 'Post-Capitalist Peace Theory',
+      coined: true,
       parent: 'post-capitalism',
       html: '<p><em>Post-capitalist peace theory</em> considers how peace between societies could be secured once competition for growth and markets no longer drives their relations. Where the “capitalist peace” holds that trade and interdependence reduce war, a post-capitalist account asks what would sustain peace in a world no longer organised around economic rivalry.</p>'
     },
@@ -2030,6 +2084,7 @@
     {
       id: 'the-great-alignment',
       title: 'The Great Alignment',
+      coined: true,
       parent: 'alignment-and-futures',
       html: '<p>The <em>great alignment</em> is the project of aligning not only artificial intelligence with human values, but humanity’s institutions, economies and technologies with the long-term flourishing of people and the biosphere. It frames AI alignment as one instance of a broader civilisational problem: bringing powerful optimising systems of every kind into accord with what is truly valuable.</p>'
     },
@@ -2086,12 +2141,14 @@
     {
       id: 'utopia-unified-theory',
       title: 'UTOPIA: Unified Theory of the Principles of Intelligence & Alignment',
+      coined: true,
       parent: 'replicators',
       html: '<p><em>UTOPIA</em> – a Unified Theory of the Principles of Intelligence and Alignment – names the aspiration to a single framework explaining what intelligence is, human and artificial, and what it means for intelligent systems to be aligned with one another and with what is good. The acronym signals that the good society and the aligned mind may be two faces of the same problem.</p>'
     },
     {
       id: 'human-inner-alignment-problem',
       title: 'The Human Inner Alignment Problem',
+      coined: true,
       parent: 'alignment-and-futures',
       html: '<p>The <em>human inner alignment problem</em> applies the language of AI alignment to people: just as an AI trained for one goal may develop different internal objectives, human beings shaped by evolution and culture pursue drives – status, comfort, short-term reward – that diverge from their considered values and collective wellbeing. Solving it concerns psychology, culture and education as much as policy.</p>'
     },
@@ -2190,6 +2247,7 @@
     {
       id: 'biowisdom',
       title: 'Intra-structure: Biowisdom',
+      coined: true,
       parent: 'civilisation-design',
       html: '<p><em>Biowisdom</em> is wisdom grounded in the understanding of living systems: the recognition that human flourishing depends on the health of the biosphere, and that the principles by which life sustains itself – diversity, feedback, resilience, interdependence – can guide the design of human societies.</p>'
     },
@@ -2256,12 +2314,14 @@
     {
       id: 'twin-nuclei-problem',
       title: 'The Twin Nuclei Problem',
+      coined: true,
       parent: 'metacrisis',
       html: '<p><em>Entry in preparation.</em></p>'
     },
     {
       id: 'critical-collapsology',
       title: 'Critical Collapsology',
+      coined: true,
       parent: 'risk-and-catastrophe',
       ref: 'Servigne & Stevens (collapsology)',
       html: '<p><em>Critical collapsology</em> builds on “collapsology”, the interdisciplinary study of the collapse of industrial civilisation popularised by Pablo Servigne and Raphaël Stevens (2015). Its critical form examines not only whether and how collapse might happen, but whose collapse is imagined, which narratives of collapse serve which interests, and how the study of collapse can inform transition rather than resignation.</p>'
@@ -2276,12 +2336,14 @@
     {
       id: 'techno-capitalist-progress-narrative',
       title: 'The Techno-Capitalist Progress Narrative',
+      coined: true,
       parent: 'culture-and-meaning',
       html: '<p>The <em>techno-capitalist progress narrative</em> is the story that technological innovation driven by markets naturally produces human progress, and that more growth and more technology are the solution to the problems they create. It functions as the unofficial creed of the present civilisation, making its trajectory seem both inevitable and benevolent.</p>'
     },
     {
       id: 'high-modern-panopticon',
       title: 'The High-Modern Panopticon',
+      coined: true,
       parent: 'power-and-control',
       ref: 'Scott; Bentham, Foucault',
       html: '<p>The <em>high-modern panopticon</em> joins James C. Scott’s high modernism – the drive to make society legible and redesign it from above – with the panopticon’s logic of total visibility. Digital technology makes possible a state or platform that sees everything and plans accordingly, combining the ambitions of central planning with the reach of universal surveillance.</p>'
@@ -2289,12 +2351,14 @@
     {
       id: 'the-fourth-frontier',
       title: 'The Fourth Frontier',
+      coined: true,
       parent: 'alignment-and-futures',
       html: '<p><em>Entry in preparation.</em></p>'
     },
     {
       id: 'civilisation-x',
       title: 'Civilisation X',
+      coined: true,
       parent: 'civilisation-design',
       html: '<p><em>Civilisation X</em> is a placeholder name for the civilisation that could succeed the present one – the unknown variable that civilisation design seeks to solve for. Leaving it unnamed resists committing prematurely to any existing ideology or blueprint, while insisting that a successor civilisation is both necessary and designable.</p>'
     },
@@ -2307,6 +2371,7 @@
     {
       id: 'the-integral-economy',
       title: 'The Integral Economy',
+      coined: true,
       parent: 'post-capitalism',
       html: '<p>The <em>integral economy</em> is an economy designed to integrate its dimensions – material, ecological, social, cultural and inner – rather than optimising for financial value alone. It measures success by the flourishing of people and living systems, and treats production, care, meaning and ecology as parts of a single economic whole.</p>'
     },
@@ -2320,6 +2385,7 @@
     {
       id: 'mcluhans-aquarium',
       title: 'McLuhan’s Aquarium: The Fish in Water',
+      coined: true,
       parent: 'civilisation-design',
       ref: 'McLuhan',
       html: '<p><em>McLuhan’s aquarium</em> draws on Marshall McLuhan’s observation that we do not know who discovered water, but we know it was not the fish. The environments we are most immersed in – media, technologies, economic systems – are the hardest to perceive. Seeing one’s own civilisation as an aquarium is a precondition for redesigning it.</p>'
@@ -2327,12 +2393,14 @@
     {
       id: 'civilisational-sanity',
       title: 'Civilisational Sanity',
+      coined: true,
       parent: 'coordination-and-governance',
       html: '<p><em>Civilisational sanity</em> is the capacity of a civilisation to perceive reality accurately, reason about it collectively and act in its own long-term interest. By analogy with individual mental health, a civilisation can become collectively insane – pursuing self-destructive courses despite knowing better – and restoring its sanity is a precondition for any successful transition.</p>'
     },
     {
       id: 'megamechanical-turk',
       title: 'Megamechanical Turk',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Mumford; Kempelen',
       html: '<p>The <em>megamechanical Turk</em> joins Lewis Mumford’s “megamachine” with the Mechanical Turk, the eighteenth-century chess automaton secretly operated by a hidden human. It names the vast socio-technical systems that appear automated and autonomous, but which in fact run on hidden human labour, judgement and attention distributed across the globe.</p>'
@@ -2340,6 +2408,7 @@
     {
       id: 'mturkification',
       title: 'MTurkification',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Amazon Mechanical Turk',
       html: '<p><em>MTurkification</em>, after Amazon’s Mechanical Turk platform, describes the breaking-down of work into small, anonymous, piece-rate tasks distributed through digital platforms – labelling data, moderating content, completing micro-jobs. It turns human workers into interchangeable components of automated systems, often invisible to the people who use their output.</p>'
@@ -2347,6 +2416,7 @@
     {
       id: 'unaligned-artificial-artificial-superintelligence',
       title: 'Unaligned Artificial Artificial Superintelligence',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Amazon MTurk slogan',
       html: '<p><em>Unaligned artificial artificial superintelligence</em> plays on “artificial artificial intelligence”, the slogan of Amazon’s Mechanical Turk, which used humans to perform tasks machines could not. It names collective systems of people and machines – corporations, markets, bureaucracies – that already act with superhuman capability, and are already misaligned with human wellbeing.</p>'
@@ -2354,6 +2424,7 @@
     {
       id: 'planetary-reverse-turing-test',
       title: 'Planetary Reverse Turing Test',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Turing',
       html: '<p>The <em>planetary reverse Turing test</em> inverts Alan Turing’s test of whether a machine can pass as human. In a world saturated by artificial agents, humans must increasingly prove to machines, and to one another, that they are human – and a civilisation as a whole faces the test of whether its human judgement can still be distinguished from, and prevail over, automated processes.</p>'
@@ -2361,18 +2432,21 @@
     {
       id: 'military-economic-maladaptation',
       title: 'Military Economic Maladaptation',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p><em>Military-economic maladaptation</em> is the flip side of military-economic adaptationism: the institutions selected for competitive success in war and trade become maladaptive once the stakes are planetary. Traits that once conferred advantage – expansion, secrecy, arms races, growth at any cost – now threaten the survival of the whole system that selected for them.</p>'
     },
     {
       id: 'negative-existential-externality',
       title: 'Negative Existential Externality',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p>A <em>negative existential externality</em> is a cost imposed on others that takes the form of existential risk: an activity profitable for those who undertake it, but which raises the probability of catastrophe for everyone. Because markets do not price such risks, they tend to be produced in excess – as by the race to deploy powerful technologies before they are safe.</p>'
     },
     {
       id: 'world-risk-factory',
       title: 'World-Risk Factory',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Beck (world risk society)',
       html: '<p>The <em>world-risk factory</em> describes the present world-system as a machine that manufactures risk as a by-product of its ordinary operation. Extending Ulrich Beck’s world risk society, it emphasises that risk is not an accident of modernity but one of its principal outputs, produced continuously by the same processes that generate wealth.</p>'
@@ -2380,6 +2454,7 @@
     {
       id: '4e-global-catastrophic-risk',
       title: '4E Global Catastrophic Risk',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: '4E cognition',
       html: '<p><em>4E global catastrophic risk</em> applies the “4E” account of cognition – embodied, embedded, enacted and extended – to catastrophic risk from AI. Rather than locating danger in a single rogue system, it looks at how AI becomes embodied in infrastructure, embedded in institutions, enacted through markets and extended across the world-system, so that risk emerges from the whole.</p>'
@@ -2387,12 +2462,14 @@
     {
       id: 'world-command-and-control-system',
       title: 'The World Command-and-Control System',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p>The <em>world command-and-control system</em> is the planetary apparatus of surveillance, communication, finance and military power through which the world-system is monitored and steered. Increasingly automated and interlinked, it raises the questions of who, or what, is actually in command, and what happens when its components act faster than any human can oversee.</p>'
     },
     {
       id: 'world-system-securitisation',
       title: 'World-System Securitisation',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Buzan, Wæver (securitisation)',
       html: '<p><em>World-system securitisation</em> applies securitisation theory, developed by Barry Buzan and Ole Wæver, which studies how issues are framed as existential threats to justify exceptional measures. As technology, climate, information and economics are each reframed as security issues, the world-system as a whole drifts towards a logic of emergency, secrecy and control.</p>'
@@ -2400,6 +2477,7 @@
     {
       id: 'spontaneous-totalitarian-order',
       title: 'Spontaneous Totalitarian Order',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       ref: 'Hayek (spontaneous order)',
       html: '<p><em>Spontaneous totalitarian order</em> is the possibility that total control could emerge without any dictator or plan – arising spontaneously from the interaction of surveillance, platforms, markets and security systems, each pursuing its own logic. It inverts Hayek’s hope that spontaneous order protects freedom, suggesting that decentralised processes can also converge on its opposite.</p>'
@@ -2414,30 +2492,35 @@
     {
       id: 'demons-of-techno-capitalism',
       title: 'The Demons of Techno-Capitalism',
+      coined: true,
       parent: 'complex-world-system-dynamics',
       html: '<p>The <em>demons of techno-capitalism</em> are the autonomous, impersonal forces produced by the fusion of technology and capital – optimisation processes, algorithms and market dynamics that act with apparent intention, pursuing growth, engagement and profit through human beings without any human fully directing them. Surveillance capitalism’s demons are one species of the wider family.</p>'
     },
     {
       id: 'marl-by-market-feedback',
       title: 'Multi-Agent Reinforcement Learning by Market Feedback',
+      coined: true,
       parent: 'capital-and-growth',
       html: '<p><em>Multi-agent reinforcement learning by market feedback</em> describes the market economy as a vast learning system in which many agents – firms, investors, consumers – adjust their behaviour in response to rewards and penalties signalled by prices and profits. Like any reinforcement learner, it optimises the reward it is given, not the outcomes its designers intended.</p>'
     },
     {
       id: 'socio-economic-evolutionary-mismatch',
       title: 'Socio-Economic Evolutionary Mismatch',
+      coined: true,
       parent: 'capital-and-growth',
       html: '<p><em>Socio-economic evolutionary mismatch</em> applies the biological concept of evolutionary mismatch – traits adapted to past environments that become harmful in new ones – to societies and economies. Human psychology evolved for small groups and local scarcity; institutions evolved for slower, smaller worlds. In a globalised, technological civilisation, both can drive behaviour that is no longer adaptive.</p>'
     },
     {
       id: 'the-capital-curse',
       title: 'The Capital Curse',
+      coined: true,
       parent: 'capital-and-growth',
       html: '<p>The <em>capital curse</em> is an analogy to the resource curse and the intelligence curse: when capital becomes the principal source of wealth and power, those who hold it need less from everyone else. As automation increases the returns to capital relative to labour, the incentives that once bound elites to the welfare of the broader population weaken.</p>'
     },
     {
       id: 'endgame-capitalism-and-exterminism',
       title: 'Endgame Capitalism & Exterminism',
+      coined: true,
       parent: 'capital-and-growth',
       ref: 'The Mechanist Win-Condition of Elite Class Warfare; Frase',
       html: '<p><em>Endgame capitalism</em> names the end-point of capitalism considered as a game: the win-condition in which an elite, owning the automated means of production, no longer depends on anyone else. Peter Frase, in <em>Four Futures</em> (2016), called one such future “exterminism” – abundance for the few combined with hierarchy, in which the rest of humanity becomes superfluous.</p>'
@@ -2445,6 +2528,7 @@
     {
       id: '4e-intelligence',
       title: '4E Intelligence',
+      coined: true,
       parent: 'ai-alignment',
       ref: '4E cognition',
       html: '<p><em>4E intelligence</em> applies the 4E account of cognition – embodied, embedded, enacted and extended – to intelligence in general. It holds that intelligence is not a property of an isolated brain or model, but arises from an agent’s body, environment, activity and tools, which has implications for how artificial intelligence should be understood and aligned.</p>'
@@ -2452,6 +2536,7 @@
     {
       id: 'aligned-evolutionarily-stable-social-structure',
       title: 'Aligned Evolutionarily Stable Social Structure',
+      coined: true,
       parent: 'replicators',
       ref: 'Maynard Smith & Price (ESS)',
       html: '<p>An <em>aligned evolutionarily stable social structure</em> draws on the evolutionarily stable strategy of John Maynard Smith and George Price (1973) – a strategy that cannot be displaced by any alternative once established. It names a social structure that is both good for its members and stable against competitive displacement, so that alignment does not depend on everyone choosing to cooperate.</p>'
@@ -2471,6 +2556,7 @@
     {
       id: 'complex-adaptive-agency',
       title: 'Any Sufficiently Complex and Adaptive System Is Indistinguishable from Intelligent Agency',
+      coined: true,
       parent: 'replicators',
       ref: 'Clarke’s third law (form)',
       html: '<p>This principle, modelled on Arthur C. Clarke’s third law, holds that any sufficiently complex and adaptive system – a market, a bureaucracy, an ecosystem – behaves in ways indistinguishable from the actions of an intelligent agent pursuing goals. Whether or not such systems “really” have minds, treating them as agents may be the most accurate way to predict and govern them.</p>'
@@ -2478,6 +2564,7 @@
     {
       id: 'behaviour-of-a-system',
       title: 'The Behaviour of a System Is What It Is',
+      coined: true,
       parent: 'replicators',
       ref: 'Beer (POSIWID)',
       html: '<p><em>The behaviour of a system is what it is</em> echoes Stafford Beer’s principle that “the purpose of a system is what it does”. A system should be understood by what it actually produces, not by its stated intentions or design. If a system consistently produces harm, that harm is, functionally, part of what the system is.</p>'
@@ -2492,18 +2579,21 @@
     {
       id: 'hyper-agential-hyper-realism',
       title: 'Hyper-Agential Hyper-Realism',
+      coined: true,
       parent: 'replicators',
       html: '<p><em>Hyper-agential hyper-realism</em> is a stance that takes seriously the reality and agency of large-scale, non-human systems – markets, states, algorithms, technologies – as actors more powerful than individuals. It treats these hyper-agents as real forces to be analysed and negotiated with, rather than as abstractions reducible to the people within them.</p>'
     },
     {
       id: 'cybernetic-neo-platonism',
       title: 'Cybernetic Neo-Platonism',
+      coined: true,
       parent: 'replicators',
       html: '<p><em>Cybernetic neo-Platonism</em> joins cybernetics with the Platonic tradition: it treats the patterns, forms and organising principles of systems – feedback, information, structure – as more fundamental than their material substrates. The same form of organisation can be realised in cells, societies or machines, and it is the form, not the matter, that explains behaviour.</p>'
     },
     {
       id: 'computational-mechanism',
       title: 'Computational Mechanism',
+      coined: true,
       parent: 'replicators',
       ref: 'alt: Neomechanism',
       html: '<p><em>Computational mechanism</em>, or neomechanism, is the renewal of the mechanistic worldview in computational form: the view that minds, lives and societies can be understood as information-processing systems. It succeeds the clockwork mechanism of the early modern period, and underlies both the promise of AI and the tendency to treat everything as computable.</p>'
@@ -2511,6 +2601,7 @@
     {
       id: 'the-techno-onto-logical',
       title: 'The Techno-Onto-Logical',
+      coined: true,
       parent: 'replicators',
       ref: 'Technological Rationality; Heidegger; Marcuse',
       html: '<p>The <em>techno-onto-logical</em> names the way technology shapes what counts as real and how things show up at all. It draws on Heidegger’s account of modern technology as “enframing”, which reveals everything as a resource, and on Herbert Marcuse’s “technological rationality”, in which the logic of efficiency and control becomes the logic of thought itself.</p>'
@@ -2518,6 +2609,7 @@
     {
       id: 'ai-as-anthropological-mirror',
       title: 'AI as Anthropological Mirror',
+      coined: true,
       parent: 'replicators',
       html: '<p><em>AI as anthropological mirror</em> treats artificial intelligence as a reflection of the civilisation that produces it. Trained on human data and shaped by human incentives, AI systems reveal – often starkly – the values, biases, priorities and blind spots of the societies that build them. What we fear in AI may be what we have not faced in ourselves.</p>'
     },
@@ -2530,6 +2622,7 @@
     {
       id: 'misaligned-world-hypothesis',
       title: 'Misaligned World Hypothesis',
+      coined: true,
       parent: 'alignment-and-futures',
       ref: 'Bostrom (Vulnerable World Hypothesis)',
       html: '<p>The <em>misaligned world hypothesis</em>, modelled on Nick Bostrom’s vulnerable world hypothesis, proposes that the world is already governed by misaligned optimisers – markets, states and institutions pursuing goals that diverge from human wellbeing. On this view, AI alignment is not a new problem but a new instance of an old one: civilisation itself has never been aligned.</p>'
@@ -2537,12 +2630,14 @@
     {
       id: 'value-assimilation-and-misalignment-cascades',
       title: 'The Value Assimilation Problem & Misalignment Cascades',
+      coined: true,
       parent: 'alignment-and-futures',
       html: '<p>The <em>value assimilation problem</em> is the difficulty of absorbing new values, technologies or institutions into a civilisation without their distorting its existing values. <em>Misalignment cascades</em> describe how a misalignment at one level – a metric, an incentive, a system – propagates through the others, each amplifying the error until it reshapes the whole.</p>'
     },
     {
       id: 'the-emergence-model',
       title: 'The Emergence Model',
+      coined: true,
       parent: 'civilisation-design',
       html: '<p><em>Entry in preparation.</em></p>'
     },
@@ -2562,6 +2657,7 @@
     {
       id: 'capitalist-theodicy',
       title: 'The Capitalist Best of All Possible World-Systems Theodicy',
+      coined: true,
       parent: 'civilisation-design',
       ref: 'Leibniz; Voltaire',
       html: '<p>The <em>capitalist best of all possible world-systems theodicy</em> satirises the belief that the present economic order, whatever its evils, is the best achievable. It echoes Leibniz’s claim that ours is the best of all possible worlds, mocked by Voltaire through Dr Pangloss in <em>Candide</em> (1759), and names the justifications that make the suffering of the present seem necessary.</p>'
@@ -2569,6 +2665,7 @@
     {
       id: 'tyranny-of-the-cosmic-majority',
       title: 'Tyranny of the Cosmic Majority',
+      coined: true,
       parent: 'moral-theory',
       ref: 'Tocqueville, Mill (tyranny of the majority)',
       html: '<p>The <em>tyranny of the cosmic majority</em> extends the “tyranny of the majority” described by Tocqueville and Mill to cosmic and long-run scales. If the interests of vast numbers of future or potential beings dominate moral reasoning, present people – or any minority of minds – may be sacrificed to the calculated interests of an overwhelming majority that does not yet exist.</p>'
@@ -2576,6 +2673,7 @@
     {
       id: 'tyranny-of-the-multiplicity',
       title: 'Tyranny of the Multiplicity/Tolerance',
+      coined: true,
       parent: 'moral-theory',
       ref: 'Popper (paradox of tolerance)',
       html: '<p>The <em>tyranny of the multiplicity</em>, or of tolerance, is the danger that unlimited pluralism and tolerance leave a society unable to act on any shared values at all – or unable to defend itself against the intolerant, as Karl Popper’s paradox of tolerance warns. Its counterpart is the tyranny of any single vision imposed on all.</p>'
@@ -2583,18 +2681,21 @@
     {
       id: 'the-sociological-post-mortem',
       title: 'The Sociological Post-Mortem',
+      coined: true,
       parent: 'moral-theory',
       html: '<p>The <em>sociological post-mortem</em> is the exercise of imagining a civilisation’s failure after the fact and asking what caused it – which institutions failed, which warnings were ignored, which incentives made the outcome likely. Performed in advance, it turns hindsight into foresight, identifying what must change before the post-mortem becomes real.</p>'
     },
     {
       id: 'epistemic-principal-agent-problem',
       title: 'The Epistemic Principal-Agent Problem',
+      coined: true,
       parent: 'moral-theory',
       html: '<p>The <em>epistemic principal-agent problem</em> arises when those who produce and interpret knowledge on society’s behalf – experts, media, institutions, algorithms – have incentives that diverge from the public’s interest in the truth. As with any principal-agent problem, the public cannot fully monitor its agents, and the knowledge it receives is shaped by their interests.</p>'
     },
     {
       id: 'epistemic-semi-anarchic-default-condition',
       title: 'The Epistemic Semi-Anarchic Default Condition',
+      coined: true,
       parent: 'moral-theory',
       ref: 'Bostrom (Vulnerable World Hypothesis)',
       html: '<p>The <em>epistemic semi-anarchic default condition</em> applies Nick Bostrom’s “semi-anarchic default condition” – a world with limited capacity for preventive policing and global governance – to knowledge. Without institutions able to coordinate what a society collectively knows and believes, its information environment defaults to a semi-anarchic state in which misinformation and manipulation go largely unchecked.</p>'
@@ -2723,10 +2824,17 @@
         letters[L].map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
         '</ul></section>';
     }).join('') + '</div>';
+    // Conceptual Engineerings: the author's own novel terms, alphabetically.
+    var coined = concepts.filter(function (c) { return c.coined; });
+    var ce = '<div class="ce-list"><p class="ce-intro">Novel terms coined for the map: ' + coined.length + '</p><ul>' +
+      coined.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
+      '</ul></div>';
     return '<p class="count"><span>Concept Count: ' + concepts.length + '</span>' +
       '<span class="index-view" role="group" aria-label="Index view">' +
       '<button type="button" data-view="tree">Tree</button><span class="sep">/</span>' +
-      '<button type="button" data-view="az">A–Z</button></span></p>' + tree + (concepts.length ? az : '');
+      '<button type="button" data-view="az">A–Z</button><span class="sep">/</span>' +
+      '<button type="button" data-view="ce">Conceptual Engineerings</button></span></p>' +
+      tree + (concepts.length ? az + ce : '');
   }
 
   // A category page lists everything filed under it, nested as in the tree.
