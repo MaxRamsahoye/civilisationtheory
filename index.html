@@ -577,33 +577,27 @@
   ::view-transition-old(ui-top), ::view-transition-new(ui-top), ::view-transition-old(ui-progress), ::view-transition-new(ui-progress) {
     animation: none;
   }
-  ::view-transition-old(root), ::view-transition-new(root) {
-    animation-duration: .75s;
-    animation-timing-function: cubic-bezier(.45, .05, .3, 1);
-    animation-fill-mode: both;
-    transform-origin: left center;
-    backface-visibility: hidden;
-    mix-blend-mode: normal;
+  /* The page snapshots are clipped along the moving fold from script; no default cross-fade */
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  /* Forward: the old page (curling away) lies on top; back: the returning page lies on top */
+  html.turn-fwd::view-transition-old(root) { z-index: 2; }
+  html.turn-back::view-transition-new(root) { z-index: 2; }
+  /* The folded-over flap (the blank back of the leaf) and the soft shadow it casts; shown only
+     during a turn, and clipped to the fold's mirror image from script */
+  #curl-flap, #curl-shadow { display: none; position: fixed; inset: 0; pointer-events: none; z-index: 60; }
+  #curl-flap {
+    view-transition-name: curl-flap;
+    background: linear-gradient(100deg, color-mix(in srgb, var(--bg) 90%, var(--text)) 0%, var(--bg) 45%, color-mix(in srgb, var(--bg) 94%, var(--text)) 100%);
   }
-  /* Forward: the current leaf lifts from its right edge and turns over to the left, revealing the
-     next page beneath, which brightens as the shadow of the turning leaf passes off it */
-  html.turn-fwd::view-transition-old(root) { animation-name: leaf-turn-over; z-index: 2; }
-  html.turn-fwd::view-transition-new(root) { animation-name: leaf-shadow-off; z-index: 1; }
-  /* Back: the previous leaf turns back over from the left and settles on top */
-  html.turn-back::view-transition-new(root) { animation-name: leaf-turn-back; z-index: 2; }
-  html.turn-back::view-transition-old(root) { animation-name: leaf-shadow-on; z-index: 1; }
-  @keyframes leaf-turn-over {
-    0%   { transform: perspective(2600px) rotateY(0deg); filter: brightness(1); opacity: 1; }
-    60%  { filter: brightness(0.9); opacity: 1; }
-    100% { transform: perspective(2600px) rotateY(-100deg); filter: brightness(0.75); opacity: 0; }
-  }
-  @keyframes leaf-turn-back {
-    0%   { transform: perspective(2600px) rotateY(-100deg); filter: brightness(0.75); opacity: 0; }
-    40%  { filter: brightness(0.9); opacity: 1; }
-    100% { transform: perspective(2600px) rotateY(0deg); filter: brightness(1); opacity: 1; }
-  }
-  @keyframes leaf-shadow-off { from { filter: brightness(0.86); } to { filter: brightness(1); } }
-  @keyframes leaf-shadow-on  { from { filter: brightness(1); } to { filter: brightness(0.86); } }
+  #curl-shadow { view-transition-name: curl-shadow; background: rgba(0, 0, 0, 0.32); }
+  ::view-transition-old(curl-flap), ::view-transition-new(curl-flap),
+  ::view-transition-old(curl-shadow), ::view-transition-new(curl-shadow),
+  ::view-transition-group(curl-flap), ::view-transition-group(curl-shadow) { animation: none; }
+  /* Blur the clipped shadow at the group level, so its edges soften and it spreads onto the page */
+  ::view-transition-group(curl-shadow) { filter: blur(14px); transform: translate(-10px, 6px); z-index: 3; }
+  ::view-transition-group(curl-flap) { z-index: 4; }
+  ::view-transition-group(ui-sidebar), ::view-transition-group(ui-toggle), ::view-transition-group(ui-back),
+  ::view-transition-group(ui-theme), ::view-transition-group(ui-top), ::view-transition-group(ui-progress) { z-index: 5; }
 
   /* ---------- Footer ---------- */
   #site-footer {
@@ -3484,10 +3478,51 @@
     var r = a.getBoundingClientRect(), sr = sidebar.getBoundingClientRect();
     sidebar.scrollTo({ top: Math.max(0, sidebar.scrollTop + (r.top - sr.top) - sidebar.clientHeight / 2 + r.height / 2), behavior: 'smooth' });
   }
-  // Page turns: moving to a new page turns the current one over like a book's leaf (hinged at the
-  // left edge); going back turns the previous leaf back over on top. Uses the View Transitions API
-  // where available; otherwise pages simply change.
+  // Page turns: the page curls up from its bottom-right corner and folds over to the left,
+  // showing the blank back of the leaf and casting a soft shadow, revealing the next page beneath.
+  // Going back plays it in reverse, laying the previous page back down on top. Built on the View
+  // Transitions API: the old/new page snapshots are clipped along a moving fold line, and two
+  // overlay layers (the folded-over flap and its shadow) are clipped to the fold's mirror image.
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var curlShadow = document.createElement('div'), curlFlap = document.createElement('div');
+  curlShadow.id = 'curl-shadow'; curlFlap.id = 'curl-flap';
+  document.body.appendChild(curlShadow); document.body.appendChild(curlFlap);
+  function clipHalf(poly, P, Q, keepLeft) {
+    // Sutherland–Hodgman: keep the part of poly on one side of the line P→Q.
+    function side(p) { return ((Q[0] - P[0]) * (p[1] - P[1]) - (Q[1] - P[1]) * (p[0] - P[0])) * (keepLeft ? 1 : -1); }
+    var out = [];
+    for (var i = 0; i < poly.length; i++) {
+      var A = poly[i], B = poly[(i + 1) % poly.length], sa = side(A), sb = side(B);
+      if (sa >= 0) out.push(A);
+      if ((sa >= 0) !== (sb >= 0)) { var k = sa / (sa - sb); out.push([A[0] + (B[0] - A[0]) * k, A[1] + (B[1] - A[1]) * k]); }
+    }
+    return out;
+  }
+  function reflect(p, P, Q) {
+    var dx = Q[0] - P[0], dy = Q[1] - P[1], l = dx * dx + dy * dy;
+    var k = ((p[0] - P[0]) * dx + (p[1] - P[1]) * dy) / l;
+    var fx = P[0] + k * dx, fy = P[1] + k * dy;
+    return [2 * fx - p[0], 2 * fy - p[1]];
+  }
+  function poly(pts) {
+    if (pts.length < 3) return 'polygon(0 0, 0 0, 0 0)';
+    return 'polygon(' + pts.map(function (p) { return p[0].toFixed(1) + 'px ' + p[1].toFixed(1) + 'px'; }).join(', ') + ')';
+  }
+  function curlFrames(W, H, back) {
+    var page = [[0, 0], [W, 0], [W, H], [0, H]], keep = [], flap = [], N = 36;
+    for (var i = 0; i <= N; i++) {
+      var u = i / N, e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;   // ease in-out
+      var t = back ? 1 - e : e;
+      // The fold line runs from the top edge to the bottom edge; the bottom leads, so the page
+      // lifts from its bottom-right corner, and the lean grows then relaxes as the leaf turns.
+      var lean = W * 0.32 * Math.sin(Math.PI * Math.min(1, t * 1.15));
+      var xTop = W * (1.08 - 1.5 * t) + lean * 0.35, xBot = xTop - lean;
+      var P = [xTop, 0], Q = [xBot, H];
+      keep.push(poly(clipHalf(page, P, Q, true)));   // the page still lying flat, left of the fold
+      flap.push(poly(clipHalf(page, P, Q, false).map(function (p) { return reflect(p, P, Q); })));   // the lifted part, folded over
+    }
+    return { keep: keep, flap: flap };
+  }
   window.addEventListener('hashchange', function () {
     if (!document.startViewTransition || reduceMotion.matches || !document.getElementById('loader').classList.contains('done')) { render(); return; }
     // Runs before the trail updates: a step back lands on the page before the current one.
@@ -3495,8 +3530,21 @@
     var root = document.documentElement;
     root.classList.toggle('turn-back', back);
     root.classList.toggle('turn-fwd', !back);
-    var t = document.startViewTransition(render);
-    t.finished.finally(function () { root.classList.remove('turn-back', 'turn-fwd'); });
+    var t = document.startViewTransition(function () {
+      render();
+      curlShadow.style.display = curlFlap.style.display = 'block';
+    });
+    t.ready.then(function () {
+      var f = curlFrames(window.innerWidth, window.innerHeight, back);
+      var opts = { duration: 950, easing: 'linear', fill: 'both' };
+      root.animate({ clipPath: f.keep }, Object.assign({ pseudoElement: back ? '::view-transition-new(root)' : '::view-transition-old(root)' }, opts));
+      root.animate({ clipPath: f.flap }, Object.assign({ pseudoElement: '::view-transition-image-pair(curl-flap)' }, opts));
+      root.animate({ clipPath: f.flap }, Object.assign({ pseudoElement: '::view-transition-image-pair(curl-shadow)' }, opts));
+    }).catch(function () {});
+    t.finished.finally(function () {
+      root.classList.remove('turn-back', 'turn-fwd');
+      curlShadow.style.display = curlFlap.style.display = '';
+    });
   });
 
   // ---------- Back: return to the previous page viewed on the site ----------
