@@ -3162,7 +3162,14 @@
       (function walk(x) { childrenOf(x).forEach(function (k) { if (isConcept(k)) n++; walk(k.id); }); })(id);
       return n;
     }
-    var tree = concepts.length ? '<div class="index-list">' +
+    // Overview above the menu, in the same form as the Conceptual Engineerings introduction.
+    var overview = '<h3 class="ce-title">Category Tree</h3>' +
+      '<p class="ce-desc">The map is organised as a tree. Its ' + (sections.length === 9 ? 'nine' : sections.length) + ' sections come in three sets – ' +
+      '<em>civilisational</em> (how civilisation works, how it could be designed, and how it could change), ' +
+      '<em>meta</em> (the crisis, culture and theory that frame it) and <em>macro</em> (its history, society and strategy at the largest scale). ' +
+      'Each section is divided into categories, and each concept sits under the category it belongs to, ' +
+      'with closely related concepts nested beneath it. Use the menu below to jump to a section or category.</p>';
+    var tree = concepts.length ? '<div class="index-list">' + overview +
       menu +
       childrenOf(ROOT.id).map(function (d, i) {
         var tmp = document.createElement('div');
