@@ -1077,13 +1077,9 @@
   .description .crp-switch button:hover { color: var(--text); }
   :root[data-index="cs"] .crp-switch [data-view="cs"],
   :root[data-index="tree"] .crp-switch [data-view="tree"] { color: var(--text); border-bottom-color: var(--text); }
-  /* The nine sections beneath the sequence, three to a row (one column on phones) */
-  .description .cs-list .seq-sections-intro { margin-top: 3.4rem; }
-  .description .seq-sections { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 2.4rem; }
-  .description .seq-sections .seq-head a { color: inherit; text-decoration: none; }
-  .description .seq-sections .seq-head a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
-  .description .seq-sections .rl-empty { margin: 0; font-size: 0.95em; }
-  @media (max-width: 640px) { .description .seq-sections { grid-template-columns: 1fr; gap: 1.4rem; } }   /* room after the entries counter */
+  /* The new structure's sections, after the curated sequence */
+  .description .seq-structure { margin-top: 4rem; }
+  .description .index-domain > .rl-empty { margin: 0; }
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
@@ -3976,20 +3972,25 @@
       'and <em>macro</em> (history, sociology, strategy). ' +
       'Each field is divided into categories, and each concept sits within the category it belongs to, ' +
       'with closely related concepts nested beneath it. Use the menu below to navigate.</p>';
-    var tree = concepts.length ? '<div class="index-list">' + overview +
-      menu +
-      childrenOf(ROOT.id).map(function (d, i) {
+    // The nine sections in turn. `empty` gives the new structure's version: the same sections,
+    // numbering and descriptions, with no concepts filed in them yet (and its own anchors).
+    function sectionsHtml(empty) {
+      return childrenOf(ROOT.id).map(function (d, i) {
         var tmp = document.createElement('div');
         tmp.innerHTML = d.html;
-        var n = countIn(d.id);
+        var n = empty ? 0 : countIn(d.id);
         // Sections come in sets of three; a stronger rule opens each set.
-        return '<section class="index-domain' + (i % 3 === 0 ? ' set-start' : '') + '" id="idx-' + d.id + '">' +
+        return '<section class="index-domain' + (i % 3 === 0 ? ' set-start' : '') + '" id="' + (empty ? 'nidx-' : 'idx-') + d.id + '">' +
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + (n === 1 ? ' concept' : ' concepts') + '</p>' +
           '<h3 class="domain-title"><a href="' + href(d) + '">' + esc(d.title) + '</a></h3>' +
           // First sentence only; the full description is on the section's own page.
           (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
-          '<ul class="index-cols">' + childrenOf(d.id).map(branch).join('') + '</ul></section>';
-      }).join('') + '</div>' : '';
+          (empty ? '<p class="rl-empty">Concepts to be added.</p>' : '<ul class="index-cols">' + childrenOf(d.id).map(branch).join('') + '</ul>') +
+          '</section>';
+      }).join('');
+    }
+    var overviewDesc = overview.slice(overview.indexOf('<p class="ce-desc">'));
+    var tree = concepts.length ? '<div class="index-list">' + overview + menu + sectionsHtml(false) + '</div>' : '';
     // Alternative A–Z view: every concept alphabetically, grouped by first letter.
     var letters = {};
     concepts.forEach(function (c) {
@@ -4036,15 +4037,10 @@
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
-      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + crpSwitch +
-      '<p class="ce-desc">A reading path through the map.</p>' +
-      '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div>' +
-      // Beneath it, the paradigm's nine sections, each to receive its own reading path of concepts.
-      '<p class="ce-intro seq-sections-intro">Sections: ' + sections.length + '</p><div class="seq-sections">' +
-      sections.map(function (sec) {
-        return '<div class="seq-block"><p class="seq-head"><a href="' + href(sec) + '">' + esc(sec.title) + '</a></p>' +
-          '<p class="rl-empty">Concepts to be added.</p></div>';
-      }).join('') + '</div></div>';
+      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + crpSwitch + overviewDesc +
+      '<p class="ce-intro">Curated sequence: ' + seq.length + ' entries</p><div class="seq-list">' + sequenceListHtml(null) + '</div>' +
+      // Then the same sections as the original structure, each still to receive its concepts.
+      '<div class="seq-structure">' + menu.replace(/data-jump="idx-/g, 'data-jump="nidx-') + sectionsHtml(true) + '</div></div>';
     // Civilisation Research Landscape: the field around the paradigm (entries tagged 'landscape').
     var rlTerms = concepts.filter(function (c) { return c.tags && c.tags.indexOf('landscape') >= 0; });
     var rl = '<div class="ce-list rl-list">' +
