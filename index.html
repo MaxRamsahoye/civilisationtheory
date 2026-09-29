@@ -758,7 +758,7 @@
   #slide-next { top: calc(50% + 0.3rem); }
   #slide-prev svg { transform: rotate(180deg); }
   .slide-nav .control:disabled { opacity: 0.25; pointer-events: none; }
-  .slides[hidden] { display: none; }
+  [hidden] { display: none !important; }
   /* Deck menu: every concept A–Z, or one of the nine sections (three columns, one per set) */
   .description .deck-menu {
     margin: 3.4rem 0 0;
@@ -1065,7 +1065,7 @@
   <div class="side-icons">
     <a href="#" data-page="home" aria-label="Home"><svg viewBox="-4.1 -3.1 108.1 108.1" aria-hidden="true"><polyline points="10,46 50,12 90,46"/><polyline points="22,36 22,90 78,90 78,36"/><polyline points="42,90 42,64 58,64 58,90"/></svg></a>
     <a href="#the-map" data-page="the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
-    <a href="#infinite" data-page="infinite" aria-label="Infinite"><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
+    <a href="#infinite" data-page="infinite" aria-label="Infinite" hidden><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
   </div>
   <p class="side-title"><a href="#the-map" data-page="the-map">The Map</a></p>
   <ul class="tree" id="tree"></ul>
@@ -1078,7 +1078,7 @@
     <nav class="head-icons" aria-label="Site">
       <a href="#" data-page="home" aria-label="Home" title="Home"><svg viewBox="-4.1 -3.1 108.1 108.1" aria-hidden="true"><polyline points="10,46 50,12 90,46"/><polyline points="22,36 22,90 78,90 78,36"/><polyline points="42,90 42,64 58,64 58,90"/></svg></a>
       <a href="#the-map" data-page="the-map" aria-label="The Map" title="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
-      <a href="#infinite" data-page="infinite" aria-label="Infinite" title="Infinite"><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
+      <a href="#infinite" data-page="infinite" aria-label="Infinite" title="Infinite" hidden><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
       <button type="button" class="head-search" aria-label="Search concepts" title="Search ( / )" aria-keyshortcuts="/">
         <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
       </button>
@@ -3264,8 +3264,13 @@
     try { localStorage.setItem('ct-deck', key); } catch (err) {}
   }
 
+  // Infinite (the slide view) is hidden for now: its links are hidden and its address opens the
+  // homepage. Set to true to bring it back (and remove the hidden attributes on its two icons).
+  var SHOW_INFINITE = false;
+
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (id === 'infinite' && !SHOW_INFINITE) id = '';
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
@@ -3674,7 +3679,7 @@
     var NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
     function col(title, items) { return '<div class="foot-col"><p class="foot-head">' + title + '</p><ul>' + items.join('') + '</ul></div>'; }
     function li(inner) { return '<li>' + inner + '</li>'; }
-    var keys = [['Space', 'The map'], ['/', 'Search'], ['↑ ↓', 'Slides'], ['⌫', 'Top, then back'], ['T', 'Theme'], ['C', 'Accent'], ['M', 'Sound']];
+    var keys = [['Space', 'The map'], ['/', 'Search']].concat(SHOW_INFINITE ? [['↑ ↓', 'Slides']] : []).concat([['⌫', 'Top, then back'], ['T', 'Theme'], ['C', 'Accent'], ['M', 'Sound']]);
     f.innerHTML = '<div class="foot-inner">' +
       '<div class="foot-lede">' +
         '<p class="foot-title"><a href="#">Civilisation Theory Map</a></p>' +
@@ -3682,7 +3687,7 @@
         '<p class="foot-stats"><span>' + concepts.length + ' concepts</span><span>' + sections.length + ' sections</span><span>' + coined + ' conceptual engineerings</span></p>' +
       '</div>' +
       '<div class="foot-cols">' +
-        col('Explore', [li('<a href="#">Home</a>'), li('<a href="#the-map">The Map</a>'), li('<a href="#infinite">Infinite</a>')]) +
+        col('Explore', [li('<a href="#">Home</a>'), li('<a href="#the-map">The Map</a>')].concat(SHOW_INFINITE ? [li('<a href="#infinite">Infinite</a>')] : [])) +
         col('Index', [li('<a href="#the-map" data-view-link="tree">Category Tree</a>'), li('<a href="#the-map" data-view-link="az">Alphabetical A–Z</a>'), li('<a href="#the-map" data-view-link="ce">Conceptual Engineerings</a>')]) +
         col('Sections', sections.map(function (d, i) { return li('<span class="foot-num">' + NUM[i] + '</span><a href="' + href(d) + '">' + esc(d.title) + '</a>'); })) +
         '<div class="foot-col foot-keys"><p class="foot-head">Shortcuts</p><ul>' + keys.map(function (k) {
