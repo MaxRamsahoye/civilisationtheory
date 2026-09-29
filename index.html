@@ -677,6 +677,22 @@
   .ts-stack { display: block; font-size: 0.86em; opacity: 0.6; line-height: 2.15; margin-bottom: 0.4rem; }
   .ts-stack .ts-row { display: block; }
   .ts-line { display: block; }
+  /* On an entry, the stack sits above the line without taking up space, so it can fold away
+     after the page loads (and unfold on hover) without moving anything else on the page */
+  p.tree-string:not(.slide-meta) { position: relative; }
+  p.tree-string:not(.slide-meta) .ts-stack {
+    position: absolute; left: 0; bottom: 100%;
+    margin: 0; padding-bottom: 0.4rem;
+    transition: opacity .45s ease, transform .45s ease, visibility 0s;
+  }
+  p.tree-string.ts-folded .ts-stack {
+    opacity: 0; visibility: hidden; transform: translateY(0.4rem);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s .45s;
+  }
+  p.tree-string.ts-folded:hover .ts-stack {
+    opacity: 0.6; visibility: visible; transform: none;
+    transition: opacity .3s ease, transform .3s ease, visibility 0s;
+  }
 
   h1 {
     font-weight: 700;
@@ -3326,8 +3342,19 @@
     main.style.paddingTop = Math.max(5 * rem, (window.innerHeight - own) / 2) + 'px';
   }
   function fitCrumbs() {
+    fitTitle();
     fitCrumbsOnly();
     centreEntry();
+  }
+  // A title only a little too long for the column is set slightly smaller to keep it on one
+  // line; one that would need shrinking by more than a fifth wraps at full size as usual.
+  function fitTitle() {
+    var h = document.querySelector('#entry > h1');
+    if (!h) return;
+    h.style.fontSize = ''; h.style.whiteSpace = 'nowrap';
+    var over = h.scrollWidth / h.clientWidth;
+    if (over > 1 && over <= 1.25) h.style.fontSize = (parseFloat(getComputedStyle(h).fontSize) / over * 0.995) + 'px';
+    else if (over > 1) h.style.whiteSpace = '';
   }
   function fitCrumbsOnly() {
     var els = [].slice.call(document.querySelectorAll('#entry p.tree-string:not(.slide-meta), #entry .slide-meta .crumbs'));
@@ -3421,6 +3448,9 @@
     document.documentElement.classList.toggle('page-home', c === ROOT);
     closeSearch(true);
     if (c.id === 'search') initSearchPage();
+    // The stacked part of the tree string folds away shortly after the entry opens.
+    var ts = document.querySelector('#entry > p.tree-string');
+    setTimeout(function () { if (ts.isConnected) ts.classList.add('ts-folded'); }, 1600);
     if (c.id === 'infinite') { var dk = 'az'; try { dk = localStorage.getItem('ct-deck') || 'az'; } catch (err) {} showDeck(dk); }
     fitCrumbs();
 
