@@ -749,8 +749,8 @@
   @media (min-width: 900px) {
     #entry { position: relative; }
     .entry-tags {
-      position: absolute; right: 100%; margin: 0.95rem 1.4rem 0 0;
-      flex-direction: column; align-items: flex-end; white-space: nowrap;
+      position: absolute; margin: 0.95rem 0 0;
+      flex-direction: column; align-items: center; white-space: nowrap;
     }
     /* …unless the margin is too narrow (e.g. with the sidebar open): then above the title */
     .entry-tags.tags-inline { position: static; margin: 0 0 0.9rem; flex-direction: row; }
@@ -3856,15 +3856,23 @@
   }
   // The tags sit in the left margin only when it has room for them clear of the sidebar and the
   // icons at the page's left edge.
+  // In the margin they are centred in the left column, lined up with where the contents list's
+  // heading sits (the contents are centred in the same column).
   function fitTags() {
     var el = document.querySelector('#entry > .entry-tags');
     if (!el) return;
     el.classList.remove('tags-inline');
+    el.style.left = '';
     if (getComputedStyle(el).position !== 'absolute') return;
     var sidebar = document.getElementById('sidebar');
     var edge = document.body.classList.contains('sidebar-closed') ? 0 : sidebar.getBoundingClientRect().right;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    if (el.getBoundingClientRect().left < edge + 3.6 * rem) el.classList.add('tags-inline');
+    var article = document.getElementById('entry').getBoundingClientRect();
+    var colLeft = document.querySelector('main .page').getBoundingClientRect().left;
+    var w = el.getBoundingClientRect().width;
+    var left = (colLeft + article.left) / 2 - w / 2;
+    if (left < edge + 3.6 * rem || left + w > article.left - rem) { el.classList.add('tags-inline'); return; }
+    el.style.left = (left - article.left) + 'px';
   }
   function fitCrumbs() {
     fitTags();
