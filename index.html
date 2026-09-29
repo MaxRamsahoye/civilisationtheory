@@ -550,7 +550,7 @@
   /* The Map page's index is more generously spaced */
   html.page-map .description .index-cols,
   html.page-map .description .ce-list ul { column-gap: 2.4rem; line-height: 1.4; }
-  html.page-map .az-list { column-gap: 2.4rem; line-height: 1.4; }
+  html.page-map .az-list { column-gap: 2.4rem; row-gap: 2.8rem; line-height: 1.4; }
   html.page-map .description .index-cols li,
   html.page-map .description .az-list li { margin-bottom: 0.7rem; }
   html.page-map .description .ce-list li { margin-bottom: 1.1rem; }
@@ -564,7 +564,6 @@
   html.page-map .description .menu-cols { gap: 2.4rem; }
   @media (min-width: 641px) { html.page-map .description .menu-col + .menu-col { padding-left: 2.4rem; } }
   html.page-map .description .menu-sec { margin-bottom: 1.4rem; }
-  html.page-map .az-group { padding-bottom: 2rem; }
   html.page-map .description .az-letter { margin-bottom: 1rem; }
   /* Conceptual Engineerings list */
   .ce-list { margin-top: 2.4rem; }
@@ -624,17 +623,20 @@
   .slide-title a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); }
   @media (max-width: 899px) { .description .slide-title { font-size: 2.1rem; } }
 
-  /* A–Z: one continuous vertical list, read down each of three columns in turn (like a book's
-     index); each letter heads its run of concepts and is never left stranded at a column foot */
-  .az-list { margin-top: 2.4rem; font-size: 0.9em; line-height: 1.3; columns: 3; column-gap: 1.4rem; }
-  .az-group { padding: 0 0 1.3rem; }
+  /* A–Z: letters laid out across in rows of three (A, B, C, then D, E, F below), each letter's
+     concepts listed down beneath it */
+  .az-list {
+    margin-top: 2.4rem; font-size: 0.9em; line-height: 1.3;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 1.4rem; row-gap: 2rem;
+    align-items: start;
+  }
+  .az-group { min-width: 0; }
   .description .az-letter {
     font-size: 1.31em;
     font-weight: 700;
     line-height: 1;
     margin: 0 0 0.6rem;
     padding-top: 0.2rem;
-    break-after: avoid;
   }
   .description .az-list ul { list-style: none; padding: 0; margin: 0; }
   .description .az-list li { margin: 0 0 0.4rem; padding: 0; break-inside: avoid; }
@@ -732,7 +734,7 @@
   @media (max-width: 640px) {
     .description .index-cols { columns: 1; font-size: 1em; }
     .az-list { font-size: 1em; }
-    .az-list { columns: 1; }
+    .az-list { grid-template-columns: minmax(0, 1fr); }
   }
 
   /* Category pages: nested list of members */
