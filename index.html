@@ -3818,12 +3818,12 @@
       SETS.map(function (label, k) {
         return '<div class="menu-col"><p class="menu-set">' + label + '</p><ul>' +
           sections.slice(k * 3, k * 3 + 3).map(function (d, j) {
-            var cats = childrenOf(d.id).filter(function (c) { return c.kind === 'category'; });
+            // Each section: its name, then two links – down to its part of the index below, or to
+            // the section's own entry page.
             return '<li class="menu-sec"><span class="menu-num">' + NUMERALS[k * 3 + j] + '</span><div>' +
-              '<a href="#" data-jump="idx-' + d.id + '" class="menu-section">' + esc(d.title) + '</a>' +
-              (cats.length ? '<div class="menu-cats">' + cats.map(function (c) {
-                return '<span><a href="#" data-jump="idx-' + c.id + '">' + esc(c.title) + '</a></span>';
-              }).join('') + '</div>' : '') + '</div></li>';
+              '<span class="menu-section">' + esc(d.title) + '</span>' +
+              '<div class="menu-cats"><span><a href="#" data-jump="idx-' + d.id + '">Section</a></span>' +
+              '<span><a href="' + href(d) + '">Entry</a></span></div></div></li>';
           }).join('') + '</ul></div>';
       }).join('') + '</div></nav>';
     // Sectioned by domain: each top-level category is a section with its own heading and
