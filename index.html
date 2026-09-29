@@ -3309,7 +3309,12 @@
     window.scrollTo(0, 0);
     onScroll();
     trackedId = undefined;
-    if (c.id === 'infinite') updateSlideNav();
+    if (c.id === 'infinite') {
+      updateSlideNav();
+      // Glide down to the first slide, so it is clear the slides continue below the menu
+      // (unless the reader has already scrolled or moved on).
+      setTimeout(function () { if (location.hash === '#infinite' && window.scrollY < 10) toFirstSlide(); }, 450);
+    }
     else revealCurrentInSidebar();
   }
 
@@ -3348,6 +3353,10 @@
   });
 
   // ---------- Infinite: deck menu ----------
+  function toFirstSlide() {
+    var first = deckSlides()[0];
+    if (first) window.scrollTo({ top: window.scrollY + first.getBoundingClientRect().top, behavior: 'smooth' });
+  }
   document.getElementById('entry').addEventListener('click', function (e) {
     var b = e.target.closest('.deck-menu button');
     if (!b) return;
@@ -3355,6 +3364,7 @@
     fitCrumbs();
     trackedId = undefined;
     updateSlideNav();
+    toFirstSlide();
   });
 
   // ---------- Index view: tree or A–Z (remembered) ----------
