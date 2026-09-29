@@ -418,6 +418,19 @@
     text-transform: uppercase;
     margin-top: 0.5rem;
   }
+  /* The nine sections: no indent beneath them – set apart by size and weight instead */
+  #tree > li > ul > li > ul { padding-left: 0; }
+  #tree > li > ul > li > a {
+    font-family: inherit;
+    font-size: 1.12em;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--text);
+    margin-top: 1.3rem;
+  }
+  #tree > li > ul > li:first-child > a { margin-top: 0.7rem; }
+  #tree > li > ul > li > a:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
   .tree a[aria-current] { color: var(--active); }
   .tree .empty {
     color: var(--muted);
