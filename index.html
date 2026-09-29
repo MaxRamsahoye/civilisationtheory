@@ -1077,6 +1077,29 @@
   .description .crp-switch button:hover { color: var(--text); }
   :root[data-index="cs"] .crp-switch [data-view="cs"],
   :root[data-index="tree"] .crp-switch [data-view="tree"] { color: var(--text); border-bottom-color: var(--text); }
+  /* ---------- The Map's opening: no tree string; its icon over a centred heading; the view tabs
+     in a single line across the page, on one continuous rule ---------- */
+  html.page-map #entry .tree-string { display: none; }
+  html.page-map #entry .page-icon { display: flex; justify-content: center; margin: 0 0 1.4rem; color: var(--text); }
+  html.page-map #entry .page-icon svg {
+    width: 2.2rem; height: 2.2rem; fill: none; stroke: currentColor; stroke-width: 1.4px; stroke-linejoin: miter; overflow: visible;
+  }
+  html.page-map #entry .page-icon svg * { vector-effect: non-scaling-stroke; }
+  html.page-map #entry h1 { text-align: center; }
+  html.page-map .description > p:first-child { text-align: center; }
+  /* (The single line needs the width of a desktop window; narrower, the tabs keep two rows of three.) */
+  @media (min-width: 1200px) {
+    html.page-map .description .index-tabs {
+      grid-template-columns: repeat(5, auto); justify-content: space-between; gap: 0 3.2rem;
+      width: min(calc(100vw - 9rem), 96rem); margin-left: 50%; transform: translateX(-50%);
+      border-top: 1px solid var(--rule);
+    }
+    html.page-map .index-tabs button { border-top: 2px solid transparent; margin-top: -1px; padding-top: 1.1rem; box-shadow: none; }
+    html.page-map .index-tabs button:hover { border-top-color: var(--muted); }
+    html.page-map .index-tabs .tab-name { font-size: clamp(0.58rem, calc((100cqi - 13rem) / 58), 1.22rem); }
+    html.page-map .index-tabs .tab-meta { font-size: clamp(0.45rem, calc((100cqi - 13rem) / 110), 0.6rem); }
+  }
+  @media (min-width: 641px) { html.page-map .description .crp-switch { gap: 2.6rem; } }
   /* The new structure's sections, after the curated sequence */
   .description .seq-structure { margin-top: 4rem; }
   .description .index-domain > .rl-empty { margin: 0; }
@@ -4283,7 +4306,10 @@
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
-      tagsHtml(c) + '<h1>' + esc(c === ROOT ? HOME_TITLE : c.title) + '</h1>' +
+      tagsHtml(c) +
+      // The Map: its icon above the (centred) heading.
+      (c.id === 'the-map' ? '<p class="page-icon" aria-hidden="true"><svg viewBox="-9.5 -9.5 118.9 118.9"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></p>' : '') +
+      '<h1>' + esc(c === ROOT ? HOME_TITLE : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
       '</div>';
     // Slides snap gently into place as you scroll.
