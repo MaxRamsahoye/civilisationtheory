@@ -3220,7 +3220,26 @@
     var id = host ? host.getAttribute('data-id') : el.getAttribute('data-for');
     return byId[id] || PAGES[id];
   }
+  // An entry with concepts nested under it would otherwise be too tall to centre and start at the
+  // top; instead its own part (tree string, title, description) is centred on screen as a short
+  // entry would be, and the list of nested concepts follows below the fold.
+  function centreEntry() {
+    var main = document.querySelector('main');
+    main.style.paddingTop = '';
+    main.style.justifyContent = '';
+    var list = document.querySelector('#entry .description > p.count');
+    if (!list || document.documentElement.classList.contains('main-page')) return;
+    var article = document.getElementById('entry');
+    var own = list.getBoundingClientRect().top - article.getBoundingClientRect().top;
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    main.style.justifyContent = 'flex-start';
+    main.style.paddingTop = Math.max(5 * rem, (window.innerHeight - own) / 2) + 'px';
+  }
   function fitCrumbs() {
+    fitCrumbsOnly();
+    centreEntry();
+  }
+  function fitCrumbsOnly() {
     var els = [].slice.call(document.querySelectorAll('#entry p.tree-string:not(.slide-meta), #entry .slide-meta .crumbs'));
     els.forEach(function (el) {
       var c = crumbTarget(el);
