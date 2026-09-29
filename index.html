@@ -451,7 +451,11 @@
     font-size: inherit; font-weight: inherit; color: var(--muted); margin-top: 0;
   }
   #tree.tree-az > li > ul > li > a:hover { color: var(--text); text-decoration: none; }
-  #tree.tree-az > li > ul > li > a[aria-current] { color: var(--active); }
+  /* The open concept keeps the click's accent-tinted box, set larger and bolder */
+  #tree.tree-az > li > ul > li > a[aria-current] {
+    color: var(--text); font-size: 1.12em; font-weight: 700; background: var(--hl);
+    border-radius: 5px; padding: 0.12em 0.4em; margin-left: -0.4em; margin-right: -0.4em;
+  }
   #tree.tree-az.filtering > li > ul > li > a:not(.hit) { opacity: 0.75 !important; }
   #tree.tree-az > li > ul > li > a.hit { color: var(--text); }
   /* The root (Civilisation Theory) is not listed: the sidebar starts at the sections */
