@@ -1257,12 +1257,6 @@
   }
 
   /* Category pages: nested list of members */
-  .description .branch-list, .description .branch-list ul { list-style: none; padding: 0; margin: 0; }
-  .description .branch-list { margin-top: 2rem; }
-  .description .branch-list ul { padding-left: 1.2rem; margin-top: 0.3rem; }
-  .description .branch-list li { margin: 0 0 0.35rem; padding: 0; }
-  .description .branch-list li.is-category > a { font-weight: 700; }
-  .description .branch-list > li.is-category { margin-top: 1rem; }
 
   /* ---------- Loading screen ---------- */
   #loader {
@@ -4014,19 +4008,6 @@
       tree + (concepts.length ? az + ce + cp + cs : '');
   }
 
-  // A category page lists everything filed under it, nested as in the tree.
-  function categoryHtml(cat) {
-    var n = 0;
-    function branch(c) {
-      if (isConcept(c)) n++;
-      var kids = childrenOf(c.id);
-      return '<li' + (c.kind === 'category' ? ' class="is-category"' : '') + '><a href="' + href(c) + '">' + esc(c.title) + '</a>' +
-        (kids.length ? '<ul>' + kids.map(branch).join('') + '</ul>' : '') + '</li>';
-    }
-    var list = childrenOf(cat.id).map(branch).join('');
-    return '<p class="count"><span>Concepts: ' + n + '</span></p><ul class="branch-list">' + list + '</ul>';
-  }
-
   // k = how many of the earliest nodes step out into the vertical stack above the line.
   function crumbsHtml(c, k) {
     var nodes = pathTo(c).map(function (p, i, arr) {
@@ -4245,8 +4226,7 @@
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
       tagsHtml(c) + '<h1>' + esc(c === ROOT ? HOME_TITLE : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
-      // Categories list everything filed beneath them (concept entries do not).
-      (c !== ROOT && c.kind === 'category' ? categoryHtml(c) : '') + '</div>';
+      '</div>';
     // Slides snap gently into place as you scroll.
     document.documentElement.classList.toggle('snap-slides', c.id === 'infinite');
     // Search appears on the three main pages only, not on individual concept entries.
