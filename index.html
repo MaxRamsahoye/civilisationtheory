@@ -592,7 +592,7 @@
   .foot-col li { white-space: nowrap; }
   .foot-col ul { list-style: none; margin: 0; padding: 0; }
   .foot-col ul + .foot-head { margin-top: 1.9rem; }
-  .foot-col li { display: flex; align-items: baseline; margin: 0 0 1.1rem; font-size: 1.02rem; line-height: 1.3; }
+  .foot-col li { display: flex; align-items: baseline; margin: 0 0 0.6rem; font-size: 0.92rem; line-height: 1.3; }
   .foot-col a { color: var(--text); text-decoration: none; }
   .foot-col a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 0.15em; }
   .foot-num { flex: none; width: 1.9rem; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
@@ -3165,8 +3165,8 @@
     // Overview above the menu, in the same form as the Conceptual Engineerings introduction.
     var overview = '<h3 class="ce-title">Category Tree</h3>' +
       '<p class="ce-desc">The map is organised as a tree. Its ' + (sections.length === 9 ? 'nine' : sections.length) + ' sections come in three sets – ' +
-      '<em>civilisational</em> (how civilisation works, how it could be designed, and how it could change), ' +
-      '<em>meta</em> (the crisis, culture and theory that frame it) and <em>macro</em> (its history, society and strategy at the largest scale). ' +
+      '<em>civilisational</em> (mechanics, design, transition), <em>meta</em> (crisis, modernism, theory) ' +
+      'and <em>macro</em> (history, sociology, strategy). ' +
       'Each section is divided into categories, and each concept sits under the category it belongs to, ' +
       'with closely related concepts nested beneath it. Use the menu below to jump to a section or category.</p>';
     var tree = concepts.length ? '<div class="index-list">' + overview +
