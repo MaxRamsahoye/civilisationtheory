@@ -3205,9 +3205,7 @@
     });
     var nLetters = Object.keys(letters).length;
     var az = '<div class="az-view"><h3 class="ce-title">Alphabetical A–Z</h3>' +
-      '<p class="ce-desc">Every concept on the map in a single alphabetical list, regardless of where it sits in the tree – for when you know the name of what you are looking for. ' +
-      'A leading “The”, “A” or “An” is ignored in the ordering, so <em>The Anthropocene</em> is found under A, and terms beginning with a number are gathered at the end under 0–9. ' +
-      'Each letter heads its own list, and the letters run across the three columns – A, B and C side by side, then D beneath A, and so on.</p>' +
+      '<p class="ce-desc">Every concept on the map organised into an alphabetical list.</p>' +
       '<p class="ce-intro">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p>' +
       '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div></div>';
     // Conceptual Engineerings: the author's own novel terms, alphabetically.
