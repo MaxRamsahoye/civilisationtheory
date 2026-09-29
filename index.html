@@ -631,6 +631,36 @@
   @keyframes page-fade-out { to { opacity: 0; } }
   @keyframes page-fade-in { from { opacity: 0; } }
 
+  /* ---------- Find in page (Ctrl/Cmd+F) ---------- */
+  #find-bar {
+    position: fixed; top: 0.7rem; left: 50%; transform: translateX(-50%); z-index: 45;
+    display: flex; align-items: center; gap: 0.35rem;
+    width: min(27rem, calc(100% - 2rem));
+    padding: 0.35rem 0.4rem 0.35rem 0.8rem;
+    background: var(--bg-side); border: 1px solid var(--rule); border-radius: 3px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    animation: find-in .2s ease;
+  }
+  @keyframes find-in { from { opacity: 0; transform: translate(-50%, -0.4rem); } }
+  #find-bar svg { width: 0.85rem; height: 0.85rem; fill: none; stroke: currentColor; stroke-width: 1.4px; overflow: visible; }
+  #find-bar svg * { vector-effect: non-scaling-stroke; }
+  #find-bar .find-glass { color: var(--muted); flex: none; }
+  #find-input {
+    flex: 1; min-width: 0; font: inherit; font-size: 0.82rem; color: var(--text);
+    background: none; border: 0; outline: none; padding: 0.3rem 0.2rem;
+  }
+  #find-input::placeholder { color: var(--muted); }
+  #find-count { font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); white-space: nowrap; padding: 0 0.3rem; }
+  #find-bar .find-btn {
+    width: 1.8rem; height: 1.8rem; display: flex; align-items: center; justify-content: center;
+    color: var(--muted); background: none; border-radius: 2px;
+  }
+  #find-bar .find-btn:hover { color: var(--text); background: var(--select); }
+  mark.find-hit { background: color-mix(in srgb, var(--select) 70%, transparent); color: inherit; border-radius: 1px; }
+  mark.find-hit.current { background: var(--accent); color: var(--bg); }
+  html.hudless #find-bar { opacity: 1 !important; visibility: visible !important; }
+
   /* ---------- Footer ---------- */
   #site-footer {
     border-top: 1px solid var(--rule);
@@ -4043,6 +4073,7 @@
     document.documentElement.classList.toggle('page-map', c.id === 'the-map');
     document.documentElement.classList.toggle('page-home', c === ROOT);
     closeSearch(true);
+    if (typeof closeFind === 'function') closeFind();
     if (c.id === 'search') initSearchPage();
     // The stacked part of the tree string folds away shortly after the entry opens.
     var ts = document.querySelector('#entry > p.tree-string');
@@ -4535,6 +4566,105 @@
     if (e.clientX < nav.left - 16 || e.clientY > nav.bottom + 16) root.classList.remove('icons-open');
   });
   window.addEventListener('resize', function () { if (document.documentElement.classList.contains('icons-folded')) measureIconFold(); });
+
+  // ---------- Find in page (Ctrl/Cmd+F): the site's own find bar in place of the browser's ----------
+  var findBar = document.createElement('div');
+  findBar.id = 'find-bar';
+  findBar.hidden = true;
+  findBar.setAttribute('role', 'search');
+  findBar.innerHTML =
+    '<svg class="find-glass" viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>' +
+    '<input id="find-input" type="text" placeholder="Find on this page" aria-label="Find on this page" autocomplete="off" spellcheck="false">' +
+    '<span id="find-count" aria-live="polite"></span>' +
+    '<button type="button" class="find-btn" data-find="-1" aria-label="Previous match"><svg viewBox="0 0 100 100" aria-hidden="true"><polyline points="22,64 50,36 78,64"/></svg></button>' +
+    '<button type="button" class="find-btn" data-find="1" aria-label="Next match"><svg viewBox="0 0 100 100" aria-hidden="true"><polyline points="22,36 50,64 78,36"/></svg></button>' +
+    '<button type="button" class="find-btn" data-find="close" aria-label="Close"><svg viewBox="0 0 100 100" aria-hidden="true"><line x1="26" y1="26" x2="74" y2="74"/><line x1="74" y1="26" x2="26" y2="74"/></svg></button>';
+  document.body.appendChild(findBar);
+  var findInput = findBar.querySelector('#find-input'), findCount = findBar.querySelector('#find-count');
+  var findHits = [], findAt = -1;
+  function clearFindMarks() {
+    var entry = document.getElementById('entry');
+    entry.querySelectorAll('mark.find-hit').forEach(function (m) {
+      m.replaceWith(document.createTextNode(m.textContent));
+    });
+    entry.normalize();
+    findHits = []; findAt = -1;
+  }
+  // Wrap every match of the query in the page's text (not in hidden views) in a highlight.
+  function runFind() {
+    clearFindMarks();
+    var q = findInput.value.trim().toLowerCase();
+    if (!q) { findCount.textContent = ''; return; }
+    var walker = document.createTreeWalker(document.getElementById('entry'), NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        var el = n.parentElement;
+        return n.nodeValue.toLowerCase().indexOf(q) >= 0 && el && el.offsetParent !== null && !el.closest('svg')
+          ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function (node) {
+      var text = node.nodeValue, lower = text.toLowerCase(), i = 0, j, frag = document.createDocumentFragment();
+      while ((j = lower.indexOf(q, i)) >= 0) {
+        if (j > i) frag.appendChild(document.createTextNode(text.slice(i, j)));
+        var m = document.createElement('mark');
+        m.className = 'find-hit';
+        m.textContent = text.slice(j, j + q.length);
+        frag.appendChild(m);
+        findHits.push(m);
+        i = j + q.length;
+      }
+      if (i < text.length) frag.appendChild(document.createTextNode(text.slice(i)));
+      node.replaceWith(frag);
+    });
+    if (findHits.length) stepFind(0, true); else findCount.textContent = 'No matches';
+  }
+  function stepFind(d, absolute) {
+    if (!findHits.length) return;
+    if (findAt >= 0) findHits[findAt].classList.remove('current');
+    findAt = absolute ? d : (findAt + d + findHits.length) % findHits.length;
+    var m = findHits[findAt];
+    m.classList.add('current');
+    m.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    findCount.textContent = (findAt + 1) + ' / ' + findHits.length;
+  }
+  function openFind() {
+    findBar.hidden = false;
+    var sel = String(window.getSelection() || '').trim();
+    if (sel && sel.length < 60 && sel.indexOf('\n') < 0) { findInput.value = sel; runFind(); }
+    findInput.focus();
+    findInput.select();
+  }
+  function closeFind() {
+    if (findBar.hidden) return;
+    findBar.hidden = true;
+    clearFindMarks();
+    findCount.textContent = '';
+  }
+  var findTimer;
+  findInput.addEventListener('input', function () { clearTimeout(findTimer); findTimer = setTimeout(runFind, 120); });
+  findInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); stepFind(e.shiftKey ? -1 : 1); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); stepFind(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); stepFind(-1); }
+    else if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeFind(); }
+  });
+  findBar.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-find]');
+    if (!b) return;
+    var f = b.getAttribute('data-find');
+    if (f === 'close') closeFind(); else { stepFind(+f); findInput.focus(); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 'f' || e.key === 'F')) {
+      e.preventDefault();
+      openFind();
+    } else if ((e.ctrlKey || e.metaKey) && (e.key === 'g' || e.key === 'G') && !findBar.hidden) {
+      e.preventDefault();
+      stepFind(e.shiftKey ? -1 : 1);
+    }
+  });
 
   // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless ----------
   document.addEventListener('keydown', function (e) {
