@@ -4081,12 +4081,13 @@
   // Tags: small labels under an entry's title marking where it comes from (e.g. entries taken
   // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
   var TAGS = {
-    consilience: { label: 'Consilience Project', href: 'https://consilienceproject.org/glossary/' }
+    consilience: { label: 'Consilience Project', view: 'cp' }   // opens the Map's Consilience Project view
   };
   function tagsHtml(c) {
     if (!c.tags || !c.tags.length) return '';
     return '<p class="entry-tags">' + c.tags.map(function (t) {
       var tag = TAGS[t] || { label: t };
+      if (tag.view) return '<a class="entry-tag" href="#the-map" data-view-link="' + tag.view + '">' + esc(tag.label) + '</a>';
       return tag.href
         ? '<a class="entry-tag" href="' + tag.href + '" target="_blank" rel="noopener">' + esc(tag.label) + '</a>'
         : '<span class="entry-tag">' + esc(tag.label) + '</span>';
@@ -4202,6 +4203,20 @@
     trackedId = undefined;
     updateSlideNav();
     toFirstSlide();
+  });
+
+  // Links that open the Map on a particular view (e.g. an entry's Consilience Project tag): choose
+  // the view, then bring its tabs into view once the Map has opened.
+  document.getElementById('entry').addEventListener('click', function (e) {
+    var v = e.target.closest('a[data-view-link]');
+    if (!v) return;
+    var view = v.getAttribute('data-view-link');
+    document.documentElement.setAttribute('data-index', view);
+    try { localStorage.setItem('ct-index', view); } catch (err) {}
+    setTimeout(function () {
+      var t = document.querySelector('#entry .index-tabs');
+      if (t && location.hash === '#the-map') window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - 40, behavior: 'smooth' });
+    }, 450);
   });
 
   // ---------- Index view: tree or A–Z (remembered) ----------
