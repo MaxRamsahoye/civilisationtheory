@@ -555,7 +555,7 @@
   #site-footer {
     border-top: 1px solid var(--rule);
     background: var(--bg-side);
-    padding: 3.4rem 0 2rem;
+    padding: 3.4rem 0 3.6rem;
     transition: padding-left .25s ease;
   }
   @media (min-width: 900px) {
@@ -563,11 +563,11 @@
   }
   .foot-inner { width: min(54rem, 100% - 3rem); margin: 0 auto; }
   /* Title and description on the left; the menus in two columns on the right */
-  .foot-main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 3rem; padding-bottom: 2.6rem; }
+  .foot-main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 3rem; }
   .foot-title { margin: 0 0 0.9rem; font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
   .foot-title a { color: inherit; text-decoration: none; }
   .foot-desc { margin: 0 0 1.4rem; color: var(--muted); font-size: 1.02rem; line-height: 1.5; }
-  .foot-stats, .foot-head, .foot-base, .foot-num, .foot-top {
+  .foot-stats, .foot-head, .foot-num {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
   }
   .foot-stats { margin: 0; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); line-height: 1.8; }
@@ -580,20 +580,12 @@
   .foot-col a { color: var(--text); text-decoration: none; }
   .foot-col a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 0.15em; }
   .foot-num { flex: none; width: 2.1rem; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
-  .foot-base {
-    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
-    padding-top: 1.4rem; border-top: 1px solid var(--rule);
-    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
-  }
-  .foot-top { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted); background: none; }
-  .foot-top:hover { color: var(--text); }
   @media (max-width: 899px) {
     .foot-main { grid-template-columns: 1fr; gap: 2.4rem; }
   }
   @media (max-width: 640px) {
     #site-footer { padding-bottom: 4.6rem; }  /* clear of the back-to-top arrow */
     .foot-num { width: 1.8rem; }
-    .foot-base { flex-direction: column; gap: 0.8rem; }
   }
 
   /* ---------- Contents (left of the text column) ---------- */
@@ -3789,11 +3781,8 @@
         '</div><div class="foot-col">' +
         group('Sections', sections.map(function (d, i) { return li('<span class="foot-num">' + NUM[i] + '</span><a href="' + href(d) + '">' + esc(d.title) + '</a>'); })) +
       '</div></div></div>' +
-      '<div class="foot-base"><span>A conceptual adaptive system · ' + new Date().getFullYear() + '</span>' +
-        '<button type="button" class="foot-top">Back to top <span aria-hidden="true">↑</span></button></div>' +
       '</div>';
     f.addEventListener('click', function (e) {
-      if (e.target.closest('.foot-top')) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
       var v = e.target.closest('[data-view-link]');
       if (v) {
         var view = v.getAttribute('data-view-link');
