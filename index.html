@@ -699,12 +699,14 @@
   .index-view .sep { margin: 0 0.5em; }
   :root[data-index="tree"] .index-view [data-view="tree"],
   :root[data-index="az"] .index-view [data-view="az"] { color: var(--text); }
-  :root[data-index="tree"] .az-list,
+  :root[data-index="tree"] .az-view,
   :root[data-index="tree"] .ce-list,
   :root[data-index="az"] .index-list,
   :root[data-index="az"] .ce-list,
   :root[data-index="ce"] .index-list,
-  :root[data-index="ce"] .az-list { display: none; }
+  :root[data-index="ce"] .az-view { display: none; }
+  .az-view { margin-top: 2.4rem; }
+  .az-view .az-list { margin-top: 0; }
   :root[data-index="ce"] .index-view [data-view="ce"] { color: var(--text); }
   /* The Map page's view switcher: three equal tabs, each hung from a rule that thickens and
      darkens under the view in use; name in Bembo, tally in the interface face beneath */
@@ -3200,7 +3202,13 @@
         letters[L].map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
         '</ul></section>';
     });
-    var az = '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div>';
+    var nLetters = Object.keys(letters).length;
+    var az = '<div class="az-view"><h3 class="ce-title">Alphabetical A–Z</h3>' +
+      '<p class="ce-desc">Every concept on the map in a single alphabetical list, regardless of where it sits in the tree – for when you know the name of what you are looking for. ' +
+      'A leading “The”, “A” or “An” is ignored in the ordering, so <em>The Anthropocene</em> is found under A, and terms beginning with a number are gathered at the end under 0–9. ' +
+      'Each letter heads its own list, and the letters run across the three columns – A, B and C side by side, then D beneath A, and so on.</p>' +
+      '<p class="ce-intro">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p>' +
+      '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div></div>';
     // Conceptual Engineerings: the author's own novel terms, alphabetically.
     var coined = concepts.filter(function (c) { return c.coined; });
     var ce = '<div class="ce-list">' +
