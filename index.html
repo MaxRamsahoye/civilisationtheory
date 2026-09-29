@@ -455,6 +455,61 @@
     min-width: 0;
   }
 
+  /* ---------- Footer ---------- */
+  #site-footer {
+    border-top: 1px solid var(--rule);
+    background: var(--bg-side);
+    padding: 4.2rem 0 2rem;
+    transition: padding-left .25s ease;
+  }
+  @media (min-width: 900px) {
+    body:not(.sidebar-closed) #site-footer { padding-left: var(--side-w); }
+  }
+  .foot-inner { width: min(54rem, 100% - 3rem); margin: 0 auto; }
+  .foot-lede { max-width: 34rem; margin-bottom: 3.2rem; }
+  .foot-title { margin: 0 0 0.9rem; font-size: 1.9rem; font-weight: 700; line-height: 1.1; }
+  .foot-title a { color: inherit; text-decoration: none; }
+  .foot-desc { margin: 0 0 1.4rem; color: var(--muted); font-size: 1.02rem; line-height: 1.5; }
+  .foot-stats, .foot-head, .foot-base, .foot-num, .foot-keys, .foot-top {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+  }
+  .foot-stats { margin: 0; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .foot-stats span + span::before { content: '·'; margin: 0 0.7em; }
+  .foot-cols {
+    display: grid;
+    grid-template-columns: 0.8fr 1fr 1.5fr 1fr;
+    gap: 2rem;
+    padding: 2.2rem 0 2.6rem;
+    border-top: 1px solid var(--rule);
+  }
+  .foot-head { margin: 0 0 1rem; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .foot-col ul { list-style: none; margin: 0; padding: 0; }
+  .foot-col li { margin: 0 0 0.55rem; font-size: 0.98rem; line-height: 1.3; }
+  .foot-col a { color: var(--text); text-decoration: none; }
+  .foot-col a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 0.15em; }
+  .foot-num { display: inline-block; width: 2.1rem; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
+  .foot-keys li { display: flex; align-items: baseline; gap: 0.7rem; font-size: 0.78rem; color: var(--muted); }
+  .foot-keys kbd {
+    display: inline-block; min-width: 2.6rem; text-align: center;
+    font-family: inherit; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; color: var(--text);
+    border: 1px solid var(--rule); border-radius: 3px; padding: 0.15rem 0.4rem;
+  }
+  .foot-base {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+    padding-top: 1.4rem; border-top: 1px solid var(--rule);
+    font-size: 0.62rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  }
+  .foot-top { font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--muted); background: none; }
+  .foot-top:hover { color: var(--text); }
+  @media (max-width: 899px) {
+    .foot-cols { grid-template-columns: 1fr 1fr; gap: 2.2rem 1.4rem; }
+  }
+  @media (max-width: 640px) {
+    .foot-keys { display: none; }
+    #site-footer { padding-bottom: 4.6rem; }  /* clear of the back-to-top arrow */
+    .foot-cols .foot-col:nth-child(3) { grid-column: 1 / -1; }
+  }
+
   /* ---------- Contents (left of the text column) ---------- */
   #toc {
     grid-column: 1;
@@ -952,6 +1007,7 @@
     <article id="entry"></article>
   </div>
 </main>
+<footer id="site-footer"></footer>
 
 <script>
   /*
@@ -3507,6 +3563,50 @@
       if (soundOn) chime();
     }
   });
+
+  // ---------- Footer: title, description, menus and shortcuts ----------
+  (function buildFooter() {
+    var f = document.getElementById('site-footer');
+    var concepts = CONCEPTS.filter(isConcept);
+    var coined = concepts.filter(function (c) { return c.coined; }).length;
+    var sections = childrenOf(ROOT.id);
+    var NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+    function col(title, items) { return '<div class="foot-col"><p class="foot-head">' + title + '</p><ul>' + items.join('') + '</ul></div>'; }
+    function li(inner) { return '<li>' + inner + '</li>'; }
+    var keys = [['Space', 'The map'], ['/', 'Search'], ['↑ ↓', 'Slides'], ['⌫', 'Top, then back'], ['T', 'Theme'], ['C', 'Accent'], ['M', 'Sound']];
+    f.innerHTML = '<div class="foot-inner">' +
+      '<div class="foot-lede">' +
+        '<p class="foot-title"><a href="#">Civilisation Theory Map</a></p>' +
+        '<p class="foot-desc">A conceptual adaptive system: a map of the concepts needed to understand civilisation – its mechanics, its crises and its possible transition – built as a collective knowledge base for collective understanding, and in turn, collective action.</p>' +
+        '<p class="foot-stats"><span>' + concepts.length + ' concepts</span><span>' + sections.length + ' sections</span><span>' + coined + ' conceptual engineerings</span></p>' +
+      '</div>' +
+      '<div class="foot-cols">' +
+        col('Explore', [li('<a href="#">Home</a>'), li('<a href="#the-map">The Map</a>'), li('<a href="#infinite">Infinite</a>')]) +
+        col('Index', [li('<a href="#the-map" data-view-link="tree">Category Tree</a>'), li('<a href="#the-map" data-view-link="az">Alphabetical A–Z</a>'), li('<a href="#the-map" data-view-link="ce">Conceptual Engineerings</a>')]) +
+        col('Sections', sections.map(function (d, i) { return li('<span class="foot-num">' + NUM[i] + '</span><a href="' + href(d) + '">' + esc(d.title) + '</a>'); })) +
+        '<div class="foot-col foot-keys"><p class="foot-head">Shortcuts</p><ul>' + keys.map(function (k) {
+          return li('<kbd>' + k[0] + '</kbd><span>' + k[1] + '</span>');
+        }).join('') + '</ul></div>' +
+      '</div>' +
+      '<div class="foot-base"><span>A conceptual adaptive system · ' + new Date().getFullYear() + '</span>' +
+        '<button type="button" class="foot-top">Back to top <span aria-hidden="true">↑</span></button></div>' +
+      '</div>';
+    f.addEventListener('click', function (e) {
+      if (e.target.closest('.foot-top')) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+      var v = e.target.closest('[data-view-link]');
+      if (v) {
+        var view = v.getAttribute('data-view-link');
+        document.documentElement.setAttribute('data-index', view);
+        try { localStorage.setItem('ct-index', view); } catch (err) {}
+        // Already on the Map: no hash change, so bring the index into view by hand.
+        if (location.hash === '#the-map') {
+          e.preventDefault();
+          var t = document.querySelector('#entry .index-tabs');
+          if (t) window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - 40, behavior: 'smooth' });
+        }
+      }
+    });
+  })();
 
   // Every load or refresh opens the homepage: drop any concept slug left in the URL.
   if (location.hash) history.replaceState(null, '', location.pathname + location.search);
