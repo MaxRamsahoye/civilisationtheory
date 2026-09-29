@@ -432,6 +432,19 @@
     margin-top: 1.3rem;
   }
   #tree > li > ul > li:first-child > a { margin-top: 0; }
+  /* Alphabetical sidebar: letters as headings (in the size and weight of the old section
+     headings), the concepts beneath them as ordinary entries */
+  #tree.tree-az .side-letter-name {
+    display: block; font-size: 1.12em; font-weight: 700; color: var(--text); margin: 1.3rem 0 0.2rem;
+  }
+  #tree.tree-az > li:first-child .side-letter-name { margin-top: 0; }
+  #tree.tree-az > li > ul > li > a {
+    font-size: inherit; font-weight: inherit; color: var(--muted); margin-top: 0;
+  }
+  #tree.tree-az > li > ul > li > a:hover { color: var(--text); text-decoration: none; }
+  #tree.tree-az > li > ul > li > a[aria-current] { color: var(--active); }
+  #tree.tree-az.filtering > li > ul > li > a:not(.hit) { opacity: 0.75 !important; }
+  #tree.tree-az > li > ul > li > a.hit { color: var(--text); }
   /* The root (Civilisation Theory) is not listed: the sidebar starts at the sections */
   #tree > li > a { display: none; }
   #tree > li > ul > li > a:hover { color: var(--text); text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
@@ -3700,7 +3713,25 @@
   }
   var treeEl = document.getElementById('tree');
   var pageLinks = document.querySelectorAll('#sidebar [data-page], #site-header .head-icons [data-page]');
-  treeEl.innerHTML = buildTree(ROOT) +
+  // The sidebar lists every concept alphabetically, under letter headings (a leading “The”, “A”
+  // or “An” is ignored; numbers come last, under 0–9).
+  function buildSidebarAZ() {
+    var groups = {};
+    CONCEPTS.filter(isConcept).sort(byTitle).forEach(function (c) {
+      var L = sortKey(c).charAt(0).toUpperCase();
+      if (!/[A-Z]/.test(L)) L = '0–9';
+      (groups[L] = groups[L] || []).push(c);
+    });
+    return Object.keys(groups).sort(function (a, b) {
+      return (a === '0–9') - (b === '0–9') || a.localeCompare(b);
+    }).map(function (L) {
+      return '<li class="side-letter"><span class="side-letter-name">' + L + '</span><ul>' +
+        groups[L].map(function (c) { return '<li><a href="' + href(c) + '" data-id="' + c.id + '">' + esc(c.title) + '</a></li>'; }).join('') +
+        '</ul></li>';
+    }).join('');
+  }
+  treeEl.classList.add('tree-az');
+  treeEl.innerHTML = buildSidebarAZ() +
     (CONCEPTS.length === 1 ? '<li class="empty">Concepts forthcoming.</li>' : '');
 
   // ---------- Entry rendering ----------
@@ -4347,7 +4378,7 @@
     var hit = {};
     searchResults(q, Infinity).forEach(function (r) { hit[r.c.id] = true; });
     // Post-order: a branch stays if it is a hit or holds one.
-    (function keep(li) {
+    function keep(li) {
       var a = li.querySelector(':scope > a'), id = a && a.getAttribute('data-id');
       var any = false;
       li.querySelectorAll(':scope > ul > li').forEach(function (k) { if (keep(k)) any = true; });
@@ -4359,7 +4390,8 @@
         a.classList.add('hit');
       }
       return self || any;
-    })(treeEl.querySelector(':scope > li'));
+    }
+    treeEl.querySelectorAll(':scope > li').forEach(keep);
     treeHits = [].slice.call(treeEl.querySelectorAll('a.hit'));
     if (treeHits.length) { treeSel = 0; treeHits[0].classList.add('sel'); }
     if (!none) {
