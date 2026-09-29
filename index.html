@@ -2824,9 +2824,19 @@
     if (c === ROOT || c.id === 'the-map' || c.id === 'infinite' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
     onScroll();
-    document.getElementById('sidebar').scrollTop = 0;
     trackedId = undefined;
     if (c.id === 'infinite') updateSlideNav();
+    else revealCurrentInSidebar();
+  }
+
+  // The sidebar follows the selected page: its entry is scrolled into the middle of the list
+  // (or the list returns to the top when the page has no entry in the tree).
+  function revealCurrentInSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var a = treeEl.querySelector('a[aria-current]');
+    if (!a) { sidebar.scrollTop = 0; return; }
+    var r = a.getBoundingClientRect(), sr = sidebar.getBoundingClientRect();
+    sidebar.scrollTop = Math.max(0, sidebar.scrollTop + (r.top - sr.top) - sidebar.clientHeight / 2 + r.height / 2);
   }
   window.addEventListener('hashchange', render);
 
@@ -2898,9 +2908,9 @@
   var sideBtn = document.getElementById('sidebar-toggle');
   function setSidebar(open, remember) {
     if (open && document.body.classList.contains('sidebar-closed')) {
-      // Opening always starts the concept list from the top (Infinite then re-tracks the slide in view).
-      document.getElementById('sidebar').scrollTop = 0;
+      // Opening shows the selected page's entry (on Infinite, the slide in view).
       if (document.documentElement.classList.contains('snap-slides')) { trackedId = undefined; updateSlideNav(); }
+      else if (typeof treeEl !== 'undefined') revealCurrentInSidebar();
     }
     document.body.classList.toggle('sidebar-closed', !open);
     sideBtn.setAttribute('aria-label', open ? 'Hide concept map' : 'Show concept map');
