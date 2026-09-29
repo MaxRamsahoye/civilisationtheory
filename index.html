@@ -673,29 +673,7 @@
     transition: opacity .6s ease, visibility 0s linear .6s;
   }
   #loader.done { opacity: 0; visibility: hidden; }
-  /* Opening: the screen starts in the theme's text colour (black on the white theme); a dot of the
-     background colour appears at the centre and expands until it fills the screen. */
-  .loader-base { position: absolute; inset: 0; background: var(--text); }
-  /* A rectangle with the screen's own proportions, scaled from a single pixel at a constant speed
-     until it fills the screen. Scaling (a transform) runs on the compositor, so it stays smooth
-     while the page is being built. */
-  .loader-dot {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 1px;
-    height: 1px;
-    background: var(--bg);
-    transform: scale(0);
-    will-change: transform;
-  }
   .loader-mark, .loader-ring { z-index: 2; }
-  .loader-ring { opacity: 0; transition: opacity .4s ease; }
-  #loader.revealed .loader-ring { opacity: 1; }
-  #loader.revealed .loader-base, #loader.revealed .loader-dot { display: none; }
-  @media (prefers-reduced-motion: reduce) {
-    .loader-base, .loader-dot { display: none; }
-  }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
   /* Ring encircles the title, scaled from the title's width, and fills in step with the typewriter */
   .loader-mark { position: relative; display: inline-block; }
@@ -742,35 +720,11 @@
 <body>
 
 <div id="loader" aria-hidden="true">
-  <div class="loader-base"></div>
-  <div class="loader-dot"></div>
   <div class="loader-mark">
     <svg class="loader-ring" viewBox="0 0 400 400"><circle class="track" cx="200" cy="200" r="180"/><circle id="loader-fill" class="fill" cx="200" cy="200" r="180"/></svg>
     <h1><span class="ghost">Civilisation Theory</span><span class="typed"><span id="loader-text"></span></span></h1>
   </div>
 </div>
-<script>
-  // Start the reveal at once, before the rest of the page is built: a screen-shaped rectangle
-  // grows from a single pixel at the centre until it fills the screen.
-  (function () {
-    var dot = document.querySelector('#loader .loader-dot');
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !dot.animate) {
-      window.__loaderReveal = Promise.resolve();
-      return;
-    }
-    var W = window.innerWidth, H = window.innerHeight;
-    dot.style.width = W + 'px';
-    dot.style.height = H + 'px';
-    dot.style.marginLeft = -W / 2 + 'px';
-    dot.style.marginTop = -H / 2 + 'px';
-    // Starts one pixel across on its shorter side, keeping the screen's proportions throughout.
-    var anim = dot.animate(
-      [{ transform: 'scale(' + (1 / Math.min(W, H)) + ')' }, { transform: 'scale(1)' }],
-      { duration: 1800, delay: 150, easing: 'linear', fill: 'forwards' }
-    );
-    window.__loaderReveal = anim.finished.catch(function () {});
-  })();
-</script>
 <noscript><style>#loader { display: none; }</style></noscript>
 
 <div id="progress" aria-hidden="true"></div>
@@ -3188,7 +3142,6 @@
       clearTimeout(timer);
       out.textContent = title;
       fillRing(title.length);
-      loader.classList.add('revealed');
       loader.classList.add('done');
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
@@ -3220,11 +3173,8 @@
     }
     // Wait for ET Bembo so the title doesn't reflow mid-animation (capped so a slow font never blocks).
     var fontsReady = document.fonts && document.fonts.load ? document.fonts.load('700 1em "ET Bembo"') : Promise.resolve();
-    // The reveal (started as soon as the loader appeared) runs first; typing starts once the
-    // circle has filled the screen.
-    var revealDone = (window.__loaderReveal || Promise.resolve()).then(function () { loader.classList.add('revealed'); });
     var fontsOrTimeout = Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 1500); })]);
-    Promise.all([fontsOrTimeout, revealDone]).then(function () {
+    fontsOrTimeout.then(function () {
       if (finished) return;
       if (reduce) { out.textContent = title; fillRing(title.length); timer = setTimeout(finish, 600); return; }
       timer = setTimeout(function () { type(1); }, 250);
