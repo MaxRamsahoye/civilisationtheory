@@ -1018,10 +1018,12 @@
   /* An entry's Curated Sequence section: the sequence in the concept-list format, this entry unlinked and dark */
   .description .seq-section .count a { color: inherit; text-decoration: none; }
   .description .seq-section .count a:hover { color: var(--text); }
-  .description .seq-list { list-style: none; padding: 0; margin: 2rem 0 0; columns: 3; column-gap: 1.4rem; font-size: 0.9em; line-height: 1.3; }
+  .description .seq-list { list-style: none; padding: 0; margin: 2rem 0 0; font-size: 0.9em; line-height: 1.3; }
   .description .seq-list li { margin: 0 0 0.95rem; padding: 0; break-inside: avoid; }
   .description .seq-list li[aria-current] span { font-weight: 700; }
-  @media (max-width: 640px) { .description .seq-list { columns: 1; font-size: 1em; } }
+  @media (max-width: 640px) { .description .seq-list { font-size: 1em; } }
+  /* The Curated Sequence reads as a single column, in order, on the Map and on its entries */
+  .description .ce-list.cs-list ul, html.page-map .description .ce-list.cs-list ul { columns: 1; }
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
