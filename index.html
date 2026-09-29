@@ -2802,7 +2802,8 @@
       '<p class="tree-string">' + crumbsHtml(c) + '</p>' +
       '<h1>' + esc(c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()) +
-      (c.kind === 'category' ? categoryHtml(c) : '') + '</div>';
+      // Categories, and concepts with nested concepts, list everything filed beneath them.
+      (c !== ROOT && (c.kind === 'category' || childrenOf(c.id).length) ? categoryHtml(c) : '') + '</div>';
     // Slides snap gently into place as you scroll.
     document.documentElement.classList.toggle('snap-slides', c.id === 'infinite');
     // Search appears on the three main pages only, not on individual concept entries.
