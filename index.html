@@ -562,6 +562,49 @@
   .sp-snip mark { background: var(--select); color: var(--text); }
   @media (max-width: 640px) { #sp-input { font-size: 1.5rem; } }
 
+  /* ---------- Page turns ---------- */
+  /* The fixed interface stays put while the page beneath turns */
+  #sidebar { view-transition-name: ui-sidebar; }
+  #sidebar-toggle { view-transition-name: ui-toggle; }
+  #back-btn { view-transition-name: ui-back; }
+  #theme-toggle { view-transition-name: ui-theme; }
+  #to-top { view-transition-name: ui-top; }
+  #progress { view-transition-name: ui-progress; }
+  ::view-transition-group(ui-sidebar), ::view-transition-group(ui-toggle), ::view-transition-group(ui-back),
+  ::view-transition-group(ui-theme), ::view-transition-group(ui-top), ::view-transition-group(ui-progress),
+  ::view-transition-old(ui-sidebar), ::view-transition-new(ui-sidebar), ::view-transition-old(ui-toggle), ::view-transition-new(ui-toggle),
+  ::view-transition-old(ui-back), ::view-transition-new(ui-back), ::view-transition-old(ui-theme), ::view-transition-new(ui-theme),
+  ::view-transition-old(ui-top), ::view-transition-new(ui-top), ::view-transition-old(ui-progress), ::view-transition-new(ui-progress) {
+    animation: none;
+  }
+  ::view-transition-old(root), ::view-transition-new(root) {
+    animation-duration: .75s;
+    animation-timing-function: cubic-bezier(.45, .05, .3, 1);
+    animation-fill-mode: both;
+    transform-origin: left center;
+    backface-visibility: hidden;
+    mix-blend-mode: normal;
+  }
+  /* Forward: the current leaf lifts from its right edge and turns over to the left, revealing the
+     next page beneath, which brightens as the shadow of the turning leaf passes off it */
+  html.turn-fwd::view-transition-old(root) { animation-name: leaf-turn-over; z-index: 2; }
+  html.turn-fwd::view-transition-new(root) { animation-name: leaf-shadow-off; z-index: 1; }
+  /* Back: the previous leaf turns back over from the left and settles on top */
+  html.turn-back::view-transition-new(root) { animation-name: leaf-turn-back; z-index: 2; }
+  html.turn-back::view-transition-old(root) { animation-name: leaf-shadow-on; z-index: 1; }
+  @keyframes leaf-turn-over {
+    0%   { transform: perspective(2600px) rotateY(0deg); filter: brightness(1); opacity: 1; }
+    60%  { filter: brightness(0.9); opacity: 1; }
+    100% { transform: perspective(2600px) rotateY(-100deg); filter: brightness(0.75); opacity: 0; }
+  }
+  @keyframes leaf-turn-back {
+    0%   { transform: perspective(2600px) rotateY(-100deg); filter: brightness(0.75); opacity: 0; }
+    40%  { filter: brightness(0.9); opacity: 1; }
+    100% { transform: perspective(2600px) rotateY(0deg); filter: brightness(1); opacity: 1; }
+  }
+  @keyframes leaf-shadow-off { from { filter: brightness(0.86); } to { filter: brightness(1); } }
+  @keyframes leaf-shadow-on  { from { filter: brightness(1); } to { filter: brightness(0.86); } }
+
   /* ---------- Footer ---------- */
   #site-footer {
     border-top: 1px solid var(--rule);
@@ -3233,7 +3276,7 @@
         letters[L].map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
         '</ul></section>';
     });
-    var nLetters = Object.keys(letters).length;
+    var nLetters = Object.keys(letters).filter(function (L) { return L !== '0–9'; }).length;  // A–Z only
     var az = '<div class="az-view"><h3 class="ce-title">Alphabetical A–Z</h3>' +
       '<p class="ce-desc">Every concept on the map organised into an alphabetical list.</p>' +
       '<p class="ce-intro">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p>' +
@@ -3253,7 +3296,7 @@
     }
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
       tab('tree', 'Category Tree', sections.length + ' sections · ' + concepts.length + ' concepts') +
-      tab('az', 'Alphabetical A–Z', Object.keys(letters).length + ' letters · ' + concepts.length + ' concepts') +
+      tab('az', 'Alphabetical A–Z', nLetters + ' letters · ' + concepts.length + ' concepts') +
       tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') + '</nav>' +
       tree + (concepts.length ? az + ce : '');
   }
@@ -3441,7 +3484,20 @@
     var r = a.getBoundingClientRect(), sr = sidebar.getBoundingClientRect();
     sidebar.scrollTo({ top: Math.max(0, sidebar.scrollTop + (r.top - sr.top) - sidebar.clientHeight / 2 + r.height / 2), behavior: 'smooth' });
   }
-  window.addEventListener('hashchange', render);
+  // Page turns: moving to a new page turns the current one over like a book's leaf (hinged at the
+  // left edge); going back turns the previous leaf back over on top. Uses the View Transitions API
+  // where available; otherwise pages simply change.
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  window.addEventListener('hashchange', function () {
+    if (!document.startViewTransition || reduceMotion.matches || !document.getElementById('loader').classList.contains('done')) { render(); return; }
+    // Runs before the trail updates: a step back lands on the page before the current one.
+    var back = trail.length > 1 && trail[trail.length - 2] === location.hash;
+    var root = document.documentElement;
+    root.classList.toggle('turn-back', back);
+    root.classList.toggle('turn-fwd', !back);
+    var t = document.startViewTransition(render);
+    t.finished.finally(function () { root.classList.remove('turn-back', 'turn-fwd'); });
+  });
 
   // ---------- Back: return to the previous page viewed on the site ----------
   var backBtn = document.getElementById('back-btn');
