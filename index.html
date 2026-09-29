@@ -2069,6 +2069,22 @@
       coined: true,
       html: '<p><em>The wizarding away of the state</em> plays on Marx and Engels’s prophecy of the “withering away of the state”: the idea that, once class society had been overcome, the coercive apparatus of the state would no longer be needed and would gradually fall away. In place of that slow political withering, it names the prospect of the state being superseded by technology – its functions of coordination, administration and enforcement absorbed into automated systems, platforms and artificial intelligence so capable that, in Arthur C. Clarke’s phrase, they are “indistinguishable from magic”. The question it poses is who holds the wand: whether such a transition would dissolve domination, as the socialist tradition hoped, or concentrate it in whoever owns the systems, as in <a href="#the-silicon-cage">the silicon cage</a>. See also <a href="#fully-automated-luxury-communism">fully automated luxury communism</a> and <a href="#meta-marxism">meta-Marxism</a>.</p>'
     },
+    {
+      id: 'civilization-research-institute',
+      title: 'Civilization Research Institute',
+      parent: 'metacrisis',
+      order: 1,
+      ref: 'civilizationresearchinstitute.org',
+      html: '<p>The <em>Civilization Research Institute</em> is a research organisation devoted to the <a href="#metacrisis">metacrisis</a>: the shared underlying dynamics that generate humanity’s converging global risks, and the conditions under which a civilisation could navigate them without collapsing into catastrophe or dystopia. Rather than treating climate, AI, biotechnology, inequality and institutional decay as separate problems, it studies them as expressions of common <a href="#generator-functions">generator functions</a> – rivalrous competition, extractive growth and exponential technology without commensurate wisdom – and asks what it would take to address them at that level. Its metacrisis frame is one of the direct inspirations of this map.</p>'
+    },
+    {
+      id: 'civilization-emerging',
+      title: 'Civilization Emerging',
+      parent: 'metacrisis',
+      order: 2,
+      ref: 'Daniel Schmachtenberger',
+      html: '<p><em>Civilization Emerging</em> was an earlier project of Daniel Schmachtenberger’s: a body of essays, talks and interviews from the late 2010s on the drivers of existential risk and the design criteria for a civilisation capable of surviving its own technological power. Much of the vocabulary that later shaped discussion of the <a href="#metacrisis">metacrisis</a> was worked out there – <a href="#generator-functions">generator functions</a>, the <a href="#multipolar-trap">multipolar trap</a>, and the <a href="#third-attractor">third attractor</a> between catastrophe and dystopia – together with the argument that only a civilisation redesigned at the level of its underlying incentives and institutions can be both safe and free.</p>'
+    },
     // ---- From the Consilience Project glossary (tagged 'consilience')
     {
       id: 'cp-commons',
@@ -3956,7 +3972,7 @@
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Curated Sequence</h3>' +
-      '<p class="ce-desc">A reading path through the map, in order: begin with its foundation, the civilisation research paradigm; follow its nine sections through the civilisational, meta and macro sets; and end at its core, the viable life-world-system.</p>' +
+      '<p class="ce-desc">A reading path through the map, in order: begin with its foundation – the civilisation research paradigm, and the Civilization Research Institute and Civilization Emerging on which it builds; follow its nine sections through the civilisational, meta and macro sets; and end at its core, the viable life-world-system.</p>' +
       '<p class="ce-intro">Entries: ' + seq.length + '</p><div class="seq-list">' + sequenceListHtml(null) + '</div></div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
@@ -4152,7 +4168,7 @@
   function curatedGroups() {
     var sections = childrenOf(ROOT.id);
     return [
-      { name: 'Foundation', items: [byId['civilisation-research-paradigm']] },
+      { name: 'Foundation', items: [byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
       { name: 'Civilisational', items: sections.slice(0, 3) },
       { name: 'Meta', items: sections.slice(3, 6) },
       { name: 'Macro', items: sections.slice(6, 9) },
