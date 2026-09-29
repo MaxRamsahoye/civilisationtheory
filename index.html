@@ -264,7 +264,7 @@
   /* ---------- Press effect (click and keyboard shortcuts) ---------- */
   /* Icons: a squeeze and an expanding ring; text links and buttons: a highlight flash */
   .side-icons a { position: relative; }
-  .control.pressed, .side-icons a.pressed, .head-icons .pressed { color: var(--text); }
+  .control.pressed, .side-icons a.pressed, .head-icons .pressed { color: var(--accent) !important; }   /* the click effect takes the theme's accent */
   .control.pressed svg, .side-icons a.pressed svg, .head-icons .pressed svg { animation: press-squeeze .32s ease; }
   .control.pressed::after, .side-icons a.pressed::after, .head-icons .pressed::after {
     content: '';
@@ -281,7 +281,7 @@
   }
   @keyframes press-squeeze { 0% { scale: 1; } 35% { scale: 0.78; } 100% { scale: 1; } }
   @keyframes press-ring { from { transform: scale(0.45); opacity: 0.7; } to { transform: scale(1.45); opacity: 0; } }
-  @keyframes press-flash { from { background-color: var(--select); } to { background-color: transparent; } }
+  @keyframes press-flash { from { background-color: var(--hl); } to { background-color: transparent; } }
   @media (prefers-reduced-motion: reduce) {
     .control.pressed svg, .side-icons a.pressed svg, .control.pressed::after, .side-icons a.pressed::after { animation: none; }
   }
