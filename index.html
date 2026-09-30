@@ -816,6 +816,7 @@
   }
 
   .tree-string { margin: 0 0 1.8rem; line-height: 2; }
+  html:not(.main-page) #entry > .tree-string { margin-bottom: 0.7rem; }   /* on entries, close above the title */
   .tree-string a { color: var(--muted); text-decoration: none; }
   .tree-string a:hover { color: var(--text); }
   .tree-string .node { white-space: nowrap; }
@@ -884,12 +885,12 @@
   .entry-tag {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.71rem; font-weight: 600; letter-spacing: 0.02em; text-transform: none;
-    color: var(--bg); background: var(--accent); text-decoration: none;
+    color: var(--text); background: var(--hl); text-decoration: none;
     border: 0; border-radius: 999px; padding: 0.3rem 0.8rem 0.25rem;
     transition: filter .2s ease;
   }
-  a.entry-tag:hover, :root.accent a.entry-tag:hover { color: var(--bg); filter: brightness(1.08); }
-  :root.accent a.entry-tag { color: var(--bg); }
+  a.entry-tag:hover, :root.accent a.entry-tag:hover { color: var(--text); filter: brightness(0.97); }
+  :root.accent a.entry-tag { color: var(--text); }
   .description .cp-note { margin-top: 1.6rem; font-size: 0.92em; color: var(--muted); }
   /* Consilience Project view: every definition in full beneath the list of terms */
   .cp-glossary { margin: 3.4rem auto 0; border-top: 1px solid var(--rule); max-width: 39rem; }   /* centred in the wide Map column */
@@ -4271,24 +4272,20 @@
   // An entry with concepts nested under it would otherwise be too tall to centre and start at the
   // top; instead its own part (tree string, title, description) is centred on screen as a short
   // entry would be, and the list of nested concepts follows below the fold.
+  // Entries open with their first line (the tree string) just above the middle of the screen.
   function centreEntry() {
     var main = document.querySelector('main');
     main.style.paddingTop = '';
     main.style.justifyContent = '';
     if (document.documentElement.classList.contains('main-page')) return;
-    var list = document.querySelector('#entry .description > p.count');
-    var article = document.getElementById('entry');
+    var first = document.querySelector('#entry > p.tree-string') || document.getElementById('entry');
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    var H = window.innerHeight;
-    // The entry's own part: up to its list of nested concepts, if it has one, else all of it.
-    var own = list ? list.getBoundingClientRect().top - article.getBoundingClientRect().top : article.offsetHeight;
-    // Too tall to centre whole: centre its opening instead (the first screenful or so), so long
-    // entries open at the same height as short ones rather than jumping to the top.
-    if (own > H - 10 * rem) own = Math.min(own, H * 0.62);
-    else if (!list) return;   // short, with nothing below it: the usual centring already applies
     main.style.justifyContent = 'flex-start';
-    main.style.paddingTop = Math.max(5 * rem, (H - own) / 2) + 'px';
+    main.style.paddingTop = '0px';
+    var at = docY(first, 'top');
+    main.style.paddingTop = Math.max(5 * rem, window.innerHeight * 0.4 - at) + 'px';
   }
+
   // The tags sit in the left margin only when it has room for them clear of the sidebar and the
   // icons at the page's left edge.
   // In the margin they are centred in the left column, lined up with where the contents list's
