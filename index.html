@@ -41,7 +41,7 @@
     if (a === 'alt') document.documentElement.classList.add('accent-alt');
     // The Map opens with no view chosen: just its opening screen, the tabs to choose from.
     document.documentElement.setAttribute('data-index', 'none');
-    document.documentElement.classList.add('loading-topo');   // the topography loading screen (see LOADER)
+    document.documentElement.classList.add('loading-topo', 'loading-hud');   // the topography loading screen (see LOADER)
     document.documentElement.setAttribute('data-ce-view', 'cat');   // Conceptual Engineerings: by category
   })();
 </script>
@@ -5507,10 +5507,11 @@
       finished = true;
       clearTimeout(timer);
       loader.classList.add('done');
-      root.classList.add('topo-reveal', 'loading-hud');
+      // First the title and subtitle; the interface (hidden from the start) follows once they are in.
+      root.classList.add('topo-reveal');
       root.classList.remove('loading-topo');
-      setTimeout(function () { root.classList.remove('loading-hud'); }, 1300);   // then the interface
-      setTimeout(function () { root.classList.remove('topo-reveal'); }, 3000);
+      setTimeout(function () { root.classList.remove('loading-hud'); }, 1500);
+      setTimeout(function () { root.classList.remove('topo-reveal'); }, 3100);
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
     }
@@ -5520,7 +5521,7 @@
     timer = setTimeout(finish, reduce ? 700 : 3600);
   })();
   else (function () {
-    document.documentElement.classList.remove('loading-topo');
+    document.documentElement.classList.remove('loading-topo', 'loading-hud');
     var loader = document.getElementById('loader');
     var out = document.getElementById('loader-text');
     var title = 'Civilisational';
