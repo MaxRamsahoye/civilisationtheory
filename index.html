@@ -27,9 +27,9 @@
 
   // Apply saved theme before first paint to avoid a flash.
   (function () {
-    // The theme follows the system: dark if it is set to dark, otherwise light (T changes it for
+    // The theme follows the system: blue (midnight) if it is set to dark, otherwise light (T changes it for
     // the visit; nothing is saved).
-    var t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    var t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'midnight' : 'light';
     document.documentElement.setAttribute('data-theme', t);
     setFavicon(t);
     // The loading screen is shown in the blue (midnight) theme; the reader's own theme – light by
@@ -1160,6 +1160,8 @@
   html.page-map #entry { position: relative; z-index: 1; }
   html.hudless #map-topo { opacity: 0.35; }
   html.page-map #entry h1 { text-align: left; margin-bottom: 0.5rem; }
+  /* The subtitle in the interface face */
+  html.page-map .description > p:first-child { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 0.01em; font-weight: 500 !important; font-size: 1.3rem !important; }
   html.page-map #entry > .description { margin-top: 0; }
   html.page-map .description > p:first-child { font-weight: 600; margin-top: 0; }
   /* The view in use keeps the click's accent-tinted box (rounded below, hung from the line),
@@ -4941,7 +4943,7 @@
   // Until T is used, the site follows a change in the system's light/dark setting.
   var themeChosen = false;
   if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
-    var t = e.matches ? 'dark' : 'light', root = document.documentElement;
+    var t = e.matches ? 'midnight' : 'light', root = document.documentElement;
     root.setAttribute('data-theme-after', t);
     if (themeChosen || root.getAttribute('data-theme') === 'midnight' && root.classList.contains('awaiting-theme')) return;
     root.setAttribute('data-theme', t); setFavicon(t);
