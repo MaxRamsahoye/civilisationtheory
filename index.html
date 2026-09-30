@@ -4276,7 +4276,7 @@
   // An entry with concepts nested under it would otherwise be too tall to centre and start at the
   // top; instead its own part (tree string, title, description) is centred on screen as a short
   // entry would be, and the list of nested concepts follows below the fold.
-  // Entries open with their first line (the tree string) just above the middle of the screen.
+  // Entries open with their first line (the tree string) about a third of the way down the screen.
   function centreEntry() {
     var main = document.querySelector('main');
     main.style.paddingTop = '';
@@ -4287,7 +4287,7 @@
     main.style.justifyContent = 'flex-start';
     main.style.paddingTop = '0px';
     var at = docY(first, 'top');
-    main.style.paddingTop = Math.max(5 * rem, window.innerHeight * 0.4 - at) + 'px';
+    main.style.paddingTop = Math.max(5 * rem, window.innerHeight * 0.3 - at) + 'px';
   }
 
   // The tags sit in the left margin only when it has room for them clear of the sidebar and the
