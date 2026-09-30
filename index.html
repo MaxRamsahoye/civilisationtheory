@@ -41,6 +41,7 @@
     if (a === 'alt') document.documentElement.classList.add('accent-alt');
     // The Map opens with no view chosen: just its opening screen, the tabs to choose from.
     document.documentElement.setAttribute('data-index', 'none');
+    document.documentElement.classList.add('loading-topo');   // the topography loading screen (see LOADER)
     document.documentElement.setAttribute('data-ce-view', 'cat');   // Conceptual Engineerings: by category
   })();
 </script>
@@ -1418,6 +1419,12 @@
     transition: opacity .6s ease, visibility 0s linear .6s;
   }
   #loader.done { opacity: 0; visibility: hidden; }
+  /* The topography loading screen: only the Map's topography shows, at full strength, until the
+     page fades in over it */
+  html.loading-topo #loader { display: none; }
+  html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
+  html.loading-topo #map-topo { -webkit-mask-image: none; mask-image: none; z-index: 50; }
+  html.topo-reveal body > *:not(#map-topo):not(script) { transition: opacity .9s ease; }
   .loader-mark, .loader-ring { z-index: 2; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
   /* Ring encircles the title, scaled from the title's width, and fills in step with the typewriter */
@@ -1551,7 +1558,7 @@
    */
   // Shared by the homepage's closing section and the standalone Map page.
   // The Map's opening: what the map is.
-  var MAP_INTRO = '<p>The conceptual architecture from which a <em>civilisational</em> worldview emerges</p>';
+  var MAP_INTRO = '<p>The conceptual architecture from which a <em>civilisational</em> world-model emerges</p>';
 
   var CONCEPTS = [
     {
@@ -5465,8 +5472,32 @@
   window.scrollTo(0, 0);
   render();
 
-  // ---------- Loading screen: type the title, then fade out (any key or click skips) ----------
-  (function () {
+  // ---------- Loading screen ----------
+  // 'topo': the Map's topography alone, full-screen, before the page fades in over it.
+  // 'typed': (stored away) the title typed out inside a filling ring.
+  var LOADER = 'topo';
+  if (LOADER === 'topo') (function () {
+    var root = document.documentElement, loader = document.getElementById('loader');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var finished = false, timer;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      loader.classList.add('done');
+      root.classList.add('topo-reveal');
+      root.classList.remove('loading-topo');
+      setTimeout(function () { root.classList.remove('topo-reveal'); }, 1100);
+      document.removeEventListener('keydown', skip, true);
+      document.removeEventListener('pointerdown', skip, true);
+    }
+    function skip(e) { e.preventDefault(); e.stopPropagation(); finish(); }
+    document.addEventListener('keydown', skip, true);
+    document.addEventListener('pointerdown', skip, true);
+    timer = setTimeout(finish, reduce ? 700 : 2200);
+  })();
+  else (function () {
+    document.documentElement.classList.remove('loading-topo');
     var loader = document.getElementById('loader');
     var out = document.getElementById('loader-text');
     var title = 'Civilisational';
