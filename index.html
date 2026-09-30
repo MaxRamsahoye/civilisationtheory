@@ -1116,6 +1116,12 @@
   .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
   .description .cs-list .ce-intro { margin-bottom: 2.6rem; }
   .description .rl-empty { color: var(--muted); font-style: italic; }
+  /* The CE mark after a conceptual engineering's title in lists */
+  .ce-word { white-space: nowrap; }
+  .ce-mark {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.5em; font-weight: 600;
+    letter-spacing: 0.04em; margin-left: 0.25em; vertical-align: super; line-height: 0; display: inline-block; text-decoration: none;
+  }
   /* An entry's list of its nested concepts */
   .description .branch-list, .description .branch-list ul { list-style: none; padding: 0; margin: 0; }
   .description .branch-list { margin-top: 2rem; }
@@ -4144,6 +4150,24 @@
     });
   }
   function href(c) { return c === ROOT ? '#' : '#' + c.id; }
+  // In lists outside the Conceptual Engineerings view itself, each of the map creator's own
+  // conceptual engineerings carries a small CE after its title.
+  function markCoined(root) {
+    root.querySelectorAll('li > a[href^="#"]').forEach(function (a) {
+      var c = byId[a.getAttribute('href').slice(1)];
+      if (!c || !c.coined || a.querySelector('.ce-mark')) return;
+      var box = a.closest('.ce-list');
+      if (box && !box.classList.contains('cs-list') && !box.classList.contains('rl-list') && !box.classList.contains('cp-list')) return;
+      // (bound to the title's last word, so the mark never wraps onto a line of its own)
+      var t = a.lastChild;
+      if (t && t.nodeType === 3 && /\S+\s*$/.test(t.nodeValue)) {
+        var m = t.nodeValue.match(/^([\s\S]*?)(\S+)\s*$/), span = document.createElement('span');
+        span.className = 'ce-word'; span.textContent = m[2];
+        span.insertAdjacentHTML('beforeend', '<sup class="ce-mark">CE</sup>');
+        t.nodeValue = m[1]; a.appendChild(span);
+      } else a.insertAdjacentHTML('beforeend', '<sup class="ce-mark">CE</sup>');
+    });
+  }
 
   // ---------- Sidebar tree ----------
   function buildTree(c) {
@@ -4174,6 +4198,7 @@
   treeEl.classList.add('tree-az');
   treeEl.innerHTML = buildSidebarAZ() +
     (CONCEPTS.length === 1 ? '<li class="empty">Concepts forthcoming.</li>' : '');
+  markCoined(treeEl);
 
   // ---------- Entry rendering ----------
   function indexHtml() {
@@ -4731,6 +4756,7 @@
     fitCrumbs();
 
     buildToc();
+    markCoined(document.getElementById('entry'));
     // The Map is the front page, and carries the site's own title; the root entry is its About page.
     document.title = c.id === 'the-map' ? 'Civilisational' : (c === ROOT ? 'About' : c.title) + ' · Civilisation Theory Map';
     var pageId = c === ROOT ? 'home' : c.id;
