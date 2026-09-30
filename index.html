@@ -1112,25 +1112,24 @@
     html.page-map #entry > h1 { font-size: 4.6rem; line-height: 1.02; margin-bottom: 2rem; }
     html.page-map .description > p:first-child { font-size: 1.2rem; line-height: 1.5; max-width: 44rem; margin-left: auto; margin-right: auto; color: var(--muted); }
   }
-  /* (The single line needs the width of a desktop window; narrower, the tabs keep two rows of three.) */
-  @media (min-width: 1200px) {
+  /* (The single line needs a desktop window; narrower, the tabs keep two rows of three.) */
+  @media (min-width: 1000px) {
     /* No gaps: the tabs meet end to end, each one's stretch of the line reaching out past its
        text on either side, so the line is continuous and the names still stand apart */
     html.page-map .description .index-tabs {
-      display: flex; gap: 0; margin: 5.2rem 0 2.2rem;
-      width: min(calc(100vw - 9rem), 96rem); margin-left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0; margin: 5.2rem 0 2.2rem;   /* the width of the index column */
       border-top: 1px solid var(--rule);
     }
     html.page-map .index-tabs button {
-      flex: 1 1 auto; align-items: center; text-align: center; padding: 1.1rem 1.3rem 0;
+      flex: 1 1 auto; align-items: center; text-align: center; padding: 1.1rem 0.8rem 0;
       border-top: 2px solid transparent; margin-top: -1px; box-shadow: none;
     }
     html.page-map .index-tabs button:hover { border-top-color: var(--muted); }
     /* The tabs meet edge to edge, so a flashed box would read as dividers between them: on the
        line, a click flashes the tab's stretch of the line (and its name) in the accent instead */
     html.page-map .index-tabs button.pressed { animation: tab-press .6s ease-out !important; background: none !important; }
-    html.page-map .index-tabs .tab-name { font-size: clamp(0.58rem, calc((100cqi - 13rem) / 58), 1.22rem); }
-    html.page-map .index-tabs .tab-meta { font-size: clamp(0.45rem, calc((100cqi - 13rem) / 110), 0.6rem); }
+    html.page-map .index-tabs .tab-name { font-size: clamp(0.58rem, calc((100cqi - 8rem) / 55), 1.22rem); }
+    html.page-map .index-tabs .tab-meta { font-size: clamp(0.45rem, calc((100cqi - 8rem) / 100), 0.6rem); }
   }
   /* The new structure's sections, after the curated sequence */
   .description .seq-structure { margin-top: 4rem; }
