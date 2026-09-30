@@ -1541,7 +1541,7 @@
         '</ul>',
 
         '<h2 class="has-icon"><a class="h-icon" href="#the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>The Map</h2>',
-        '<p><a href="#the-map">The Map</a> is a complete index of the concepts on this site. Over time, it will extend to cover hundreds of entries. It can be read in four views – the civilisation research paradigm, an alphabetical A–Z, the map’s own conceptual engineerings, and the glossary of <em>The Consilience Project</em> – and browsed at any time from the sidebar.</p>',
+        '<p><a href="#the-map">The Map</a> is a complete index of the concepts on this site. Over time, it will extend to cover hundreds of entries. It can be read in four views – the civilisation research paradigm, an alphabetical A–Z, the map creator’s own conceptual engineerings, and the glossary of <em>The Consilience Project</em> – and browsed at any time from the sidebar.</p>',
 
         '<h2 class="has-icon"><a class="h-icon" href="https://maxramsahoye.github.io/max/" aria-label="Max Ramsahoye"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="10,90 10,10 30,10 50,40 70,10 90,10 90,90 70,90 70,46 50,74 30,46 30,90"/></svg></a>The Cartographer</h2>',
         '<p><em>Civilisational</em> (The Civilisation Theory Map) is a conceptual architecture and artifact created by <a href="https://maxramsahoye.github.io/max/">Max Ramsahoye</a> (with the assistance of Claude for the purposes of speed).</p>'
@@ -4100,7 +4100,7 @@
     var coined = concepts.filter(function (c) { return c.coined; });
     var ce = '<div class="ce-list">' +
       '<h3 class="ce-title">Conceptual Engineerings</h3>' +
-      '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
+      '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
       '<p class="ce-intro">Novel terms: ' + coined.length + '</p><ul>' +
       coined.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
       '</ul></div>';
