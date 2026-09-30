@@ -4381,7 +4381,7 @@
     var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
     function draw(now) {
       if (!W || !Hh) return;
-      var t = clock * 0.065, S = 1 / 230;
+      var t = clock * 0.04, S = 1 / 230;
       for (var j = 0; j <= rows; j++) for (var i = 0; i <= cols; i++) grid[j * (cols + 1) + i] = field(i * CELL * S, j * CELL * S, t);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, Hh);
