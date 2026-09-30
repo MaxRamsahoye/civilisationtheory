@@ -1939,9 +1939,12 @@
       id: 'civilisational-mechanics',
       title: 'Civilisational Mechanics',
       parent: 'civilisation-theory',
+      coined: true,
       kind: 'category',
       order: 1,
-      html: '<p><em>Civilisational mechanics</em> is the study of how a civilisation actually works – the dynamics, incentives, feedback loops and structures that generate its behaviour over time – and of how those same mechanics produce crisis, risk and decline. Where civilisation design asks what could be built, civilisational mechanics asks what is already running, and why its outcomes so often escape anyone’s intentions.</p>'
+      html: '<p><em>Civilisational mechanics</em> is the study of how a civilisation actually works – the dynamics, incentives, feedback loops and structures that generate its behaviour over time – and of how those same mechanics produce crisis, risk and decline. Where civilisation design asks what could be built, civilisational mechanics asks what is already running, and why its outcomes so often escape anyone’s intentions.</p>' +
+        '<p>The term is a conceptual engineering, derived from three sources. From <em>celestial mechanics</em>, the branch of physics that explains the motions of bodies under the forces acting on them, it takes the ambition of explaining a system’s trajectory from the forces that drive it. From <em>generative mechanisms</em> in critical realism – the underlying causal processes that produce observable patterns – it takes the insistence that what matters lies beneath the events: the structures that generate them. And from <em>civilisational dynamics</em> it takes its object: civilisation as a system whose behaviour unfolds over time.</p>' +
+        '<p>A parallel framing is <em>world-system dynamics</em>, which joins Immanuel Wallerstein’s <em>world-system</em> to the <em>system dynamics</em> of complex systems theory (see <a href="#complex-world-system-dynamics">complex world-system dynamics</a>). <em>Civilisational dynamics</em> is itself a term in current use: by the Centre for Research into the Dynamics of Civilisation at UCL, and by the Alignment of Complex Systems Research Group, whose work on “post-AGI civilisational dynamics” asks how civilisation will behave once advanced AI systems are among its agents.</p>'
     },
     {
       id: 'risk-and-catastrophe',
@@ -4263,7 +4266,7 @@
       return groups;
     }
     // Conceptual Engineerings: the author's own novel terms.
-    var coined = concepts.filter(function (c) { return c.coined; });
+    var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).sort(byTitle);
     var ce = '<div class="ce-list">' +
       '<h3 class="ce-title">Conceptual Engineerings</h3>' +
       '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
@@ -5576,7 +5579,7 @@
   (function buildFooter() {
     var f = document.getElementById('site-footer');
     var concepts = CONCEPTS.filter(isConcept);
-    var coined = concepts.filter(function (c) { return c.coined; }).length;
+    var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;
     var sections = childrenOf(ROOT.id);
     var NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
     function group(title, items) { return '<p class="foot-head">' + title + '</p><ul>' + items.join('') + '</ul>'; }
