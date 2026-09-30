@@ -630,7 +630,7 @@
     .head-inner { gap: 0.6rem; padding-left: 5.3rem; padding-right: 2.9rem; }
     .head-title { font-size: 0.98rem; }
     .head-icons { gap: 0; }
-    .head-icons [data-page="home"] { display: none; }  /* the title links home */
+    .head-icons [data-page="the-map"] { display: none; }  /* the title links to the Map */
     .head-icons a, .head-icons button { width: 1.8rem; }
   }
 
@@ -1456,8 +1456,8 @@
     <ul id="search-results" role="listbox" hidden></ul>
   </div>
   <div class="side-icons">
-    <a href="#" data-page="home" aria-label="Home"><svg viewBox="-4.1 -3.1 108.1 108.1" aria-hidden="true"><polyline points="10,46 50,12 90,46"/><polyline points="22,36 22,90 78,90 78,36"/><polyline points="42,90 42,64 58,64 58,90"/></svg></a>
     <a href="#the-map" data-page="the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
+    <a href="#" data-page="home" aria-label="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>
     <a href="#infinite" data-page="infinite" aria-label="Infinite" hidden><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
   </div>
   <ul class="tree" id="tree"></ul>
@@ -1466,10 +1466,10 @@
 
 <header id="site-header">
   <div class="head-inner">
-    <a class="head-title" href="#">Civilisational</a>
+    <a class="head-title" href="#the-map">Civilisational</a>
     <nav class="head-icons" aria-label="Site">
-      <a href="#" data-page="home" aria-label="Home" title="Home"><svg viewBox="-4.1 -3.1 108.1 108.1" aria-hidden="true"><polyline points="10,46 50,12 90,46"/><polyline points="22,36 22,90 78,90 78,36"/><polyline points="42,90 42,64 58,64 58,90"/></svg></a>
       <a href="#the-map" data-page="the-map" aria-label="The Map" title="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
+      <a href="#" data-page="home" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>
       <a href="#infinite" data-page="infinite" aria-label="Infinite" title="Infinite" hidden><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
       <a href="#search" class="head-search" data-page="search" aria-label="Search concepts" title="Search ( / )" aria-keyshortcuts="/">
         <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
@@ -4443,7 +4443,7 @@
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
       tagsHtml(c) +
-      '<h1>' + esc(c === ROOT ? HOME_TITLE : c.title) + '</h1>' +
+      '<h1>' + esc(c === ROOT ? 'About' : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
       '</div>';
     // Slides snap gently into place as you scroll.
@@ -4468,7 +4468,8 @@
     fitCrumbs();
 
     buildToc();
-    document.title = c === ROOT ? HOME_TITLE : c.title + ' · Civilisation Theory Map';
+    // The Map is the front page, and carries the site's own title; the root entry is its About page.
+    document.title = c.id === 'the-map' ? HOME_TITLE : (c === ROOT ? 'About' : c.title) + ' · Civilisation Theory Map';
     var pageId = c === ROOT ? 'home' : c.id;
     pageLinks.forEach(function (a) {
       if (a.getAttribute('data-page') === pageId) a.setAttribute('aria-current', 'page');
@@ -5191,12 +5192,12 @@
     function li(inner) { return '<li>' + inner + '</li>'; }
     f.innerHTML = '<div class="foot-inner"><div class="foot-main">' +
       '<div class="foot-lede">' +
-        '<p class="foot-title"><a href="#">Civilisation Theory Map</a></p>' +
+        '<p class="foot-title"><a href="#the-map">Civilisation Theory Map</a></p>' +
         '<p class="foot-desc">A conceptual adaptive system: a map of the concepts needed to understand civilisation – its mechanics, design and transition.</p>' +
         '<p class="foot-stats"><span>' + concepts.length + ' Concepts</span> <span>' + coined + ' Conceptual Engineerings</span></p>' +
       '</div>' +
       '<div class="foot-cols"><div class="foot-col">' +
-        // Explore: the same icons as the header (home, map, search)
+        // Explore: the same icons as the header (map, about, search)
         '<p class="foot-head">Explore</p><nav class="head-icons foot-icons" aria-label="Explore">' +
           document.querySelector('#site-header .head-icons').innerHTML.replace(/ data-page="[^"]*"/g, '') + '</nav>' +
         '</div><div class="foot-col foot-sections"><p class="foot-head">Sections</p><div class="foot-secs">' +
@@ -5238,8 +5239,8 @@
     }).observe(document.getElementById('site-footer'));
   }
 
-  // Every load or refresh opens the homepage: drop any concept slug left in the URL.
-  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  // Every load or refresh opens the Map, the site's front page (any other page left in the URL is dropped).
+  history.replaceState(null, '', location.pathname + location.search + '#the-map');
   render();
 
   // ---------- Loading screen: type the title, then fade out (any key or click skips) ----------
