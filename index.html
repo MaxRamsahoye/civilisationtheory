@@ -940,6 +940,9 @@
   :root[data-index="none"] .index-list, :root[data-index="none"] .az-view, :root[data-index="none"] .ce-list { display: none; }
   :root[data-index="none"].page-map main { padding-bottom: 0; }   /* the footer follows the tab line */
   html.page-map main { justify-content: flex-start; }
+  html.page-map { overflow-x: clip; }   /* (the tab line's full width never scrolls the page sideways) */
+  /* No footer until a view is chosen: the opening screen stands alone */
+  :root[data-index="none"].page-map #site-footer { display: none; }
   /* Civilisation Research Landscape view */
   :root:not([data-index="rl"]) .rl-list,
   :root[data-index="rl"] .index-list,
@@ -1137,8 +1140,8 @@
        text on either side, so the line is continuous and the names still stand apart */
     html.page-map .description .index-tabs {
       display: flex; gap: 0; margin: 5.2rem 0 2.2rem;
-      /* the index column, widened by half the empty space on either side of it */
-      width: calc(100% + (100vw - 100%) / 2); margin-left: calc((100% - 100vw) / 4);
+      /* the full width of the screen */
+      width: 100vw; margin-left: calc((100% - 100vw) / 2);
       border-top: 1px solid var(--rule);
     }
     html.page-map .index-tabs button {
@@ -1146,6 +1149,8 @@
       border-top: 2px solid transparent; margin-top: -1px; box-shadow: none;
     }
     html.page-map .index-tabs button:hover { border-top-color: var(--muted); }
+    html.page-map .index-tabs button:first-child { padding-left: 1.8rem; }
+    html.page-map .index-tabs button:last-child { padding-right: 1.8rem; }
     /* Every tab in full ink: the heavier stretch of line alone marks the view in use */
     html.page-map .index-tabs button, html.page-map .index-tabs .tab-meta { color: var(--text); }
     html.page-map .index-tabs .tab-name { font-size: clamp(0.58rem, calc((100cqi - 8rem) / 55), 1.22rem); }
