@@ -2166,6 +2166,24 @@
       html: '<p>A <em>zero-sum game</em>, formalised by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944), is one in which any gain for one party is exactly matched by a loss for another, so the total stays fixed. Many real situations are not zero-sum – trade, cooperation and innovation can enlarge the total – yet <em>zero-sum thinking</em>, the habit of treating them as if they were, drives rivalry, arms races and the <a href="#multipolar-trap">multipolar trap</a>. Shifting from zero-sum to positive-sum games is a recurring theme in visions of a <a href="#win-win">win-win</a> civilisation.</p>'
     },
     {
+      id: 'macroeconomics',
+      title: 'Macroeconomics',
+      parent: 'capital-and-growth',
+      html: '<p><em>Macroeconomics</em> is the study of the economy as a whole – output, growth, employment, inflation, money and trade, and the policies that govern them – as distinct from the behaviour of individual firms and households. It took its modern form in John Maynard Keynes’s <em>General Theory</em> (1936), and has since been shaped by debates between Keynesian, <a href="#monetarism">monetarist</a> and other schools over how far economies correct themselves and how far they must be steered.</p><p>From a civilisational standpoint its central assumption is growth: most macroeconomic policy is organised around keeping output rising, which ties the economy to <a href="#embedded-growth-obligations">embedded growth obligations</a> and places it in tension with planetary limits. See <a href="#political-economy">political economy</a>.</p>'
+    },
+    {
+      id: 'macroevolution',
+      title: 'Macroevolution',
+      parent: 'evolutionary-theory',
+      html: '<p><em>Macroevolution</em> is evolution above the level of species: the origin of new lineages, the major transitions in the history of life, adaptive radiations and mass extinctions, studied across geological time. Where microevolution tracks changes within populations, macroevolution asks how the large-scale patterns of life – its branching, its bursts of novelty and its collapses – arise.</p><p>The major transitions described by John Maynard Smith and Eörs Szathmáry (1995) – from single cells to multicellular life, from solitary organisms to societies, and to language and culture – place civilisation itself within a macroevolutionary sequence, as the latest and least stable of life’s new levels of organisation. See <a href="#evolutionary-theory">evolutionary theory</a> and <a href="#macrohistory">macrohistory</a>.</p>'
+    },
+    {
+      id: 'macrocosm',
+      title: 'Macrocosm',
+      parent: 'metaphysics',
+      html: '<p>The <em>macrocosm</em> is the universe as a whole, understood as an ordered totality. In the ancient and Renaissance idea of the macrocosm and microcosm – “as above, so below” – the human being was a small world that mirrored the structure of the great one, so that knowledge of the self and knowledge of the cosmos were bound together.</p><p>Modern science broke that correspondence, but the question it answered has returned at the <a href="#civilisational-scale">civilisational scale</a>: how human civilisation fits within the larger orders – planetary, biological and cosmic – on which it depends. See <a href="#metaphysics">metaphysics</a> and <a href="#the-anthropocene">the Anthropocene</a>.</p>'
+    },
+    {
       id: 'civilisational-collapse',
       title: 'Civilisational Collapse',
       parent: 'risk-and-catastrophe',
@@ -4427,7 +4445,10 @@
         { name: 'I', items: sections.slice(3, 6) },
         { name: 'II', items: [byId['metanarrative'], byId['metaphysics'], byId['metarationality'], byId['metapsychology'], byId['metamathics']] }
       ] },
-      { name: 'Macro', items: sections.slice(6, 9) },
+      { name: 'Macro', subs: [
+        { name: 'I', items: sections.slice(6, 9) },
+        { name: 'II', items: [byId['macroeconomics'], byId['macroevolution'], byId['macrocosm']] }
+      ] },
       { name: 'Core', items: [byId['life-world-system']] }
     ].map(function (g) {
       // A group may be divided into numbered sub-groups (I, II, …); its items are theirs in order.
