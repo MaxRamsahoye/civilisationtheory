@@ -4617,7 +4617,11 @@
     var y = window.scrollY;
     progressEl.style.transform = 'scaleY(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
     topBtn.classList.toggle('visible', y > 300);
-    document.documentElement.classList.toggle('map-past-opening', y > window.innerHeight * 0.85);
+    var root = document.documentElement, wasPast = root.classList.contains('map-past-opening');
+    root.classList.toggle('map-past-opening', y > window.innerHeight * 0.85);
+    // Scrolling back up into the Map's opening screen closes the sidebar, as the footer does.
+    if (wasPast && !root.classList.contains('map-past-opening') && root.classList.contains('page-map') &&
+        !document.body.classList.contains('sidebar-closed')) setSidebar(false, false);
     var current = tocHeads[0];
     tocHeads.forEach(function (h) { if (h.getBoundingClientRect().top < window.innerHeight * 0.3) current = h; });
     if (max > 0 && y >= max - 2) current = tocHeads[tocHeads.length - 1];
