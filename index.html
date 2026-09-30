@@ -4707,7 +4707,9 @@
     leaving = { y: window.scrollY, link: link, view: document.documentElement.getAttribute('data-index') };
   }, true);
   function onHashChange() {
-    if (trail.length > 1 && trail[trail.length - 2].hash === location.hash) {
+    // A link just followed is always a step forward (even to the page before); only a change with
+    // no link clicked – the Back arrow, Backspace or the browser's own Back – steps back.
+    if (!leaving && trail.length > 1 && trail[trail.length - 2].hash === location.hash) {
       trail.pop();
       backReturn = trail[trail.length - 1];
     } else {
@@ -4773,10 +4775,11 @@
     if (!v) return;
     var view = v.getAttribute('data-view-link');
     document.documentElement.setAttribute('data-index', view);
+    // Once the Map has opened: the view below its tab line, the tab line brought up to the top.
     setTimeout(function () {
-      var t = document.querySelector('#entry .index-tabs');
-      if (t && location.hash === '#the-map') window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - 40, behavior: 'smooth' });
-    }, 450);
+      if (location.hash !== '#the-map') return;
+      setMapTail(); toMapView();
+    }, 500);
   });
 
   // ---------- Conceptual Engineerings: by category or A–Z ----------
