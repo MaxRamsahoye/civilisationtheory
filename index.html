@@ -1160,7 +1160,9 @@
   html.page-map #map-topo { display: block; transition: opacity .6s ease; }
   html.topo-off #map-topo { opacity: 0; }   /* A hides the topography */
   html.page-map #entry { position: relative; z-index: 1; }
-  html.hudless #map-topo { opacity: 0.35; }
+  /* Hudless on the Map: the tab line goes with the rest of the interface; the topography stays */
+  html.hudless.page-map #entry .index-tabs { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+  html.hud-fade.page-map #entry .index-tabs { transition: opacity .6s ease, visibility .6s !important; }
   html.page-map #entry h1 { text-align: left; margin-bottom: 0.5rem; }
   /* The subtitle in the interface face */
   html.page-map .description > p:first-child { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; letter-spacing: 0.01em; font-weight: 500 !important; font-size: 1.3rem !important; }
