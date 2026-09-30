@@ -39,9 +39,8 @@
     try { a = localStorage.getItem('ct-accent'); } catch (e) {}
     if (a !== 'off') document.documentElement.classList.add('accent');
     if (a === 'alt') document.documentElement.classList.add('accent-alt');
-    var v = null;
-    try { v = localStorage.getItem('ct-index'); } catch (e) {}
-    document.documentElement.setAttribute('data-index', ['rl', 'az', 'ce', 'cp'].indexOf(v) >= 0 ? v : 'cs');
+    // The Map opens with no view chosen: just its opening screen, the tabs to choose from.
+    document.documentElement.setAttribute('data-index', 'none');
   })();
 </script>
 <style>
@@ -937,6 +936,10 @@
   :root[data-index="cs"] .index-list,
   :root[data-index="cs"] .az-view,
   :root[data-index="cs"] .ce-list:not(.cs-list) { display: none; }
+  /* No view chosen (the Map as it opens): every view folded away */
+  :root[data-index="none"] .index-list, :root[data-index="none"] .az-view, :root[data-index="none"] .ce-list { display: none; }
+  :root[data-index="none"].page-map main { padding-bottom: 0; }   /* the footer follows the tab line */
+  html.page-map main { justify-content: flex-start; }
   /* Civilisation Research Landscape view */
   :root:not([data-index="rl"]) .rl-list,
   :root[data-index="rl"] .index-list,
@@ -1105,20 +1108,6 @@
   html.page-map #entry { position: relative; z-index: 1; }
   html.hudless #map-topo { opacity: 0.35; }
   html.page-map #entry h1 { text-align: left; margin-bottom: 0.5rem; }
-  /* The arrow under the description, bobbing gently downwards */
-  .description .map-down { display: none; }
-  html.page-map .description .map-down {
-    display: block; margin: 2.2rem 0 0; padding: 0.4rem; margin-left: -0.4rem; background: none; border: 0;
-    color: var(--text); cursor: var(--cursor-link, pointer);
-  }
-  html.page-map .map-down svg {
-    display: block; width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 1.4px; stroke-linejoin: miter; overflow: visible;
-    animation: map-down-bob 2.2s ease-in-out infinite;
-  }
-  html.page-map .map-down svg * { vector-effect: non-scaling-stroke; }
-  html.page-map .map-down:hover svg { animation-duration: 1.1s; }
-  @keyframes map-down-bob { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(0.55rem); opacity: 0.55; } }
-  @media (prefers-reduced-motion: reduce) { html.page-map .map-down svg { animation: none; } }
   html.page-map #entry > .description { margin-top: 0; }
   html.page-map .description > p:first-child { font-weight: 600; margin-top: 0; }
   /* The view in use keeps the click's accent-tinted box (rounded below, hung from the line),
@@ -1518,9 +1507,7 @@
    */
   // Shared by the homepage's closing section and the standalone Map page.
   // The Map's opening: what the map is.
-  var MAP_INTRO = '<p>The conceptual architecture from which a <em>civilisational</em> worldview emerges</p>' +
-    // A gently moving arrow: choose a view below, or scroll on (clicking it opens the view in use).
-    '<button type="button" class="map-down" aria-label="Down to the index"><svg viewBox="-8.3 -7.3 116.7 116.7" aria-hidden="true"><polygon points="8,10 50,34 92,10 50,92"/><line x1="50" y1="34" x2="50" y2="92"/></svg></button>';
+  var MAP_INTRO = '<p>The conceptual architecture from which a <em>civilisational</em> worldview emerges</p>';
 
   var CONCEPTS = [
     {
@@ -4205,7 +4192,7 @@
     tabs.style.marginTop = Math.max(2 * rem, gap) + 'px';
     // The content starts just past the foot of the screen.
     var tabsBottom = tabs.getBoundingClientRect().bottom + sy;
-    tabs.style.marginBottom = Math.max(2.2 * rem, H - tabsBottom) + 'px';
+    tabs.style.marginBottom = document.documentElement.getAttribute('data-index') === 'none' ? '0px' : Math.max(2.2 * rem, H - tabsBottom) + 'px';
     layoutTopo(icon, tabs);
   }
 
@@ -4575,7 +4562,6 @@
     if (!v) return;
     var view = v.getAttribute('data-view-link');
     document.documentElement.setAttribute('data-index', view);
-    try { localStorage.setItem('ct-index', view); } catch (err) {}
     setTimeout(function () {
       var t = document.querySelector('#entry .index-tabs');
       if (t && location.hash === '#the-map') window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - 40, behavior: 'smooth' });
@@ -4588,10 +4574,9 @@
     if (!b) return;
     var view = b.getAttribute('data-view');
     document.documentElement.setAttribute('data-index', view);
-    try { localStorage.setItem('ct-index', view); } catch (err) {}
     if (document.documentElement.classList.contains('snap-slides')) updateSlideNav();
     // On the Map, choosing a view from its opening screen brings that view's content up.
-    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) toMapView();
+    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) { layoutMapHero(); toMapView(); }
   });
   function toMapView() {
     var panel = Array.prototype.find.call(document.querySelectorAll('#entry .description > .az-view, #entry .description > .ce-list'),
@@ -4600,10 +4585,6 @@
     if (head && head.getBoundingClientRect().top > window.innerHeight * 0.6)
       window.scrollTo({ top: window.scrollY + head.getBoundingClientRect().top - 3 * parseFloat(getComputedStyle(document.documentElement).fontSize), behavior: 'smooth' });
   }
-  // The Map's down arrow opens the view in use.
-  document.getElementById('entry').addEventListener('click', function (e) {
-    if (e.target.closest('.map-down')) toMapView();
-  });
 
   // ---------- Contents ----------
   var tocEl = document.getElementById('toc');
@@ -5245,7 +5226,6 @@
       if (v) {
         var view = v.getAttribute('data-view-link');
         document.documentElement.setAttribute('data-index', view);
-        try { localStorage.setItem('ct-index', view); } catch (err) {}
         var sec = v.getAttribute('data-section');
         var onMap = location.hash === '#the-map';
         if (onMap) e.preventDefault();
