@@ -940,7 +940,7 @@
   :root[data-index="none"] .index-list, :root[data-index="none"] .az-view, :root[data-index="none"] .ce-list { display: none; }
   :root[data-index="none"].page-map main { padding-bottom: 0; }   /* the footer follows the tab line */
   html.page-map main { justify-content: flex-start; }
-  html.page-map { overflow-x: clip; }   /* (the tab line's full width never scrolls the page sideways) */
+  html.page-map { overflow-x: clip; overflow-anchor: none; }   /* (the tab line's full width never scrolls the page sideways) */
   /* No footer until a view is chosen: the opening screen stands alone */
   :root[data-index="none"].page-map #site-footer { display: none; }
   /* Civilisation Research Landscape view */
@@ -4213,28 +4213,44 @@
   // The Map opens on a screen of its own: icon, heading and introduction centred in the space
   // above the line of view tabs, which sits near the foot of the screen; the tab's content
   // begins on the next screen. (Where the opening is taller than the screen, it simply flows.)
-  function layoutMapHero() {
+  // (Positions are measured against the document itself, never via scrollY, so they hold however
+  // far the page is scrolled; and the Map turns off scroll anchoring, which would otherwise shift
+  // the page under these measurements as the margins change.)
+  function docY(el, edge) { return el.getBoundingClientRect()[edge] - document.documentElement.getBoundingClientRect().top; }
+  var heroSize = { w: 0, h: 0 };
+  function layoutMapHero(force) {
     var icon = document.querySelector('#entry > h1'), tabs = document.querySelector('#entry .index-tabs');
     var lede = tabs && tabs.previousElementSibling;   // the last part of the opening
     if (!icon || !tabs || !lede || !document.documentElement.classList.contains('page-map')) return;
+    var W = document.documentElement.clientWidth, H = window.innerHeight;
+    // A phone's address bar showing or hiding changes the height a little as the page scrolls:
+    // that alone is not a reason to lay the opening out again.
+    if (force !== true && icon.style.marginTop && W === heroSize.w && Math.abs(H - heroSize.h) < 140 && window.matchMedia('(pointer: coarse)').matches) { layoutTopo(icon, tabs); return; }
+    heroSize = { w: W, h: H };
     icon.style.marginTop = ''; tabs.style.marginTop = ''; tabs.style.marginBottom = '';
-    var sy = window.scrollY, H = window.innerHeight;
     var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
     var header = document.getElementById('site-header');
-    var top = header ? header.getBoundingClientRect().bottom + sy : 0;
-    var iconTop = icon.getBoundingClientRect().top + sy;
-    var group = lede.getBoundingClientRect().bottom + sy - iconTop;
+    var top = header ? docY(header, 'bottom') : 0;
+    var iconTop = docY(icon, 'top');
+    var group = docY(lede, 'bottom') - iconTop;
     var tabsH = tabs.offsetHeight;
     var tabsTop = H - tabsH;                                         // the line: at the foot of the screen
     var free = tabsTop - top - group - 3 * rem;                      // room left around the heading group
-    if (free <= 0) return;
-    icon.style.marginTop = Math.max(0, top + free * 0.8 - iconTop + parseFloat(getComputedStyle(icon).marginTop)) + 'px';
-    var gap = tabsTop - (lede.getBoundingClientRect().bottom + sy);
-    tabs.style.marginTop = Math.max(2 * rem, gap) + 'px';
-    // The content starts just past the foot of the screen.
-    var tabsBottom = tabs.getBoundingClientRect().bottom + sy;
-    tabs.style.marginBottom = document.documentElement.getAttribute('data-index') === 'none' ? '0px' : Math.max(2.2 * rem, H - tabsBottom) + 'px';
+    if (free > 0) {
+      icon.style.marginTop = Math.max(0, top + free * 0.8 - iconTop + parseFloat(getComputedStyle(icon).marginTop)) + 'px';
+      tabs.style.marginTop = Math.max(2 * rem, tabsTop - docY(lede, 'bottom')) + 'px';
+    }
+    setMapTail();
     layoutTopo(icon, tabs);
+  }
+  // Below the tab line: nothing until a view is chosen; then the view begins on the next screen.
+  function setMapTail() {
+    var tabs = document.querySelector('#entry .index-tabs');
+    if (!tabs || !document.documentElement.classList.contains('page-map')) return;
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    tabs.style.marginBottom = '0px';
+    if (document.documentElement.getAttribute('data-index') !== 'none')
+      tabs.style.marginBottom = Math.max(2.2 * rem, window.innerHeight - docY(tabs, 'bottom')) + 'px';
   }
 
   // ---------- The Map's topography: contour lines of a slowly drifting landscape ----------
@@ -4316,26 +4332,26 @@
   // The topography fills the opening screen.
   function layoutTopo(h1, tabs) {
     if (typeof topo === 'undefined' || !topo) return;
-    var sy = window.scrollY, top = 0;   // from the very top, behind the (clear) header
+    var top = 0;   // from the very top, behind the (clear) header
     // …down to the foot of the first screen, under the line of tabs as well
-    var bottom = Math.max(window.innerHeight, tabs.getBoundingClientRect().bottom + sy);
+    var bottom = Math.max(window.innerHeight, docY(tabs, 'bottom'));
     if (bottom - top <= 80) return;
     // The lines fade to a whisper behind the heading and description, wherever they sit.
     var lede = document.querySelector('#entry .description > p:first-child'), a = h1.getBoundingClientRect(), z = lede.getBoundingClientRect();
     var range = document.createRange(); range.selectNodeContents(lede); var zr = range.getBoundingClientRect();
     var l = Math.min(a.left, zr.left), r = Math.max(a.left + textRight(h1), zr.right);
-    var t = a.top + sy - top, b = z.bottom + sy - top, H = bottom - top, W = document.documentElement.clientWidth;
+    var t = docY(h1, 'top') - top, b = docY(lede, 'bottom') - top, H = bottom - top, W = document.documentElement.clientWidth;
     var wrap = document.getElementById('map-topo');
     wrap.style.setProperty('--fx', ((l + r) / 2 / W * 100) + '%');
     wrap.style.setProperty('--fy', ((t + b) / 2 / H * 100) + '%');
     wrap.style.setProperty('--fw', ((r - l) / 2 / W * 100 + 14) + '%');
     wrap.style.setProperty('--fh', ((b - t) / 2 / H * 100 + 16) + '%');
     // …and fall almost silent behind the line of tabs, so their names read clearly.
-    var tt = (tabs.getBoundingClientRect().top + sy - top) / H * 100;
+    var tt = (docY(tabs, 'top') - top) / H * 100;
     wrap.style.setProperty('--tt0', Math.max(0, tt - 7) + '%');
     wrap.style.setProperty('--tt', Math.max(0, tt - 1) + '%');
     // Likewise behind the header, so its title and menu read clearly.
-    var hb = document.getElementById('site-header').getBoundingClientRect().bottom + sy - top;
+    var hb = docY(document.getElementById('site-header'), 'bottom') - top;
     wrap.style.setProperty('--h0', (hb * 0.6 / H * 100) + '%');
     wrap.style.setProperty('--h1', ((hb + 220) / H * 100) + '%');
     topo.place(top, H);
@@ -4623,7 +4639,7 @@
     document.documentElement.setAttribute('data-index', view);
     if (document.documentElement.classList.contains('snap-slides')) updateSlideNav();
     // On the Map, choosing a view from its opening screen brings that view's content up.
-    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) { layoutMapHero(); toMapView(); }
+    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) { setMapTail(); toMapView(); }
   });
   function toMapView() {
     var panel = Array.prototype.find.call(document.querySelectorAll('#entry .description > .az-view, #entry .description > .ce-list'),
@@ -4631,8 +4647,8 @@
     var head = panel && panel.querySelector('.ce-title');
     // …by turning to the next screen: the page scrolls to where the opening screen ends.
     var tabs = document.querySelector('#entry .index-tabs');
-    if (head && tabs && head.getBoundingClientRect().top > window.innerHeight * 0.6)
-      window.scrollTo({ top: window.scrollY + tabs.getBoundingClientRect().bottom, behavior: 'smooth' });
+    if (head && tabs && tabs.getBoundingClientRect().bottom > 1)   // (while any of the opening screen still shows)
+      window.scrollTo({ top: docY(tabs, 'bottom'), behavior: 'smooth' });
   }
 
   // ---------- Contents ----------
@@ -4683,7 +4699,7 @@
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
-  if (document.fonts) document.fonts.ready.then(fitCrumbs);
+  if (document.fonts) document.fonts.ready.then(function () { fitCrumbs(); layoutMapHero(true); });
   var fitTimer;
   window.addEventListener('resize', function () { clearTimeout(fitTimer); fitTimer = setTimeout(fitCrumbs, 120); });
   topBtn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
