@@ -1149,7 +1149,8 @@
     mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3) 0, rgba(0,0,0,0.3) var(--h0, 7%), #000 var(--h1, 30%), #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     mask-composite: intersect;
   }
-  #map-topo canvas { display: block; width: 100%; height: 100%; animation: topo-in 1.8s ease-in-out both; }
+  #map-topo canvas { display: block; width: 100%; height: 100%; opacity: 0; }
+  html.topo-go #map-topo canvas { opacity: 1; animation: topo-in 1.8s ease-in-out both; }
   @keyframes topo-in { from { opacity: 0; } to { opacity: 1; } }   /* the terrain rises into view as the site opens */
   html.page-map #map-topo { display: block; }
   html.page-map #entry { position: relative; z-index: 1; }
@@ -4378,7 +4379,7 @@
     var wrap = document.createElement('div'), cv = document.createElement('canvas'), ctx = cv.getContext('2d');
     wrap.id = 'map-topo'; wrap.setAttribute('aria-hidden', 'true'); wrap.appendChild(cv);
     document.body.appendChild(wrap);
-    var W = 0, Hh = 0, dpr = 1, clock = 0, prevNow = 0, frame = 0, raf = 0, still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var W = 0, Hh = 0, dpr = 1, clock = 0, prevNow = 0, frame = 0, raf = 0, started = false, still = window.matchMedia('(prefers-reduced-motion: reduce)');
     // Value noise on a lattice, smoothly interpolated, in three dimensions.
     var P = new Uint8Array(512);
     (function () { var a = [], i, j, k, seed = 7; for (i = 0; i < 256; i++) a[i] = i;
@@ -4432,10 +4433,13 @@
       raf = 0;
       var dt = prevNow ? Math.min(now - prevNow, 34) : 16; prevNow = now;
       var visible = document.documentElement.classList.contains('page-map') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
-      if (visible) { clock += dt / 1000; if (frame++ % 2 === 0) draw(now); }
+      if (visible && started) { clock += dt / 1000; if (frame++ % 2 === 0) draw(now); }
       if (document.documentElement.classList.contains('page-map') && !still.matches) raf = requestAnimationFrame(loop);
     }
     return {
+      // The landscape holds still until the site is built and running smoothly (see the loading
+      // screen), then starts moving at its true pace.
+      start: function () { if (!started) { started = true; prevNow = 0; } },
       place: function (top, height) {
         var w = document.documentElement.clientWidth;
         wrap.style.top = top + 'px'; wrap.style.height = height + 'px';
@@ -5521,13 +5525,34 @@
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
     }
-    function skip(e) { e.preventDefault(); e.stopPropagation(); finish(); }
+    function skip(e) { e.preventDefault(); e.stopPropagation(); go(); finish(); }
     document.addEventListener('keydown', skip, true);
     document.addEventListener('pointerdown', skip, true);
-    timer = setTimeout(finish, reduce ? 700 : 3600);
+    // A blank moment first, while the site is built: wait for the fonts, then for the frames to
+    // run smoothly (a few in a row on time), so that building the page never slows the terrain.
+    // Only then does it fade in and start moving, and the loading screen's time begins.
+    var going = false;
+    function go() {
+      if (going) return;
+      going = true;
+      root.classList.add('topo-go');
+      if (typeof topo !== 'undefined') topo.start();
+    }
+    var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    Promise.race([fontsReady, new Promise(function (r) { setTimeout(r, 1500); })]).then(function () {
+      var calm = 0, prev = 0, begun = performance.now();
+      (function watch(now) {
+        if (finished) return;
+        if (prev && now - prev < 24) calm++; else calm = 0;
+        prev = now;
+        if (calm >= 6 || now - begun > 1500) { go(); timer = setTimeout(finish, reduce ? 700 : 3600); return; }
+        requestAnimationFrame(watch);
+      })(performance.now());
+    });
   })();
   else (function () {
     document.documentElement.classList.remove('loading-topo', 'loading-hud');
+    document.documentElement.classList.add('topo-go'); if (typeof topo !== 'undefined') topo.start();
     var loader = document.getElementById('loader');
     var out = document.getElementById('loader-text');
     var title = 'Civilisational';
