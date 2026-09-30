@@ -1098,7 +1098,9 @@
   html.page-map #map-topo { display: block; }
   html.page-map #entry { position: relative; z-index: 1; }
   html.hudless #map-topo { opacity: 0.35; }
-  html.page-map #entry h1 { text-align: left; }
+  html.page-map #entry h1 { text-align: left; margin-bottom: 0.5rem; }
+  html.page-map #entry > .description { margin-top: 0; }
+  html.page-map .description > p:first-child { font-weight: 600; margin-top: 0; }
   /* The view in use keeps the click's accent-tinted box (rounded below, hung from the line),
      instead of a passing flash */
   html.page-map .index-tabs button.pressed { animation: none !important; }
@@ -1112,13 +1114,13 @@
   html.page-map .description > p:first-child { text-align: left; }
   /* Shorter windows: the opening is drawn tighter so that it still fits the screen */
   @media (min-width: 900px) and (max-height: 860px) {
-    html.page-map #entry > h1 { font-size: 3.4rem !important; margin-bottom: 1.2rem !important; }
-    html.page-map .description > p:first-child { font-size: 1.05rem !important; }
+    html.page-map #entry > h1 { font-size: 3.4rem !important; }
+    html.page-map .description > p:first-child { font-size: 1.3rem !important; }
   }
   /* With a screen to itself, the opening is set larger */
   @media (min-width: 900px) {
-    html.page-map #entry > h1 { font-size: 4.6rem; line-height: 1.02; margin-bottom: 2rem; }
-    html.page-map .description > p:first-child { font-size: 1.2rem; line-height: 1.5; max-width: 44rem; margin-left: 0; margin-right: 0; }
+    html.page-map #entry > h1 { font-size: 4.6rem; line-height: 1.02; }
+    html.page-map .description > p:first-child { font-size: 1.55rem; line-height: 1.35; max-width: none; margin-left: 0; margin-right: 0; text-wrap: balance; }
   }
   /* (The single line needs a desktop window; narrower, the tabs keep two rows of three.) */
   @media (min-width: 1000px) {
