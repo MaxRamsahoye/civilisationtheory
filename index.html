@@ -4658,16 +4658,23 @@
     if (!tags.length) return '';
     return '<p class="entry-tags">' + tags.map(function (t) {
       var tag = TAGS[t] || { label: t };
-      if (tag.view) return '<a class="entry-tag" href="#the-map" data-view-link="' + tag.view + '">' + esc(tag.label) + '</a>';
+      if (tag.view) return '<a class="entry-tag" href="' + mapViewHref(tag.view) + '" data-view-link="' + tag.view + '">' + esc(tag.label) + '</a>';
       return tag.href
         ? '<a class="entry-tag" href="' + tag.href + '" target="_blank" rel="noopener">' + esc(tag.label) + '</a>'
         : '<span class="entry-tag">' + esc(tag.label) + '</span>';
     }).join('') + '</p>';
   }
 
+  // The addresses of the Map's five views
+  var MAP_VIEWS = { cs: 'civilisation-research-paradigm', rl: 'civilisation-research-landscape', az: 'a-z', ce: 'conceptual-engineerings', cp: 'consilience-project' };
+  function mapViewHref(v) { return '#the-map/' + MAP_VIEWS[v]; }
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
+    // The Map's five views have their own addresses (#the-map/…): the Map, opened on that view.
+    var mapView = null;
+    Object.keys(MAP_VIEWS).forEach(function (v) { if (id === 'the-map/' + MAP_VIEWS[v]) mapView = v; });
+    if (mapView) { document.documentElement.setAttribute('data-index', mapView); id = 'the-map'; }
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
@@ -4713,6 +4720,11 @@
     window.scrollTo(0, 0);
     // Returning by Back: the page reopens where it was left, and the link that was followed is marked.
     if (backReturn) { var br = backReturn; backReturn = null; restoreReturn(br); }
+    // Opened at a view's address: bring the view up (once the opening screen has loaded).
+    else if (mapView) (function waitThenShow() {
+      if (document.documentElement.classList.contains('loading-topo')) { setTimeout(waitThenShow, 200); return; }
+      setTimeout(function () { if (location.hash === '#the-map/' + MAP_VIEWS[mapView]) { setMapTail(); toMapView(); } }, 60);
+    })();
     onScroll();
     trackedId = undefined;
     if (c.id === 'infinite') {
@@ -4844,7 +4856,11 @@
     document.documentElement.setAttribute('data-index', view);
     if (document.documentElement.classList.contains('snap-slides')) updateSlideNav();
     // On the Map, choosing a view from its opening screen brings that view's content up.
-    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) { setMapTail(); toMapView(); }
+    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) {
+      // The address follows the view chosen (without reloading the page).
+      if (MAP_VIEWS[view]) { history.replaceState(null, '', mapViewHref(view)); trail[trail.length - 1].hash = location.hash; }
+      setMapTail(); toMapView();
+    }
   });
   function toMapView() {
     var panel = Array.prototype.find.call(document.querySelectorAll('#entry .description > .az-view, #entry .description > .ce-list'),
@@ -5515,14 +5531,14 @@
         var view = v.getAttribute('data-view-link');
         document.documentElement.setAttribute('data-index', view);
         var sec = v.getAttribute('data-section');
-        var onMap = location.hash === '#the-map';
+        var onMap = document.documentElement.classList.contains('page-map');
         if (onMap) e.preventDefault();
         // Bring the section (or else the tabs) into view – at once when already on the Map, and
         // once the Map has opened otherwise.
         setTimeout(function () {
           var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
           var t = sec ? document.getElementById('nidx-' + sec) : document.querySelector('#entry .index-tabs');
-          if (t && location.hash === '#the-map') window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - (sec ? 3 * rem : 40), behavior: 'smooth' });
+          if (t && document.documentElement.classList.contains('page-map')) window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - (sec ? 3 * rem : 40), behavior: 'smooth' });
         }, onMap ? 0 : 700);
       }
     });
@@ -5539,7 +5555,8 @@
   }
 
   // Every load or refresh opens the Map, the site's front page (any other page left in the URL is dropped).
-  history.replaceState(null, '', location.pathname + location.search + '#the-map');
+  var keepView = Object.keys(MAP_VIEWS).some(function (v) { return location.hash === mapViewHref(v); });
+  if (!keepView) history.replaceState(null, '', location.pathname + location.search + '#the-map');
   trail[0].hash = location.hash;   // (the Back trail starts from the Map)
   // …at its top: the browser is not to restore an earlier scroll position on reload.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
