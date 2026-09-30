@@ -1425,7 +1425,11 @@
      topography showing until the interface and content fade in over it */
   html.loading-topo #loader { display: none; }
   html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
-  html.topo-reveal body > *:not(#map-topo):not(script) { transition: opacity 1.4s ease; }
+  /* …first the title and subtitle, then (a moment later) the interface: header, controls, tab line */
+  html.loading-hud #site-header, html.loading-hud #head-menu, html.loading-hud .control, html.loading-hud #sidebar,
+  html.loading-hud #progress, html.loading-hud #entry .index-tabs { opacity: 0 !important; pointer-events: none !important; }
+  html.topo-reveal body > *:not(#map-topo):not(script),
+  html.topo-reveal #site-header, html.topo-reveal #head-menu, html.topo-reveal .control, html.topo-reveal #entry .index-tabs { transition: opacity 1.4s ease; }
   .loader-mark, .loader-ring { z-index: 2; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
   /* Ring encircles the title, scaled from the title's width, and fills in step with the typewriter */
@@ -5495,9 +5499,10 @@
       finished = true;
       clearTimeout(timer);
       loader.classList.add('done');
-      root.classList.add('topo-reveal');
+      root.classList.add('topo-reveal', 'loading-hud');
       root.classList.remove('loading-topo');
-      setTimeout(function () { root.classList.remove('topo-reveal'); }, 1600);
+      setTimeout(function () { root.classList.remove('loading-hud'); }, 1300);   // then the interface
+      setTimeout(function () { root.classList.remove('topo-reveal'); }, 3000);
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
     }
