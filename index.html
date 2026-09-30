@@ -27,17 +27,16 @@
 
   // Apply saved theme before first paint to avoid a flash.
   (function () {
-    var t = null;
-    try { t = localStorage.getItem('ct-theme'); } catch (e) {}
-    if (['light', 'sepia', 'midnight', 'dark'].indexOf(t) < 0) {
-      t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    }
+    // The theme follows the system: dark if it is set to dark, otherwise light (T changes it for
+    // the visit; nothing is saved).
+    var t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', t);
     setFavicon(t);
     // The loading screen is shown in the blue (midnight) theme; the reader's own theme – light by
     // default – takes over as the site settles (see the loading screen).
     document.documentElement.setAttribute('data-theme-after', t);
     document.documentElement.setAttribute('data-theme', 'midnight');
+    document.documentElement.classList.add('awaiting-theme');
     // The accent colour is on by default; C cycles it (and a reader's choice is remembered).
     var a = null;
     try { a = localStorage.getItem('ct-accent'); } catch (e) {}
@@ -1436,7 +1435,7 @@
      topography showing until the interface and content fade in over it */
   html.loading-topo #loader { display: none; }
   /* The shift from the loading screen's blue to the reader's theme: a slow cross-fade of colours */
-  html.theme-shift body, html.theme-shift #site-header { transition: background-color 1.4s ease, color 1.4s ease; }
+  html.theme-shift body, html.theme-shift body * { transition: background-color 1.4s ease, color 1.4s ease, border-color 1.4s ease !important; }
   html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
   /* …first the title and subtitle, then (a moment later) the interface: header, controls, tab line */
   html.loading-hud #site-header, html.loading-hud #head-menu, html.loading-hud .control, html.loading-hud #sidebar,
@@ -4935,7 +4934,15 @@
     var next = order[(order.indexOf(document.documentElement.getAttribute('data-theme')) + 1) % order.length];
     document.documentElement.setAttribute('data-theme', next);
     setFavicon(next);
-    try { localStorage.setItem('ct-theme', next); } catch (e) {}
+    themeChosen = true;
+  });
+  // Until T is used, the site follows a change in the system's light/dark setting.
+  var themeChosen = false;
+  if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+    var t = e.matches ? 'dark' : 'light', root = document.documentElement;
+    root.setAttribute('data-theme-after', t);
+    if (themeChosen || root.getAttribute('data-theme') === 'midnight' && root.classList.contains('awaiting-theme')) return;
+    root.setAttribute('data-theme', t); setFavicon(t);
   });
 
   // ---------- Click sounds: a soft, quiet chime on links and buttons (M mutes) ----------
@@ -5548,15 +5555,20 @@
       finished = true;
       clearTimeout(timer);
       loader.classList.add('done');
-      // The blue of the loading screen gives way to the reader's theme…
-      root.classList.add('theme-shift');
-      root.setAttribute('data-theme', root.getAttribute('data-theme-after') || 'light');
-      setTimeout(function () { root.classList.remove('theme-shift'); }, 1600);
-      // …then the title and subtitle; the interface (hidden from the start) follows once they are in.
+      // First the title and subtitle; the interface (hidden from the start) follows once they are in;
+      // and only once that has settled does the blue of the loading screen give way to the
+      // system's theme.
       root.classList.add('topo-reveal');
       root.classList.remove('loading-topo');
       setTimeout(function () { root.classList.remove('loading-hud'); }, 1500);
-      setTimeout(function () { root.classList.remove('topo-reveal'); }, 3100);
+      setTimeout(function () {
+        root.classList.remove('topo-reveal', 'awaiting-theme');
+        if (themeChosen) return;
+        root.classList.add('theme-shift');
+        var t = root.getAttribute('data-theme-after') || 'light';
+        root.setAttribute('data-theme', t); setFavicon(t);
+        setTimeout(function () { root.classList.remove('theme-shift'); }, 1600);
+      }, 3100);
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
     }
@@ -5587,7 +5599,7 @@
   })();
   else (function () {
     document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme-after') || 'light');
-    document.documentElement.classList.remove('loading-topo', 'loading-hud');
+    document.documentElement.classList.remove('loading-topo', 'loading-hud', 'awaiting-theme');
     document.documentElement.classList.add('topo-go'); if (typeof topo !== 'undefined') topo.start();
     var loader = document.getElementById('loader');
     var out = document.getElementById('loader-text');
