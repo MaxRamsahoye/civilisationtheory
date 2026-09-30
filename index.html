@@ -34,11 +34,11 @@
     }
     document.documentElement.setAttribute('data-theme', t);
     setFavicon(t);
-    try {
-      var a = localStorage.getItem('ct-accent');
-      if (a === 'on' || a === 'alt') document.documentElement.classList.add('accent');
-      if (a === 'alt') document.documentElement.classList.add('accent-alt');
-    } catch (e) {}
+    // The accent colour is on by default; C cycles it (and a reader's choice is remembered).
+    var a = null;
+    try { a = localStorage.getItem('ct-accent'); } catch (e) {}
+    if (a !== 'off') document.documentElement.classList.add('accent');
+    if (a === 'alt') document.documentElement.classList.add('accent-alt');
     var v = null;
     try { v = localStorage.getItem('ct-index'); } catch (e) {}
     document.documentElement.setAttribute('data-index', ['rl', 'az', 'ce', 'cp'].indexOf(v) >= 0 ? v : 'cs');
