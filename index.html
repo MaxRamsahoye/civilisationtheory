@@ -541,6 +541,16 @@
   #site-header { border-bottom: 1px solid var(--rule); background: var(--bg-side); }
   /* Header and footer frame the main pages only; concept entries stand alone */
   html:not(.main-page) #site-footer { display: none; }
+  /* Light theme: the header band (on the main pages) and the footer are inverted, white on black */
+  :root[data-theme="light"] #site-footer,
+  :root[data-theme="light"].main-page:not(.page-map) #site-header {
+    --bg: #111111; --bg-side: #111111; --text: #fffff8; --muted: #a9a79e; --rule: #2e2e2b;
+    --link: #fffff8; --link-underline: #6d6b64; --active: #ffffff;
+    color: var(--text); border-color: #111111;
+  }
+  /* …and the back-to-top arrow, when it stands over the footer, turns light with it */
+  :root[data-theme="light"] body.footer-in-view #to-top { color: #d8d6cc; }
+  :root[data-theme="light"] body.footer-in-view #to-top:hover { color: #fffff8; }
   /* On entries the header sits over the top of the page in the page's own colour, with no rule,
      and takes no space, so entries stay centred on screen */
   html:not(.main-page) #site-header, html.page-map #site-header {
