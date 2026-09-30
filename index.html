@@ -345,7 +345,7 @@
   }
   #search-results li a[aria-selected="true"], #search-results li a:hover { background: var(--select); }
   #search-results .r-title { display: block; font-family: 'ET Bembo', Georgia, serif; font-size: 0.95rem; line-height: 1.25; }
-  #search-results .r-path { display: block; font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 0.1rem; }
+  #search-results .r-path { display: block; font-size: 0.67rem; letter-spacing: 0.02em; text-transform: none; color: var(--muted); margin-top: 0.1rem; }
   #search-results .r-none { padding: 0.4rem 0.8rem; font-size: 0.72rem; color: var(--muted); }
   @media (max-width: 899px) {
   }
@@ -384,10 +384,10 @@
     font-variant-numeric: normal;
   }
   .side-title, .tree-string, .count {
-    font-size: 0.66rem;
+    font-size: 0.76rem;
     font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
     color: var(--muted);
   }
   .side-title { margin: 0 0 1rem; }
@@ -426,10 +426,10 @@
   /* Categories in the sidebar tree: small spaced capitals, like the map label */
   .tree li.is-category > a {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.69rem;
     font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
     margin-top: 0.5rem;
   }
   /* The nine sections: no indent beneath them – set apart by size and weight instead */
@@ -483,7 +483,7 @@
   #side-results { font-size: 1rem; }
   #side-results .sr-count, #side-results .sr-head {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    font-size: 0.69rem; font-weight: 600; letter-spacing: 0.02em; text-transform: none; color: var(--muted);
   }
   #side-results .sr-count { margin: 0 0 0.6rem; }
   #side-results .sr-head { margin: 1.1rem 0 0.35rem; font-weight: 500; }
@@ -496,7 +496,7 @@
   #side-results .sr-path {
     display: block; margin-top: 0.18rem;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.56rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+    font-size: 0.64rem; font-weight: 500; letter-spacing: 0.02em; text-transform: none; color: var(--muted);
   }
   #side-results .sr-snip { display: block; margin-top: 0.25rem; font-size: 0.84rem; line-height: 1.4; color: var(--muted); }
   #side-results mark { background: var(--hl); color: inherit; border-radius: 2px; }
@@ -658,7 +658,7 @@
   #sp-input::-webkit-search-cancel-button { -webkit-appearance: none; }
   .description .sp-meta {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    font-size: 0.71rem; font-weight: 600; letter-spacing: 0.02em; text-transform: none; color: var(--muted);
     margin: 0 0 2rem;
   }
   .description .sp-results { list-style: none; padding: 0; margin: 0; }
@@ -673,7 +673,7 @@
   .sp-path {
     display: block; margin-top: 0.35rem;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+    font-size: 0.67rem; font-weight: 500; letter-spacing: 0.02em; text-transform: none; color: var(--muted);
   }
   .description .sp-snip { margin: 0.55rem 0 0; font-size: 0.95rem; line-height: 1.5; color: var(--muted); }
   .sp-snip mark { background: var(--hl); color: var(--text); }
@@ -877,14 +877,18 @@
     /* …unless the margin is too narrow (e.g. with the sidebar open): then above the title */
     .entry-tags.tags-inline { position: static; margin: 0 0 0.9rem; flex-direction: row; }
   }
+  /* Counters and tallies in title case (their words capitalised) */
+  html .description .ce-intro, html .index-tabs .tab-meta, html .description .domain-label, html #side-results .sr-count, html #side-results .sr-head,
+  html .description .sp-meta, html .description .count, html .deck-menu .deck-n { text-transform: capitalize; }
   .entry-tag {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--muted); text-decoration: none;
-    border: 1px solid var(--rule); border-radius: 999px; padding: 0.25rem 0.7rem 0.2rem;
-    transition: color .2s ease, border-color .2s ease;
+    font-size: 0.71rem; font-weight: 600; letter-spacing: 0.02em; text-transform: none;
+    color: var(--bg); background: var(--accent); text-decoration: none;
+    border: 0; border-radius: 999px; padding: 0.3rem 0.8rem 0.25rem;
+    transition: filter .2s ease;
   }
-  a.entry-tag:hover { color: var(--text); border-color: var(--muted); }
+  a.entry-tag:hover, :root.accent a.entry-tag:hover { color: var(--bg); filter: brightness(1.08); }
+  :root.accent a.entry-tag { color: var(--bg); }
   .description .cp-note { margin-top: 1.6rem; font-size: 0.92em; color: var(--muted); }
   /* Consilience Project view: every definition in full beneath the list of terms */
   .cp-glossary { margin: 3.4rem auto 0; border-top: 1px solid var(--rule); max-width: 39rem; }   /* centred in the wide Map column */
@@ -995,10 +999,10 @@
   .index-tabs .tab-meta {
     white-space: nowrap;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(0.45rem, 1.5cqi, 0.6rem);
+    font-size: clamp(0.52rem, 1.72cqi, 0.7rem);
     font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
     color: var(--muted);
   }
   :root[data-index="tree"] .index-tabs [data-view="tree"],
@@ -1055,10 +1059,10 @@
   .description .ce-desc { color: var(--muted); font-size: 0.92em; line-height: 1.45; margin: 0 0 2.8rem; max-width: 36rem; }
   .description .ce-intro {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.62rem;
+    font-size: 0.71rem;
     font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
     color: var(--muted);
     margin: 0 0 1.4rem;
   }
@@ -1109,7 +1113,7 @@
   .description .ce-switch { display: flex; gap: 2.2rem; margin: -1.6rem 0 2.4rem; }
   .description .ce-switch button {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: 0.71rem; font-weight: 600; letter-spacing: 0.02em; text-transform: none;
     padding: 0.25rem 0; color: var(--muted); background: none; border: 0; border-bottom: 1px solid transparent;
   }
   .description .ce-switch button:hover { color: var(--text); }
@@ -1189,7 +1193,7 @@
     /* Every tab in full ink: the heavier stretch of line alone marks the view in use */
     html.page-map .index-tabs button, html.page-map .index-tabs .tab-meta { color: var(--text); }
     html.page-map .index-tabs .tab-name { font-size: clamp(0.58rem, calc((100cqi - 13rem) / 55), 1.22rem); }
-    html.page-map .index-tabs .tab-meta { font-size: clamp(0.45rem, calc((100cqi - 13rem) / 100), 0.6rem); }
+    html.page-map .index-tabs .tab-meta { font-size: clamp(0.52rem, calc((100cqi - 13rem) / 87), 0.7rem); }
   }
   /* The new structure's sections, after the curated sequence */
   .description .seq-structure { margin-top: 4rem; }
@@ -1229,7 +1233,7 @@
   .deck-menu button[aria-pressed="true"] .deck-n::before { content: '●'; font-size: 0.6em; margin-right: 0.6em; vertical-align: 0.15em; }
   .deck-menu .deck-name { font-size: 0.86rem; line-height: 1.3; }
   .deck-menu .deck-n, .deck-menu .menu-num {
-    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    font-size: 0.71rem; font-weight: 600; letter-spacing: 0.08em; text-transform: none; color: var(--muted);
   }
   .deck-menu .deck-all {
     grid-template-columns: 1fr auto;
@@ -1313,10 +1317,10 @@
   .description .menu-col { min-width: 0; }
   .description .menu-col + .menu-col { border-left: 1px solid var(--rule); padding-left: 1.4rem; }
   .description .menu-set {
-    font-size: 0.62rem;
+    font-size: 0.71rem;
     font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
     color: var(--muted);
     margin: 0 0 1.1rem;
     line-height: 1;
@@ -1366,10 +1370,10 @@
   .description .index-domain.set-start { border-top-color: var(--text); margin-top: 3.6rem; }
   .description .domain-label {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.62rem;
+    font-size: 0.71rem;
     font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-transform: none;
     color: var(--muted);
     margin: 0 0 0.6rem;
   }
