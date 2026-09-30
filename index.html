@@ -4094,6 +4094,7 @@
 
   // k = how many of the earliest nodes step out into the vertical stack above the line.
   function crumbsHtml(c, k) {
+    if (c === ROOT) return '<span class="node">About the Project</span>';   // the About page's label
     var nodes = pathTo(c).map(function (p, i, arr) {
       return i === arr.length - 1
         ? '<span class="node">' + esc(p.title) + '</span>'
@@ -4443,7 +4444,7 @@
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
       tagsHtml(c) +
-      '<h1>' + esc(c === ROOT ? 'About' : c.title) + '</h1>' +
+      '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
       '</div>';
     // Slides snap gently into place as you scroll.
