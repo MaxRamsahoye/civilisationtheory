@@ -1111,6 +1111,10 @@
   .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
   .description .cs-list .ce-intro { margin-bottom: 2.6rem; }
   .description .rl-empty { color: var(--muted); font-style: italic; }
+  /* An entry's list of its nested concepts */
+  .description .branch-list, .description .branch-list ul { list-style: none; padding: 0; margin: 0; }
+  .description .branch-list { margin-top: 2rem; }
+  .description .branch-list li { margin: 0 0 0.35rem; padding: 0; }
   /* Conceptual Engineerings: switch between by-category (default) and A–Z */
   .description .ce-switch { display: flex; gap: 2.2rem; margin: -1.6rem 0 2.4rem; }
   .description .ce-switch button {
@@ -3719,7 +3723,8 @@
       parent: 'metatheory',
       ref: '4E cognition',
       html: '<p><em>4E ontology</em> extends the “4E” account of cognition – that minds are embodied, embedded, enacted and extended – from the study of mind to the study of what exists. Where the 4E programme in cognitive science holds that thinking cannot be located inside a skull, 4E ontology holds that no entity of civilisational significance – an intelligence, an agent, a power, a social order – can be understood as a self-contained thing. Each is <em>embodied</em> in material forms, <em>embedded</em> in environments and institutions, <em>enacted</em> through ongoing activity, and <em>extended</em> across tools, networks and other minds.</p><p>It is the superconcept of the map’s 4E concepts, each of which applies the same four dimensions to a different object. Together they replace an ontology of isolated substances – the rogue AI, the sovereign individual, the state as a thing – with an ontology of relations and processes, which is the level at which the <a href="#metacrisis">metacrisis</a> operates and at which a <a href="#life-world-system">viable life-world-system</a> would have to be designed. See <a href="#metaphysics">metaphysics</a>.</p>' +
-        '<h2>4E Concepts</h2><ul>' +
+        // Its nested concepts, listed as nested concepts were: a count, then the list.
+        '<p class="count"><span>Concepts: 5</span></p><ul class="branch-list">' +
         '<li><a href="#4e-agency">4E Agency</a></li>' +
         '<li><a href="#4e-global-catastrophic-risk">4E Global Catastrophic Risk</a></li>' +
         '<li><a href="#4e-intelligence">4E Intelligence</a></li>' +
@@ -4385,7 +4390,7 @@
     var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
     function draw(now) {
       if (!W || !Hh) return;
-      var t = clock * 0.04, S = 1 / 230;
+      var t = clock * 0.025, S = 1 / 230;
       for (var j = 0; j <= rows; j++) for (var i = 0; i <= cols; i++) grid[j * (cols + 1) + i] = field(i * CELL * S, j * CELL * S, t);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, Hh);
