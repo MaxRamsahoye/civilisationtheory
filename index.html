@@ -564,6 +564,7 @@
   html.page-map #site-header { background: transparent; }
   /* …until the reader scrolls past the opening screen, when it appears as elsewhere */
   html.page-map:not(.map-past-opening) #sidebar-toggle { opacity: 0; pointer-events: none; }
+  html.page-map #back-btn { display: none; }   /* the Map is the front page: no Back there */
   /* Hudless mode (H): only the text itself – no header, footer, sidebar, icons, contents or tree string */
   /* The interface fades out (and back in); nothing moves, so the text stays exactly where it is */
   html.hudless #site-header, html.hudless #site-footer, html.hudless #sidebar, html.hudless #scrim,
@@ -4637,6 +4638,7 @@
     document.startViewTransition(render);
   });
   backBtn.addEventListener('click', function () {
+    if (document.documentElement.classList.contains('page-map')) return;
     if (trail.length > 1) history.back();
   });
 
@@ -5273,7 +5275,7 @@
       // First to the top of the page; once already at the top, back to the previous page.
       e.preventDefault();
       if (window.scrollY > 4) topBtn.click();
-      else if (!document.documentElement.classList.contains('page-home')) backBtn.click();
+      else if (!document.documentElement.classList.contains('page-home') && !document.documentElement.classList.contains('page-map')) backBtn.click();
     } else if (e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
       var mapOpening = document.documentElement.classList.contains('page-map') && !document.documentElement.classList.contains('map-past-opening');
