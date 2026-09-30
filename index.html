@@ -1071,26 +1071,30 @@
   /* ---------- The Map's opening: no tree string; its icon over a centred heading; the view tabs
      in a single line across the page, on one continuous rule ---------- */
   html.page-map #entry .tree-string { display: none; }
-  html.page-map #entry .page-icon { display: flex; justify-content: center; margin: 0 0 1.4rem; color: var(--text); }
-  html.page-map #entry .page-icon svg {
-    width: 2.2rem; height: 2.2rem; fill: none; stroke: currentColor; stroke-width: 1.4px; stroke-linejoin: miter; overflow: visible;
+  /* Behind the opening, spanning it edge to edge: a slowly shifting topographic map (canvas),
+     faded towards the text at its centre and away at its foot */
+  #map-topo {
+    position: absolute; left: 0; width: 100%; z-index: 0; pointer-events: none; display: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%), radial-gradient(ellipse 46% 42% at 50% 46%, rgba(0,0,0,0.28) 0, rgba(0,0,0,0.28) 45%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%), radial-gradient(ellipse 46% 42% at 50% 46%, rgba(0,0,0,0.28) 0, rgba(0,0,0,0.28) 45%, #000 100%);
+    mask-composite: intersect;
   }
-  html.page-map #entry .page-icon svg * { vector-effect: non-scaling-stroke; }
+  #map-topo canvas { display: block; width: 100%; height: 100%; }
+  html.page-map #map-topo { display: block; }
+  html.page-map #entry { position: relative; z-index: 1; }
+  html.hudless #map-topo { opacity: 0.35; }
   html.page-map #entry h1 { text-align: center; }
   /* Everything on the Map in full ink: the muted grey is redefined as the text colour within it */
   html.page-map #entry .description { --muted: var(--text); }
   html.page-map .description > p:first-child { text-align: center; }
   /* Shorter windows: the opening is drawn tighter so that it still fits the screen */
   @media (min-width: 900px) and (max-height: 860px) {
-    html.page-map #entry .page-icon { margin-bottom: 1rem !important; }
-    html.page-map #entry .page-icon svg { width: 2.2rem !important; height: 2.2rem !important; }
     html.page-map #entry > h1 { font-size: 3.4rem !important; margin-bottom: 1.2rem !important; }
     html.page-map .description > p:first-child { font-size: 1.05rem !important; }
   }
   /* With a screen to itself, the opening is set larger */
   @media (min-width: 900px) {
-    html.page-map #entry .page-icon svg { width: 2.8rem; height: 2.8rem; }
-    html.page-map #entry .page-icon { margin-bottom: 1.8rem; }
     html.page-map #entry > h1 { font-size: 4.6rem; line-height: 1.02; margin-bottom: 2rem; }
     html.page-map .description > p:first-child { font-size: 1.2rem; line-height: 1.5; max-width: 44rem; margin-left: auto; margin-right: auto; }
   }
@@ -4137,7 +4141,7 @@
   // above the line of view tabs, which sits near the foot of the screen; the tab's content
   // begins on the next screen. (Where the opening is taller than the screen, it simply flows.)
   function layoutMapHero() {
-    var icon = document.querySelector('#entry .page-icon'), tabs = document.querySelector('#entry .index-tabs');
+    var icon = document.querySelector('#entry > h1'), tabs = document.querySelector('#entry .index-tabs');
     var lede = tabs && tabs.previousElementSibling;   // the last part of the opening
     if (!icon || !tabs || !lede || !document.documentElement.classList.contains('page-map')) return;
     icon.style.marginTop = ''; tabs.style.marginTop = ''; tabs.style.marginBottom = '';
@@ -4157,6 +4161,90 @@
     // The content starts just past the foot of the screen.
     var tabsBottom = tabs.getBoundingClientRect().bottom + sy;
     tabs.style.marginBottom = Math.max(2.2 * rem, H - tabsBottom) + 'px';
+    layoutTopo(icon, tabs);
+  }
+
+  // ---------- The Map's topography: contour lines of a slowly drifting landscape ----------
+  // A smooth noise field (x, y, time) is traced at evenly spaced heights by marching squares;
+  // every fifth contour is an index contour, drawn heavier, as on a survey map.
+  var topo = (function () {
+    var wrap = document.createElement('div'), cv = document.createElement('canvas'), ctx = cv.getContext('2d');
+    wrap.id = 'map-topo'; wrap.setAttribute('aria-hidden', 'true'); wrap.appendChild(cv);
+    document.body.appendChild(wrap);
+    var W = 0, Hh = 0, dpr = 1, t0 = performance.now(), raf = 0, last = 0, still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Value noise on a lattice, smoothly interpolated, in three dimensions.
+    var P = new Uint8Array(512);
+    (function () { var a = [], i, j, k, seed = 7; for (i = 0; i < 256; i++) a[i] = i;
+      for (i = 255; i > 0; i--) { seed = (seed * 16807) % 2147483647; j = seed % (i + 1); k = a[i]; a[i] = a[j]; a[j] = k; }
+      for (i = 0; i < 512; i++) P[i] = a[i & 255]; })();
+    function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    function lat(x, y, z) { return P[P[P[x & 255] + (y & 255)] + (z & 255)] / 127.5 - 1; }
+    function noise(x, y, z) {
+      var X = Math.floor(x), Y = Math.floor(y), Z = Math.floor(z), u = fade(x - X), v = fade(y - Y), w = fade(z - Z);
+      function l(a, b, t) { return a + (b - a) * t; }
+      return l(l(l(lat(X, Y, Z), lat(X + 1, Y, Z), u), l(lat(X, Y + 1, Z), lat(X + 1, Y + 1, Z), u), v),
+               l(l(lat(X, Y, Z + 1), lat(X + 1, Y, Z + 1), u), l(lat(X, Y + 1, Z + 1), lat(X + 1, Y + 1, Z + 1), u), v), w);
+    }
+    function field(x, y, t) { return noise(x, y, t) * 0.7 + noise(x * 2.1 + 17, y * 2.1 + 9, t * 1.6) * 0.3; }
+    var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
+    function draw(now) {
+      if (!W || !Hh) return;
+      var t = (now - t0) / 1000 * 0.035, S = 1 / 230;
+      for (var j = 0; j <= rows; j++) for (var i = 0; i <= cols; i++) grid[j * (cols + 1) + i] = field(i * CELL * S, j * CELL * S, t);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, Hh);
+      var ink = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#111';
+      ctx.strokeStyle = ink; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      for (var k = -13; k <= 13; k++) {
+        var lv = k * STEP, index = k % 5 === 0;
+        ctx.globalAlpha = index ? 0.55 : 0.3; ctx.lineWidth = index ? 1.5 : 0.9;
+        ctx.beginPath();
+        for (j = 0; j < rows; j++) for (i = 0; i < cols; i++) {
+          var a = grid[j * (cols + 1) + i], b = grid[j * (cols + 1) + i + 1], c = grid[(j + 1) * (cols + 1) + i + 1], d = grid[(j + 1) * (cols + 1) + i];
+          var m = (a > lv ? 8 : 0) | (b > lv ? 4 : 0) | (c > lv ? 2 : 0) | (d > lv ? 1 : 0);
+          if (m === 0 || m === 15) continue;
+          var x = i * CELL, y = j * CELL;
+          var top = [x + CELL * (lv - a) / (b - a), y], right = [x + CELL, y + CELL * (lv - b) / (c - b)],
+              bottom = [x + CELL * (lv - d) / (c - d), y + CELL], left = [x, y + CELL * (lv - a) / (d - a)];
+          var segs = SEG[m];
+          for (var s2 = 0; s2 < segs.length; s2 += 2) {
+            var p = [top, right, bottom, left][segs[s2]], q = [top, right, bottom, left][segs[s2 + 1]];
+            ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]);
+          }
+        }
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+    // Edges crossed by the contour for each corner pattern (0 top, 1 right, 2 bottom, 3 left).
+    var SEG = { 1: [3, 2], 2: [2, 1], 3: [3, 1], 4: [0, 1], 5: [3, 0, 2, 1], 6: [0, 2], 7: [3, 0], 8: [3, 0], 9: [0, 2], 10: [0, 1, 3, 2], 11: [0, 1], 12: [3, 1], 13: [2, 1], 14: [3, 2] };
+    function loop(now) {
+      raf = 0;
+      var visible = document.documentElement.classList.contains('page-map') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
+      if (visible && now - last > 1000 / 24) { last = now; draw(now); }
+      if (document.documentElement.classList.contains('page-map') && !still.matches) raf = requestAnimationFrame(loop);
+    }
+    return {
+      place: function (top, height) {
+        var w = document.documentElement.clientWidth;
+        wrap.style.top = top + 'px'; wrap.style.height = height + 'px';
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        if (w !== W || height !== Hh) {
+          W = w; Hh = height; cv.width = Math.round(W * dpr); cv.height = Math.round(Hh * dpr);
+          cols = Math.ceil(W / CELL); rows = Math.ceil(Hh / CELL); grid = new Float32Array((cols + 1) * (rows + 1));
+        }
+        draw(performance.now());
+        if (!raf && !still.matches) raf = requestAnimationFrame(loop);
+      }
+    };
+  })();
+  // The topography spans the opening: from under the header down to the line of tabs.
+  function layoutTopo(h1, tabs) {
+    if (typeof topo === 'undefined' || !topo) return;
+    var sy = window.scrollY, header = document.getElementById('site-header');
+    var top = header ? header.getBoundingClientRect().bottom + sy : 0;
+    var bottom = tabs.getBoundingClientRect().top + sy;
+    if (bottom - top > 80) topo.place(top, bottom - top);
   }
   // A title only a little too long for the column is set slightly smaller to keep it on one
   // line; one that would need shrinking by more than a fifth wraps at full size as usual.
@@ -4310,8 +4398,6 @@
     document.getElementById('entry').innerHTML =
       '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
       tagsHtml(c) +
-      // The Map: its icon above the (centred) heading.
-      (c.id === 'the-map' ? '<p class="page-icon" aria-hidden="true"><svg viewBox="-9.5 -9.5 118.9 118.9"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></p>' : '') +
       '<h1>' + esc(c === ROOT ? HOME_TITLE : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
       '</div>';
