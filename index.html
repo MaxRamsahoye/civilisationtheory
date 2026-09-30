@@ -606,6 +606,9 @@
     transform: translateX(var(--fold-x, 0px)); opacity: 0; pointer-events: none;
   }
   html.icons-folded:not(.icons-open) #theme-toggle { opacity: 0; pointer-events: none; }
+  /* T with the icons folded: the theme icon (showing the new theme) briefly takes the menu icon's place */
+  html.icons-folded.theme-peek:not(.icons-open) #theme-toggle { opacity: 1; transform: none; transition: opacity .25s ease; }
+  html.icons-folded.theme-peek:not(.icons-open) #head-menu { opacity: 0; transition: opacity .25s ease; }
   /* The title travels with the icons: it slides right to sit beside the menu icon, and back */
   #site-header .head-title { transition: transform .5s cubic-bezier(.4, 0, .2, 1); }
   html.icons-folded:not(.icons-open) #site-header .head-title { transform: translateX(var(--title-x, 0px)); }
@@ -5440,6 +5443,10 @@
       if (!e.repeat && !mapOpening && !document.body.classList.contains('footer-in-view') && !document.documentElement.classList.contains('hudless')) sideBtn.click();
     } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
       document.getElementById('theme-toggle').click();
+      var r = document.documentElement;
+      r.classList.add('theme-peek');
+      clearTimeout(r._peek);
+      r._peek = setTimeout(function () { r.classList.remove('theme-peek'); }, 1300);
     } else if ((e.key === 'c' || e.key === 'C') && !e.repeat) {
       // Cycle: off → first accent → second accent (themes that have one) → off
       var root = document.documentElement, state;
