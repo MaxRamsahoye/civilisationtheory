@@ -283,7 +283,6 @@
   .index-tabs button.pressed, .deck-menu button.pressed { border-radius: 0 0 5px 5px !important; }
   @keyframes press-squeeze { 0% { scale: 1; } 35% { scale: 0.78; } 100% { scale: 1; } }
   @keyframes press-ring { from { transform: scale(0.45); opacity: 0.7; } to { transform: scale(1.45); opacity: 0; } }
-  @keyframes tab-press { from { border-top-color: var(--accent); color: var(--accent); } }
   @keyframes press-flash { from { background-color: var(--hl); } to { background-color: transparent; } }
   @media (prefers-reduced-motion: reduce) {
     .control.pressed svg, .side-icons a.pressed svg, .control.pressed::after, .side-icons a.pressed::after { animation: none; }
@@ -1090,9 +1089,9 @@
      faded towards the text at its centre and away at its foot */
   #map-topo {
     position: absolute; left: 0; width: 100%; z-index: 0; pointer-events: none; display: none;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 88%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to bottom, #000 0, #000 88%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
+    mask-image: linear-gradient(to bottom, #000 0, #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     mask-composite: intersect;
   }
   #map-topo canvas { display: block; width: 100%; height: 100%; }
@@ -1100,6 +1099,14 @@
   html.page-map #entry { position: relative; z-index: 1; }
   html.hudless #map-topo { opacity: 0.35; }
   html.page-map #entry h1 { text-align: left; }
+  /* The view in use keeps the click's accent-tinted box (rounded below, hung from the line),
+     instead of a passing flash */
+  html.page-map .index-tabs button.pressed { animation: none !important; }
+  :root[data-index="cs"].page-map .index-tabs [data-view="cs"],
+  :root[data-index="rl"].page-map .index-tabs [data-view="rl"],
+  :root[data-index="az"].page-map .index-tabs [data-view="az"],
+  :root[data-index="ce"].page-map .index-tabs [data-view="ce"],
+  :root[data-index="cp"].page-map .index-tabs [data-view="cp"] { background: var(--hl); border-radius: 0 0 5px 5px; }
   /* Everything on the Map in full ink: the muted grey is redefined as the text colour within it */
   html.page-map #entry .description { --muted: var(--text); }
   html.page-map .description > p:first-child { text-align: left; }
@@ -1130,9 +1137,6 @@
     html.page-map .index-tabs button:hover { border-top-color: var(--muted); }
     /* Every tab in full ink: the heavier stretch of line alone marks the view in use */
     html.page-map .index-tabs button, html.page-map .index-tabs .tab-meta { color: var(--text); }
-    /* The tabs meet edge to edge, so a flashed box would read as dividers between them: on the
-       line, a click flashes the tab's stretch of the line (and its name) in the accent instead */
-    html.page-map .index-tabs button.pressed { animation: tab-press .6s ease-out !important; background: none !important; }
     html.page-map .index-tabs .tab-name { font-size: clamp(0.58rem, calc((100cqi - 8rem) / 55), 1.22rem); }
     html.page-map .index-tabs .tab-meta { font-size: clamp(0.45rem, calc((100cqi - 8rem) / 100), 0.6rem); }
   }
@@ -3928,7 +3932,7 @@
 
   // Site pages: routed like concepts, but not part of the tree, index or concept count.
   var PAGES = {
-    'the-map': { id: 'the-map', title: 'The Map', parent: ROOT.id, html: MAP_INTRO + '\n<!--INDEX-->' },
+    'the-map': { id: 'the-map', title: 'The Civilisational Map', parent: ROOT.id, html: MAP_INTRO + '\n<!--INDEX-->' },
     'infinite': { id: 'infinite', title: 'Infinite', parent: ROOT.id,
       html: '<p>Every concept on the map in one continuous sequence of slides. Scroll to move from one to the next – through every concept A–Z, or through one of the nine sections.</p>\n<!--SLIDES-->' },
     'search': { id: 'search', title: 'Search', parent: ROOT.id, html: '<!--SEARCH-->' }
@@ -4272,6 +4276,10 @@
     wrap.style.setProperty('--fy', ((t + b) / 2 / H * 100) + '%');
     wrap.style.setProperty('--fw', ((r - l) / 2 / W * 100 + 14) + '%');
     wrap.style.setProperty('--fh', ((b - t) / 2 / H * 100 + 16) + '%');
+    // …and fall almost silent behind the line of tabs, so their names read clearly.
+    var tt = (tabs.getBoundingClientRect().top + sy - top) / H * 100;
+    wrap.style.setProperty('--tt0', Math.max(0, tt - 7) + '%');
+    wrap.style.setProperty('--tt', Math.max(0, tt - 1) + '%');
     topo.place(top, H);
   }
   // A title only a little too long for the column is set slightly smaller to keep it on one
