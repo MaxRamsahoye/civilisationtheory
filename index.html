@@ -5161,7 +5161,8 @@
         '</div><div class="foot-col foot-sections"><p class="foot-head">Sections</p><div class="foot-secs">' +
         [0, 3, 6].map(function (k) {
           return '<ul>' + sections.slice(k, k + 3).map(function (d, j) {
-            return li('<span class="foot-num">' + NUM[k + j] + '</span><a href="' + href(d) + '">' + esc(d.title) + '</a>');
+            // Each opens its section of the Civilisation Research Paradigm on the Map.
+            return li('<span class="foot-num">' + NUM[k + j] + '</span><a href="#the-map" data-view-link="cs" data-section="' + d.id + '">' + esc(d.title) + '</a>');
           }).join('') + '</ul>';
         }).join('') +
       '</div></div></div></div>' +
@@ -5172,12 +5173,16 @@
         var view = v.getAttribute('data-view-link');
         document.documentElement.setAttribute('data-index', view);
         try { localStorage.setItem('ct-index', view); } catch (err) {}
-        // Already on the Map: no hash change, so bring the index into view by hand.
-        if (location.hash === '#the-map') {
-          e.preventDefault();
-          var t = document.querySelector('#entry .index-tabs');
-          if (t) window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - 40, behavior: 'smooth' });
-        }
+        var sec = v.getAttribute('data-section');
+        var onMap = location.hash === '#the-map';
+        if (onMap) e.preventDefault();
+        // Bring the section (or else the tabs) into view – at once when already on the Map, and
+        // once the Map has opened otherwise.
+        setTimeout(function () {
+          var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+          var t = sec ? document.getElementById('nidx-' + sec) : document.querySelector('#entry .index-tabs');
+          if (t && location.hash === '#the-map') window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - (sec ? 3 * rem : 40), behavior: 'smooth' });
+        }, onMap ? 0 : 700);
       }
     });
   })();
