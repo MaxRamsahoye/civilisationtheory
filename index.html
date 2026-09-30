@@ -1420,11 +1420,10 @@
     transition: opacity .6s ease, visibility 0s linear .6s;
   }
   #loader.done { opacity: 0; visibility: hidden; }
-  /* The topography loading screen: only the Map's topography shows, at full strength, until the
-     page fades in over it */
+  /* The topography loading screen: the Map's opening screen exactly as it is, but with only its
+     topography showing until the interface and content fade in over it */
   html.loading-topo #loader { display: none; }
   html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
-  html.loading-topo #map-topo { -webkit-mask-image: none; mask-image: none; z-index: 50; }
   html.topo-reveal body > *:not(#map-topo):not(script) { transition: opacity .9s ease; }
   .loader-mark, .loader-ring { z-index: 2; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
