@@ -41,6 +41,7 @@
     if (a === 'alt') document.documentElement.classList.add('accent-alt');
     // The Map opens with no view chosen: just its opening screen, the tabs to choose from.
     document.documentElement.setAttribute('data-index', 'none');
+    document.documentElement.setAttribute('data-ce-view', 'cat');   // Conceptual Engineerings: by category
   })();
 </script>
 <style>
@@ -1104,6 +1105,28 @@
   .description .ce-list.cs-list .seq-list { font-size: 1em; margin-top: 0; }
   .description .cs-list .ce-intro { margin-bottom: 2.6rem; }
   .description .rl-empty { color: var(--muted); font-style: italic; }
+  /* Conceptual Engineerings: switch between by-category (default) and A–Z */
+  .description .ce-switch { display: flex; gap: 2.2rem; margin: -1.6rem 0 2.4rem; }
+  .description .ce-switch button {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.25rem 0; color: var(--muted); background: none; border: 0; border-bottom: 1px solid transparent;
+  }
+  .description .ce-switch button:hover { color: var(--text); }
+  :root[data-ce-view="cat"] .ce-switch [data-ce="cat"], :root[data-ce-view="az"] .ce-switch [data-ce="az"] { color: var(--text); border-bottom-color: var(--text); }
+  :root[data-ce-view="cat"] .ce-list .ce-az, :root:not([data-ce-view="cat"]) .ce-list .ce-cats { display: none; }
+  .description .ce-cats { columns: 3; column-gap: 2.4rem; }
+  .description .ce-cat { break-inside: avoid; margin: 0 0 2.6rem; }
+  .description .ce-cat-sec {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.58rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.35rem;
+  }
+  .description .ce-cat-head { font-size: 1.18em; font-weight: 700; line-height: 1.2; margin: 0 0 0.9rem; }
+  .description .ce-cat-head a, :root.accent .description .ce-cat-head a { color: var(--text); text-decoration: none; }
+  .description .ce-cat-head a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
+  .description .ce-list .ce-cats ul, html.page-map .description .ce-list .ce-cats ul { columns: 1; margin: 0; }
+  @media (max-width: 900px) { .description .ce-cats { columns: 2; } }
+  @media (max-width: 560px) { .description .ce-cats { columns: 1; } }
   /* ---------- The Map's opening: no tree string; its icon over a centred heading; the view tabs
      in a single line across the page, on one continuous rule ---------- */
   html.page-map #entry .tree-string { display: none; }
@@ -4101,12 +4124,42 @@
       '<p class="ce-desc">Every concept on the map organised into an alphabetical list.</p>' +
       '<p class="ce-intro">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p>' +
       '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div></div>';
-    // Conceptual Engineerings: the author's own novel terms, alphabetically.
+    // Conceptual Engineerings grouped by the category each sits in, in the order of the tree, each
+    // group labelled with its section (numeral and name).
+    function coinedByCategory(list) {
+      var order = [], secOf = {};
+      (function walk(id, sec) {
+        childrenOf(id).forEach(function (k) {
+          var s2 = id === ROOT.id ? k : sec;
+          if (k.kind === 'category') { order.push(k); secOf[k.id] = s2; }
+          walk(k.id, s2);
+        });
+      })(ROOT.id, null);
+      var secs = childrenOf(ROOT.id), groups = {};
+      list.forEach(function (c) {
+        var p = byId[c.parent];
+        while (p && p.kind !== 'category' && p !== ROOT) p = byId[p.parent];
+        if (!p || p === ROOT) return;
+        (groups[p.id] = groups[p.id] || []).push(c);
+      });
+      return order.filter(function (k) { return groups[k.id]; }).map(function (k) {
+        var sec = secOf[k.id], n = secs.indexOf(sec);
+        return { cat: k, items: groups[k.id], section: (['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'][n] || '') + ' · ' + sec.title };
+      });
+    }
+    // Conceptual Engineerings: the author's own novel terms.
     var coined = concepts.filter(function (c) { return c.coined; });
     var ce = '<div class="ce-list">' +
       '<h3 class="ce-title">Conceptual Engineerings</h3>' +
       '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
-      '<p class="ce-intro">Novel terms: ' + coined.length + '</p><ul>' +
+      // Two ways to read them: by category (the default) or A–Z.
+      '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
+      '<p class="ce-intro">Novel terms: ' + coined.length + '</p>' +
+      '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
+        return '<div class="ce-cat"><p class="ce-cat-sec">' + esc(g.section) + '</p><p class="ce-cat-head"><a href="' + href(g.cat) + '">' + esc(g.cat.title) + '</a></p><ul>' +
+          g.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul></div>';
+      }).join('') + '</div>' +
+      '<ul class="ce-az">' +
       coined.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
       '</ul></div>';
     // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
@@ -4678,6 +4731,12 @@
       var t = document.querySelector('#entry .index-tabs');
       if (t && location.hash === '#the-map') window.scrollTo({ top: window.scrollY + t.getBoundingClientRect().top - 40, behavior: 'smooth' });
     }, 450);
+  });
+
+  // ---------- Conceptual Engineerings: by category or A–Z ----------
+  document.getElementById('entry').addEventListener('click', function (e) {
+    var b = e.target.closest('.ce-switch button');
+    if (b) document.documentElement.setAttribute('data-ce-view', b.getAttribute('data-ce'));
   });
 
   // ---------- Index view: tree or A–Z (remembered) ----------
