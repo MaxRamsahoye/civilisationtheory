@@ -5564,7 +5564,7 @@
       // system's theme.
       root.classList.add('topo-reveal');
       root.classList.remove('loading-topo');
-      setTimeout(function () { root.classList.remove('loading-hud'); }, 1500);
+      setTimeout(function () { root.classList.remove('loading-hud'); }, 2800);
       setTimeout(function () {
         root.classList.remove('topo-reveal', 'awaiting-theme');
         if (themeChosen) return;
@@ -5572,7 +5572,7 @@
         var t = root.getAttribute('data-theme-after') || 'light';
         root.setAttribute('data-theme', t); setFavicon(t);
         setTimeout(function () { root.classList.remove('theme-shift'); }, 1600);
-      }, 3100);
+      }, 4400);
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
     }
