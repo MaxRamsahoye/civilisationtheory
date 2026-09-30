@@ -614,6 +614,8 @@
   #head-menu svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.4px; overflow: visible; }
   #head-menu svg * { vector-effect: non-scaling-stroke; }
   html.icons-folded:not(.icons-open) #head-menu { opacity: 1; pointer-events: auto; transition-delay: .2s; }
+  /* On the Map the menu icon stays with the header's title, scrolling away with it */
+  html.page-map #head-menu { position: absolute; }
   html.icons-folded #head-menu:hover { color: var(--text); }
   html.hudless #head-menu { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
   /* The current page: a short rule beneath its icon */
