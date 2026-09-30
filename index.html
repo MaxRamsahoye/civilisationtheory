@@ -1103,11 +1103,9 @@
   /* Group names in Bembo, bold and a step larger than the entries beneath them */
   .description .seq-head { font-size: 1.18em; font-weight: 700; line-height: 1.2; color: var(--text); margin: 0 0 0.85rem; }
   /* Numbered sub-groups within a group (Meta I, II) */
-  .description .seq-sub {
-    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; color: var(--muted); margin: 0 0 0.7rem;
-  }
-  .description .seq-group + .seq-sub { margin-top: 1.4rem; }
+  /* Within a group, its sub-groups are parted by a light rule (finer and fainter than the
+     sections' dividers) */
+  .description .seq-divide { border: 0; border-top: 0.5px solid var(--rule); opacity: 0.7; margin: 0.4rem 0 1.3rem; width: 100%; }
   .description .seq-list li[aria-current] span { font-weight: 700; }
   @media (max-width: 640px) { .description .seq-list { font-size: 1em; } }
   /* The Curated Sequence reads as a single column, in order, on the Map and on its entries */
@@ -4646,7 +4644,7 @@
     }
     function block(g) {
       return '<div class="seq-block seq-' + g.name.toLowerCase() + '"><p class="seq-head">' + g.name + '</p>' +
-        (g.subs ? g.subs.map(function (sg) { return '<p class="seq-sub">' + sg.name + '</p>' + list(sg.items); }).join('') : list(g.items)) + '</div>';
+        (g.subs ? g.subs.map(function (sg) { return list(sg.items); }).join('<hr class="seq-divide">') : list(g.items)) + '</div>';
     }
     // Four columns, each stacking its own groups at their own height (Core directly beneath Foundation).
     var gs = curatedGroups();
