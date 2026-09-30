@@ -543,10 +543,14 @@
   html:not(.main-page) #site-footer { display: none; }
   /* On entries the header sits over the top of the page in the page's own colour, with no rule,
      and takes no space, so entries stay centred on screen */
-  html:not(.main-page) #site-header {
+  html:not(.main-page) #site-header, html.page-map #site-header {
     position: absolute; top: 0; left: 0; right: 0; z-index: 2;
     background: var(--bg); border-bottom: 0;
   }
+  /* The Map takes the entries' header too – clear, so its topography runs up behind it – and
+     has no sidebar button */
+  html.page-map #site-header { background: transparent; }
+  html.page-map #sidebar-toggle { display: none; }
   /* Hudless mode (H): only the text itself – no header, footer, sidebar, icons, contents or tree string */
   /* The interface fades out (and back in); nothing moves, so the text stays exactly where it is */
   html.hudless #site-header, html.hudless #site-footer, html.hudless #sidebar, html.hudless #scrim,
@@ -4242,8 +4246,7 @@
   // The topography spans the opening: from under the header down to the line of tabs.
   function layoutTopo(h1, tabs) {
     if (typeof topo === 'undefined' || !topo) return;
-    var sy = window.scrollY, header = document.getElementById('site-header');
-    var top = header ? header.getBoundingClientRect().bottom + sy : 0;
+    var sy = window.scrollY, top = 0;   // from the very top, behind the (clear) header
     var bottom = tabs.getBoundingClientRect().top + sy;
     if (bottom - top > 80) topo.place(top, bottom - top);
   }
@@ -4417,7 +4420,7 @@
     // …and on entries the header icons fold into the menu icon.
     document.documentElement.classList.remove('icons-folded', 'icons-open');
     clearTimeout(foldIconsTimer);
-    if (!document.documentElement.classList.contains('main-page')) {
+    if (!document.documentElement.classList.contains('main-page') || c.id === 'the-map') {
       foldIconsTimer = setTimeout(function () { measureIconFold(); document.documentElement.classList.add('icons-folded'); }, 1600);
     }
     if (c.id === 'infinite') { var dk = 'az'; try { dk = localStorage.getItem('ct-deck') || 'az'; } catch (err) {} showDeck(dk); }
