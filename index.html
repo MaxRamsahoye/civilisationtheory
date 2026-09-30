@@ -1145,7 +1145,7 @@
     mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3) 0, rgba(0,0,0,0.3) var(--h0, 7%), #000 var(--h1, 30%), #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     mask-composite: intersect;
   }
-  #map-topo canvas { display: block; width: 100%; height: 100%; animation: topo-in 1.2s ease-out both; }
+  #map-topo canvas { display: block; width: 100%; height: 100%; animation: topo-in 1.8s ease-in-out both; }
   @keyframes topo-in { from { opacity: 0; } to { opacity: 1; } }   /* the terrain rises into view as the site opens */
   html.page-map #map-topo { display: block; }
   html.page-map #entry { position: relative; z-index: 1; }
@@ -1425,7 +1425,7 @@
      topography showing until the interface and content fade in over it */
   html.loading-topo #loader { display: none; }
   html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
-  html.topo-reveal body > *:not(#map-topo):not(script) { transition: opacity .9s ease; }
+  html.topo-reveal body > *:not(#map-topo):not(script) { transition: opacity 1.4s ease; }
   .loader-mark, .loader-ring { z-index: 2; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
   /* Ring encircles the title, scaled from the title's width, and fills in step with the typewriter */
@@ -4363,7 +4363,7 @@
     var wrap = document.createElement('div'), cv = document.createElement('canvas'), ctx = cv.getContext('2d');
     wrap.id = 'map-topo'; wrap.setAttribute('aria-hidden', 'true'); wrap.appendChild(cv);
     document.body.appendChild(wrap);
-    var W = 0, Hh = 0, dpr = 1, t0 = performance.now(), raf = 0, last = 0, still = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var W = 0, Hh = 0, dpr = 1, clock = 0, prevNow = 0, frame = 0, raf = 0, still = window.matchMedia('(prefers-reduced-motion: reduce)');
     // Value noise on a lattice, smoothly interpolated, in three dimensions.
     var P = new Uint8Array(512);
     (function () { var a = [], i, j, k, seed = 7; for (i = 0; i < 256; i++) a[i] = i;
@@ -4381,7 +4381,7 @@
     var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
     function draw(now) {
       if (!W || !Hh) return;
-      var t = (now - t0) / 1000 * 0.065, S = 1 / 230;
+      var t = clock * 0.065, S = 1 / 230;
       for (var j = 0; j <= rows; j++) for (var i = 0; i <= cols; i++) grid[j * (cols + 1) + i] = field(i * CELL * S, j * CELL * S, t);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, Hh);
@@ -4410,10 +4410,14 @@
     }
     // Edges crossed by the contour for each corner pattern (0 top, 1 right, 2 bottom, 3 left).
     var SEG = { 1: [3, 2], 2: [2, 1], 3: [3, 1], 4: [0, 1], 5: [3, 0, 2, 1], 6: [0, 2], 7: [3, 0], 8: [3, 0], 9: [0, 2], 10: [0, 1, 3, 2], 11: [0, 1], 12: [3, 1], 13: [2, 1], 14: [3, 2] };
+    // The landscape's clock advances by the time between frames, but never by more than a frame's
+    // worth at once – so a busy moment (the site starting up) slows it for an instant rather than
+    // making it jump – and it is redrawn on every other frame, a steady rhythm.
     function loop(now) {
       raf = 0;
+      var dt = prevNow ? Math.min(now - prevNow, 34) : 16; prevNow = now;
       var visible = document.documentElement.classList.contains('page-map') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
-      if (visible && now - last > 1000 / 24) { last = now; draw(now); }
+      if (visible) { clock += dt / 1000; if (frame++ % 2 === 0) draw(now); }
       if (document.documentElement.classList.contains('page-map') && !still.matches) raf = requestAnimationFrame(loop);
     }
     return {
@@ -5484,14 +5488,14 @@
       loader.classList.add('done');
       root.classList.add('topo-reveal');
       root.classList.remove('loading-topo');
-      setTimeout(function () { root.classList.remove('topo-reveal'); }, 1100);
+      setTimeout(function () { root.classList.remove('topo-reveal'); }, 1600);
       document.removeEventListener('keydown', skip, true);
       document.removeEventListener('pointerdown', skip, true);
     }
     function skip(e) { e.preventDefault(); e.stopPropagation(); finish(); }
     document.addEventListener('keydown', skip, true);
     document.addEventListener('pointerdown', skip, true);
-    timer = setTimeout(finish, reduce ? 700 : 2200);
+    timer = setTimeout(finish, reduce ? 700 : 3600);
   })();
   else (function () {
     document.documentElement.classList.remove('loading-topo');
