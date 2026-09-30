@@ -4436,12 +4436,12 @@
     }
     // Edges crossed by the contour for each corner pattern (0 top, 1 right, 2 bottom, 3 left).
     var SEG = { 1: [3, 2], 2: [2, 1], 3: [3, 1], 4: [0, 1], 5: [3, 0, 2, 1], 6: [0, 2], 7: [3, 0], 8: [3, 0], 9: [0, 2], 10: [0, 1, 3, 2], 11: [0, 1], 12: [3, 1], 13: [2, 1], 14: [3, 2] };
-    // The landscape's clock advances by the time between frames, but never by more than a frame's
-    // worth at once – so a busy moment (the site starting up) slows it for an instant rather than
-    // making it jump – and it is redrawn on every other frame, a steady rhythm.
+    // The landscape's clock runs in real time, so it always moves at the same speed whatever the
+    // frame rate (only a long gap – the tab hidden, the page scrolled away – is not counted), and it
+    // is redrawn on every other frame, a steady rhythm.
     function loop(now) {
       raf = 0;
-      var dt = prevNow ? Math.min(now - prevNow, 34) : 16; prevNow = now;
+      var dt = prevNow ? now - prevNow : 16; if (dt > 250) dt = 16; prevNow = now;
       var visible = document.documentElement.classList.contains('page-map') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
       if (visible && started) { clock += dt / 1000; if (frame++ % 2 === 0) draw(now); }
       if (document.documentElement.classList.contains('page-map') && !still.matches) raf = requestAnimationFrame(loop);
