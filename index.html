@@ -1559,7 +1559,7 @@
    */
   // Shared by the homepage's closing section and the standalone Map page.
   // The Map's opening: what the map is.
-  var MAP_INTRO = '<p>The conceptual architecture from which a <em>civilisational</em> world-model emerges</p>';
+  var MAP_INTRO = '<p>A conceptual adaptive system for a complex adaptive world-system</p>';
 
   var CONCEPTS = [
     {
@@ -5359,11 +5359,20 @@
     }
   });
 
+  // Buttons and links clicked with the mouse don't keep the focus (Tab still moves it as usual).
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest && e.target.closest('button, a');
+    if (t && e.detail > 0 && t === document.activeElement) t.blur();
+  });
+
   // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
     if (el.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+    // A shortcut is not keyboard navigation: a button or link left focused by an earlier click
+    // lets go of its focus, so the browser does not draw its focus box around it.
+    if (e.key !== 'Tab' && e.key !== 'Enter' && document.activeElement && /^(A|BUTTON)$/.test(document.activeElement.tagName)) document.activeElement.blur();
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && document.documentElement.classList.contains('snap-slides')) {
       e.preventDefault();
       // Holding an arrow key steps slide by slide at a steady pace (each step pressing the button),
