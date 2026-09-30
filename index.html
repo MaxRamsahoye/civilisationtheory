@@ -1077,6 +1077,13 @@
   html.page-map #entry .page-icon svg * { vector-effect: non-scaling-stroke; }
   html.page-map #entry h1 { text-align: center; }
   html.page-map .description > p:first-child { text-align: center; }
+  /* With a screen to itself, the opening is set larger */
+  @media (min-width: 900px) {
+    html.page-map #entry .page-icon svg { width: 2.8rem; height: 2.8rem; }
+    html.page-map #entry .page-icon { margin-bottom: 1.8rem; }
+    html.page-map #entry > h1 { font-size: 4.6rem; line-height: 1.02; margin-bottom: 2rem; }
+    html.page-map .description > p:first-child { font-size: 1.28rem; line-height: 1.5; max-width: 40rem; margin-left: auto; margin-right: auto; color: var(--muted); }
+  }
   /* (The single line needs the width of a desktop window; narrower, the tabs keep two rows of three.) */
   @media (min-width: 1200px) {
     /* No gaps: the tabs meet end to end, each one's stretch of the line reaching out past its
@@ -4107,6 +4114,32 @@
     fitTitle();
     fitCrumbsOnly();
     centreEntry();
+    layoutMapHero();
+  }
+  // The Map opens on a screen of its own: icon, heading and introduction centred in the space
+  // above the line of view tabs, which sits near the foot of the screen; the tab's content
+  // begins on the next screen. (Where the opening is taller than the screen, it simply flows.)
+  function layoutMapHero() {
+    var icon = document.querySelector('#entry .page-icon'), tabs = document.querySelector('#entry .index-tabs');
+    var lede = document.querySelector('#entry .description > p:first-child');
+    if (!icon || !tabs || !lede || !document.documentElement.classList.contains('page-map')) return;
+    icon.style.marginTop = ''; tabs.style.marginTop = ''; tabs.style.marginBottom = '';
+    var sy = window.scrollY, H = window.innerHeight;
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    var header = document.getElementById('site-header');
+    var top = header ? header.getBoundingClientRect().bottom + sy : 0;
+    var iconTop = icon.getBoundingClientRect().top + sy;
+    var group = lede.getBoundingClientRect().bottom + sy - iconTop;
+    var tabsH = tabs.offsetHeight;
+    var tabsTop = H - Math.max(3 * rem, H * 0.09) - tabsH;           // the line: near the foot of the screen
+    var free = tabsTop - top - group - 3 * rem;                      // room left around the heading group
+    if (free <= 0) return;
+    icon.style.marginTop = Math.max(0, top + free * 0.45 - iconTop + parseFloat(getComputedStyle(icon).marginTop)) + 'px';
+    var gap = tabsTop - (lede.getBoundingClientRect().bottom + sy);
+    tabs.style.marginTop = Math.max(2 * rem, gap) + 'px';
+    // The content starts just past the foot of the screen.
+    var tabsBottom = tabs.getBoundingClientRect().bottom + sy;
+    tabs.style.marginBottom = Math.max(2.2 * rem, H - tabsBottom) + 'px';
   }
   // A title only a little too long for the column is set slightly smaller to keep it on one
   // line; one that would need shrinking by more than a fifth wraps at full size as usual.
@@ -4388,6 +4421,14 @@
     document.documentElement.setAttribute('data-index', view);
     try { localStorage.setItem('ct-index', view); } catch (err) {}
     if (document.documentElement.classList.contains('snap-slides')) updateSlideNav();
+    // On the Map, choosing a view from its opening screen brings that view's content up.
+    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) {
+      var panel = Array.prototype.find.call(document.querySelectorAll('#entry .description > .az-view, #entry .description > .ce-list'),
+        function (el) { return getComputedStyle(el).display !== 'none'; });
+      var head = panel && panel.querySelector('.ce-title');
+      if (head && head.getBoundingClientRect().top > window.innerHeight * 0.6)
+        window.scrollTo({ top: window.scrollY + head.getBoundingClientRect().top - 2.5 * parseFloat(getComputedStyle(document.documentElement).fontSize), behavior: 'smooth' });
+    }
   });
 
   // ---------- Contents ----------
