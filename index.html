@@ -1162,6 +1162,9 @@
   html.page-map #entry { position: relative; z-index: 1; }
   /* Hudless on the Map: the tab line goes with the rest of the interface; the topography stays */
   html.hudless.page-map #entry .index-tabs { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+  /* After a view has opened, the tab line fades away until the reader scrolls back up */
+  html.page-map #entry .index-tabs { transition: opacity .6s ease; }
+  html.tabs-away.page-map #entry .index-tabs { opacity: 0; pointer-events: none; }
   html.hud-fade.page-map #entry .index-tabs { transition: opacity .6s ease, visibility .6s !important; }
   html.page-map #entry h1 { text-align: left; margin-bottom: 0.5rem; }
   /* The subtitle in the interface face */
@@ -4710,6 +4713,7 @@
     // Search appears on the three main pages only, not on individual concept entries.
     document.documentElement.classList.toggle('main-page', c === ROOT || c.id === 'the-map' || c.id === 'infinite' || c.id === 'search');
     document.documentElement.classList.toggle('page-map', c.id === 'the-map');
+    document.documentElement.classList.remove('tabs-away');
     document.documentElement.classList.toggle('page-home', c === ROOT);
     closeSearch(true);
     if (typeof closeFind === 'function') closeFind();
@@ -4893,7 +4897,28 @@
     var tabs = document.querySelector('#entry .index-tabs');
     if (head && tabs && Math.abs(tabs.getBoundingClientRect().top) > 1)
       window.scrollTo({ top: docY(tabs, 'top'), behavior: 'smooth' });
+    // Once the scroll has come to rest with the view in place, the tab line fades away; scrolling
+    // back up brings it back.
+    if (!tabs) return;
+    var root = document.documentElement, still = 0, began = performance.now(), lastY = -1;
+    root.classList.remove('tabs-away');
+    (function settle() {
+      var y = window.scrollY;
+      still = Math.abs(y - lastY) < 0.5 ? still + 1 : 0; lastY = y;
+      if (!root.classList.contains('page-map') || performance.now() - began > 3000) return;
+      if (still >= 8 && Math.abs(tabs.getBoundingClientRect().top) < 3) {
+        setTimeout(function () { if (Math.abs(tabs.getBoundingClientRect().top) < 3) root.classList.add('tabs-away'); }, 450);
+        return;
+      }
+      requestAnimationFrame(settle);
+    })();
   }
+  var prevScrollY = window.scrollY;
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY;
+    if (y < prevScrollY - 2) document.documentElement.classList.remove('tabs-away');   // scrolling up
+    prevScrollY = y;
+  }, { passive: true });
 
   // ---------- Contents ----------
   var tocEl = document.getElementById('toc');
