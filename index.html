@@ -1092,9 +1092,9 @@
      faded towards the text at its centre and away at its foot */
   #map-topo {
     position: absolute; left: 0; width: 100%; z-index: 0; pointer-events: none; display: none;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.12) 0, rgba(0,0,0,0.12) var(--h0, 7%), #000 var(--h1, 14%), #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3) 0, rgba(0,0,0,0.3) var(--h0, 7%), #000 var(--h1, 30%), #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.12) 0, rgba(0,0,0,0.12) var(--h0, 7%), #000 var(--h1, 14%), #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3) 0, rgba(0,0,0,0.3) var(--h0, 7%), #000 var(--h1, 30%), #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     mask-composite: intersect;
   }
   #map-topo canvas { display: block; width: 100%; height: 100%; }
@@ -4288,8 +4288,8 @@
     wrap.style.setProperty('--tt', Math.max(0, tt - 1) + '%');
     // Likewise behind the header, so its title and menu read clearly.
     var hb = document.getElementById('site-header').getBoundingClientRect().bottom + sy - top;
-    wrap.style.setProperty('--h0', (hb / H * 100) + '%');
-    wrap.style.setProperty('--h1', ((hb + 70) / H * 100) + '%');
+    wrap.style.setProperty('--h0', (hb * 0.6 / H * 100) + '%');
+    wrap.style.setProperty('--h1', ((hb + 220) / H * 100) + '%');
     topo.place(top, H);
   }
   // A title only a little too long for the column is set slightly smaller to keep it on one
