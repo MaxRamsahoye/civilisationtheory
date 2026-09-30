@@ -1170,7 +1170,8 @@
   html.hudless.page-map #entry .index-tabs { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
   /* After a view has opened, the tab line fades away until the reader scrolls back up */
   html.page-map #entry .index-tabs { transition: opacity .6s ease; }
-  html.tabs-away.page-map #entry .index-tabs { opacity: 0; pointer-events: none; }
+  html.tabs-away.page-map #entry .index-tabs { opacity: 0; }
+  html.tabs-away.page-map #entry .index-tabs:hover, html.tabs-away.page-map #entry .index-tabs:focus-within { opacity: 1; transition-duration: .3s; }   /* …or pointing at it */
   html.hud-fade.page-map #entry .index-tabs { transition: opacity .6s ease, visibility .6s !important; }
   html.page-map #entry h1 { text-align: left; margin-bottom: 0.5rem; }
   /* The subtitle in the interface face */
