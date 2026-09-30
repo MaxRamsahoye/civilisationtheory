@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Civilisational: The Civilisation Theory Map</title>
+<title>Civilisational</title>
 <meta name="description" content="A glossary of concepts for Civilisation Theory: a conceptual adaptive system for civilisation design and transition.">
 <link id="favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='0,0 100,0 0,100' fill='%23000'/></svg>">
 <script>
@@ -4376,7 +4376,6 @@
   // homepage. Set to true to bring it back (and remove the hidden attributes on its two icons).
   var SHOW_INFINITE = false;
   // The homepage's own title (the root concept stays “Civilisation Theory” in tree strings).
-  var HOME_TITLE = 'Civilisational: The Civilisation Theory Map';
 
   // Tags: small labels under an entry's title marking where it comes from (e.g. entries taken
   // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
@@ -4470,7 +4469,7 @@
 
     buildToc();
     // The Map is the front page, and carries the site's own title; the root entry is its About page.
-    document.title = c.id === 'the-map' ? HOME_TITLE : (c === ROOT ? 'About' : c.title) + ' · Civilisation Theory Map';
+    document.title = c.id === 'the-map' ? 'Civilisational' : (c === ROOT ? 'About' : c.title) + ' · Civilisation Theory Map';
     var pageId = c === ROOT ? 'home' : c.id;
     pageLinks.forEach(function (a) {
       if (a.getAttribute('data-page') === pageId) a.setAttribute('aria-current', 'page');
