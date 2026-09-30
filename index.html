@@ -1145,7 +1145,8 @@
     mask-image: linear-gradient(to bottom, rgba(0,0,0,0.3) 0, rgba(0,0,0,0.3) var(--h0, 7%), #000 var(--h1, 30%), #000 var(--tt0, 80%), rgba(0,0,0,0.12) var(--tt, 84%), rgba(0,0,0,0.12) 94%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     mask-composite: intersect;
   }
-  #map-topo canvas { display: block; width: 100%; height: 100%; }
+  #map-topo canvas { display: block; width: 100%; height: 100%; animation: topo-in 1.2s ease-out both; }
+  @keyframes topo-in { from { opacity: 0; } to { opacity: 1; } }   /* the terrain rises into view as the site opens */
   html.page-map #map-topo { display: block; }
   html.page-map #entry { position: relative; z-index: 1; }
   html.hudless #map-topo { opacity: 0.35; }
@@ -4380,7 +4381,7 @@
     var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
     function draw(now) {
       if (!W || !Hh) return;
-      var t = (now - t0) / 1000 * 0.035, S = 1 / 230;
+      var t = (now - t0) / 1000 * 0.065, S = 1 / 230;
       for (var j = 0; j <= rows; j++) for (var i = 0; i <= cols; i++) grid[j * (cols + 1) + i] = field(i * CELL * S, j * CELL * S, t);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, Hh);
