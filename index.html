@@ -1107,7 +1107,7 @@
   /* Numbered sub-groups within a group (Meta I, II) */
   /* Within a group, its sub-groups are parted by a light rule (finer and fainter than the
      sections' dividers) */
-  .description .seq-divide { border: 0; border-top: 0.5px solid var(--rule); opacity: 0.7; margin: 0.4rem 0 1.3rem; width: 100%; }
+  .description .seq-divide { border: 0; border-top: 0.5px solid var(--rule); opacity: 0.7; margin: 0.4rem 0 1.3rem; width: 100%; max-width: none; position: relative; z-index: 1; }
   .description .seq-list li[aria-current] span { font-weight: 700; }
   @media (max-width: 640px) { .description .seq-list { font-size: 1em; } }
   /* The Curated Sequence reads as a single column, in order, on the Map and on its entries */
@@ -4357,6 +4357,25 @@
     fitCrumbsOnly();
     centreEntry();
     layoutMapHero();
+    joinSeqRules();
+  }
+  // The curated sequence's dividing lines (between the I and II groups) sit at one height across
+  // the columns: draw them as a single line running from the first to the last.
+  function joinSeqRules() {
+    document.querySelectorAll('#entry .seq-list').forEach(function (list) {
+      var hrs = list.querySelectorAll('.seq-divide');
+      hrs.forEach(function (h) { h.style.width = ''; h.style.marginRight = ''; h.style.visibility = ''; });
+      if (hrs.length < 2) return;
+      var first = hrs[0].getBoundingClientRect(), last = hrs[hrs.length - 1].getBoundingClientRect();
+      if (!first.width) return;   // (the view is not showing)
+      var level = Array.prototype.every.call(hrs, function (h) { return Math.abs(h.getBoundingClientRect().top - first.top) < 3; });
+      if (!level) return;
+      // (a negative margin takes back the extra width, so the columns keep their places)
+      var span = last.right - first.left;
+      hrs[0].style.width = span + 'px';
+      hrs[0].style.marginRight = -(span - first.width) + 'px';
+      for (var i = 1; i < hrs.length; i++) hrs[i].style.visibility = 'hidden';
+    });
   }
   // The Map opens on a screen of its own: icon, heading and introduction centred in the space
   // above the line of view tabs, which sits near the foot of the screen; the tab's content
@@ -4725,7 +4744,7 @@
     // Opened at a view's address: bring the view up (once the opening screen has loaded).
     else if (mapView) (function waitThenShow() {
       if (document.documentElement.classList.contains('loading-topo')) { setTimeout(waitThenShow, 200); return; }
-      setTimeout(function () { if (location.hash === '#the-map/' + MAP_VIEWS[mapView]) { setMapTail(); toMapView(); } }, 60);
+      setTimeout(function () { if (location.hash === '#the-map/' + MAP_VIEWS[mapView]) { setMapTail(); joinSeqRules(); toMapView(); } }, 60);
     })();
     onScroll();
     trackedId = undefined;
@@ -4840,7 +4859,7 @@
     // Once the Map has opened: the view below its tab line, the tab line brought up to the top.
     setTimeout(function () {
       if (location.hash !== '#the-map') return;
-      setMapTail(); toMapView();
+      setMapTail(); joinSeqRules(); toMapView();
     }, 500);
   });
 
@@ -4861,7 +4880,7 @@
     if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) {
       // The address follows the view chosen (without reloading the page).
       if (MAP_VIEWS[view]) { history.replaceState(null, '', mapViewHref(view)); trail[trail.length - 1].hash = location.hash; }
-      setMapTail(); toMapView();
+      setMapTail(); joinSeqRules(); toMapView();
     }
   });
   function toMapView() {
