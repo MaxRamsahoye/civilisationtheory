@@ -4418,7 +4418,14 @@
       return l(l(l(lat(X, Y, Z), lat(X + 1, Y, Z), u), l(lat(X, Y + 1, Z), lat(X + 1, Y + 1, Z), u), v),
                l(l(lat(X, Y, Z + 1), lat(X + 1, Y, Z + 1), u), l(lat(X, Y + 1, Z + 1), lat(X + 1, Y + 1, Z + 1), u), v), w);
     }
-    function field(x, y, t) { return noise(x, y, t) * 0.7 + noise(x * 2.1 + 17, y * 2.1 + 9, t * 1.6) * 0.3; }
+    // Time must not run along one of the noise lattice's axes: there the smooth blend between one
+    // lattice slice and the next makes every point slow to a standstill together at each slice
+    // (the terrain would crawl, speed up and crawl again, every ~40 seconds, starting still). So
+    // the lattice is turned: time runs along its diagonal and the map's plane lies across it,
+    // and every point meets the lattice at a different moment – a steady pace throughout.
+    var R2 = Math.SQRT1_2, R6 = 1 / Math.sqrt(6), R3 = 1 / Math.sqrt(3);
+    function tnoise(x, y, t) { return noise(x * R2 + y * R6 + t * R3, -x * R2 + y * R6 + t * R3, -2 * y * R6 + t * R3); }
+    function field(x, y, t) { return tnoise(x, y, t) * 0.7 + tnoise(x * 2.1 + 17, y * 2.1 + 9, t * 1.6) * 0.3; }
     var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
     function draw(now) {
       if (!W || !Hh) return;
