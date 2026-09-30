@@ -870,18 +870,15 @@
   @media (max-width: 640px) { h2 .h-icon { margin-right: 0.3rem; } h2 .h-icon svg { width: 0.7em; height: 0.7em; } }
   /* Tags under an entry's title: small outlined labels in the interface face */
   /* Narrow screens: the tags sit just above the title */
-  .entry-tags { margin: 0 0 0.9rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  /* Wider screens: in the margin to the left of the title, level with its first line (placed
-     before the title, so it keeps the title's position without taking any space) */
-  @media (min-width: 900px) {
-    #entry { position: relative; }
-    .entry-tags {
-      position: absolute; margin: 0.95rem 0 0;
-      flex-direction: column; align-items: center; white-space: nowrap;
-    }
-    /* …unless the margin is too narrow (e.g. with the sidebar open): then above the title */
-    .entry-tags.tags-inline { position: static; margin: 0 0 0.9rem; flex-direction: row; }
+  /* Tags sit in the screen's bottom-left corner (clear of the sidebar when it is open) */
+  .entry-tags {
+    position: fixed; left: 1.4rem; bottom: 1.2rem; z-index: 5; margin: 0;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem;
+    transition: left .25s ease, opacity .3s ease;
   }
+  body:not(.sidebar-closed) .entry-tags { left: calc(var(--side-w) + 1.4rem); }
+  @media (max-width: 899px) { body:not(.sidebar-closed) .entry-tags { left: 1.4rem; } }
+  #entry { position: relative; }
   /* Counters and tallies in title case (their words capitalised) */
   html .description .ce-intro, html .index-tabs .tab-meta, html .description .domain-label, html #side-results .sr-count, html #side-results .sr-head,
   html .description .sp-meta, html .description .count, html .deck-menu .deck-n { text-transform: capitalize; }
@@ -890,10 +887,9 @@
     font-size: 0.74rem; font-weight: 400; letter-spacing: 0.02em; text-transform: none;
     color: var(--text); background: none; text-decoration: none;
     /* a fine accent line on its left, in place of a pill */
-    border: 0; border-left: 2px solid var(--accent); border-radius: 0; padding: 0.12rem 0 0.1rem 0.6rem;
-    line-height: 1.3; transition: border-color .2s ease;
+    border: 0; border-radius: 0; padding: 0; line-height: 1.3; transition: color .2s ease;
   }
-  a.entry-tag:hover, :root.accent a.entry-tag:hover { color: var(--text); border-left-color: var(--text); }
+  a.entry-tag:hover, :root.accent a.entry-tag:hover { color: var(--accent); }
   :root.accent a.entry-tag { color: var(--text); }
   .description .cp-note { margin-top: 1.6rem; font-size: 0.92em; color: var(--muted); }
   /* Consilience Project view: every definition in full beneath the list of terms */
@@ -4371,6 +4367,7 @@
   // In the margin they are centred in the left column, lined up with where the contents list's
   // heading sits (the contents are centred in the same column).
   function fitTags() {
+    return;   // (tags now sit fixed in the screen's bottom-left corner)
     var el = document.querySelector('#entry > .entry-tags');
     if (!el) return;
     el.classList.remove('tags-inline');
