@@ -37,15 +37,11 @@
     document.documentElement.setAttribute('data-theme-after', t);
     document.documentElement.setAttribute('data-theme', 'midnight');
     document.documentElement.classList.add('awaiting-theme');
-    // The accent colour is on by default; C cycles it (and a reader's choice is remembered).
-    var a = null;
-    try { a = localStorage.getItem('ct-accent'); } catch (e) {}
-    if (a !== 'off') document.documentElement.classList.add('accent');
-    if (a === 'alt') document.documentElement.classList.add('accent-alt');
+    // The accent colour is on at the start of every visit; C cycles it (nothing is saved).
+    document.documentElement.classList.add('accent');
     // The Map opens with no view chosen: just its opening screen, the tabs to choose from.
     document.documentElement.setAttribute('data-index', 'none');
     document.documentElement.classList.add('loading-topo', 'loading-hud');
-    try { if (localStorage.getItem('ct-topo') === 'off') document.documentElement.classList.add('topo-off'); } catch (e) {}   // A: topography hidden   // the topography loading screen (see LOADER)
     document.documentElement.setAttribute('data-ce-view', 'cat');   // Conceptual Engineerings: by category
   })();
 </script>
@@ -4585,7 +4581,6 @@
     document.querySelectorAll('#entry .deck-menu button').forEach(function (b) {
       b.setAttribute('aria-pressed', b.getAttribute('data-deck') === key ? 'true' : 'false');
     });
-    try { localStorage.setItem('ct-deck', key); } catch (err) {}
   }
 
   // Infinite (the slide view) is hidden for now: its links are hidden and its address opens the
@@ -4686,7 +4681,7 @@
     if (!document.documentElement.classList.contains('main-page') || c.id === 'the-map' || c === ROOT) {
       foldIconsTimer = setTimeout(function () { measureIconFold(); document.documentElement.classList.add('icons-folded'); }, 1600);
     }
-    if (c.id === 'infinite') { var dk = 'az'; try { dk = localStorage.getItem('ct-deck') || 'az'; } catch (err) {} showDeck(dk); }
+    if (c.id === 'infinite') { showDeck('az'); }
     fitCrumbs();
 
     buildToc();
@@ -4913,7 +4908,6 @@
     document.body.classList.toggle('sidebar-closed', !open);
     sideBtn.setAttribute('aria-label', open ? 'Hide concept map' : 'Show concept map');
     sideBtn.setAttribute('aria-expanded', String(open));
-    if (remember) { try { localStorage.setItem('ct-sidebar', open ? 'open' : 'closed'); } catch (e) {} }
     // The text column changes width as the sidebar slides: refit tree strings once it settles.
     if (typeof fitCrumbs === 'function') setTimeout(fitCrumbs, 300);
   }
@@ -4922,10 +4916,8 @@
   });
   document.getElementById('scrim').addEventListener('click', function () { setSidebar(false, false); });
 
-  var savedSide = null;
-  try { savedSide = localStorage.getItem('ct-sidebar'); } catch (e) {}
   var narrow = window.matchMedia('(max-width: 899px)').matches;
-  setSidebar(narrow ? false : savedSide !== 'closed', false);
+  setSidebar(!narrow, false);
 
   // ---------- Theme toggle ----------
   document.getElementById('theme-toggle').addEventListener('click', function () {
@@ -4948,7 +4940,6 @@
   // ---------- Click sounds: a soft, quiet chime on links and buttons (M mutes) ----------
   var audioCtx = null;
   var soundOn = true;
-  try { soundOn = localStorage.getItem('ct-sound') !== 'off'; } catch (e) {}
   // Pentatonic notes (C5–A5), so any sequence of clicks stays consonant.
   var NOTES = [523.25, 587.33, 659.25, 783.99, 880.00];
   var lastNote = -1;
@@ -5457,7 +5448,6 @@
       else state = 'off';
       root.classList.toggle('accent', state !== 'off');
       root.classList.toggle('accent-alt', state === 'alt');
-      try { localStorage.setItem('ct-accent', state); } catch (err) {}
     } else if (e.key === '/') {
       e.preventDefault();
       openSearchPage('');
@@ -5467,12 +5457,10 @@
     } else if (e.key === 'Escape' && document.documentElement.classList.contains('hudless')) {
       setHudless(false);
     } else if ((e.key === 'a' || e.key === 'A') && !e.repeat) {
-      // The Map's topography: hide or show it (remembered)
+      // The Map's topography: hide or show it (for this visit)
       var off = document.documentElement.classList.toggle('topo-off');
-      try { localStorage.setItem('ct-topo', off ? 'off' : 'on'); } catch (err) {}
     } else if ((e.key === 'm' || e.key === 'M') && !e.repeat) {
       soundOn = !soundOn;
-      try { localStorage.setItem('ct-sound', soundOn ? 'on' : 'off'); } catch (err) {}
       if (soundOn) chime();
     }
   });
