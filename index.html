@@ -4344,7 +4344,7 @@
     var tabsTop = H - tabsH;                                         // the line: at the foot of the screen
     var free = tabsTop - top - group - 3 * rem;                      // room left around the heading group
     if (free > 0) {
-      icon.style.marginTop = Math.max(0, top + free * 0.8 - iconTop + parseFloat(getComputedStyle(icon).marginTop)) + 'px';
+      icon.style.marginTop = Math.max(0, top + free * 0.6 - iconTop + parseFloat(getComputedStyle(icon).marginTop)) + 'px';
       tabs.style.marginTop = Math.max(2 * rem, tabsTop - docY(lede, 'bottom')) + 'px';
     }
     setMapTail();
