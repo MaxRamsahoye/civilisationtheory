@@ -1022,8 +1022,11 @@
   html.page-map .description .ce-list ul { column-gap: 2.4rem; line-height: 1.4; }
   html.page-map .az-list { column-gap: 2.4rem; row-gap: 2.8rem; line-height: 1.4; }
   html.page-map .description .index-cols li,
-  html.page-map .description .az-list li { margin-bottom: 0.55rem; }
+  html.page-map .description .az-list li { margin-bottom: 0.85rem; }
   html.page-map .description .ce-list li { margin-bottom: 0.85rem; }
+  /* One rhythm for every list on the Map: the same line height and the same space between entries */
+  html.page-map .description .az-list, html.page-map .description .ce-list ul, html.page-map .description .seq-list { line-height: 1.3; }
+  html.page-map .description .seq-list li { margin-bottom: 0.85rem; }
   html.page-map .description .index-cols ul { margin-top: 0.7rem; }
   html.page-map .description .index-cols > li.has-kids { padding-bottom: 1.8rem; }
   html.page-map .description .index-cols > li:not(.has-kids) + li.has-kids { padding-top: 1.1rem; }
@@ -1524,7 +1527,7 @@
       title: 'Civilisation Theory',
       parent: null,
       html: [
-        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisational-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>',
+        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>',
 
         '<h2>A Conceptual Adaptive System</h2>',
         '<p>This wiki site serves to create a <em>conceptual adaptive system</em> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
@@ -2185,7 +2188,7 @@
       id: 'macrocosm',
       title: 'Macrocosm',
       parent: 'metaphysics',
-      html: '<p>The <em>macrocosm</em> is the universe as a whole, understood as an ordered totality. In the ancient and Renaissance idea of the macrocosm and microcosm – “as above, so below” – the human being was a small world that mirrored the structure of the great one, so that knowledge of the self and knowledge of the cosmos were bound together.</p><p>Modern science broke that correspondence, but the question it answered has returned at the <a href="#civilisational-scale">civilisational scale</a>: how human civilisation fits within the larger orders – planetary, biological and cosmic – on which it depends. See <a href="#metaphysics">metaphysics</a> and <a href="#the-anthropocene">the Anthropocene</a>.</p>'
+      html: '<p>The <em>macrocosm</em> is the universe as a whole, understood as an ordered totality. In the ancient and Renaissance idea of the macrocosm and microcosm – “as above, so below” – the human being was a small world that mirrored the structure of the great one, so that knowledge of the self and knowledge of the cosmos were bound together.</p><p>Modern science broke that correspondence, but the question it answered has returned at the <a href="#civilisation-scale">civilisation-scale</a>: how human civilisation fits within the larger orders – planetary, biological and cosmic – on which it depends. See <a href="#metaphysics">metaphysics</a> and <a href="#the-anthropocene">the Anthropocene</a>.</p>'
     },
     {
       id: 'civilisational-collapse',
@@ -2200,10 +2203,10 @@
       html: '<p><em>Civilisational risk</em> is risk to civilisation as a whole: hazards severe enough to cause <a href="#civilisational-collapse">civilisational collapse</a>, or to set civilisation back by generations, even where they fall short of human extinction. It sits between global catastrophic risk, which is measured in lives and damage, and <a href="#existential-risk">existential risk</a>, which concerns the permanent loss of humanity’s future.</p><p>Seen through the <a href="#metacrisis">metacrisis</a>, civilisational risks – from climate breakdown and ecological overshoot to nuclear war, engineered pandemics and uncontrolled artificial intelligence – are not independent hazards but products of the same underlying dynamics, which is why they cannot be addressed one at a time.</p>'
     },
     {
-      id: 'civilisational-scale',
-      title: 'Civilisational Scale',
+      id: 'civilisation-scale',
+      title: 'Civilisation-Scale',
       parent: 'civilisational-mechanics',
-      html: '<p><em>Civilisational scale</em> is the scale at which civilisation itself becomes the unit of analysis and action: the whole human world-system, across its full span of time, rather than any single nation, market or generation. Problems at this scale – planetary boundaries, exponential technology, the coordination of billions – cannot be seen from within narrower frames, and cannot be solved by actors who operate only within them.</p><p>Civilisation theory is theory applied at a civilisational scale: it treats the initial conditions, developmental process and dominant paradigm of civilisation as objects of study in their own right. See <a href="#macrohistory">macrohistory</a> and <a href="#civilisational-risk">civilisational risk</a>.</p>'
+      html: '<p><em>Civilisation-scale</em> is the scale at which civilisation itself becomes the unit of analysis and action: the whole human world-system, across its full span of time, rather than any single nation, market or generation. Problems at this scale – planetary boundaries, exponential technology, the coordination of billions – cannot be seen from within narrower frames, and cannot be solved by actors who operate only within them.</p><p>Civilisation theory is theory applied at civilisation-scale: it treats the initial conditions, developmental process and dominant paradigm of civilisation as objects of study in their own right. See <a href="#macrohistory">macrohistory</a> and <a href="#civilisational-risk">civilisational risk</a>.</p>'
     },
     {
       id: 'civilisation-research-paradigm',
@@ -4459,7 +4462,7 @@
       { name: 'Foundation', items: [byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
       { name: 'Civilisational', subs: [
         { name: 'I', items: sections.slice(0, 3) },
-        { name: 'II', items: [byId['civilisational-collapse'], byId['civilisational-risk'], byId['civilisational-scale']] }
+        { name: 'II', items: [byId['civilisational-collapse'], byId['civilisational-risk'], byId['civilisation-scale']] }
       ] },
       { name: 'Meta', subs: [
         { name: 'I', items: sections.slice(3, 6) },
