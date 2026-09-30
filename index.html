@@ -1080,19 +1080,19 @@
      faded towards the text at its centre and away at its foot */
   #map-topo {
     position: absolute; left: 0; width: 100%; z-index: 0; pointer-events: none; display: none;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%), radial-gradient(ellipse 46% 42% at 50% 46%, rgba(0,0,0,0.28) 0, rgba(0,0,0,0.28) 45%, #000 100%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     -webkit-mask-composite: source-in;
-    mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%), radial-gradient(ellipse 46% 42% at 50% 46%, rgba(0,0,0,0.28) 0, rgba(0,0,0,0.28) 45%, #000 100%);
+    mask-image: linear-gradient(to bottom, #000 0, #000 72%, transparent 100%), radial-gradient(ellipse var(--fw, 46%) var(--fh, 42%) at var(--fx, 50%) var(--fy, 46%), rgba(0,0,0,0.22) 0, rgba(0,0,0,0.22) 50%, #000 100%);
     mask-composite: intersect;
   }
   #map-topo canvas { display: block; width: 100%; height: 100%; }
   html.page-map #map-topo { display: block; }
   html.page-map #entry { position: relative; z-index: 1; }
   html.hudless #map-topo { opacity: 0.35; }
-  html.page-map #entry h1 { text-align: center; }
+  html.page-map #entry h1 { text-align: left; }
   /* Everything on the Map in full ink: the muted grey is redefined as the text colour within it */
   html.page-map #entry .description { --muted: var(--text); }
-  html.page-map .description > p:first-child { text-align: center; }
+  html.page-map .description > p:first-child { text-align: left; }
   /* Shorter windows: the opening is drawn tighter so that it still fits the screen */
   @media (min-width: 900px) and (max-height: 860px) {
     html.page-map #entry > h1 { font-size: 3.4rem !important; margin-bottom: 1.2rem !important; }
@@ -1101,7 +1101,7 @@
   /* With a screen to itself, the opening is set larger */
   @media (min-width: 900px) {
     html.page-map #entry > h1 { font-size: 4.6rem; line-height: 1.02; margin-bottom: 2rem; }
-    html.page-map .description > p:first-child { font-size: 1.2rem; line-height: 1.5; max-width: 44rem; margin-left: auto; margin-right: auto; }
+    html.page-map .description > p:first-child { font-size: 1.2rem; line-height: 1.5; max-width: 44rem; margin-left: 0; margin-right: 0; }
   }
   /* (The single line needs a desktop window; narrower, the tabs keep two rows of three.) */
   @media (min-width: 1000px) {
@@ -4160,7 +4160,7 @@
     var tabsTop = H - Math.max(3 * rem, H * 0.09) - tabsH;           // the line: near the foot of the screen
     var free = tabsTop - top - group - 3 * rem;                      // room left around the heading group
     if (free <= 0) return;
-    icon.style.marginTop = Math.max(0, top + free * 0.45 - iconTop + parseFloat(getComputedStyle(icon).marginTop)) + 'px';
+    icon.style.marginTop = Math.max(0, top + free * 0.8 - iconTop + parseFloat(getComputedStyle(icon).marginTop)) + 'px';
     var gap = tabsTop - (lede.getBoundingClientRect().bottom + sy);
     tabs.style.marginTop = Math.max(2 * rem, gap) + 'px';
     // The content starts just past the foot of the screen.
@@ -4243,12 +4243,25 @@
       }
     };
   })();
+  // Right edge of an element's own text (not its box).
+  function textRight(el) { var rg = document.createRange(); rg.selectNodeContents(el); return rg.getBoundingClientRect().right - el.getBoundingClientRect().left; }
   // The topography spans the opening: from under the header down to the line of tabs.
   function layoutTopo(h1, tabs) {
     if (typeof topo === 'undefined' || !topo) return;
     var sy = window.scrollY, top = 0;   // from the very top, behind the (clear) header
     var bottom = tabs.getBoundingClientRect().top + sy;
-    if (bottom - top > 80) topo.place(top, bottom - top);
+    if (bottom - top <= 80) return;
+    // The lines fade to a whisper behind the heading and description, wherever they sit.
+    var lede = tabs.previousElementSibling, a = h1.getBoundingClientRect(), z = lede.getBoundingClientRect();
+    var range = document.createRange(); range.selectNodeContents(lede); var zr = range.getBoundingClientRect();
+    var l = Math.min(a.left, zr.left), r = Math.max(a.left + textRight(h1), zr.right);
+    var t = a.top + sy - top, b = z.bottom + sy - top, H = bottom - top, W = document.documentElement.clientWidth;
+    var wrap = document.getElementById('map-topo');
+    wrap.style.setProperty('--fx', ((l + r) / 2 / W * 100) + '%');
+    wrap.style.setProperty('--fy', ((t + b) / 2 / H * 100) + '%');
+    wrap.style.setProperty('--fw', ((r - l) / 2 / W * 100 + 14) + '%');
+    wrap.style.setProperty('--fh', ((b - t) / 2 / H * 100 + 16) + '%');
+    topo.place(top, H);
   }
   // A title only a little too long for the column is set slightly smaller to keep it on one
   // line; one that would need shrinking by more than a fifth wraps at full size as usual.
