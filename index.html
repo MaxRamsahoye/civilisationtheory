@@ -542,7 +542,7 @@
   html:not(.main-page) #site-footer { display: none; }
   /* Light theme: the header band (on the main pages) and the footer are inverted, white on black */
   :root[data-theme="light"] #site-footer,
-  :root[data-theme="light"].main-page:not(.page-map) #site-header {
+  :root[data-theme="light"].main-page:not(.page-map):not(.page-home) #site-header {
     --bg: #111111; --bg-side: #111111; --text: #fffff8; --muted: #a9a79e; --rule: #2e2e2b;
     --link: #fffff8; --link-underline: #6d6b64; --active: #ffffff;
     color: var(--text); border-color: #111111;
@@ -552,7 +552,7 @@
   :root[data-theme="light"] body.footer-in-view #to-top:hover { color: #fffff8; }
   /* On entries the header sits over the top of the page in the page's own colour, with no rule,
      and takes no space, so entries stay centred on screen */
-  html:not(.main-page) #site-header, html.page-map #site-header {
+  html:not(.main-page) #site-header, html.page-map #site-header, html.page-home #site-header {
     position: absolute; top: 0; left: 0; right: 0; z-index: 2;
     background: var(--bg); border-bottom: 0;
   }
@@ -4461,7 +4461,7 @@
     // …and on entries the header icons fold into the menu icon.
     document.documentElement.classList.remove('icons-folded', 'icons-open');
     clearTimeout(foldIconsTimer);
-    if (!document.documentElement.classList.contains('main-page') || c.id === 'the-map') {
+    if (!document.documentElement.classList.contains('main-page') || c.id === 'the-map' || c === ROOT) {
       foldIconsTimer = setTimeout(function () { measureIconFold(); document.documentElement.classList.add('icons-folded'); }, 1600);
     }
     if (c.id === 'infinite') { var dk = 'az'; try { dk = localStorage.getItem('ct-deck') || 'az'; } catch (err) {} showDeck(dk); }
