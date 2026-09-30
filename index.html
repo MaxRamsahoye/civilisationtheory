@@ -282,6 +282,9 @@
   .index-tabs button.pressed, .deck-menu button.pressed { border-radius: 0 0 5px 5px !important; }
   @keyframes press-squeeze { 0% { scale: 1; } 35% { scale: 0.78; } 100% { scale: 1; } }
   @keyframes press-ring { from { transform: scale(0.45); opacity: 0.7; } to { transform: scale(1.45); opacity: 0; } }
+  /* A link returned to by Back: the click's accent-tinted box, held for a moment and then fading */
+  a.returned { animation: returned-mark 2.4s ease-out; border-radius: 5px; }
+  @keyframes returned-mark { 0%, 45% { background-color: var(--hl); } 100% { background-color: transparent; } }
   @keyframes press-flash { from { background-color: var(--hl); } to { background-color: transparent; } }
   @media (prefers-reduced-motion: reduce) {
     .control.pressed svg, .side-icons a.pressed svg, .control.pressed::after, .side-icons a.pressed::after { animation: none; }
@@ -4559,6 +4562,8 @@
     // The homepage and the Map page carry the full index themselves, so the sidebar collapses there.
     if (c === ROOT || c.id === 'the-map' || c.id === 'infinite' || window.matchMedia('(max-width: 899px)').matches) setSidebar(false, false);
     window.scrollTo(0, 0);
+    // Returning by Back: the page reopens where it was left, and the link that was followed is marked.
+    if (backReturn) { var br = backReturn; backReturn = null; restoreReturn(br); }
     onScroll();
     trackedId = undefined;
     if (c.id === 'infinite') {
@@ -4582,20 +4587,54 @@
   // Page transitions: the old page fades out, then the new one fades in (View Transitions API
   // where available; otherwise pages simply change).
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  window.addEventListener('hashchange', function () {
-    if (!document.startViewTransition || reduceMotion.matches || !document.getElementById('loader').classList.contains('done')) { render(); return; }
-    document.startViewTransition(render);
-  });
-
   // ---------- Back: return to the previous page viewed on the site ----------
   var backBtn = document.getElementById('back-btn');
   // A trail of the pages viewed this visit; stepping back (by this button or the browser's)
-  // returns along it, and the button is faded when there is nowhere earlier to go.
-  var trail = [location.hash];
-  window.addEventListener('hashchange', function () {
-    if (trail.length > 1 && trail[trail.length - 2] === location.hash) trail.pop();
-    else trail.push(location.hash);
+  // returns along it, and the button is faded when there is nowhere earlier to go. Each step
+  // remembers how far down its page was scrolled and which link on it was followed, so that
+  // going back returns to that point, with that link marked.
+  var trail = [{ hash: location.hash, y: 0, link: null }];
+  var leaving = null, backReturn = null;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var link = null;
+    if (a.closest('#entry')) {
+      var same = document.querySelectorAll('#entry a[href="' + a.getAttribute('href') + '"]');
+      link = { href: a.getAttribute('href'), n: Array.prototype.indexOf.call(same, a) };
+    }
+    leaving = { y: window.scrollY, link: link, view: document.documentElement.getAttribute('data-index') };
+  }, true);
+  function onHashChange() {
+    if (trail.length > 1 && trail[trail.length - 2].hash === location.hash) {
+      trail.pop();
+      backReturn = trail[trail.length - 1];
+    } else {
+      var here = trail[trail.length - 1];
+      here.y = leaving ? leaving.y : window.scrollY; here.link = leaving ? leaving.link : null;
+      here.view = document.documentElement.getAttribute('data-index');
+      trail.push({ hash: location.hash, y: 0, link: null });
+      backReturn = null;
+    }
+    leaving = null;
     backBtn.disabled = trail.length < 2;
+  }
+  function restoreReturn(step) {
+    if (step.view && document.documentElement.classList.contains('page-map')) {
+      document.documentElement.setAttribute('data-index', step.view);
+      if (typeof layoutMapHero === 'function') layoutMapHero(true);
+    }
+    window.scrollTo(0, step.y || 0);
+    if (!step.link) return;
+    var el = document.querySelectorAll('#entry a[href="' + step.link.href + '"]')[step.link.n];
+    if (!el) return;
+    el.classList.remove('returned'); void el.offsetWidth; el.classList.add('returned');
+    setTimeout(function () { el.classList.remove('returned'); }, 2400);
+  }
+  window.addEventListener('hashchange', function () {
+    onHashChange();
+    if (!document.startViewTransition || reduceMotion.matches || !document.getElementById('loader').classList.contains('done')) { render(); return; }
+    document.startViewTransition(render);
   });
   backBtn.addEventListener('click', function () {
     if (trail.length > 1) history.back();
@@ -5324,6 +5363,7 @@
 
   // Every load or refresh opens the Map, the site's front page (any other page left in the URL is dropped).
   history.replaceState(null, '', location.pathname + location.search + '#the-map');
+  trail[0].hash = location.hash;   // (the Back trail starts from the Map)
   // …at its top: the browser is not to restore an earlier scroll position on reload.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
