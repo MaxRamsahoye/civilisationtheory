@@ -3697,10 +3697,48 @@
       html: '<p>The <em>world-risk factory</em> describes the present world-system as a machine that manufactures risk as a by-product of its ordinary operation. Extending Ulrich Beck’s world risk society, it emphasises that risk is not an accident of modernity but one of its principal outputs, produced continuously by the same processes that generate wealth.</p>'
     },
     {
+      id: '4e-ontology',
+      title: '4E Ontology',
+      coined: true,
+      parent: 'metatheory',
+      ref: '4E cognition',
+      html: '<p><em>4E ontology</em> extends the “4E” account of cognition – that minds are embodied, embedded, enacted and extended – from the study of mind to the study of what exists. Where the 4E programme in cognitive science holds that thinking cannot be located inside a skull, 4E ontology holds that no entity of civilisational significance – an intelligence, an agent, a power, a social order – can be understood as a self-contained thing. Each is <em>embodied</em> in material forms, <em>embedded</em> in environments and institutions, <em>enacted</em> through ongoing activity, and <em>extended</em> across tools, networks and other minds.</p><p>It is the superconcept of the map’s 4E concepts, each of which applies the same four dimensions to a different object. Together they replace an ontology of isolated substances – the rogue AI, the sovereign individual, the state as a thing – with an ontology of relations and processes, which is the level at which the <a href="#metacrisis">metacrisis</a> operates and at which a <a href="#life-world-system">viable life-world-system</a> would have to be designed. See <a href="#metaphysics">metaphysics</a>.</p>' +
+        '<h2>4E Concepts</h2><ul>' +
+        '<li><a href="#4e-agency">4E Agency</a></li>' +
+        '<li><a href="#4e-global-catastrophic-risk">4E Global Catastrophic Risk</a></li>' +
+        '<li><a href="#4e-intelligence">4E Intelligence</a></li>' +
+        '<li><a href="#4e-power">4E Power</a></li>' +
+        '<li><a href="#4e-utopia">4E Utopia</a></li></ul>'
+    },
+    {
+      id: '4e-agency',
+      title: '4E Agency',
+      coined: true,
+      parent: '4e-ontology',
+      ref: '4E cognition',
+      html: '<p><em>4E agency</em> applies the 4E account – embodied, embedded, enacted and extended – to agency: the capacity to act. It holds that agency does not belong to an isolated will, human or artificial, but is distributed across bodies, environments, practices and tools. An agent acts through its infrastructure, within institutions that shape what it can do, by way of habits and routines, and with the aid of instruments that carry part of the action.</p><p>This matters as artificial systems take on more of the work of acting in the world: the question is less whether a machine is an agent than how agency is being redistributed across the whole human–machine system, and who or what ends up steering it. See <a href="#4e-ontology">4E ontology</a> and <a href="#4e-intelligence">4E intelligence</a>.</p>'
+    },
+    {
+      id: '4e-power',
+      title: '4E Power',
+      coined: true,
+      parent: '4e-ontology',
+      ref: '4E cognition',
+      html: '<p><em>4E power</em> applies the 4E account – embodied, embedded, enacted and extended – to power. Power is not a quantity held by a person or a state, but is embodied in material infrastructure and wealth, embedded in institutions and norms, enacted through the everyday practices that reproduce it, and extended through technologies that let it act at a distance and at scale.</p><p>Seen this way, the concentration of power by advanced technology is not only a matter of who owns the systems, but of how deeply power becomes built into the environment everyone else must live in – which is also why it is hard to see and hard to contest. See <a href="#4e-ontology">4E ontology</a> and <a href="#power-and-control">power and control</a>.</p>'
+    },
+    {
+      id: '4e-utopia',
+      title: '4E Utopia',
+      coined: true,
+      parent: '4e-ontology',
+      ref: '4E cognition',
+      html: '<p><em>4E utopia</em> applies the 4E account – embodied, embedded, enacted and extended – to the idea of a good society. Rather than a blueprint of rules or an ideal set of values, a 4E utopia is a way of life embodied in its material infrastructure, embedded in its ecology and institutions, enacted in the daily practices of its members, and extended through the tools and systems that carry its intelligence.</p><p>On this view a better civilisation cannot simply be legislated or imagined into being: it has to be built into the world people inhabit and grown through the way they live, which is the design problem of the <a href="#life-world-system">viable life-world-system</a>. See <a href="#4e-ontology">4E ontology</a>.</p>'
+    },
+    {
       id: '4e-global-catastrophic-risk',
       title: '4E Global Catastrophic Risk',
       coined: true,
-      parent: 'complex-world-system-dynamics',
+      parent: '4e-ontology',
       ref: '4E cognition',
       html: '<p><em>4E global catastrophic risk</em> applies the “4E” account of cognition – embodied, embedded, enacted and extended – to catastrophic risk from AI. Rather than locating danger in a single rogue system, it looks at how AI becomes embodied in infrastructure, embedded in institutions, enacted through markets and extended across the world-system, so that risk emerges from the whole.</p>'
     },
@@ -3774,7 +3812,7 @@
       id: '4e-intelligence',
       title: '4E Intelligence',
       coined: true,
-      parent: 'ai-alignment',
+      parent: '4e-ontology',
       ref: '4E cognition',
       html: '<p><em>4E intelligence</em> applies the 4E account of cognition – embodied, embedded, enacted and extended – to intelligence in general. It holds that intelligence is not a property of an isolated brain or model, but arises from an agent’s body, environment, activity and tools, which has implications for how artificial intelligence should be understood and aligned.</p>'
     },
@@ -4522,7 +4560,7 @@
         { name: 'I', items: sections.slice(6, 9) },
         { name: 'II', items: [byId['macroeconomics'], byId['macroevolution'], byId['macrocosm']] }
       ] },
-      { name: 'Core', items: [byId['life-world-system']] }
+      { name: 'Core', items: [byId['4e-ontology'], byId['life-world-system']] }
     ].map(function (g) {
       // A group may be divided into numbered sub-groups (I, II, …); its items are theirs in order.
       if (g.subs) g.subs.forEach(function (sg) { sg.items = sg.items.filter(Boolean); });
