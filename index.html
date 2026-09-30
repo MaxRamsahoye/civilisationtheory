@@ -4629,8 +4629,10 @@
     var panel = Array.prototype.find.call(document.querySelectorAll('#entry .description > .az-view, #entry .description > .ce-list'),
       function (el) { return getComputedStyle(el).display !== 'none'; });
     var head = panel && panel.querySelector('.ce-title');
-    if (head && head.getBoundingClientRect().top > window.innerHeight * 0.6)
-      window.scrollTo({ top: window.scrollY + head.getBoundingClientRect().top - 3 * parseFloat(getComputedStyle(document.documentElement).fontSize), behavior: 'smooth' });
+    // …by turning to the next screen: the page scrolls to where the opening screen ends.
+    var tabs = document.querySelector('#entry .index-tabs');
+    if (head && tabs && head.getBoundingClientRect().top > window.innerHeight * 0.6)
+      window.scrollTo({ top: window.scrollY + tabs.getBoundingClientRect().bottom, behavior: 'smooth' });
   }
 
   // ---------- Contents ----------
