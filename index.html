@@ -2166,6 +2166,24 @@
       html: '<p>A <em>zero-sum game</em>, formalised by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944), is one in which any gain for one party is exactly matched by a loss for another, so the total stays fixed. Many real situations are not zero-sum – trade, cooperation and innovation can enlarge the total – yet <em>zero-sum thinking</em>, the habit of treating them as if they were, drives rivalry, arms races and the <a href="#multipolar-trap">multipolar trap</a>. Shifting from zero-sum to positive-sum games is a recurring theme in visions of a <a href="#win-win">win-win</a> civilisation.</p>'
     },
     {
+      id: 'civilisational-collapse',
+      title: 'Civilisational Collapse',
+      parent: 'risk-and-catastrophe',
+      html: '<p><em>Civilisational collapse</em> is the rapid, lasting loss of a civilisation’s social, political and economic complexity – the breakdown of its institutions, its capacity to coordinate and its ability to sustain its population. Joseph Tainter’s <em>The Collapse of Complex Societies</em> (1988) explained it as the point at which further investment in complexity yields diminishing and then negative returns; Jared Diamond’s <em>Collapse</em> (2005) stressed environmental overshoot and the choices societies make in response to it.</p><p>Historical collapses – the Western Roman Empire, the Classic Maya, Bronze Age Mediterranean civilisation – were regional. The question the present raises is whether a single, globally interconnected civilisation could collapse as a whole, and whether its recovery would be possible at all. See <a href="#critical-collapsology">critical collapsology</a>, <a href="#civilisational-risk">civilisational risk</a> and <a href="#existential-risk">existential risk</a>.</p>'
+    },
+    {
+      id: 'civilisational-risk',
+      title: 'Civilisational Risk',
+      parent: 'risk-and-catastrophe',
+      html: '<p><em>Civilisational risk</em> is risk to civilisation as a whole: hazards severe enough to cause <a href="#civilisational-collapse">civilisational collapse</a>, or to set civilisation back by generations, even where they fall short of human extinction. It sits between global catastrophic risk, which is measured in lives and damage, and <a href="#existential-risk">existential risk</a>, which concerns the permanent loss of humanity’s future.</p><p>Seen through the <a href="#metacrisis">metacrisis</a>, civilisational risks – from climate breakdown and ecological overshoot to nuclear war, engineered pandemics and uncontrolled artificial intelligence – are not independent hazards but products of the same underlying dynamics, which is why they cannot be addressed one at a time.</p>'
+    },
+    {
+      id: 'civilisational-scale',
+      title: 'Civilisational Scale',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Civilisational scale</em> is the scale at which civilisation itself becomes the unit of analysis and action: the whole human world-system, across its full span of time, rather than any single nation, market or generation. Problems at this scale – planetary boundaries, exponential technology, the coordination of billions – cannot be seen from within narrower frames, and cannot be solved by actors who operate only within them.</p><p>Civilisation theory is theory applied at a civilisational scale: it treats the initial conditions, developmental process and dominant paradigm of civilisation as objects of study in their own right. See <a href="#macrohistory">macrohistory</a> and <a href="#civilisational-risk">civilisational risk</a>.</p>'
+    },
+    {
       id: 'civilisation-research-paradigm',
       title: 'Civilisation Research Paradigm',
       parent: 'metatheory',
@@ -4401,7 +4419,10 @@
     var sections = childrenOf(ROOT.id);
     return [
       { name: 'Foundation', items: [byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
-      { name: 'Civilisational', items: sections.slice(0, 3) },
+      { name: 'Civilisational', subs: [
+        { name: 'I', items: sections.slice(0, 3) },
+        { name: 'II', items: [byId['civilisational-collapse'], byId['civilisational-risk'], byId['civilisational-scale']] }
+      ] },
       { name: 'Meta', subs: [
         { name: 'I', items: sections.slice(3, 6) },
         { name: 'II', items: [byId['metanarrative'], byId['metaphysics'], byId['metarationality'], byId['metapsychology'], byId['metamathics']] }
