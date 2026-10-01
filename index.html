@@ -4356,6 +4356,50 @@
     return CONCEPTS.filter(function (c) { return c.parent === id && !c.cpOnly; })
       .sort(function (a, b) { return ((a.order || 1000) - (b.order || 1000)) || byTitle(a, b); });
   }
+  // The concepts filed in each section of the new structure: entries (by id) with the entries
+  // nested beneath them, and plain subheadings ({ head }) grouping entries without an entry of
+  // their own.
+  var NEW_STRUCTURE = {
+    'civilisational-mechanics': [
+      ['initial-conditions', ['root-socio-economic-orientation', 'circumscription-theory', 'agriculturalisation-trap']],
+      ['developmental-process', ['military-economic-adaptationism', 'accelerationism', 'problem-solution-externality-history']],
+      ['structural-teleology', [['exterminism', ['ai-exterminism']], 'exhaustionism', 'extractivism']],
+      ['vulnerable-world-hypothesis', ['anarchy-technology-dilemma', 'technological-self-destruction-hypothesis', 'fragile-world-hypothesis']],
+      ['hyper-agents', ['economic-superorganism', 'the-technium', 'what-progress-wants', 'moloch', 'leviathan', 'kraken']],
+      ['4e-ontology', ['4e-cognition', '4e-agency', '4e-power', '4e-global-catastrophic-risk']],
+      { head: 'Order', items: ['natural-order', 'artificial-order', ['spontaneous-order', ['spontaneous-disorder', 'spontaneous-totalitarian-order']]] },
+      ['technological-revolutions', ['cognitive-evolution', 'agricultural-revolution', 'industrial-revolution', 'information-revolution', ['intelligence-revolution', ['neomechanisation-and-autonomisation']]]],
+      ['capitalism', ['primitive-accumulation', 'industrial-capitalism', 'surveillance-capitalism', 'late-stage-capitalism', 'end-stage-capitalism', 'post-capitalism', 'technocapitalism', 'techno-feudalism']]
+    ]
+  };
+  // Each concept's place in the Civilisation Research Paradigm, as filed above: its parent there
+  // (a concept, or a plain subheading), or nothing if it has not yet been filed.
+  var STRUCT_PARENT = {};
+  Object.keys(NEW_STRUCTURE).forEach(function (sec) {
+    (function walk(list, parent) {
+      list.forEach(function (x) {
+        if (typeof x === 'string') { if (!(x in STRUCT_PARENT)) STRUCT_PARENT[x] = parent; return; }
+        if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT)) STRUCT_PARENT[x[0]] = parent; walk(x[1] || [], x[0]); return; }
+        walk(x.items, { title: x.head, heading: true, parent: parent });
+      });
+    })(NEW_STRUCTURE[sec], sec);
+  });
+  // The tree string's path: Civilisation Theory › section › … › the concept – for the sections
+  // themselves, the site's own pages, and the concepts filed in the paradigm; null for the rest.
+  function crumbPath(c) {
+    if (c === ROOT) return [ROOT];
+    if (c.parent === ROOT.id && (c.kind === 'category' || PAGES[c.id])) return [ROOT, c];
+    if (!(c.id in STRUCT_PARENT)) return null;
+    var path = [c], p = STRUCT_PARENT[c.id];
+    while (p) {
+      if (typeof p === 'string') {
+        var n = byId[p]; if (!n) return null;
+        path.unshift(n); p = (p in STRUCT_PARENT) ? STRUCT_PARENT[p] : null;
+      } else { path.unshift(p); p = p.parent; }
+    }
+    path.unshift(ROOT);
+    return path;
+  }
   function pathTo(c) {
     var path = [];
     while (c) { path.unshift(c); c = c.parent ? byId[c.parent] : null; }
@@ -4427,22 +4471,6 @@
     var overviewDesc = '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation: ' + (sections.length === 9 ? 'nine' : sections.length) + ' fields in three sets – ' +
       '<em>civilisational</em> (mechanics, design, transition), <em>meta</em> (crisis, modernism, theory) ' +
       'and <em>macro</em> (history, sociology, strategy).</p>';
-    // The concepts filed in each section of the new structure: entries (by id) with the entries
-    // nested beneath them, and plain subheadings ({ head }) grouping entries without an entry of
-    // their own.
-    var NEW_STRUCTURE = {
-      'civilisational-mechanics': [
-        ['initial-conditions', ['root-socio-economic-orientation', 'circumscription-theory', 'agriculturalisation-trap']],
-        ['developmental-process', ['military-economic-adaptationism', 'accelerationism', 'problem-solution-externality-history']],
-        ['structural-teleology', [['exterminism', ['ai-exterminism']], 'exhaustionism', 'extractivism']],
-        ['vulnerable-world-hypothesis', ['anarchy-technology-dilemma', 'technological-self-destruction-hypothesis', 'fragile-world-hypothesis']],
-        ['hyper-agents', ['economic-superorganism', 'the-technium', 'what-progress-wants', 'moloch', 'leviathan', 'kraken']],
-        ['4e-ontology', ['4e-cognition', '4e-agency', '4e-power', '4e-global-catastrophic-risk']],
-        { head: 'Order', items: ['natural-order', 'artificial-order', ['spontaneous-order', ['spontaneous-disorder', 'spontaneous-totalitarian-order']]] },
-        ['technological-revolutions', ['cognitive-evolution', 'agricultural-revolution', 'industrial-revolution', 'information-revolution', ['intelligence-revolution', ['neomechanisation-and-autonomisation']]]],
-        ['capitalism', ['primitive-accumulation', 'industrial-capitalism', 'surveillance-capitalism', 'late-stage-capitalism', 'end-stage-capitalism', 'post-capitalism', 'technocapitalism', 'techno-feudalism']]
-      ]
-    };
     function structCount(list) {
       var n = 0;
       list.forEach(function (x) {
@@ -4573,8 +4601,10 @@
   // k = how many of the earliest nodes step out into the vertical stack above the line.
   function crumbsHtml(c, k) {
     if (c === ROOT) return '<span class="node">About the Project</span>';   // the About page's label
-    var nodes = pathTo(c).map(function (p, i, arr) {
-      return i === arr.length - 1
+    var path = crumbPath(c);
+    if (!path) return '';   // not yet filed in the paradigm: no tree string
+    var nodes = path.map(function (p, i, arr) {
+      return i === arr.length - 1 || p.heading
         ? '<span class="node">' + esc(p.title) + '</span>'
         : '<a class="node" href="' + href(p) + '">' + esc(p.title) + '</a>';
     });
@@ -4843,7 +4873,7 @@
     wrapping.forEach(function (el) {
       var c = crumbTarget(el);
       if (!c) return;
-      var n = pathTo(c).length;
+      var n = (crumbPath(c) || []).length;
       for (var k = 1; k < n; k++) {
         el.innerHTML = crumbsHtml(c, k);
         var line = el.querySelectorAll('.ts-line .node');
@@ -4981,7 +5011,7 @@
     if (mapView) { document.documentElement.setAttribute('data-index', mapView); id = 'the-map'; }
     var c = byId[id] || PAGES[id] || ROOT;
     document.getElementById('entry').innerHTML =
-      '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' +
+      (crumbsHtml(c) ? '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' : '') +
       tagsHtml(c) +
       '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
@@ -4998,7 +5028,7 @@
     if (c.id === 'search') initSearchPage();
     // The stacked part of the tree string folds away shortly after the entry opens.
     var ts = document.querySelector('#entry > p.tree-string');
-    setTimeout(function () { if (ts.isConnected) ts.classList.add('ts-folded'); }, 1600);
+    if (ts) setTimeout(function () { if (ts.isConnected) ts.classList.add('ts-folded'); }, 1600);
     // …and on entries the header icons fold into the menu icon.
     document.documentElement.classList.remove('icons-folded', 'icons-open');
     clearTimeout(foldIconsTimer);
@@ -5473,7 +5503,7 @@
   treeEl.after(sideResults);
   var sideHits = [], sideSel = -1, MENTION_LIMIT = 12;
   function sideItem(c, words, withSnip) {
-    var path = pathTo(c).slice(1, -1).slice(-2).map(function (p) { return esc(p.title); }).join(' › ');
+    var path = (crumbPath(c) || [c]).slice(1, -1).slice(-2).map(function (p) { return esc(p.title); }).join(' › ');
     var snip = '';
     if (withSnip) {
       var raw = searchIndex.filter(function (x) { return x.c === c; })[0].raw;
@@ -5580,7 +5610,7 @@
     meta.textContent = res.length ? res.length + (res.length === 1 ? ' result' : ' results') : 'No matching concepts';
     spSel = res.length ? 0 : -1;
     list.innerHTML = res.map(function (r, i) {
-      var path = pathTo(r.c).slice(1, -1).map(function (p) { return esc(p.title); }).join(' &gt; ');
+      var path = (crumbPath(r.c) || [r.c]).slice(1, -1).map(function (p) { return esc(p.title); }).join(' &gt; ');
       return '<li' + (i === 0 ? ' class="sel"' : '') + '><a class="sp-title" href="' + href(r.c) + '">' + esc(r.c.title) + '</a>' +
         '<span class="sp-path">' + path + '</span><p class="sp-snip">' + snippet(r.raw, q) + '</p></li>';
     }).join('');
