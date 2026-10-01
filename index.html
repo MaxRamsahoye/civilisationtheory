@@ -4763,10 +4763,24 @@
     function tnoise(x, y, t) { return noise(x * R2 + y * R6 + t * R3, -x * R2 + y * R6 + t * R3, -2 * y * R6 + t * R3); }
     function field(x, y, t) { return tnoise(x, y, t) * 0.7 + tnoise(x * 2.1 + 17, y * 2.1 + 9, t * 1.6) * 0.3; }
     var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
+    // The ground answers the reader. Under the cursor it swells into a low hill that follows it
+    // (eased, so it trails a little behind); a click instead sends a ripple out across the
+    // terrain, a ring of raised ground that widens and dies away.
+    var hover = { x: 0, y: 0, tx: 0, ty: 0, on: false, h: 0 }, ripples = [];
+    var HILL = 0.42, HILL_R = 110, RIP_A = 0.8, RIP_W = 30, RIP_V = 240, RIP_LIFE = 3.5;
+    function lift(x, y) {
+      var z = 0, dx, dy, k;
+      if (hover.h > 0.001) { dx = x - hover.x; dy = y - hover.y; z += HILL * hover.h * Math.exp(-(dx * dx + dy * dy) / (HILL_R * HILL_R)); }
+      for (k = 0; k < ripples.length; k++) {
+        var r = ripples[k], d = Math.sqrt((x - r.x) * (x - r.x) + (y - r.y) * (y - r.y)) - r.age * RIP_V, e = d / RIP_W;
+        if (e > -3 && e < 3) z += RIP_A * Math.exp(-r.age * 1.1) * Math.cos(e * 1.6) * Math.exp(-e * e / 2);
+      }
+      return z;
+    }
     function draw(now) {
       if (!W || !Hh) return;
-      var t = clock * 0.025, S = 1 / 230;
-      for (var j = 0; j <= rows; j++) for (var i = 0; i <= cols; i++) grid[j * (cols + 1) + i] = field(i * CELL * S, j * CELL * S, t);
+      var t = clock * 0.025, S = 1 / 230, alive = hover.h > 0.001 || ripples.length;
+      for (var j = 0; j <= rows; j++) for (var i = 0; i <= cols; i++) grid[j * (cols + 1) + i] = field(i * CELL * S, j * CELL * S, t) + (alive ? lift(i * CELL, j * CELL) : 0);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, Hh);
       var ink = getComputedStyle(document.documentElement).getPropertyValue('--text').trim() || '#111';
@@ -4801,9 +4815,33 @@
       raf = 0;
       var dt = prevNow ? now - prevNow : 16; if (dt > 250) dt = 16; prevNow = now;
       var visible = document.documentElement.classList.contains('page-map') && !document.documentElement.classList.contains('topo-off') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
-      if (visible && started) { clock += dt / 1000; if (frame++ % 2 === 0) draw(now); }
+      if (visible && started) {
+        clock += dt / 1000;
+        var f = 1 - Math.exp(-dt / 1000 * 5);
+        hover.x += (hover.tx - hover.x) * f; hover.y += (hover.ty - hover.y) * f;
+        hover.h += ((hover.on ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * 2.5));
+        for (var k = ripples.length - 1; k >= 0; k--) { ripples[k].age += dt / 1000; if (ripples[k].age > RIP_LIFE) ripples.splice(k, 1); }
+        if (frame++ % 2 === 0) draw(now);
+      }
       if (document.documentElement.classList.contains('page-map') && !still.matches) raf = requestAnimationFrame(loop);
     }
+    // The topography lets pointer events through to the page, so the page's own pointer is read.
+    function live() { var c = document.documentElement.classList; return started && c.contains('page-map') && !c.contains('topo-off') && !c.contains('loading-topo') && !still.matches; }
+    function local(e) { var b = wrap.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top, inside: e.clientY >= b.top && e.clientY <= b.bottom }; }
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      var p = local(e);
+      if (!live() || !p.inside) { hover.on = false; return; }
+      if (!hover.on && hover.h < 0.01) { hover.x = p.x; hover.y = p.y; }   // a fresh hill rises where the cursor is
+      hover.tx = p.x; hover.ty = p.y; hover.on = true;
+    }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', function () { hover.on = false; });
+    window.addEventListener('blur', function () { hover.on = false; });
+    document.addEventListener('click', function (e) {
+      if (!live() || e.target.closest('a, button, input, textarea, select, label, [role="tab"]')) return;
+      var p = local(e); if (!p.inside) return;
+      ripples.push({ x: p.x, y: p.y, age: 0 }); if (ripples.length > 6) ripples.shift();
+    });
     return {
       // The landscape holds still until the site is built and running smoothly (see the loading
       // screen), then starts moving at its true pace.
