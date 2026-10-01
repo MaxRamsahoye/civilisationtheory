@@ -1223,6 +1223,17 @@
   /* The new structure's sections, after the curated sequence */
   .description .seq-structure { margin-top: 4rem; }
   .description .index-domain > .rl-empty { margin: 0; }
+  /* A subheading in the new structure (no entry of its own) */
+  .description .struct-head > span { font-weight: 700; }
+  /* The new structure's sections: their groups in three columns, every level at one size */
+  html.page-map .description .ce-list.cs-list ul.struct-cols { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 2.4rem; line-height: 1.3; }
+  html.page-map .description .ce-list.cs-list .struct-cols ul { list-style: none; padding: 0 0 0 1rem; margin: 0.55rem 0 0; font-size: 1em; columns: 1; }
+  html.page-map .description .struct-cols li { font-size: 1em; margin: 0 0 0.55rem; break-inside: avoid; }
+  html.page-map .description .struct-cols > li { margin: 0 0 1.8rem; }
+  html.page-map .description .struct-cols > li > a, html.page-map .description .struct-cols > li > span { font-weight: 700; }
+  html.page-map .description .struct-cols li a { font-size: 1em; }
+  @media (max-width: 900px) { html.page-map .description .ce-list.cs-list ul.struct-cols { columns: 2; } }
+  @media (max-width: 560px) { html.page-map .description .ce-list.cs-list ul.struct-cols { columns: 1; } }
 
   /* ---------- Infinite: one concept per full-screen slide ---------- */
   .slide-nav { display: none; }
@@ -2164,7 +2175,7 @@
       id: 'military-economic-adaptationism',
       title: 'Military-Economic Adaptationism',
       parent: 'capital-and-growth',
-      html: '<p><em>Military-economic adaptationism</em> is the view that the dominant institutions of civilisation have been selected above all for military and economic competitiveness. Societies that grew wealthier and stronger displaced or absorbed those that did not, so the forms that prevail are adaptations to intergroup competition – not necessarily to human wellbeing or long-term viability.</p>'
+      html: '<p><em>Military-economic adaptationism</em> is Allan Dafoe’s term, from “On Technological Determinism” (2015), for the view that the dominant institutions of civilisation have been selected above all for military and economic competitiveness. Societies that grew wealthier and stronger displaced or absorbed those that did not, so the forms that prevail are adaptations to intergroup competition – not necessarily to human wellbeing or long-term viability.</p>'
     },
     {
       id: 'end-stage-capitalism',
@@ -2205,7 +2216,7 @@
       id: 'economic-superorganism',
       title: 'The Economic Superorganism',
       parent: 'capital-and-growth',
-      ref: 'Hagens',
+      ref: 'Hagens and King',
       html: '<p>The <em>economic superorganism</em> is Nate Hagens’s term for the global economy considered as a single emergent entity, driven by energy and oriented to growth, which no individual or government controls. In “Economics for the Future – Beyond the Superorganism” (2020), Hagens argues that this entity is running on finite fossil energy and faces a necessary contraction.</p>'
     },
     {
@@ -2282,6 +2293,203 @@
       title: 'Macrocosm',
       parent: 'metaphysics',
       html: '<p>The <em>macrocosm</em> is the universe as a whole, understood as an ordered totality. In the ancient and Renaissance idea of the macrocosm and microcosm – “as above, so below” – the human being was a small world that mirrored the structure of the great one, so that knowledge of the self and knowledge of the cosmos were bound together.</p><p>Modern science broke that correspondence, but the question it answered has returned at the <a href="#civilisation-scale">civilisation-scale</a>: how human civilisation fits within the larger orders – planetary, biological and cosmic – on which it depends. See <a href="#metaphysics">metaphysics</a> and <a href="#the-anthropocene">the Anthropocene</a>.</p>'
+    },
+    {
+      id: 'initial-conditions',
+      title: 'Initial Conditions',
+      parent: 'civilisational-mechanics',
+      html: '<p>The <em>initial conditions</em> of civilisation are the circumstances in which it first arose: settled agriculture, surplus, rising population density and the competition between groups that these made possible. Like the initial conditions of a dynamical system, they do not fix every later state, but they constrain the paths open to it – and some of the tendencies set in motion at the start have never been reversed.</p><p>The question is old – Rousseau located the origin of inequality in the first enclosure of land – and it has been taken up in archaeology and anthropology, from Robert Carneiro’s account of how states arose under environmental circumscription to James C. Scott’s <em>Against the Grain</em> (2017) on the early agrarian states.</p>'
+    },
+    {
+      id: 'circumscription-theory',
+      title: 'Circumscription Theory',
+      parent: 'initial-conditions',
+      ref: 'Carneiro',
+      html: '<p><em>Circumscription theory</em> is Robert Carneiro’s explanation of the origin of the state, set out in “A Theory of the Origin of the State” (<em>Science</em>, 1970). Where farmland is bounded – by mountains, desert or sea, or by other peoples – a growing population cannot simply move away. Competition for land then turns to war, and the defeated, unable to escape, are absorbed as subjects rather than driven off.</p><p>Repeated over generations, this produces ever larger political units and, eventually, states with classes, taxation and standing armies. Carneiro pointed to the narrow river valleys of Peru, Egypt and Mesopotamia, where the earliest states appeared, and contrasted them with the Amazon basin, where land was plentiful and villages split rather than combined.</p>'
+    },
+    {
+      id: 'agriculturalisation-trap',
+      title: 'Evolutionary Game-Theory Trap of Agriculturalisation',
+      parent: 'initial-conditions',
+      html: '<p>The <em>evolutionary game-theory trap of agriculturalisation</em> describes the adoption of farming as a trap in the game-theoretic sense: once some groups farm, those that do not are outnumbered and displaced, so every group is driven to farm whether or not it leaves its members better off. Agriculture supported far larger populations, and larger populations won.</p><p>The evidence that early farmers were shorter, sicker and harder-worked than the foragers before them – which led Jared Diamond to call agriculture “the worst mistake in the history of the human race” (1987) – is what makes it a trap rather than progress: a strategy that spreads because it wins contests between groups, not because it improves the lives of those who adopt it.</p>'
+    },
+    {
+      id: 'developmental-process',
+      title: 'Developmental Process',
+      parent: 'civilisational-mechanics',
+      html: '<p>The <em>developmental process</em> of civilisation is the way it has unfolded from its initial conditions: the long sequence of selection, accumulation and technological change by which some social forms spread and others disappeared. It is less a plan than a path, shaped at each step by what was already in place and by what out-competed what.</p><p>Accounts of it range from the stage theories of the nineteenth century to evolutionary and world-systems approaches, and differ above all on whether the process has a direction – progress, complexity, acceleration – or only a history.</p>'
+    },
+    {
+      id: 'structural-teleology',
+      title: 'Structural Teleology',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Structural teleology</em> is the tendency of a system’s structure to carry it towards a particular end-state, whatever the intentions of the people within it. The end is not chosen; it is built in, as a destination the system keeps arriving at because of how it is arranged.</p><p>Three such end-states have been named for the present world-system: <em>exterminism</em>, in which its means of destruction come to determine its course; <em>exhaustionism</em>, in which it runs down the resources and capacities it depends on; and <em>extractivism</em>, in which it organises itself around removing value from the living world faster than it can be renewed.</p>'
+    },
+    {
+      id: 'exterminism',
+      title: 'Exterminism',
+      parent: 'structural-teleology',
+      ref: 'Thompson',
+      html: '<p><em>Exterminism</em> is E. P. Thompson’s term, from “Notes on Exterminism, the Last Stage of Civilisation” (<em>New Left Review</em>, 1980), for a social order whose institutions, economy and ideology have become organised around the means of mass destruction. Thompson argued that the nuclear arms race was not a policy that could be adjusted but a self-reproducing system, with its own momentum and interests, whose outcome – if it ran its course – would be the extermination of multitudes.</p><p>The concept shifted the question from the intentions of states to the logic of the apparatus itself, and has since been extended to other technologies whose development no one seems able to stop.</p>'
+    },
+    {
+      id: 'exhaustionism',
+      title: 'Exhaustionism',
+      parent: 'structural-teleology',
+      ref: 'Stewart',
+      html: '<p><em>Exhaustionism</em> describes a civilisation whose course is set towards the exhaustion of what it depends on – soils, fisheries, aquifers, fossil energy, and the attention, health and trust of its people – because its structures reward drawing these down faster than they can recover. It names a trajectory of running out, rather than of a single collapse.</p>'
+    },
+    {
+      id: 'extractivism',
+      title: 'Extractivism',
+      parent: 'structural-teleology',
+      html: '<p><em>Extractivism</em> is an economic model organised around removing natural resources – minerals, oil, timber, monocrop harvests – at large scale, typically for export and with little processing where they are taken. The term was developed in Latin America, by Eduardo Gudynas and Maristella Svampa among others, to describe economies whose dependence on extraction persists under governments of left and right alike.</p><p>Critics argue that extractivism reproduces colonial patterns, concentrating profit far from the places that bear the ecological and social costs. See also <a href="#resourcism-and-extractivism">resourcism and extractivism</a>.</p>'
+    },
+    {
+      id: 'vulnerable-world-hypothesis',
+      title: 'The Vulnerable World Hypothesis',
+      parent: 'civilisational-mechanics',
+      ref: 'Bostrom',
+      html: '<p><em>The vulnerable world hypothesis</em> is Nick Bostrom’s conjecture (2019) that, among all the technologies humanity might discover, there is likely to be at least one that makes the destruction of civilisation extremely likely by default – unless civilisation has already left what he calls the “semi-anarchic default condition”. Bostrom pictures invention as drawing balls from an urn: most are white or grey, but a black ball, once drawn, cannot be put back.</p><p>He distinguishes types of vulnerability – a technology so easy to misuse that some individual will, or one that gives powerful actors an incentive to cause mass harm – and argues that surviving them may require levels of preventive policing or global governance that carry grave risks of their own.</p>'
+    },
+    {
+      id: 'anarchy-technology-dilemma',
+      title: 'The Anarchy-Technology Dilemma',
+      parent: 'vulnerable-world-hypothesis',
+      ref: 'Sears',
+      html: '<p><em>The anarchy-technology dilemma</em> is Nathan Alexander Sears’s name for the predicament of an international system without a sovereign above states – anarchy, in the language of international relations – that possesses technologies capable of destroying civilisation. Under anarchy, each state must seek security through its own power, which drives the development of ever more dangerous capabilities; yet those capabilities can only be governed by forms of cooperation that anarchy makes hard to achieve.</p>'
+    },
+    {
+      id: 'technological-self-destruction-hypothesis',
+      title: 'The Technological Self-Destruction Hypothesis',
+      parent: 'vulnerable-world-hypothesis',
+      ref: 'Sagan',
+      html: '<p><em>The technological self-destruction hypothesis</em> is the proposal, associated with Carl Sagan, that technological civilisations tend to destroy themselves soon after acquiring the power to do so. Sagan raised it in discussing the Drake equation and the absence of evidence for alien civilisations: if the lifetime of a technological civilisation is short, few will exist at any one time to be found.</p><p>Writing at the height of the nuclear arms race, Sagan treated humanity as a test case, and argued that our survival depended on growing the wisdom to match our power.</p>'
+    },
+    {
+      id: 'fragile-world-hypothesis',
+      title: 'The Fragile World Hypothesis',
+      parent: 'vulnerable-world-hypothesis',
+      ref: 'Manheim',
+      html: '<p><em>The fragile world hypothesis</em> is David Manheim’s proposal (2020) that catastrophe may come less from a single dangerous discovery than from the growing fragility of a complex, tightly coupled world. As systems become more efficient and interconnected, they lose the slack that once absorbed shocks, so that ordinary failures can cascade into systemic ones.</p><p>Where Bostrom’s vulnerable world is endangered by what it might invent, Manheim’s fragile world is endangered by how it is built.</p>'
+    },
+    {
+      id: 'hyper-agents',
+      title: 'Hyper-Agents',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Hyper-agents</em> are entities that act in the world with an agency beyond that of any individual human: corporations, states, markets, technological systems and the processes that drive them. They are made of people but not reducible to them, and pursue tendencies – growth, survival, expansion – that none of their members may have chosen.</p><p>Thinkers have long reached for figures to name them, from Hobbes’s Leviathan to the economic superorganism and Moloch. See also <a href="#hyper-agents-of-doom">hyper-agents of doom</a> and <a href="#hyper-agential-hyper-realism">hyper-agential hyper-realism</a>.</p>'
+    },
+    {
+      id: 'what-progress-wants',
+      title: 'What Progress Wants',
+      parent: 'hyper-agents',
+      ref: 'Kingsnorth',
+      html: '<p><em>What Progress Wants</em> is Paul Kingsnorth’s phrase for the will he attributes to modern technological civilisation – what he calls the Machine. Answering Kevin Kelly’s <em>What Technology Wants</em> (2010), Kingsnorth argues that progress behaves as if it wants something of its own: to extend itself, to dissolve limits and to remake people and places in its image, whether or not they wish it.</p><p>Where Kelly welcomes the technium as an extension of life, Kingsnorth treats it as a force to be resisted, and calls for a recovery of limits, rootedness and the sacred.</p>'
+    },
+    {
+      id: 'leviathan',
+      title: 'Leviathan',
+      parent: 'hyper-agents',
+      ref: 'Hobbes',
+      html: '<p><em>Leviathan</em> (1651) is Thomas Hobbes’s image of the state: an “artificial man” made of the people who have covenanted to obey a sovereign, so as to escape the war of all against all. The frontispiece shows a giant crowned figure whose body is composed of many small people.</p><p>Hobbes made the state the first great hyper-agent of modern political thought – an entity created by individuals that then acts upon them with a power none of them could hold alone.</p>'
+    },
+    {
+      id: 'kraken',
+      title: 'Kraken',
+      parent: 'hyper-agents',
+      ref: 'Fredona and Reinert',
+      html: '<p><em>Kraken</em> is the figure Robert Fredona and Sophus Reinert set beside Hobbes’s Leviathan in “Leviathan and Kraken: States, Corporations, and Political Economy” (<em>History and Theory</em>, 2020). Where Leviathan stands for the state, the kraken – a sea monster of many arms – stands for the corporation: a body that is also an artificial person, reaching across borders and sometimes rivalling the state itself.</p><p>Tracing the chartered trading companies of early modern Europe, they argue that political economy has always been shaped by the relation between these two monsters, not by states alone.</p>'
+    },
+    {
+      id: '4e-cognition',
+      title: '4E Cognition',
+      parent: '4e-ontology',
+      html: '<p><em>4E cognition</em> is the family of approaches in cognitive science holding that the mind is <em>embodied</em> (shaped by the body), <em>embedded</em> (dependent on its environment), <em>enacted</em> (brought forth through activity) and <em>extended</em> (reaching into tools and other people). It developed from Francisco Varela, Evan Thompson and Eleanor Rosch’s <em>The Embodied Mind</em> (1991) and Andy Clark and David Chalmers’s “The Extended Mind” (1998).</p><p>Against the picture of the mind as a computer sealed in the skull, it treats cognition as something that happens between an organism and its world. It is the source on which the map’s other 4E concepts build.</p>'
+    },
+    {
+      id: 'natural-order',
+      title: 'Natural Order',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Natural order</em> is order that exists independently of human design or action: the regularities of physics, the cycles of ecosystems, the structures of living things. In older political thought the phrase also named the order supposedly given by nature or God – the physiocrats’ <em>ordre naturel</em>, or a fixed hierarchy of beings – against which human arrangements could be judged.</p>'
+    },
+    {
+      id: 'artificial-order',
+      title: 'Artificial Order',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Artificial order</em> is order deliberately designed and imposed: a plan, a code of law, an organisation, a machine. Friedrich Hayek called it <em>taxis</em> – made order – and contrasted it with the <em>kosmos</em> of spontaneous order, arguing that designed orders can only be as complex as their designers can understand.</p>'
+    },
+    {
+      id: 'spontaneous-order',
+      title: 'Spontaneous Order',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Spontaneous order</em> is order that emerges from the interaction of many individuals following their own purposes, without anyone designing it: languages, markets, common law, the paths worn across a field. The idea runs from the Scottish Enlightenment – Adam Ferguson’s “the result of human action, but not of human design” – to Michael Polanyi, who coined the term, and Friedrich Hayek, who made it central to his defence of the market.</p><p>Its critics accept that such orders arise but deny that they are reliably benign: the same processes can produce disorder, or orders no one would choose.</p>'
+    },
+    {
+      id: 'technological-revolutions',
+      title: 'Technological Revolutions',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Technological revolutions</em> are the transformations in which a new set of technologies reorganises the whole of a society – how it produces, communicates, fights and lives. They are revolutions not because they are sudden but because they change the ground on which everything else stands; each has taken generations to unfold.</p><p>The usual sequence runs from the agricultural and industrial revolutions to the information revolution, with the economist Carlota Perez among those who have traced their recurring pattern of installation, financial bubble and deployment.</p>'
+    },
+    {
+      id: 'cognitive-evolution',
+      title: 'Cognitive Evolution',
+      parent: 'technological-revolutions',
+      html: '<p><em>Cognitive evolution</em> is the long development of the human capacities for language, symbolic thought, cooperation and cumulative culture that preceded and made possible every later revolution. Some place a decisive shift around 70,000 years ago – the “cognitive revolution” of Yuval Noah Harari’s <em>Sapiens</em> (2011) – while others, such as Merlin Donald and Michael Tomasello, describe a series of stages in which minds, culture and social life evolved together.</p>'
+    },
+    {
+      id: 'agricultural-revolution',
+      title: 'Agricultural Revolution',
+      parent: 'technological-revolutions',
+      html: '<p>The <em>agricultural revolution</em> – the Neolithic revolution, in V. Gordon Childe’s phrase – is the transition, beginning around 12,000 years ago in several regions independently, from foraging to farming and settled life. It made possible surplus, cities, writing and the state, and also brought inequality, epidemic disease and organised war on a new scale.</p>'
+    },
+    {
+      id: 'industrial-revolution',
+      title: 'Industrial Revolution',
+      parent: 'technological-revolutions',
+      html: '<p>The <em>Industrial Revolution</em> is the transformation that began in Britain in the late eighteenth century, as machines driven by coal and steam took over production in factories. It broke the long pattern in which economic growth was soon swallowed by population, and began the sustained rise in output and living standards – and in fossil-fuel use – that continues today.</p>'
+    },
+    {
+      id: 'information-revolution',
+      title: 'Information Revolution',
+      parent: 'technological-revolutions',
+      html: '<p>The <em>information revolution</em> is the transformation driven by digital computing and networked communication from the mid-twentieth century: the microprocessor, the internet and the smartphone. It made information cheap to copy and move, reorganised work and media around data, and gave rise to new concentrations of power in the platforms that mediate it.</p>'
+    },
+    {
+      id: 'intelligence-revolution',
+      title: 'Intelligence Revolution',
+      parent: 'technological-revolutions',
+      html: '<p>The <em>intelligence revolution</em> is the transformation now under way as artificial intelligence takes on tasks of perception, language, judgement and decision once reserved for people. Where earlier revolutions mechanised muscle and then information, this one automates cognition itself – and with it the possibility that the systems doing the work also come to direct it.</p>'
+    },
+    {
+      id: 'capitalism',
+      title: 'Capitalism',
+      parent: 'civilisational-mechanics',
+      html: '<p><em>Capitalism</em> is an economic system in which the means of production are privately owned and operated for profit, and in which goods, services and labour are exchanged in markets. Its defining dynamic is accumulation: profit is reinvested to produce further profit, so that the system must grow to remain stable.</p><p>Its history is usually told in stages – mercantile, industrial, financial, digital – each reorganising production, work and power, and each with its own crises and critics, from Marx to the present.</p>'
+    },
+    {
+      id: 'primitive-accumulation',
+      title: 'Primitive Accumulation',
+      parent: 'capitalism',
+      ref: 'Marx',
+      html: '<p><em>Primitive accumulation</em> is Karl Marx’s term, in the first volume of <em>Capital</em> (1867), for the process by which capitalism began: not through thrift, as its defenders claimed, but through the forcible separation of people from the land and means of subsistence – enclosure, colonial plunder and the slave trade. It created both the concentrated wealth and the propertyless workers that capitalist production required.</p><p>Later writers, from Rosa Luxemburg to David Harvey’s “accumulation by dispossession”, argued that it is not only a historical origin but a continuing process.</p>'
+    },
+    {
+      id: 'industrial-capitalism',
+      title: 'Industrial Capitalism',
+      parent: 'capitalism',
+      html: '<p><em>Industrial capitalism</em> is the form capitalism took with the Industrial Revolution, when profit came chiefly from factory production using wage labour and machinery. It gave rise to the industrial working class, the factory town and the modern labour movement, and to the classic analyses of Marx, Engels and Weber.</p>'
+    },
+    {
+      id: 'late-stage-capitalism',
+      title: 'Late-Stage Capitalism',
+      parent: 'capitalism',
+      html: '<p><em>Late-stage capitalism</em> – late capitalism, from Werner Sombart’s <em>Spätkapitalismus</em> – names a period in which capitalism is understood to have reached a mature or declining phase. Ernest Mandel’s <em>Late Capitalism</em> (1972) and Fredric Jameson’s <em>Postmodernism, or, the Cultural Logic of Late Capitalism</em> (1991) gave it its modern sense; in popular usage the phrase now names the absurdities and indignities of a market reaching into every corner of life.</p>'
+    },
+    {
+      id: 'techno-feudalism',
+      title: 'Techno-Feudalism',
+      parent: 'capitalism',
+      html: '<p><em>Techno-feudalism</em> is the thesis, advanced by Yanis Varoufakis in <em>Technofeudalism</em> (2023) and Cédric Durand in <em>Techno-féodalisme</em> (2020), that digital platforms have begun to replace capitalism with something closer to feudalism. Profit from producing goods for markets gives way to rent extracted from those who must use the platforms – “cloud capital” – so that users and businesses become something like vassals of the owners of the digital estate.</p>'
     },
     {
       id: 'civilisation-alignment',
@@ -2729,7 +2937,7 @@
       parent: 'capital-and-growth',
       tags: ['consilience'],
       ref: 'The Consilience Project, Glossary',
-      html: '<p><em>Technocapitalism</em> is the worldview that holds technology – specifically technology developed by private corporations – to be the primary driver of civilisational progress. Its adherents point to steady global falls in child mortality and poverty during capitalism’s dominance as evidence of its success; but the market incentives driving that progress have also produced new, sometimes greater, problems as externalities. See also <a href="#techno-capitalist-progress-narrative">the techno-capitalist progress narrative</a>.</p>'
+      html: '<p><em>Technocapitalism</em> is the worldview that holds technology – specifically technology developed by private corporations – to be the primary driver of civilisational progress. Its adherents point to steady global falls in child mortality and poverty during capitalism’s dominance as evidence of its success; but the market incentives driving that progress have also produced new, sometimes greater, problems as externalities. See also <a href="#techno-capitalist-progress-narrative">the techno-capitalist progress narrative</a>.</p><p>In Nick Land’s darker usage – <em>techno-capital</em> – the term names not a worldview but a process: capital and technology fused into a single self-accelerating system that uses human beings as its medium, and that is, in Land’s account, already becoming an intelligence in its own right.</p>'
     },
     {
       id: 'goodharts-law',
@@ -3775,11 +3983,12 @@
       ref: '4E cognition',
       html: '<p><em>4E ontology</em> extends the “4E” account of cognition – that minds are embodied, embedded, enacted and extended – from the study of mind to the study of what exists. Where the 4E programme in cognitive science holds that thinking cannot be located inside a skull, 4E ontology holds that no entity of civilisational significance – an intelligence, an agent, a power, a social order – can be understood as a self-contained thing. Each is <em>embodied</em> in material forms, <em>embedded</em> in environments and institutions, <em>enacted</em> through ongoing activity, and <em>extended</em> across tools, networks and other minds.</p><p>It is the superconcept of the map’s 4E concepts, each of which applies the same four dimensions to a different object. Together they replace an ontology of isolated substances – the rogue AI, the sovereign individual, the state as a thing – with an ontology of relations and processes – closer to process philosophy and systems theory than to the common-sense picture of a world made of things. See <a href="#metaphysics">metaphysics</a>.</p>' +
         // Its nested concepts, listed as nested concepts were: a count, then the list.
-        '<p class="count"><span>Concepts: 5</span></p><ul class="branch-list">' +
+        '<p class="count"><span>Concepts: 6</span></p><ul class="branch-list">' +
         '<li><a href="#4e-agency">4E Agency</a></li>' +
-        '<li><a href="#4e-global-catastrophic-risk">4E Global Catastrophic Risk</a></li>' +
+        '<li><a href="#4e-cognition">4E Cognition</a></li>' +
         '<li><a href="#4e-intelligence">4E Intelligence</a></li>' +
         '<li><a href="#4e-power">4E Power</a></li>' +
+        '<li><a href="#4e-global-catastrophic-risk">4E Risk</a></li>' +
         '<li><a href="#4e-utopia">4E Utopia</a></li></ul>'
     },
     {
@@ -3808,11 +4017,11 @@
     },
     {
       id: '4e-global-catastrophic-risk',
-      title: '4E Global Catastrophic Risk',
+      title: '4E Risk',
       coined: true,
       parent: '4e-ontology',
       ref: '4E cognition',
-      html: '<p><em>4E global catastrophic risk</em> applies the “4E” account of cognition – embodied, embedded, enacted and extended – to catastrophic risk from AI. Rather than locating danger in a single rogue system, it looks at how AI becomes embodied in infrastructure, embedded in institutions, enacted through markets and extended across the world-system, so that risk emerges from the whole.</p>'
+      html: '<p><em>4E risk</em> applies the “4E” account of cognition – embodied, embedded, enacted and extended – to catastrophic risk from AI. Rather than locating danger in a single rogue system, it looks at how AI becomes embodied in infrastructure, embedded in institutions, enacted through markets and extended across the world-system, so that risk emerges from the whole.</p>'
     },
     {
       id: 'world-command-and-control-system',
@@ -4217,18 +4426,53 @@
     var overviewDesc = '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation: ' + (sections.length === 9 ? 'nine' : sections.length) + ' fields in three sets – ' +
       '<em>civilisational</em> (mechanics, design, transition), <em>meta</em> (crisis, modernism, theory) ' +
       'and <em>macro</em> (history, sociology, strategy).</p>';
-    // The nine sections in turn: numbering, heading and description, each still to receive its concepts.
+    // The concepts filed in each section of the new structure: entries (by id) with the entries
+    // nested beneath them, and plain subheadings ({ head }) grouping entries without an entry of
+    // their own.
+    var NEW_STRUCTURE = {
+      'civilisational-mechanics': [
+        ['initial-conditions', ['root-socio-economic-orientation', 'circumscription-theory', 'agriculturalisation-trap']],
+        ['developmental-process', ['military-economic-adaptationism', 'accelerationism', 'problem-solution-externality-history']],
+        ['structural-teleology', [['exterminism', ['ai-exterminism']], 'exhaustionism', 'extractivism']],
+        ['vulnerable-world-hypothesis', ['anarchy-technology-dilemma', 'technological-self-destruction-hypothesis', 'fragile-world-hypothesis']],
+        ['hyper-agents', ['economic-superorganism', 'the-technium', 'what-progress-wants', 'moloch', 'leviathan', 'kraken']],
+        ['4e-ontology', ['4e-cognition', '4e-agency', '4e-power', '4e-global-catastrophic-risk']],
+        { head: 'Order', items: ['natural-order', 'artificial-order', ['spontaneous-order', ['spontaneous-disorder', 'spontaneous-totalitarian-order']]] },
+        ['technological-revolutions', ['cognitive-evolution', 'agricultural-revolution', 'industrial-revolution', 'information-revolution', ['intelligence-revolution', ['neomechanisation-and-autonomisation']]]],
+        ['capitalism', ['primitive-accumulation', 'industrial-capitalism', 'surveillance-capitalism', 'late-stage-capitalism', 'end-stage-capitalism', 'post-capitalism', 'technocapitalism', 'techno-feudalism']]
+      ]
+    };
+    function structCount(list) {
+      var n = 0;
+      list.forEach(function (x) {
+        if (typeof x === 'string') n++;
+        else if (Array.isArray(x)) { n++; n += structCount(x[1] || []); }
+        else n += structCount(x.items);
+      });
+      return n;
+    }
+    function structHtml(list, top) {
+      return list.map(function (x) {
+        if (typeof x === 'string') x = [x, []];
+        if (!Array.isArray(x)) return '<li class="is-category struct-head"><span>' + esc(x.head) + '</span><ul>' + structHtml(x.items) + '</ul></li>';
+        var c = byId[x[0]], kids = x[1] || [];
+        if (!c) return '';
+        return '<li' + (top ? ' class="is-category"' : '') + '><a href="' + href(c) + '">' + esc(c.title) + '</a>' +
+          (kids.length ? '<ul>' + structHtml(kids) + '</ul>' : '') + '</li>';
+      }).join('');
+    }
+    // The nine sections in turn: numbering, heading and description, with their concepts where filed.
     function sectionsHtml() {
       return sections.map(function (d, i) {
         var tmp = document.createElement('div');
         tmp.innerHTML = d.html;
         // Sections come in sets of three; a stronger rule opens each set.
         return '<section class="index-domain' + (i % 3 === 0 ? ' set-start' : '') + '" id="nidx-' + d.id + '">' +
-          '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · 0 concepts</p>' +
+          '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + (NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id]) : 0) + ' concepts</p>' +
           '<h3 class="domain-title"><a href="' + href(d) + '">' + esc(d.title) + '</a></h3>' +
           // First sentence only; the full description is on the section's own page.
           (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
-          '<p class="rl-empty">Concepts to be added.</p></section>';
+          (NEW_STRUCTURE[d.id] ? '<ul class="index-cols struct-cols">' + structHtml(NEW_STRUCTURE[d.id], true) + '</ul>' : '<p class="rl-empty">Concepts to be added.</p>') + '</section>';
       }).join('');
     }
     // Alternative A–Z view: every concept alphabetically, grouped by first letter.
