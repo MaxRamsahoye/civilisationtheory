@@ -5518,7 +5518,7 @@
     if (t && e.detail > 0 && t === document.activeElement) t.blur();
   });
 
-  // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless, A = topography ----------
+  // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless, A = topography, 1–5 / Enter = the Map's views ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
@@ -5566,6 +5566,11 @@
       setHudless(!document.documentElement.classList.contains('hudless'));
     } else if (e.key === 'Escape' && document.documentElement.classList.contains('hudless')) {
       setHudless(false);
+    } else if (document.documentElement.classList.contains('page-map') && !e.repeat && (/^[1-5]$/.test(e.key) || e.key === 'Enter')) {
+      // The Map's views: 1–5 in tab order (Enter = 1)
+      var vs = ['cs', 'rl', 'az', 'ce', 'cp'], v = vs[e.key === 'Enter' ? 0 : +e.key - 1];
+      var btn = document.querySelector('#entry .index-tabs [data-view="' + v + '"]');
+      if (btn) { e.preventDefault(); btn.click(); }
     } else if ((e.key === 'a' || e.key === 'A') && !e.repeat) {
       // The Map's topography: hide or show it (for this visit)
       var off = document.documentElement.classList.toggle('topo-off');
