@@ -32,16 +32,21 @@
     var t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'midnight' : 'light';
     document.documentElement.setAttribute('data-theme', t);
     setFavicon(t);
+    // The loading sequence plays only when the Map itself is opened or refreshed; a refresh on any
+    // other page simply reopens that page.
+    document.documentElement.setAttribute('data-theme-after', t);
+    var h = location.hash, onMap = !h || h === '#' || h === '#the-map' || h.indexOf('#the-map/') === 0;
+    if (!onMap) document.documentElement.classList.add('no-loadin');
     // The loading screen is shown in the blue (midnight) theme; the reader's own theme – light by
     // default – takes over as the site settles (see the loading screen).
-    document.documentElement.setAttribute('data-theme-after', t);
-    document.documentElement.setAttribute('data-theme', 'midnight');
-    document.documentElement.classList.add('awaiting-theme');
+    else {
+      document.documentElement.setAttribute('data-theme', 'midnight');
+      document.documentElement.classList.add('awaiting-theme', 'loading-topo', 'loading-hud');
+    }
     // The accent colour is on at the start of every visit; C cycles it (nothing is saved).
     document.documentElement.classList.add('accent');
     // The Map opens with no view chosen: just its opening screen, the tabs to choose from.
     document.documentElement.setAttribute('data-index', 'none');
-    document.documentElement.classList.add('loading-topo', 'loading-hud');
     document.documentElement.setAttribute('data-ce-view', 'cat');   // Conceptual Engineerings: by category
   })();
 </script>
@@ -1465,7 +1470,7 @@
   #loader.done { opacity: 0; visibility: hidden; }
   /* The topography loading screen: the Map's opening screen exactly as it is, but with only its
      topography showing until the interface and content fade in over it */
-  html.loading-topo #loader { display: none; }
+  html.loading-topo #loader, html.no-loadin #loader { display: none; }
   /* The shift from the loading screen's blue to the reader's theme: a slow cross-fade of colours */
   html.theme-shift body, html.theme-shift body * { transition: background-color 1.4s ease, color 1.4s ease, border-color 1.4s ease !important; }
   html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
@@ -6133,10 +6138,21 @@
     }).observe(document.getElementById('site-footer'));
   }
 
-  // Every load or refresh opens the Map, the site's front page (any other page left in the URL is dropped).
+  // A load or refresh reopens the page in the address; one that names no page opens the Map, the
+  // site's front page (and its loading sequence).
+  var noLoadIn = document.documentElement.classList.contains('no-loadin');
+  if (noLoadIn) {
+    var openId = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (!(byId[openId] || PAGES[openId] || openId === ROOT.id) || (openId === 'infinite' && !SHOW_INFINITE)) {
+      noLoadIn = false;
+      document.documentElement.classList.remove('no-loadin');
+      document.documentElement.setAttribute('data-theme', 'midnight');
+      document.documentElement.classList.add('awaiting-theme', 'loading-topo', 'loading-hud');
+    }
+  }
   var keepView = Object.keys(MAP_VIEWS).some(function (v) { return location.hash === mapViewHref(v); });
-  if (!keepView) history.replaceState(null, '', location.pathname + location.search + '#the-map');
-  trail[0].hash = location.hash;   // (the Back trail starts from the Map)
+  if (!noLoadIn && !keepView) history.replaceState(null, '', location.pathname + location.search + '#the-map');
+  trail[0].hash = location.hash;   // (the Back trail starts from the page opened)
   // …at its top: the browser is not to restore an earlier scroll position on reload.
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
@@ -6146,7 +6162,13 @@
   // 'topo': the Map's topography alone, full-screen, before the page fades in over it.
   // 'typed': (stored away) the title typed out inside a filling ring.
   var LOADER = 'topo';
-  if (LOADER === 'topo') (function () {
+  // Opened on a page other than the Map: no loading sequence, the page as it is.
+  if (noLoadIn) (function () {
+    document.getElementById('loader').classList.add('done');
+    document.documentElement.classList.add('topo-go');
+    if (typeof topo !== 'undefined') topo.start();
+  })();
+  else if (LOADER === 'topo') (function () {
     var root = document.documentElement, loader = document.getElementById('loader');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var finished = false, timer, typing = null, endTyping = null;
