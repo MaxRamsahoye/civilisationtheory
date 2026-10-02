@@ -644,6 +644,12 @@
     border-bottom: 1px solid var(--text);
   }
   .head-icons svg * { vector-effect: non-scaling-stroke; }
+  /* The ⓘ set as a superscript after the Map's title, linking to the About page; it arrives with the interface */
+  #entry h1 .h1-about { display: inline-block; vertical-align: super; margin-left: 0.04em; line-height: 0; color: var(--muted); text-decoration: none; transition: color .2s ease, opacity 1.4s ease; }
+  #entry h1 .h1-about:hover { color: var(--text); }
+  #entry h1 .h1-about svg { width: 0.34em; height: 0.34em; fill: none; stroke: currentColor; stroke-width: 1.4px; overflow: visible; }
+  #entry h1 .h1-about svg * { vector-effect: non-scaling-stroke; }
+  html.loading-hud #entry h1 .h1-about, html.hudless #entry h1 .h1-about { opacity: 0; pointer-events: none; }
   .head-icons svg {
     width: 1.05rem; height: 1.05rem;
     fill: none; stroke: currentColor; stroke-width: 1.4px; stroke-linejoin: miter; overflow: visible;
@@ -7886,7 +7892,9 @@
     document.getElementById('entry').innerHTML =
       (crumbsHtml(c) ? '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' : '') +
       tagsHtml(c) +
-      '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) + '</h1>' +
+      '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) +
+        // (the Map's title carries a small ⓘ to the About page, as in the header)
+        (c.id === 'the-map' ? '<a class="h1-about" href="#" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>' : '') + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()) +
       (isConcept(c) && !PAGES[c.id] ? endSectionsHtml(c) : '') +
       '</div>';
