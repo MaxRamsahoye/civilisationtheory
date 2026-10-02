@@ -821,6 +821,21 @@
   }
   .description blockquote.entry-quote footer em { font-style: italic; }
 
+  /* ---------- Sidenote: in the right-hand column beside the text it belongs to (where there is room;
+     otherwise a small note set in the text) ---------- */
+  .description .sidenote {
+    margin: 0 0 1.4rem; padding-left: 0.9rem; border-left: 1px solid var(--rule);
+    font-size: 0.8rem; line-height: 1.5; color: var(--muted);
+  }
+  .description .sidenote a { color: inherit; }
+  @container (min-width: 66rem) {
+    body.sidebar-closed .description .sidenote {
+      --sn-w: min(13rem, calc((100cqi - var(--measure)) / 2 - 4.5rem));
+      float: right; clear: right; width: var(--sn-w);
+      margin: 0.35rem calc(-1 * (var(--sn-w) + 2.5rem)) 0 0; padding: 0; border: 0;
+    }
+  }
+
   /* ---------- Right-click menu: Copy, Copy Link to Highlight (in the find bar's style) ---------- */
   #ctx-menu {
     position: fixed; z-index: 60; min-width: 13.5rem; padding: 0.3rem;
@@ -1827,6 +1842,7 @@
         '<!--TOTALS-->',
 
         '<h2 class="has-icon"><a class="h-icon" href="https://maxramsahoye.github.io/max/" aria-label="Max Ramsahoye"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="10,90 10,10 30,10 50,40 70,10 90,10 90,90 70,90 70,46 50,74 30,46 30,90"/></svg></a>The Cartographer</h2>',
+        '<aside class="sidenote">The Civilisational Map is an independent project that is not affiliated with the <a href="#civilization-research-institute">Civilization Research Institute</a>.</aside>',
         '<p><em>Civilisational</em> (The Civilisation Theory Map) is a conceptual architecture and artifact created by <a href="https://maxramsahoye.github.io/max/">Max Ramsahoye</a> (with the assistance of Claude for the purposes of speed).</p>',
         '<h3 class="sub-head">A Note on AI Use</h3>',
         '<p>The selection and structuring of the concepts are the curator’s own. At this stage, Claude is used to initially produce the entries, which allows hundreds to be added in a short period of time (versus taking a lot longer for a human to research and write each individual entry).</p>',
