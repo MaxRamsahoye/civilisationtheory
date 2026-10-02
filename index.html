@@ -4603,6 +4603,8 @@
       return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : '<a href="' + href(n) + '">' + esc(n.title) + '</a>') +
         (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
     }
+    if (p === x) p = null;
+    if (typeof p === 'string' && STRUCT_KIDS[p] && STRUCT_KIDS[p].indexOf(x) >= 0) return '<ul class="nested">' + node([p, STRUCT_KIDS[p]]) + '</ul>';   // (the section's own list within itself)
     if (p && typeof p === 'object') {   // a subheading's list: the subheading, then its concepts (unless it only repeats the section's name)
       var list = (STRUCT_SIBS[x] || []).map(node).join('');
       return '<ul class="nested">' + (byId[p.parent] && byId[p.parent].title === p.title ? list : '<li><span class="nested-head">' + esc(p.title) + '</span><ul>' + list + '</ul></li>') + '</ul>';
@@ -4637,7 +4639,7 @@
       ['capitalism', ['primitive-accumulation', 'industrial-capitalism', 'surveillance-capitalism', 'late-stage-capitalism', 'end-stage-capitalism', 'post-capitalism', 'technocapitalism', 'techno-feudalism']]
     ],
     'civilisation-design': [
-      { head: 'Civilisation Design', items: ['ontological-design', 'axiological-design', 'geodesign', 'institutional-design', 'mechanism-design', 'behavioural-design', 'social-design'] },
+      ['civilisation-design', ['ontological-design', 'axiological-design', 'geodesign', 'institutional-design', 'mechanism-design', 'behavioural-design', 'social-design']],
       ['civilisation-x', ['civilisation-design-space', 'blue-skies-social-science', 'utopian-studies', 'meta-utopia', 'viatopia']],
       ['the-emergence-model', ['metastructure', 'inter-structure', 'infra-structure', 'super-structure', 'sub-structure', 'biostructure']],
       ['third-attractor', ['first-attractor', 'second-attractor']],
@@ -4654,7 +4656,7 @@
     (function walk(list, parent) {
       list.forEach(function (x) {
         if (typeof x === 'string') { if (!(x in STRUCT_PARENT)) { STRUCT_PARENT[x] = parent; STRUCT_SIBS[x] = list; } return; }
-        if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT)) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length && !STRUCT_KIDS[x[0]]) STRUCT_KIDS[x[0]] = x[1]; walk(x[1] || [], x[0]); return; }
+        if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT) && x[0] !== parent) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length && !STRUCT_KIDS[x[0]]) STRUCT_KIDS[x[0]] = x[1]; walk(x[1] || [], x[0]); return; }
         walk(x.items, { title: x.head, heading: true, parent: parent });
       });
     })(NEW_STRUCTURE[sec], sec);
@@ -4753,7 +4755,7 @@
       var n = 0;
       list.forEach(function (x) {
         if (typeof x === 'string') n++;
-        else if (Array.isArray(x)) { n++; n += structCount(x[1] || []); }
+        else if (Array.isArray(x)) { if (!NEW_STRUCTURE[x[0]]) n++; n += structCount(x[1] || []); }   // (a section listed within itself is not counted)
         else n += structCount(x.items);
       });
       return n;
