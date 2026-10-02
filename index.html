@@ -1106,7 +1106,7 @@
   :root[data-index="ab"] .index-list,
   :root[data-index="ab"] .az-view,
   :root[data-index="ab"] .ce-list:not(.ab-list) { display: none; }
-  .description .ab-list { max-width: 39rem; }
+  .description .ab-list { max-width: 39rem; margin-left: auto; margin-right: auto; }
   /* (its lists are prose lists, not the other views' columns of links) */
   .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
   .description .ce-list.ab-list li { margin: 0 0 0.4rem; }
@@ -7406,7 +7406,7 @@
     var place = LOC_VIA[c.id] && placeFromLoc(LOC_VIA[c.id], c);
     var PARENT = place ? place.parentOf : STRUCT_PARENT, SIBS = place ? place.sibsOf : STRUCT_SIBS;
     function isTop(id) { return place && id in place.topOf ? place.topOf[id] : TOP_BLOCKS[id]; }
-    function kidsAt(id) { return place && id in place.kidsOf ? place.kidsOf[id] : STRUCT_KIDS[id] || []; }
+    function kidsAt(id) { return STRUCT_KIDS[id] || (place && place.kidsOf[id]) || []; }   // (its sub-concepts from every place it is listed)
     var head = null;
     function node(x) {
       if (typeof x === 'string') x = [x, []];
@@ -7953,8 +7953,8 @@
       tab('ab', 'About the Project', entriesTotal() + ' entries') +
       tab('cs', 'Civilisation Research Paradigm', sections.length + ' sections – ' + paradigmCount() + ' concepts') +
       tab('rl', 'Civilisation Research Landscape', rlCount + ' nodes') +
-      tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') +
-      tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') + '</nav>' +
+      tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
+      tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') + '</nav>' +
       (concepts.length ? ab + az + ce + cp + cs + rl : '');
   }
 
@@ -8644,6 +8644,18 @@
       if (location.hash !== '#the-map') return;
       setMapTail(); joinSeqRules(); toMapView();
     }, 500);
+  });
+
+  // A link to the Map view already open (e.g. an ⓘ while on About the Project): the address does
+  // not change, so the view is brought up here instead.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="#the-map/"]');
+    if (!a || a.getAttribute('href') !== location.hash) return;
+    var view = Object.keys(MAP_VIEWS).filter(function (v) { return mapViewHref(v) === location.hash; })[0];
+    if (!view || !document.documentElement.classList.contains('page-map')) return;
+    e.preventDefault();
+    document.documentElement.setAttribute('data-index', view);
+    setMapTail(); joinSeqRules(); toMapView();
   });
 
   // ---------- Conceptual Engineerings: by category or A–Z ----------
@@ -9606,7 +9618,7 @@
       setHudless(false);
     } else if (document.documentElement.classList.contains('page-map') && !e.repeat && (/^[1-5]$/.test(e.key) || e.key === 'Enter')) {
       // The Map's views: 1–5 in tab order (Enter = 1)
-      var vs = ['ab', 'cs', 'rl', 'az', 'ce'], v = vs[e.key === 'Enter' ? 0 : +e.key - 1];
+      var vs = ['ab', 'cs', 'rl', 'ce', 'az'], v = vs[e.key === 'Enter' ? 0 : +e.key - 1];
       var btn = document.querySelector('#entry .index-tabs [data-view="' + v + '"]');
       if (btn) { e.preventDefault(); btn.click(); }
     } else if ((e.key === 'a' || e.key === 'A') && !e.repeat) {
