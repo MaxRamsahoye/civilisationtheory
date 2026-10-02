@@ -1134,8 +1134,8 @@
   html.page-map:not([data-index="ab"]) #toc, html.page-map:not(.map-past-opening) #toc { display: none !important; }
   /* …set in the left margin of the About view's centred column */
   html.page-map[data-index="ab"] #toc {
-    position: fixed; top: 50vh; left: calc(50% - 19.5rem - 2.8rem); transform: translate(-100%, -50%);
-    width: max-content; max-width: 11rem; z-index: 4;
+    position: fixed; top: 50vh; left: calc((50% - 19.5rem) / 2); transform: translate(-50%, -50%);   /* (centred in the left margin, as on every other page) */
+    width: max-content; z-index: 4;
   }
   .description .ab-list > h2:first-of-type { margin-top: 3rem; }
   /* Curated Sequence view */
