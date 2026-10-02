@@ -1173,7 +1173,8 @@
   }
   #map-topo canvas { display: block; width: 100%; height: 100%; opacity: 0; }
   html.topo-go #map-topo canvas { opacity: 1; animation: topo-in 1.8s ease-in-out both; }
-  @keyframes topo-in { from { opacity: 0; } to { opacity: 1; } }   /* the terrain rises into view as the site opens */
+  @keyframes topo-in { from { opacity: 0; } to { opacity: 1; } }
+  html.no-loadin.topo-go #map-topo canvas { animation-duration: .7s; }   /* (opened straight on a view: a quicker rise) */   /* the terrain rises into view as the site opens */
   html.page-map #map-topo { display: block; transition: opacity .6s ease; }
   html.topo-off #map-topo { opacity: 0; }   /* A hides the topography */
   html.page-map #entry { position: relative; z-index: 1; }
@@ -5145,6 +5146,7 @@
     layoutAZ();
     if (document.fonts) document.fonts.ready.then(layoutAZ);
   }
+  var viewPause = 60;   // (before a view's address brings the view up)
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
@@ -5204,7 +5206,8 @@
     // Opened at a view's address: bring the view up (once the opening screen has loaded).
     else if (mapView) (function waitThenShow() {
       if (document.documentElement.classList.contains('loading-topo')) { setTimeout(waitThenShow, 200); return; }
-      setTimeout(function () { if (location.hash === '#the-map/' + MAP_VIEWS[mapView]) { setMapTail(); joinSeqRules(); toMapView(); } }, 60);
+      setTimeout(function () { if (location.hash === '#the-map/' + MAP_VIEWS[mapView]) { setMapTail(); joinSeqRules(); toMapView(); } }, viewPause);
+      viewPause = 60;
     })();
     onScroll();
     trackedId = undefined;
@@ -6152,6 +6155,8 @@
     }
   }
   var keepView = Object.keys(MAP_VIEWS).some(function (v) { return location.hash === mapViewHref(v); });
+  // A view opened directly shows the Map's opening, its terrain risen, for a moment before gliding down to it.
+  if (noLoadIn && keepView) viewPause = 900;
   if (!noLoadIn && !keepView) history.replaceState(null, '', location.pathname + location.search + '#the-map');
   trail[0].hash = location.hash;   // (the Back trail starts from the page opened)
   // …at its top: the browser is not to restore an earlier scroll position on reload.
