@@ -8584,28 +8584,20 @@
     if (location.hash === '#search') { var i = document.getElementById('sp-input'); if (i) i.focus(); }
     else location.hash = '#search';
   }
-  // The About page's tally of the site: every kind of entry, counted as it stands, and the whole.
+  // The About page's tally of the site: its concepts (with those filed in the paradigm and the
+  // conceptual engineerings among them) and the landscape's nodes – together, its entries.
   function totalsHtml() {
-    var sections = childrenOf(ROOT.id);
     var concepts = CONCEPTS.filter(isConcept);
-    var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Map counts them, sections included)
     var filed = concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length;
-    var categories = CONCEPTS.filter(function (c) { return c.kind === 'category' && c.parent !== ROOT.id; }).length;
+    var coined = concepts.filter(function (c) { return c.coined; }).length;
     var nodes = CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length;
-    var glossary = CONCEPTS.filter(function (c) { return c.cpOnly; }).length;
-    var pages = 1 + Object.keys(PAGES).filter(function (id) { return id !== 'infinite' || SHOW_INFINITE; }).length;   // About, the Map, Search…
-    var total = concepts.length + sections.length + categories + nodes + glossary + pages;
-    function row(label, n, sub) { return '<li' + (sub ? ' class="sub"' : '') + '><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
+    function row(label, n) { return '<li><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
     return '<h2>Totals</h2><ul class="totals">' +
       row('Concepts', concepts.length) +
-      row('Filed in the Civilisation Research Paradigm', filed, true) +
+      row('Civilisation Research Paradigm', filed) +
       row('Conceptual Engineerings', coined) +
-      row('Sections', sections.length) +
-      row('Categories', categories) +
-      row('Research Landscape nodes', nodes) +
-      row('Consilience Project glossary definitions', glossary) +
-      row('Site pages', pages) +
-      '<li class="all"><span>Entries in total</span><span class="n">' + total + '</span></li></ul>';
+      row('Research Landscape Nodes', nodes) +
+      '<li class="all"><span>Entries in total</span><span class="n">' + (concepts.length + nodes) + '</span></li></ul>';
   }
   function searchPageHtml() {
     return '<div class="sp">' +
