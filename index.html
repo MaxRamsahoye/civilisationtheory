@@ -451,6 +451,9 @@
     display: block; font-size: 1.12em; font-weight: 700; color: var(--text); margin: 1.3rem 0 0.2rem;
   }
   #tree.tree-az > li:first-child .side-letter-name { margin-top: 0; }
+  /* A letter reached by its key glows briefly in the accent */
+  .side-letter-name, .description .az-letter { transition: color .9s ease; }
+  .side-letter-name.letter-hit, .description .az-letter.letter-hit { color: var(--accent); transition: color .15s ease; }
   #tree.tree-az > li > ul > li > a {
     font-size: inherit; font-weight: inherit; color: var(--muted); margin-top: 0;
   }
@@ -5956,6 +5959,26 @@
     if (t && e.detail > 0 && t === document.activeElement) t.blur();
   });
 
+  // ---------- Letter keys: on the Map's A–Z view, and in the sidebar while the pointer is over it,
+  // each letter jumps to its own heading (or, where no concept starts with it, the next letter
+  // that has one). There Shift with a letter keeps the letter's ordinary shortcut (Shift+T for the theme…).
+  function letterJump(L) {
+    var sidebar = document.getElementById('sidebar'), root = document.documentElement, heads, box;
+    if (!document.body.classList.contains('sidebar-closed') && sidebar.matches(':hover')) {
+      heads = sidebar.querySelectorAll('.side-letter-name'); box = sidebar;
+    } else if (root.classList.contains('page-map') && root.getAttribute('data-index') === 'az') {
+      heads = document.querySelectorAll('#entry .az-letter'); box = null;
+    } else return false;
+    var list = Array.prototype.filter.call(heads, function (h) { return /^[A-Z]$/.test(h.textContent.trim()); })
+      .sort(function (x, y) { return x.textContent.trim().localeCompare(y.textContent.trim()); });   // (the A–Z deals its letters across columns)
+    if (!list.length) return true;
+    var hit = list.filter(function (h) { return h.textContent.trim() >= L; })[0] || list[list.length - 1];
+    if (box) box.scrollTo({ top: box.scrollTop + hit.getBoundingClientRect().top - box.getBoundingClientRect().top - 24, behavior: 'smooth' });
+    else window.scrollTo({ top: window.scrollY + hit.getBoundingClientRect().top - 32, behavior: 'smooth' });
+    hit.classList.add('letter-hit');
+    clearTimeout(hit._hit); hit._hit = setTimeout(function () { hit.classList.remove('letter-hit'); }, 700);
+    return true;
+  }
   // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless, A = topography, 1–5 / Enter = the Map's views ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -5982,6 +6005,8 @@
       e.preventDefault();
       var mapOpening = document.documentElement.classList.contains('page-map') && !document.documentElement.classList.contains('map-past-opening');
       if (!e.repeat && !mapOpening && !document.body.classList.contains('footer-in-view') && !document.documentElement.classList.contains('hudless')) sideBtn.click();
+    } else if (/^[a-z]$/i.test(e.key) && !e.shiftKey && letterJump(e.key.toUpperCase())) {
+      e.preventDefault();
     } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
       document.getElementById('theme-toggle').click();
       var r = document.documentElement;
