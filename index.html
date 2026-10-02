@@ -1126,13 +1126,14 @@
   html.page-map .description .ab-list .ab-kicker + .ce-title { margin-top: 0; white-space: nowrap; font-size: min(2.1rem, calc((100vw - 2.4rem) / 18.6)); }   /* (the title on one line, at any width) */
   .description .ab-list em { font: inherit; font-style: italic; letter-spacing: inherit; }   /* (italics at the size and weight of their text) */
   /* A sidenote's number: in the text, and again at the head of the note */
-  .description sup.sn-ref, .description .sidenote .sn-num { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62em; font-weight: 300; line-height: 0; }
+  .description sup.sn-ref, .description .sidenote .sn-num { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62em; font-weight: 400; color: var(--text); line-height: 0; transition: color .25s ease; }
   .description sup.sn-ref { margin-left: 0.1em; font-size: 0.5em; }
-  .description .ab-list .sidenote { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; line-height: 1.55; }
+  .description .ab-list .sidenote { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.78rem; line-height: 1.55; }
   .description .sidenote .sn-num { vertical-align: super; margin-right: 0.3em; }
   /* Pointing at a note's number, its sentence or the note itself lights up the pair together */
   .description .sn-anchor, .description .sidenote[data-sn] { border-radius: 3px; transition: background-color .25s ease, box-shadow .25s ease; }
   .description .sn-anchor.sn-on { background: var(--hl); box-shadow: 0 0 0 2px var(--hl); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .description .sn-on sup.sn-ref, .description .sidenote.sn-on .sn-num { color: var(--accent); }   /* (the numbers in the accent) */
   .description .sidenote.sn-on { background: var(--hl); box-shadow: 0 0 0 0.45rem var(--hl); }
   /* (its lists are prose lists, not the other views' columns of links) */
   .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
