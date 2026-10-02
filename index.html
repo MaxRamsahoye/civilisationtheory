@@ -926,6 +926,7 @@
   .description ul.nested { list-style: none; padding-left: 0; }
   .description ul.nested ul { list-style: none; padding-left: 1.1rem; margin: 0.2rem 0; }
   .description ul.nested li { margin: 0.25rem 0; }
+  .description ul.nested .nested-self { font-weight: 600; }
   p { margin: 0 0 1.1rem; }
   /* Body text: 1.4 line spacing, 15px between paragraphs (and list items) */
   .description { font-size: 1.1rem; line-height: 1.4; }
@@ -4590,7 +4591,8 @@
   function endSectionsHtml(c) {
     var out = '';
     if (c.refs && c.refs.length) out += '<h2 id="references">References</h2><ol class="refs">' + c.refs.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ol>';
-    if (STRUCT_KIDS[c.id]) out += '<h2 id="nested-concepts">Nested Concepts</h2><ul class="nested">' + nestedHtml(STRUCT_KIDS[c.id]) + '</ul>';
+    // (headed by the concept itself, so the nesting shows)
+    if (STRUCT_KIDS[c.id]) out += '<h2 id="nested-concepts">Nested Concepts</h2><ul class="nested"><li><span class="nested-self">' + esc(c.title) + '</span><ul>' + nestedHtml(STRUCT_KIDS[c.id]) + '</ul></li></ul>';
     return out;
   }
   function isConcept(c) { return c !== ROOT && c.kind !== 'category' && !c.cpOnly; }
