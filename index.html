@@ -256,6 +256,7 @@
   #back-btn svg { stroke-linecap: butt; stroke-width: 1.1px; }
   html.page-home #back-btn { display: none; }
   #back-btn:disabled { opacity: 0.25; pointer-events: none; }
+  #back-btn.pressed:disabled { opacity: 1; }   /* (dims only once its press has played out) */
   /* One icon per theme: sun (white), moon (black), filled sun (sepia), moon and star (blue) */
   #theme-toggle svg { display: none; width: 1.25rem; height: 1.25rem; }
   :root[data-theme="light"] #theme-toggle .i-light,
@@ -574,7 +575,9 @@
   html.page-map #site-header { background: transparent; }
   /* …until the reader scrolls past the opening screen, when it appears as elsewhere */
   html.page-map:not(.map-past-opening) #sidebar-toggle { opacity: 0; pointer-events: none; }
-  html.page-map #back-btn { display: none; }   /* the Map is the front page: no Back there */
+  html.page-map #back-btn:not(.pressed) { display: none; }   /* the Map is the front page: no Back there */
+  html.page-map #back-btn.pressed { animation: back-away .6s ease-in forwards; }   /* (arriving there by Back, it plays out its press and fades) */
+  @keyframes back-away { 0%, 55% { opacity: 1; } 100% { opacity: 0; } }
   /* Hudless mode (H): only the text itself – no header, footer, sidebar, icons, contents or tree string */
   /* The interface fades out (and back in); nothing moves, so the text stays exactly where it is */
   html.hudless #site-header, html.hudless #site-footer, html.hudless #sidebar, html.hudless #scrim,
@@ -702,6 +705,10 @@
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none; }
   ::view-transition-group(ui-sidebar), ::view-transition-group(ui-toggle), ::view-transition-group(ui-back),
   ::view-transition-group(ui-theme), ::view-transition-group(ui-top), ::view-transition-group(ui-progress) { z-index: 5; }
+  /* …shown live throughout, so a press effect begun on one of them keeps running instead of freezing in
+     the old page's snapshot */
+  ::view-transition-old(ui-sidebar), ::view-transition-old(ui-toggle), ::view-transition-old(ui-back),
+  ::view-transition-old(ui-theme), ::view-transition-old(ui-top), ::view-transition-old(ui-progress) { display: none; }
   ::view-transition-old(root) { animation: page-fade-out .22s ease-in both; }
   ::view-transition-new(root) { animation: page-fade-in .32s ease-out .2s both; }
   @keyframes page-fade-out { to { opacity: 0; } }
