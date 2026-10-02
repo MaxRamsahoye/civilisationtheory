@@ -4830,7 +4830,7 @@
     // heart, then ease back into place. For a while (IMMUNE) the click's hill is its own: the cursor's
     // hill passes over it without adding to it, and only afterwards blends with it again.
     var hover = { x: 0, y: 0, tx: 0, ty: 0, on: false, h: 0 }, pushes = [];
-    var HILL = 0.34, HILL_R = 117, PUSH = 150, PUSH_R = 165, PUSH_LIFE = 4, IMMUNE = 1.6;
+    var HILL = 0.34, HILL_R = 117, PUSH = 150, PUSH_R = 165, PUSH_LIFE = 4, IMMUNE = 1.6, CLICK_HILL = 0.6, CLICK_R = 80;
     function lift(x, y) {
       var z = 0, dx, dy, k, r;
       if (hover.h > 0.001) {
@@ -4846,7 +4846,7 @@
       }
       for (k = 0; k < pushes.length; k++) {   // each click's own hill, rising with the push and settling with it
         r = pushes[k]; dx = x - r.x; dy = y - r.y;
-        z += HILL * r.hill * Math.exp(-(dx * dx + dy * dy) / (HILL_R * HILL_R));
+        z += CLICK_HILL * r.hill * Math.exp(-(dx * dx + dy * dy) / (CLICK_R * CLICK_R));
       }
       return z;
     }
@@ -4905,7 +4905,7 @@
         var f = 1 - Math.exp(-dt / 1000 * 10);   // (a slight trail behind the cursor)
         hover.x += (hover.tx - hover.x) * f; hover.y += (hover.ty - hover.y) * f;
         hover.h += ((hover.on ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * (hover.on ? 6.5 : 1.7)));
-        for (var k = pushes.length - 1; k >= 0; k--) { var r = pushes[k]; r.age += dt / 1000; r.amp = shove(r.age); r.hill = (1 - Math.exp(-r.age * 8)) * Math.exp(-r.age * 0.9); if (r.age > PUSH_LIFE) pushes.splice(k, 1); }
+        for (var k = pushes.length - 1; k >= 0; k--) { var r = pushes[k]; r.age += dt / 1000; r.amp = shove(r.age); r.hill = (1 - Math.exp(-r.age * 8)) * Math.exp(-r.age * 0.55); if (r.age > PUSH_LIFE) pushes.splice(k, 1); }
         if (frame++ % 2 === 0) draw(now);
       }
       if (document.documentElement.classList.contains('page-map') && !still.matches) raf = requestAnimationFrame(loop);
