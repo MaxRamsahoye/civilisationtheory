@@ -1253,8 +1253,15 @@
   .description .struct-sub > span { color: var(--muted); }
   .description .struct-drop details > summary { list-style: none; cursor: pointer; }
   .description .struct-drop details > summary::-webkit-details-marker { display: none; }
-  .description .struct-drop details > summary::before { content: '▸'; display: inline-block; width: 0.9em; margin-left: -0.9em; font-size: 0.8em; color: var(--muted); transition: transform .2s ease; }
-  .description .struct-drop details[open] > summary::before { transform: rotate(90deg); }
+  /* The dropdown's marker: a thin chevron in the line icons' style, pointing right, turning down when open */
+  .description .struct-drop details > summary { position: relative; }
+  .description .struct-drop details > summary::before {
+    content: ''; position: absolute; left: -1.05em; top: 0.42em; width: 0.42em; height: 0.42em;
+    border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+    transform: rotate(-45deg); transition: transform .2s ease, border-color .2s ease;
+  }
+  .description .struct-drop details > summary:hover::before { border-color: var(--text); }
+  .description .struct-drop details[open] > summary::before { transform: translate(0.08em, -0.1em) rotate(45deg); }
   /* The new structure's sections: their groups in three columns, every level at one size */
   html.page-map .description .ce-list.cs-list ul.struct-cols { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 2.4rem; line-height: 1.3; }
   html.page-map .description .ce-list.cs-list .struct-cols ul { list-style: none; padding: 0 0 0 1rem; margin: 0.55rem 0 0; font-size: 1em; columns: 1; }
