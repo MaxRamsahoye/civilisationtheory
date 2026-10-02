@@ -912,6 +912,12 @@
     margin: 2.4rem 0 0.8rem;
   }
   h1, h2 { scroll-margin-top: 1.5rem; }
+  /* An entry's closing References and Nested Concepts */
+  .description ol.refs { padding-left: 1.4rem; font-size: 0.92em; }
+  .description ol.refs li { margin: 0.35rem 0; padding-left: 0.2rem; }
+  .description ul.nested { list-style: none; padding-left: 0; }
+  .description ul.nested ul { list-style: none; padding-left: 1.1rem; margin: 0.2rem 0; }
+  .description ul.nested li { margin: 0.25rem 0; }
   p { margin: 0 0 1.1rem; }
   /* Body text: 1.4 line spacing, 15px between paragraphs (and list items) */
   .description { font-size: 1.1rem; line-height: 1.4; }
@@ -1599,6 +1605,7 @@
    * page listing its members, but not counted as a concept); order sorts siblings before the
    * alphabetical default; ref holds sources for internal reference only (never displayed);
    * coined: true lists the entry under Conceptual Engineerings (the author's own novel terms).
+   * refs: the works the entry draws on, shown as its References (full citations, unlike ref).
    * To add a concept, append an object with a parent id — the tree, tree string,
    * index and concept count all update automatically.
    */
@@ -1776,6 +1783,7 @@
     },
     {
       id: 'moloch',
+      refs: ['Scott Alexander, “Meditations on Moloch”, <em>Slate Star Codex</em> (2014).', 'Allen Ginsberg, <em>Howl and Other Poems</em> (1956).'],
       title: 'Moloch: God of Game-Theory',
       parent: 'multipolar-trap',
       html: '<p><em>Moloch</em> is a personification of the <a href="#multipolar-trap">multipolar trap</a>: the impersonal force by which competition sacrifices every value that does not contribute to winning. The name comes from Allen Ginsberg’s poem <em>Howl</em> (1956) and was given its current sense by Scott Alexander’s essay <em>Meditations on Moloch</em> (2014), which describes how arms races, market pressures and evolutionary selection each drive actors to trade away what they care about for competitive advantage. To speak of Moloch is to recognise that no one needs to intend a harmful outcome for a system to produce it.</p>'
@@ -2050,6 +2058,7 @@
     },
     {
       id: 'ai-exterminism',
+      refs: ['E. P. Thompson, “Notes on Exterminism, the Last Stage of Civilization”, <em>New Left Review</em> I/121 (1980).'],
       title: 'AI-Exterminism',
       coined: true,
       parent: 'complex-world-system-dynamics',
@@ -2115,6 +2124,7 @@
     },
     {
       id: 'the-technium',
+      refs: ['Kevin Kelly, <em>What Technology Wants</em> (2010).'],
       title: 'The Technium',
       parent: 'technics-and-automation',
       ref: 'Kelly',
@@ -2129,6 +2139,7 @@
     },
     {
       id: 'accelerationism',
+      refs: ['Nick Land, <em>Fanged Noumena: Collected Writings 1987–2007</em> (2011).'],
       title: 'Accelerationism',
       parent: 'technics-and-automation',
       ref: 'Land',
@@ -2179,6 +2190,7 @@
     },
     {
       id: 'military-economic-adaptationism',
+      refs: ['Allan Dafoe, “On Technological Determinism: A Typology, Scope Conditions, and a Mechanism”, <em>Science, Technology, &amp; Human Values</em> 40, no. 6 (2015).'],
       title: 'Military-Economic Adaptationism',
       parent: 'capital-and-growth',
       html: '<p><em>Military-economic adaptationism</em> is Allan Dafoe’s term, from “On Technological Determinism” (2015), for the view that the dominant institutions of civilisation have been selected above all for military and economic competitiveness. Societies that grew wealthier and stronger displaced or absorbed those that did not, so the forms that prevail are adaptations to intergroup competition – not necessarily to human wellbeing or long-term viability.</p>'
@@ -2220,6 +2232,7 @@
     },
     {
       id: 'economic-superorganism',
+      refs: ['Nate Hagens, “Economics for the Future – Beyond the Superorganism”, <em>Ecological Economics</em> 169 (2020).'],
       title: 'The Economic Superorganism',
       parent: 'capital-and-growth',
       ref: 'Hagens and King',
@@ -2308,6 +2321,7 @@
     },
     {
       id: 'circumscription-theory',
+      refs: ['Robert L. Carneiro, “A Theory of the Origin of the State”, <em>Science</em> 169, no. 3947 (1970).'],
       title: 'Circumscription Theory',
       parent: 'initial-conditions',
       ref: 'Carneiro',
@@ -2315,6 +2329,7 @@
     },
     {
       id: 'agriculturalisation-trap',
+      refs: ['Yuval Noah Harari, <em>Sapiens: A Brief History of Humankind</em> (2011; English edition 2014), ch. 5, “History’s Biggest Fraud”.'],
       title: 'Agriculture Trap',
       parent: 'initial-conditions',
       ref: 'Harari',
@@ -2334,6 +2349,7 @@
     },
     {
       id: 'exterminism',
+      refs: ['E. P. Thompson, “Notes on Exterminism, the Last Stage of Civilization”, <em>New Left Review</em> I/121 (1980).'],
       title: 'Exterminism',
       parent: 'structural-teleology',
       ref: 'Thompson',
@@ -2341,6 +2357,7 @@
     },
     {
       id: 'exhaustionism',
+      refs: ['Blake Stewart, “Notes on Exhaustionism, the Latest Moment of the Global Organic Crisis”, <em>Race &amp; Class</em> (2021). <a href="https://journals.sagepub.com/doi/10.1177/03063968211054857">doi:10.1177/03063968211054857</a>'],
       title: 'Exhaustionism',
       parent: 'structural-teleology',
       ref: 'Stewart',
@@ -2354,6 +2371,7 @@
     },
     {
       id: 'vulnerable-world-hypothesis',
+      refs: ['Nick Bostrom, “The Vulnerable World Hypothesis”, <em>Global Policy</em> 10, no. 4 (2019).'],
       title: 'The Vulnerable World Hypothesis',
       parent: 'civilisational-mechanics',
       ref: 'Bostrom',
@@ -2368,6 +2386,7 @@
     },
     {
       id: 'technological-self-destruction-hypothesis',
+      refs: ['I. S. Shklovskii and Carl Sagan, <em>Intelligent Life in the Universe</em> (1966).', 'Carl Sagan, <em>Cosmos</em> (1980).'],
       title: 'The Technological Self-Destruction Hypothesis',
       parent: 'vulnerable-world-hypothesis',
       ref: 'Sagan',
@@ -2375,6 +2394,7 @@
     },
     {
       id: 'fragile-world-hypothesis',
+      refs: ['David Manheim, “The Fragile World Hypothesis: Complexity, Fragility, and Systemic Existential Risk”, <em>Futures</em> 122 (2020).'],
       title: 'The Fragile World Hypothesis',
       parent: 'vulnerable-world-hypothesis',
       ref: 'Manheim',
@@ -2388,6 +2408,7 @@
     },
     {
       id: 'what-progress-wants',
+      refs: ['Kevin Kelly, <em>What Technology Wants</em> (2010).'],
       title: 'What Progress Wants',
       parent: 'hyper-agents',
       ref: 'Kingsnorth',
@@ -2395,6 +2416,7 @@
     },
     {
       id: 'leviathan',
+      refs: ['Thomas Hobbes, <em>Leviathan</em> (1651).'],
       title: 'Leviathan',
       parent: 'hyper-agents',
       ref: 'Hobbes',
@@ -2402,6 +2424,7 @@
     },
     {
       id: 'kraken',
+      refs: ['Robert Fredona and Sophus A. Reinert, “Leviathan and Kraken: States, Corporations, and Political Economy”, <em>History and Theory</em> 59, no. 2 (2020).', 'Thomas Hobbes, <em>Leviathan</em> (1651).'],
       title: 'Kraken',
       parent: 'hyper-agents',
       ref: 'Fredona and Reinert',
@@ -2409,6 +2432,7 @@
     },
     {
       id: '4e-cognition',
+      refs: ['Francisco J. Varela, Evan Thompson and Eleanor Rosch, <em>The Embodied Mind: Cognitive Science and Human Experience</em> (1991).', 'Andy Clark and David Chalmers, “The Extended Mind”, <em>Analysis</em> 58, no. 1 (1998).'],
       title: '4E Cognition',
       parent: '4e-ontology',
       html: '<p><em>4E cognition</em> is the family of approaches in cognitive science holding that the mind is <em>embodied</em> (shaped by the body), <em>embedded</em> (dependent on its environment), <em>enacted</em> (brought forth through activity) and <em>extended</em> (reaching into tools and other people). It developed from Francisco Varela, Evan Thompson and Eleanor Rosch’s <em>The Embodied Mind</em> (1991) and Andy Clark and David Chalmers’s “The Extended Mind” (1998).</p><p>Against the picture of the mind as a computer sealed in the skull, it treats cognition as something that happens between an organism and its world. It is the source on which the map’s other 4E concepts build.</p>'
@@ -2427,6 +2451,7 @@
     },
     {
       id: 'spontaneous-order',
+      refs: ['Adam Ferguson, <em>An Essay on the History of Civil Society</em> (1767).', 'Michael Polanyi, <em>The Logic of Liberty</em> (1951).', 'F. A. Hayek, <em>Law, Legislation and Liberty</em>, vol. 1, <em>Rules and Order</em> (1973).'],
       title: 'Spontaneous Order',
       parent: 'civilisational-mechanics',
       html: '<p><em>Spontaneous order</em> is order that emerges from the interaction of many individuals following their own purposes, without anyone designing it: languages, markets, common law, the paths worn across a field. The idea runs from the Scottish Enlightenment – Adam Ferguson’s “the result of human action, but not of human design” – to Michael Polanyi, who coined the term, and Friedrich Hayek, who made it central to his defence of the market.</p><p>Its critics accept that such orders arise but deny that they are reliably benign: the same processes can produce disorder, or orders no one would choose.</p>'
@@ -2475,6 +2500,7 @@
     },
     {
       id: 'primitive-accumulation',
+      refs: ['Karl Marx, <em>Capital: A Critique of Political Economy</em>, vol. 1 (1867), part VIII.'],
       title: 'Primitive Accumulation',
       parent: 'capitalism',
       ref: 'Marx',
@@ -2488,12 +2514,14 @@
     },
     {
       id: 'late-stage-capitalism',
+      refs: ['Ernest Mandel, <em>Late Capitalism</em> (1972).', 'Fredric Jameson, <em>Postmodernism, or, the Cultural Logic of Late Capitalism</em> (1991).'],
       title: 'Late-Stage Capitalism',
       parent: 'capitalism',
       html: '<p><em>Late-stage capitalism</em> – late capitalism, from Werner Sombart’s <em>Spätkapitalismus</em> – names a period in which capitalism is understood to have reached a mature or declining phase. Ernest Mandel’s <em>Late Capitalism</em> (1972) and Fredric Jameson’s <em>Postmodernism, or, the Cultural Logic of Late Capitalism</em> (1991) gave it its modern sense; in popular usage the phrase now names the absurdities and indignities of a market reaching into every corner of life.</p>'
     },
     {
       id: 'techno-feudalism',
+      refs: ['Cédric Durand, <em>Techno-féodalisme: Critique de l’économie numérique</em> (2020).', 'Yanis Varoufakis, <em>Technofeudalism: What Killed Capitalism</em> (2023).'],
       title: 'Techno-Feudalism',
       parent: 'capitalism',
       html: '<p><em>Techno-feudalism</em> is the thesis, advanced by Yanis Varoufakis in <em>Technofeudalism</em> (2023) and Cédric Durand in <em>Techno-féodalisme</em> (2020), that digital platforms have begun to replace capitalism with something closer to feudalism. Profit from producing goods for markets gives way to rent extracted from those who must use the platforms – “cloud capital” – so that users and businesses become something like vassals of the owners of the digital estate.</p>'
@@ -2975,6 +3003,7 @@
     },
     {
       id: 'root-socio-economic-orientation',
+      refs: ['Peter Joseph, <em>The New Human Rights Movement: Reinventing the Economy to End Oppression</em> (2017).'],
       title: 'Root Socio-Economic Orientation',
       parent: 'capital-and-growth',
       ref: 'Joseph',
@@ -3101,6 +3130,7 @@
     },
     {
       id: 'surveillance-capitalism',
+      refs: ['Shoshana Zuboff, <em>The Age of Surveillance Capitalism: The Fight for a Human Future at the New Frontier of Power</em> (2019).'],
       title: 'Surveillance Capitalism',
       parent: 'power-and-control',
       ref: 'Zuboff',
@@ -4357,6 +4387,22 @@
   function byTitle(a, b) { return sortKey(a).localeCompare(sortKey(b)); }
   // cpOnly: the Consilience Project's own version of a concept the map already has; it appears
   // only in the Consilience Project view, never in the tree, A–Z, counts or search.
+  // A concept entry closes with its References (the works it draws on, from refs) and its Nested
+  // Concepts (those filed beneath it in the Civilisation Research Paradigm); either is left out when empty.
+  function nestedHtml(list) {
+    return list.map(function (x) {
+      if (typeof x === 'string') x = [x, []];
+      var c = byId[x[0]], kids = x[1] || [];
+      if (!c) return '';
+      return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a>' + (kids.length ? '<ul>' + nestedHtml(kids) + '</ul>' : '') + '</li>';
+    }).join('');
+  }
+  function endSectionsHtml(c) {
+    var out = '';
+    if (c.refs && c.refs.length) out += '<h2 id="references">References</h2><ol class="refs">' + c.refs.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ol>';
+    if (STRUCT_KIDS[c.id]) out += '<h2 id="nested-concepts">Nested Concepts</h2><ul class="nested">' + nestedHtml(STRUCT_KIDS[c.id]) + '</ul>';
+    return out;
+  }
   function isConcept(c) { return c !== ROOT && c.kind !== 'category' && !c.cpOnly; }
   function childrenOf(id) {
     return CONCEPTS.filter(function (c) { return c.parent === id && !c.cpOnly; })
@@ -4380,12 +4426,12 @@
   };
   // Each concept's place in the Civilisation Research Paradigm, as filed above: its parent there
   // (a concept, or a plain subheading), or nothing if it has not yet been filed.
-  var STRUCT_PARENT = {};
+  var STRUCT_PARENT = {}, STRUCT_KIDS = {};   // (STRUCT_KIDS: the concepts nested beneath each, as filed)
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
     (function walk(list, parent) {
       list.forEach(function (x) {
         if (typeof x === 'string') { if (!(x in STRUCT_PARENT)) STRUCT_PARENT[x] = parent; return; }
-        if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT)) STRUCT_PARENT[x[0]] = parent; walk(x[1] || [], x[0]); return; }
+        if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT)) STRUCT_PARENT[x[0]] = parent; if (x[1] && x[1].length && !STRUCT_KIDS[x[0]]) STRUCT_KIDS[x[0]] = x[1]; walk(x[1] || [], x[0]); return; }
         walk(x.items, { title: x.head, heading: true, parent: parent });
       });
     })(NEW_STRUCTURE[sec], sec);
@@ -5067,6 +5113,7 @@
       tagsHtml(c) +
       '<h1>' + (c.id === 'the-map' ? 'The <em>Civilisational</em> Map' : esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title)) + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
+      (isConcept(c) && !PAGES[c.id] ? endSectionsHtml(c) : '') +
       '</div>';
     // Slides snap gently into place as you scroll.
     document.documentElement.classList.toggle('snap-slides', c.id === 'infinite');
