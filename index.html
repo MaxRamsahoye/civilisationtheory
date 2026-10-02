@@ -7135,8 +7135,8 @@
       desc: 'The loose ecosystem of thinkers, institutes and communities working on the metacrisis through integrative metatheory, sensemaking and cultural renewal.', groups: [
       { name: 'Individuals', items: ['daniel-schmachtenberger', 'zak-stein', 'nate-hagens', 'paul-kingsnorth', 'charles-eisenstein', 'ken-wilber'] },
       { name: 'Organisations', items: [
-        { head: 'I', items: [['civilization-research-institute', ['the-consilience-project']], 'institute-of-applied-metatheory', 'center-for-world-philosophy-and-religion', 'life-itself', 'perspectiva'] },
-        { head: 'II', items: ['integral-institute', 'center-for-integral-wisdom', 'centre-for-critical-realism', 'santa-fe-institute'] }] },
+        { head: 'I', quiet: true, items: [['civilization-research-institute', ['the-consilience-project']], 'institute-of-applied-metatheory', 'center-for-world-philosophy-and-religion', 'life-itself', 'perspectiva'] },
+        { head: 'II', quiet: true, items: ['integral-institute', 'center-for-integral-wisdom', 'centre-for-critical-realism', 'santa-fe-institute'] }] },
       { name: 'Movements', items: ['metamodernism', 'second-renaissance', 'integral-life', 'deep-ecology', 'web-3', 'the-emergentsia', 'the-liminal-web'] }] },
     { title: 'PARA-academic space', entry: 'para-academic-space',
       desc: 'The research and advocacy communities that grew up beside the universities – rationalism, effective altruism, progress studies and existential risk studies – and shaped AI alignment and macrostrategy.', groups: [
@@ -7183,7 +7183,7 @@
           (function seek(list, trail) {
             list.forEach(function (x) {
               if (found) return;
-              if (x && !Array.isArray(x) && typeof x === 'object') { seek(x.items, trail.concat([{ title: x.head, heading: true }])); return; }
+              if (x && !Array.isArray(x) && typeof x === 'object') { seek(x.items, x.quiet ? trail : trail.concat([{ title: x.head, heading: true }])); return; }   // (a quiet subgroup is left out of tree strings)
               var id = typeof x === 'string' ? x : x[0];
               if (id === c.id) { found = trail; return; }
               if (Array.isArray(x) && byId[id]) seek(x[1] || [], trail.concat([byId[id]]));
