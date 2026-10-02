@@ -938,6 +938,9 @@
     font-size: 0.85rem;
     line-height: 1.35;
   }
+  /* The contents and sidenotes fade in whenever they appear (with a page, a view, or past the Map's opening) */
+  @keyframes margin-fade-in { from { opacity: 0; } }
+  #toc:not([hidden]), .description .sidenote { animation: margin-fade-in .7s ease .15s both; }
   #toc .toc-title {
     display: block;
     font-size: 1.2em;
@@ -8783,6 +8786,7 @@
     var head = tocHeads[0];
     // An entry without subheadings has nothing to navigate, so no contents.
     tocEl.hidden = tocHeads.length < 2;
+    tocEl.style.animation = 'none'; void tocEl.offsetWidth; tocEl.style.animation = '';   // (it fades in afresh with each page)
     tocEl.innerHTML = '<a href="#" class="toc-title" data-target="' + head.id + '">' + esc(head.textContent) + '</a><ul>' +
       tocHeads.slice(1).map(function (h) {
         return '<li><a href="#" data-target="' + h.id + '">' + esc(h.textContent) + '</a></li>';
