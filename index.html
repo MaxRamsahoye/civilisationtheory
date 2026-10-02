@@ -1107,6 +1107,16 @@
   :root[data-index="ab"] .az-view,
   :root[data-index="ab"] .ce-list:not(.ab-list) { display: none; }
   .description .ab-list { max-width: 39rem; margin-left: auto; margin-right: auto; }
+  .description .ab-list .ab-kicker {
+    margin: 5.5rem 0 0.6rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  html.page-map .description .ab-list .ab-kicker + .ce-title { margin-top: 0; }
+  .description .ab-list em { font: inherit; font-style: italic; letter-spacing: inherit; }   /* (italics at the size and weight of their text) */
+  /* A sidenote's number: in the text, and again at the head of the note */
+  .description sup.sn-ref, .description .sidenote .sn-num { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62em; font-weight: 600; line-height: 0; }
+  .description sup.sn-ref { margin-left: 0.1em; }
+  .description .sidenote .sn-num { vertical-align: super; margin-right: 0.3em; }
   /* (its lists are prose lists, not the other views' columns of links) */
   .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
   .description .ce-list.ab-list li { margin: 0 0 0.4rem; }
@@ -1844,13 +1854,14 @@
       title: 'Civilisation Theory',
       parent: null,
       html: [
-        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>',
+        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure).</p>',
 
         '<h2>A Conceptual Adaptive System</h2>',
         '<p>This wiki site serves to create a <em>conceptual adaptive system</em> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
 
         '<h2>Project Context</h2>',
-        '<p>The Civilisation Theory Map is inspired by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> (ported over to this site <a href="#the-map/consilience-project">here</a>) and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>. More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
+        '<aside class="sidenote"><span class="sn-num">1</span>The Civilisational Map is an independent project that is not affiliated with the <a href="#civilization-research-institute">Civilization Research Institute</a>.</aside>',
+        '<p>The Civilisation Theory Map is inspired by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> (ported over to this site <a href="#the-map/consilience-project">here</a>) and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>.<sup class="sn-ref">1</sup> More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
         '<ul>',
         '<li><strong>The Meta-space:</strong> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>',
         '<li><strong>The PARA-academic space:</strong> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>',
@@ -1862,7 +1873,6 @@
         '<!--TOTALS-->',
 
         '<h2 class="has-icon"><a class="h-icon" href="https://maxramsahoye.github.io/max/" aria-label="Max Ramsahoye"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="10,90 10,10 30,10 50,40 70,10 90,10 90,90 70,90 70,46 50,74 30,46 30,90"/></svg></a>The Cartographer</h2>',
-        '<aside class="sidenote">The Civilisational Map is an independent project that is not affiliated with the <a href="#civilization-research-institute">Civilization Research Institute</a>.</aside>',
         '<p><em>Civilisational</em> (The Civilisation Theory Map) is a conceptual architecture and artifact created by <a href="https://maxramsahoye.github.io/max/">Max Ramsahoye</a> (with the assistance of Claude for the purposes of speed).</p>',
         '<h3 class="sub-head">A Note on AI Use</h3>',
         '<p>The selection and structuring of the concepts are the curator’s own. At this stage, Claude is used to initially produce the entries, which allows hundreds to be added in a short period of time (versus taking a lot longer for a human to research and write each individual entry).</p>',
@@ -7943,7 +7953,7 @@
           }).join('') + '</ul>' : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
     // About the Project: the site's introduction (the root entry), as a view of the Map.
-    var ab = '<div class="ce-list ab-list"><h3 class="ce-title">About the Project</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
+    var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
