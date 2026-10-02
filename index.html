@@ -1258,6 +1258,10 @@
   /* A subheading in the new structure (no entry of its own) */
   .description .struct-head > span { font-weight: 700; }
   .description .struct-sub > span { color: var(--muted); }
+  /* The landscape's groups and their subgroups set well apart from the entries beneath them */
+  html.page-map .description .rl-list .struct-cols > li.struct-head > span { display: block; font-size: 1.22em; font-weight: 700; margin-bottom: 0.2rem; }
+  html.page-map .description .rl-list .struct-sub > span { display: block; font-style: italic; font-weight: 600; font-size: 1.05em; color: var(--text); margin: 0.5rem 0 0.1rem; }
+  html.page-map .description .rl-list .struct-cols li a { font-weight: 400; font-size: 0.97em; }
   html.page-map .description .ce-list.cs-list .struct-cols > li.struct-plain > ul { padding-left: 0; margin-top: 0; }
   .description .struct-drop details > summary { list-style: none; cursor: pointer; }
   .description .struct-drop details > summary::-webkit-details-marker { display: none; }
@@ -6844,6 +6848,70 @@
       parent: 'civilisation-research-landscape',
       tags: ['landscape'],
       html: '<p><em>Jan Kulveit</em> is a Czech researcher who leads the Alignment of Complex Systems Research Group in Prague, working on <a href="#hierarchical-agency">hierarchical agency</a> and <a href="#gradual-disempowerment">gradual disempowerment</a>.</p>'
+    },
+    {
+      id: 'meta-space',
+      title: 'Meta-space',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p>The <em>meta-space</em> is the loose ecosystem of thinkers, institutes, communities and media working on the <a href="#metacrisis">metacrisis</a> through integrative metatheory, sensemaking and cultural renewal. It draws on <a href="#integral-theory">integral theory</a>, <a href="#critical-realism">critical realism</a>, <a href="#metamodernism">metamodernism</a>, systems thinking and contemplative practice, and has been named in many ways – the liminal web, the sensemaking web, the emergentsia, the metamodern movement.</p><p>What its members share is the conviction that the crises of the present cannot be solved at the level of policy alone, but require changes in worldview, culture and consciousness – a shift of civilisational paradigm.</p>'
+    },
+    {
+      id: 'para-academic-space',
+      title: 'PARA-academic space',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p>The <em>PARA-academic space</em> is the network of research and advocacy communities that grew up beside the universities rather than within them: <a href="#the-rationalist-community">rationalism</a>, <a href="#effective-altruism">effective altruism</a>, <a href="#progress-studies">progress studies</a> and <a href="#existential-risk-studies">existential risk studies</a>. Funded largely by philanthropy and organised through blogs, forums, institutes and grant-makers, it moves faster than academia and has shaped the fields of <a href="#ai-alignment">AI alignment</a> and <a href="#macrostrategy">macrostrategy</a>.</p><p>Its style is quantitative and analytic – expected value, forecasting, decision theory – in contrast to the integrative, cultural emphasis of the <a href="#meta-space">meta-space</a>.</p>'
+    },
+    {
+      id: 'second-renaissance',
+      title: 'Second Renaissance',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p>The <em>Second Renaissance</em> is the movement, initiated by Rufus Pollock and <a href="#life-itself">Life Itself</a>, that argues the crises of the present call for a transformation of culture and consciousness comparable to the Renaissance – a shift in worldview from the modern paradigm to a wiser, more relational one, pursued through inner development, community and research.</p>'
+    },
+    {
+      id: 'integral-life',
+      title: 'Integral Life',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Integral Life</em> is the media platform and community built around Ken Wilber’s <a href="#integral-theory">integral theory</a>, publishing courses, dialogues and practices that apply the integral framework to personal development, culture and politics.</p>'
+    },
+    {
+      id: 'deep-ecology',
+      title: 'Deep Ecology',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Deep ecology</em> is the environmental philosophy founded by Arne Næss in 1973, which holds that all living beings have intrinsic value independent of their usefulness to humans. It distinguishes itself from “shallow” environmentalism concerned only with human interests, and calls for a fundamental change in humanity’s relationship with nature.</p>'
+    },
+    {
+      id: 'web-3',
+      title: 'Web 3.0',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Web 3.0</em> names the vision of an internet built on decentralised technologies – blockchains, cryptographic tokens and peer-to-peer protocols – in which users own their data and coordinate without central platforms. In the meta-space it is explored as infrastructure for new forms of governance, funding and collective action, as well as criticised for its speculation.</p>'
+    },
+    {
+      id: 'the-emergentsia',
+      title: 'The Emergentsia',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>The Emergentsia</em> is Brent Cooper’s term (2019) for a new class of intellectuals emerging to grapple with the metacrisis and help manage the transition – to emergence, he wrote, what the intelligentsia was to intelligence. It names a constellation of sensemaking approaches attempting to synthesise modernity and postmodernity into metamodernity.</p>'
+    },
+    {
+      id: 'the-liminal-web',
+      title: 'The Liminal/Sensemaking/Intellectual Deep Web',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>The liminal web</em> is Joe Lightfoot’s name (2021) for an emergent subculture of sensemakers, meta-theorists and systems poets – writers, podcasters and community builders with a high crossover of perspectives, who occupy a threshold between a dying culture and an emerging one. The same constellation has been called the <em>sensemaking web</em> and the <em>intellectual deep web</em>.</p>'
     }
   ];
 
@@ -7058,15 +7126,19 @@
   // The Civilisation Research Landscape: its sections, each with its individuals, organisations and
   // movements (landscape nodes, by id; nested and grouped as in the paradigm's structure).
   var LANDSCAPE = [
-    { title: 'Cybernetic Economics', entry: 'cybernetic-economics', groups: [
+    { title: 'Cybernetic Economics', entry: 'cybernetic-economics',
+      desc: 'Thinkers, organisations and movements developing economies steered by information and feedback rather than by markets alone – from Beer and Fuller to Fresco’s resource-based economy and Joseph’s Integral.', groups: [
       { name: 'Individuals', items: ['peter-joseph', 'jacque-fresco', 'buckminster-fuller', 'stafford-beer'] },
       { name: 'Organisations', items: ['integral-collective', 'the-venus-project', 'buckminster-fuller-institute'] },
       { name: 'Movements', items: ['the-zeitgeist-movement'] }] },
-    { title: 'Meta-space', groups: [
+    { title: 'Meta-space', entry: 'meta-space',
+      desc: 'The loose ecosystem of thinkers, institutes and communities working on the metacrisis through integrative metatheory, sensemaking and cultural renewal.', groups: [
       { name: 'Individuals', items: ['daniel-schmachtenberger', 'zak-stein', 'nate-hagens', 'paul-kingsnorth', 'charles-eisenstein', 'ken-wilber'] },
       { name: 'Organisations', items: ['civilization-research-institute', 'the-consilience-project', 'institute-of-applied-metatheory', 'center-for-world-philosophy-and-religion',
-        'life-itself', 'perspectiva', 'integral-institute', 'santa-fe-institute', 'centre-for-critical-realism', 'center-for-integral-wisdom'] }] },
-    { title: 'PARA-academic space', groups: [
+        'life-itself', 'perspectiva', 'integral-institute', 'santa-fe-institute', 'centre-for-critical-realism', 'center-for-integral-wisdom'] },
+      { name: 'Movements', items: ['metamodernism', 'second-renaissance', 'integral-life', 'deep-ecology', 'web-3', 'the-emergentsia', 'the-liminal-web'] }] },
+    { title: 'PARA-academic space', entry: 'para-academic-space',
+      desc: 'The research and advocacy communities that grew up beside the universities – rationalism, effective altruism, progress studies and existential risk studies – and shaped AI alignment and macrostrategy.', groups: [
       { name: 'Submovements & Subfields', items: [['the-rationalist-community', [], { label: 'Rationalism' }],
         ['effective-altruism', ['global-poverty-health-and-development', 'ea-animal-welfare']],
         'progress-studies', 'existential-risk-studies', 'ai-alignment', ['macrostrategy', [], { label: 'Macrostrategy Research' }]] },
@@ -7118,6 +7190,7 @@
           })(g.items, [{ title: sec.title, heading: true }, { title: g.name, heading: true }]);
         });
       });
+      if (!found && LANDSCAPE.some(function (sec) { return sec.entry === c.id; })) found = [];   // (a section's own entry)
       return found ? [ROOT, { title: 'Civilisation Research Landscape', heading: true }].concat(found, [c]) : null;
     }
     if (c.parent === ROOT.id && (c.kind === 'category' || PAGES[c.id])) return [ROOT, c];
@@ -7344,6 +7417,7 @@
         return '<section class="index-domain' + (i === 0 ? ' set-start' : '') + '">' +
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + ' nodes</p>' +
           '<h3 class="domain-title">' + (e ? '<a href="' + href(e) + '">' + esc(sec.title) + '</a>' : esc(sec.title)) + '</h3>' +
+          (sec.desc ? '<p class="domain-desc">' + esc(sec.desc) + '</p>' : '') +
           (sec.groups.length ? '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
             return '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items) + '</ul></li>';
           }).join('') + '</ul>' : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
