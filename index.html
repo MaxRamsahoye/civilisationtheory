@@ -491,7 +491,8 @@
   /* The Map's own search, in the top-left corner (part of the interface: it arrives with it, and
      H hides it) – results drop down beneath it */
   #map-search {
-    display: none; position: fixed; top: 0.8rem; left: 1.4rem; z-index: 25; width: 15rem;
+    display: none; position: absolute; top: 0.8rem; left: 1.4rem; z-index: 25; width: 15rem;   /* (in the top corner of the Map's opening screen, scrolling away with it) */
+   
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     /* a solid backing, so it reads clearly over the topography */
     background: color-mix(in srgb, var(--bg) 92%, transparent); border: 1px solid color-mix(in srgb, var(--text) 28%, transparent);
@@ -1316,8 +1317,13 @@
     content: ''; position: absolute; z-index: 1; left: 0; right: 0; top: -1px; height: 2px; pointer-events: none;
     background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent) no-repeat;
     background-size: 35% 100%;
-    animation: tab-flow 3.2s ease-in-out infinite alternate;
+    animation: tab-flow 3.2s ease-in-out infinite alternate both;
+    /* it begins half a second after the tabs have faded in: on the opening sequence, their 1.4s fade
+       after the interface is revealed; arriving from another page, the page's own fade */
+    animation-delay: 1s;
   }
+  html.page-map.loading-hud .description .index-tabs::before, html.page-map.loading-hud .index-tabs button::before { content: none; }
+  html.page-map.flow-late .description .index-tabs::before, html.page-map.flow-late .index-tabs button::before { animation-delay: 1.9s; }   /* (flow-late: set for the opening sequence, cleared on leaving the page) */
   @media (min-width: 1000px) { html.page-map[data-index="none"] .index-tabs button::before { content: none; } }
   @media (max-width: 999px) { html.page-map[data-index="none"] .description .index-tabs::before { content: none; } }
   @media (prefers-reduced-motion: reduce) {
@@ -8080,6 +8086,7 @@
     setTimeout(function () { el.classList.remove('returned'); }, 2400);
   }
   window.addEventListener('hashchange', function () {
+    document.documentElement.classList.remove('flow-late');
     onHashChange();
     if (!document.startViewTransition || reduceMotion.matches || !document.getElementById('loader').classList.contains('done')) { render(); return; }
     document.startViewTransition(render);
@@ -9099,7 +9106,7 @@
       // Then the subtitle fades in under the typed title; the interface (hidden from the start) follows once they are in;
       // and only once that has settled does the blue of the loading screen give way to the
       // system's theme.
-      root.classList.add('topo-reveal');
+      root.classList.add('topo-reveal', 'flow-late');
       void root.offsetWidth;
       root.classList.remove('title-typing');
       setTimeout(function () { root.classList.remove('loading-hud'); }, 2800);
