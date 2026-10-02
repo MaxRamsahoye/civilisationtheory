@@ -1249,6 +1249,11 @@
   .description .index-domain > .rl-empty { margin: 0; }
   /* A subheading in the new structure (no entry of its own) */
   .description .struct-head > span { font-weight: 700; }
+  .description .struct-sub > span { color: var(--muted); }
+  .description .struct-drop details > summary { list-style: none; cursor: pointer; }
+  .description .struct-drop details > summary::-webkit-details-marker { display: none; }
+  .description .struct-drop details > summary::before { content: '▸'; display: inline-block; width: 0.9em; margin-left: -0.9em; font-size: 0.8em; color: var(--muted); transition: transform .2s ease; }
+  .description .struct-drop details[open] > summary::before { transform: rotate(90deg); }
   /* The new structure's sections: their groups in three columns, every level at one size */
   html.page-map .description .ce-list.cs-list ul.struct-cols { list-style: none; padding: 0; margin: 0; columns: 3; column-gap: 2.4rem; line-height: 1.3; }
   html.page-map .description .ce-list.cs-list .struct-cols ul { list-style: none; padding: 0 0 0 1rem; margin: 0.55rem 0 0; font-size: 1em; columns: 1; }
@@ -1795,7 +1800,7 @@
     },
     {
       id: 'planetary-boundaries',
-      title: 'Planetary Boundaries',
+      title: 'Crossing Planetary Boundaries',
       parent: 'ecology-and-earth-system',
       html: '<p><em>Planetary boundaries</em> are the limits of nine Earth-system processes – including climate change, biosphere integrity, land-system change and biogeochemical flows – within which humanity can continue to develop safely. The framework was introduced by Johan Rockström and colleagues in 2009, and a 2023 assessment found six of the nine boundaries already transgressed. In their 2023 update, the framework’s authors reported that six of the nine boundaries – including climate change, biosphere integrity and the flows of nitrogen and phosphorus – had already been crossed.</p>'
     },
@@ -1815,7 +1820,7 @@
     {
       id: 'third-attractor',
       title: 'The Third Attractor: Alignment',
-      parent: 'existential-risk',
+      parent: 'attractor-states',
       ref: 'Schmachtenberger',
       html: '<p>The <em>third attractor</em> is the name given, in the work of Daniel Schmachtenberger and others, to a civilisational trajectory that avoids both of the default attractors of <a href="#existential-risk">existential risk</a>: <a href="#first-attractor">catastrophe</a>, arising from uncoordinated power, and <a href="#second-attractor">dystopia</a>, arising from the control imposed to prevent it. It describes a civilisation able to coordinate at the scale of its technology without centralising unaccountable power – combining the order that prevents collapse with the freedom that prevents tyranny. What it would look like is deliberately left open: the term marks a direction – power matched by wisdom, coordination without coercion – rather than a blueprint.</p>'
     },
@@ -3059,7 +3064,7 @@
     },
     {
       id: 'the-wisdom-gap',
-      title: 'The Wisdom Gap',
+      title: 'The Wisdom Gap(s)',
       parent: 'metacrisis',
       html: '<p>The <em>wisdom gap</em> is the widening distance between humanity’s power – amplified by exponential technology – and the wisdom needed to use that power well. As capabilities grow faster than the ethical, institutional and cultural capacities to govern them, the consequences of error grow with them. Closing the gap, rather than halting power, is often framed as the central task of the century.</p>'
     },
@@ -4465,14 +4470,14 @@
     {
       id: 'first-attractor',
       title: 'The First Attractor: Catastrophe',
-      parent: 'third-attractor',
+      parent: 'attractor-states',
       ref: 'Schmachtenberger',
       html: '<p><em>The first attractor</em> is catastrophe: the trajectory in which uncoordinated actors, wielding ever more powerful technology, race one another into outcomes no one wants – arms races, ecological collapse, cascading systemic failure. It is the default destination of a world whose power grows faster than its capacity to coordinate.</p>'
     },
     {
       id: 'second-attractor',
       title: 'The Second Attractor: Dystopia',
-      parent: 'third-attractor',
+      parent: 'attractor-states',
       ref: 'Schmachtenberger',
       html: '<p><em>The second attractor</em> is dystopia: the trajectory in which catastrophe is prevented by concentrating control – surveillance, centralised authority and enforced order strong enough to stop dangerous action. It escapes the first attractor only by surrendering freedom and accountability, and so becomes a failure of its own.</p>'
     },
@@ -4616,6 +4621,564 @@
       parent: 'transitional-projects',
       ref: 'Ehrlich',
       html: '<p><em>ReGen Villages</em> is a company founded by James Ehrlich in 2016, as a spin-off from Stanford University, to design and build regenerative neighbourhoods: communities of around a hundred families that produce their own organic food, clean water and renewable energy, and recycle their waste into resources on site.</p><p>Its operating software, VillageOS, uses machine learning to design and run these closed-loop systems, with a first neighbourhood planned near Almere in the Netherlands. It offers a model of self-reliant, resilient settlement that could be replicated at scale.</p>'
+    },
+    {
+      id: 'civilisational-crisis',
+      title: 'Civilisational Crisis',
+      parent: 'metacrisis',
+      html: '<p>A <em>civilisational crisis</em> is a crisis not of one sector, institution or nation but of a civilisation as a whole: a point at which its basic ways of producing, governing and making meaning can no longer sustain it. Several names have been coined for the forms such a crisis can take – the <a href="#polycrisis">polycrisis</a>, in which many crises interact; the <a href="#permacrisis">permacrisis</a>, in which crisis becomes the permanent condition; and the <a href="#omnicrisis">omnicrisis</a>, in which it reaches into every domain at once.</p>'
+    },
+    {
+      id: 'permacrisis',
+      title: 'Permacrisis',
+      parent: 'civilisational-crisis',
+      html: '<p><em>Permacrisis</em> names an extended period of instability and insecurity in which one crisis follows another without a return to normal. Chosen as Collins Dictionary’s word of the year in 2022, it captures the sense that crisis is no longer an interruption of ordinary life but its ongoing condition.</p>'
+    },
+    {
+      id: 'omnicrisis',
+      title: 'Omnicrisis',
+      parent: 'civilisational-crisis',
+      html: '<p>An <em>omnicrisis</em> is a crisis that reaches into every domain of life at once – ecological, economic, political, technological, cultural and personal – so that there is no stable ground from which to address any one part of it. Where the polycrisis stresses the interaction of crises, the omnicrisis stresses their totality.</p>'
+    },
+    {
+      id: 'problem-complex',
+      title: 'Problem Complex',
+      parent: 'metacrisis',
+      html: '<p>The <em>problem complex</em> is the full set of interlocking crises that make up the visible face of the <a href="#metacrisis">metacrisis</a> – ecological, technological, cultural, geopolitical, macroeconomic and bio-psycho-social. Each is a field of problems in its own right, but they share causes, amplify one another and cannot be solved in isolation.</p><p>Mapping the problem complex is the first step of a metacrisis analysis; the second is to trace its <a href="#generative-dynamics">generative dynamics</a>, the patterns that keep producing it.</p>'
+    },
+    {
+      id: 'generative-dynamics',
+      title: 'Generative Dynamics',
+      parent: 'metacrisis',
+      html: '<p><em>Generative dynamics</em> are the underlying patterns that keep producing the crises of the <a href="#problem-complex">problem complex</a>: the game-theoretic, systemic, economic, psychological, epistemic and mythic structures from which particular problems arise. Addressing a crisis without changing the dynamics that generate it tends only to move the problem elsewhere.</p><p>Identifying these dynamics is what distinguishes a metacrisis analysis from a list of crises.</p>'
+    },
+    {
+      id: 'attractor-states',
+      title: 'Attractor States',
+      parent: 'metacrisis',
+      html: '<p><em>Attractor states</em> are the end-states towards which a system tends, whatever its starting point. Applied to civilisation, the metacrisis is often described in terms of three: the <a href="#first-attractor">first attractor</a> of catastrophe, the <a href="#second-attractor">second attractor</a> of dystopia, and the <a href="#third-attractor">third attractor</a> of alignment – the narrow path between the two.</p>'
+    },
+    {
+      id: 'ecological-crisis',
+      title: 'Ecological Crisis: Substrate Destruction',
+      parent: 'problem-complex',
+      html: '<p>The <em>ecological crisis</em> is the destruction of the living substrate on which civilisation depends: climate, biodiversity, soils, water and the biogeochemical cycles that keep the Earth habitable. Unlike other crises it cannot be negotiated with – its limits are physical – and it undermines every other system by degrading the ground they stand on.</p>'
+    },
+    {
+      id: 'climate-migration',
+      title: 'Climate Migration',
+      parent: 'ecological-crisis',
+      html: '<p><em>Climate migration</em> is the movement of people driven by the effects of climate change – droughts, floods, sea-level rise, crop failure and extreme heat. Estimates of its future scale run to hundreds of millions of people this century, and its pressures are likely to fall hardest on the regions least responsible for emissions.</p>'
+    },
+    {
+      id: 'crossed-planetary-boundaries',
+      title: 'The Seven/Nine Crossed Planetary Boundaries',
+      parent: 'planetary-boundaries',
+      refs: ['Katherine Richardson et al., “Earth beyond six of nine planetary boundaries”, <em>Science Advances</em> 9, no. 37 (2023).'],
+      html: '<p>Of the nine planetary boundaries defined by Johan Rockström and colleagues, an assessment in 2023 found six already transgressed – climate change, biosphere integrity, land-system change, freshwater change, biogeochemical flows and novel entities – and the Planetary Health Check of 2025 added a seventh, ocean acidification. Only stratospheric ozone and atmospheric aerosol loading remain within their safe limits.</p>'
+    },
+    {
+      id: 'safe-operating-space',
+      title: 'Safe Operating Space',
+      parent: 'planetary-boundaries',
+      refs: ['Johan Rockström et al., “A safe operating space for humanity”, <em>Nature</em> 461 (2009).'],
+      html: '<p>The <em>safe operating space</em> for humanity is the range of conditions, bounded by the planetary boundaries, within which human societies can develop without risking abrupt and irreversible change to the Earth system. The concept, introduced by Johan Rockström and colleagues in 2009, frames sustainability as staying within the stable state of the Holocene that made civilisation possible.</p>'
+    },
+    {
+      id: 'tipping-points',
+      title: 'Tipping Points',
+      parent: 'planetary-boundaries',
+      refs: ['Timothy M. Lenton et al., “Tipping elements in the Earth’s climate system”, <em>PNAS</em> 105, no. 6 (2008).'],
+      html: '<p><em>Tipping points</em> are thresholds beyond which a part of the Earth system shifts into a different state, often abruptly and irreversibly – the collapse of ice sheets, the dieback of the Amazon rainforest, the thawing of permafrost, the weakening of the Atlantic overturning circulation. Once crossed, they can trigger one another, so that warming feeds further warming beyond human control.</p>'
+    },
+    {
+      id: 'the-great-simplification',
+      title: 'The Great Simplification',
+      parent: 'ecological-crisis',
+      ref: 'Hagens',
+      html: '<p><em>The Great Simplification</em> is Nate Hagens’s name for the coming contraction of the global economy as it adjusts to the end of cheap energy and the limits of the biosphere. Modern complexity, he argues, was built on a one-off pulse of fossil carbon; as that pulse passes, societies will have to become simpler, more local and less energy-intensive – by design if possible, or by crisis if not.</p>'
+    },
+    {
+      id: 'carbon-pulse',
+      title: 'Carbon Pulse',
+      parent: 'the-great-simplification',
+      ref: 'Hagens',
+      html: '<p>The <em>carbon pulse</em> is the brief episode, a few centuries long, in which humanity has burned fossil carbon accumulated over hundreds of millions of years. Nate Hagens uses the term to stress that modern abundance rests on a one-time inheritance, drawn down far faster than it formed, rather than on a permanent condition.</p>'
+    },
+    {
+      id: 'energy-blindness',
+      title: 'Energy-Blindness',
+      parent: 'the-great-simplification',
+      ref: 'Hagens',
+      html: '<p><em>Energy-blindness</em> is Nate Hagens’s term for the failure of economics, politics and everyday thinking to see the role energy plays in everything: economies are modelled as if money and technology produced wealth, while the vast labour performed by cheap fossil energy goes unnoticed. The blindness makes the end of cheap energy appear as a series of unrelated economic problems.</p>'
+    },
+    {
+      id: 'the-mordor-economy',
+      title: 'The Mordor Economy',
+      parent: 'the-great-simplification',
+      ref: 'Hagens',
+      html: '<p><em>The Mordor economy</em> is Nate Hagens’s image for an economy that must spend an ever larger share of its energy and output simply on obtaining more energy and resources, and on repairing environmental damage, as easy reserves run out. Less and less is left for everything else – health, education, culture – as the economy turns into a machine for feeding itself.</p>'
+    },
+    {
+      id: 'technological-crisis',
+      title: 'Technological Crisis: Power Amplification',
+      parent: 'problem-complex',
+      html: '<p>The <em>technological crisis</em> is the amplification of human power beyond the capacity to govern it. Technologies such as nuclear weapons, artificial intelligence and synthetic biology give individuals and small groups destructive reach once confined to states, and advance faster than the institutions, norms and wisdom needed to control them.</p>'
+    },
+    {
+      id: 'artificial-intelligence-risks',
+      title: 'Artificial Intelligence Risks',
+      parent: 'technological-crisis',
+      html: '<p><em>Artificial intelligence risks</em> range from present harms – bias, surveillance, disinformation, the concentration of power and the displacement of labour – to the prospect of systems more capable than humans pursuing goals misaligned with human interests. The speed of development and the competitive pressure on developers make these risks hard to govern.</p>'
+    },
+    {
+      id: 'synthetic-biotechnology-risks',
+      title: 'Synthetic Biotechnology Risks',
+      parent: 'technological-crisis',
+      html: '<p><em>Synthetic biotechnology risks</em> arise from the growing power to read, write and edit living systems. The same tools that promise new medicines and materials could be used, deliberately or by accident, to create pathogens more dangerous than any found in nature – and as costs fall, the number of actors able to do so grows.</p>'
+    },
+    {
+      id: 'cultural-crisis',
+      title: 'Cultural Crisis: Collective Sensemaking',
+      parent: 'problem-complex',
+      html: '<p>The <em>cultural crisis</em> is the breakdown of collective sensemaking: a society’s shared capacity to understand what is happening, agree on what is true and deliberate about what to do. Without it, no other crisis can be addressed, because the means of recognising and responding to problems together has failed.</p>'
+    },
+    {
+      id: 'techno-epistemic-dynamics',
+      title: 'Techno-Epistemic Dynamics',
+      parent: 'cultural-crisis',
+      html: '<p><em>Techno-epistemic dynamics</em> are the ways in which information technologies shape what people know and believe. Platforms optimised for engagement reward outrage and novelty, flood attention with more than it can process and open new channels for manipulation – changing the conditions of knowing for whole societies.</p>'
+    },
+    {
+      id: 'algorithmic-political-polarisation',
+      title: 'Algorithmic Political Polarisation',
+      parent: 'techno-epistemic-dynamics',
+      html: '<p><em>Algorithmic political polarisation</em> is the deepening of political division by recommendation systems that learn what keeps people engaged and serve them more of it. Because content that provokes anger and confirms identity holds attention, the systems tend to push users towards more extreme and more homogeneous information environments. See <a href="#algorithmic-radicalisation">algorithmic radicalisation</a>.</p>'
+    },
+    {
+      id: 'information-overload',
+      title: 'Information Overload',
+      parent: 'techno-epistemic-dynamics',
+      html: '<p><em>Information overload</em> is the condition in which the volume of information exceeds the capacity to process it, so that more information produces less understanding. Attention fragments, judgement defers to whatever is loudest or most recent, and the ability to tell signal from noise declines.</p>'
+    },
+    {
+      id: 'memetic-warfare',
+      title: 'Memetic Warfare',
+      parent: 'techno-epistemic-dynamics',
+      html: '<p><em>Memetic warfare</em> is conflict waged through ideas, images and narratives designed to spread and change how people think and act. States, movements and individuals use it to sow division, demoralise opponents and shape elections, exploiting platforms that let messages travel faster than they can be checked. See <a href="#information-warfare">information warfare</a>.</p>'
+    },
+    {
+      id: 'the-sensemaking-crisis',
+      title: 'The Sensemaking Crisis',
+      parent: 'cultural-crisis',
+      html: '<p><em>The sensemaking crisis</em> is the failure of individuals and societies to make reliable sense of the world: to know what is true, whom to trust and what matters. It has technological causes, but also deeper ones in the successive shocks that modern thought has dealt to inherited frameworks of meaning – figured here as the Darwinian, Cartesian and Nietzschean crises. See <a href="#sensemaking">sensemaking</a>.</p>'
+    },
+    {
+      id: 'the-darwinian-crisis',
+      title: 'The Darwinian Crisis',
+      parent: 'the-sensemaking-crisis',
+      html: '<p><em>The Darwinian crisis</em> is the unsettling of humanity’s understanding of itself by the theory of evolution. By showing humans to be one product of an undirected natural process, it displaced older accounts of human purpose and special status, and left open the question of what, if anything, gives life meaning or direction.</p>'
+    },
+    {
+      id: 'the-nietzschean-crisis',
+      title: 'The Nietzschean Crisis',
+      parent: 'the-sensemaking-crisis',
+      html: '<p><em>The Nietzschean crisis</em> is the loss of shared foundations for value that Friedrich Nietzsche announced as the “death of God”. With the decline of the religious frameworks that had grounded morality and meaning, he warned, Western culture faced nihilism – the sense that nothing has value – unless new values could be created.</p>'
+    },
+    {
+      id: 'geopolitical-crisis',
+      title: 'Geopolitical Crisis: World-Order Contestation',
+      parent: 'problem-complex',
+      html: '<p>The <em>geopolitical crisis</em> is the contest over the shape of world order as the post-Cold War settlement breaks down. Rising and established powers, rival civilisational blocs and new technologies of conflict raise the risk of war at a time when global problems demand cooperation.</p>'
+    },
+    {
+      id: 'international-competition-conflict-and-control',
+      title: 'International Competition, Conflict & Control',
+      parent: 'geopolitical-crisis',
+      html: '<p><em>International competition, conflict and control</em> is the ordinary condition of an international system without a sovereign above states: each must look to its own power, so rivalry over territory, resources, technology and influence is constant. It drives arms races and makes the global cooperation needed for shared problems hard to achieve.</p>'
+    },
+    {
+      id: 'world-war-iii',
+      title: 'World War III',
+      parent: 'geopolitical-crisis',
+      html: '<p><em>World War III</em> names the prospect of a war between the great powers on the scale of the two world wars – now with nuclear weapons, cyberweapons and autonomous systems. Its paths include escalation from regional conflicts, competition for resources and the strain of a rising power meeting an established one.</p>'
+    },
+    {
+      id: 'nuclear-war',
+      title: 'Nuclear War',
+      parent: 'world-war-iii',
+      html: '<p><em>Nuclear war</em> is war fought with nuclear weapons. A large exchange would kill tens or hundreds of millions directly, and the soot from burning cities could cause a nuclear winter, collapsing harvests worldwide. Some nine states hold around twelve thousand warheads between them.</p>'
+    },
+    {
+      id: 'resource-war',
+      title: 'Resource War',
+      parent: 'world-war-iii',
+      html: '<p>A <em>resource war</em> is conflict over scarce resources – water, farmland, energy, critical minerals. As climate change and depletion increase scarcity, competition for what remains is expected to become a growing driver of conflict within and between states.</p>'
+    },
+    {
+      id: 'thucydides-trap',
+      title: 'The Thucydides Trap',
+      parent: 'world-war-iii',
+      ref: 'Allison',
+      refs: ['Graham Allison, <em>Destined for War: Can America and China Escape Thucydides’s Trap?</em> (2017).'],
+      html: '<p><em>The Thucydides trap</em> is Graham Allison’s name for the danger of war when a rising power threatens to displace an established one, after Thucydides’ account of the Peloponnesian War: “it was the rise of Athens and the fear that this instilled in Sparta that made war inevitable”. Allison found that most such transitions in the past five centuries ended in war, and applies the pattern to the United States and China.</p>'
+    },
+    {
+      id: 'west-versus-islam',
+      title: 'Western Civilisation versus Islamic Civilisation',
+      parent: 'clash-of-civilisations',
+      html: '<p>The opposition of <em>Western and Islamic civilisation</em> was the centrepiece of Samuel Huntington’s clash of civilisations thesis, and seemed to many to be confirmed by the September 11 attacks and the wars that followed. Critics argue that the framing treats diverse societies as monoliths and can help produce the conflict it predicts.</p>'
+    },
+    {
+      id: 'us-versus-china',
+      title: 'US Civilisation versus Chinese Civilisation',
+      parent: 'clash-of-civilisations',
+      html: '<p>The rivalry between <em>the United States and China</em> is increasingly framed as a contest between civilisations as well as states – liberal democracy against a Confucian-inflected party state – over technology, trade, Taiwan and the shape of world order. It is the central case of the <a href="#thucydides-trap">Thucydides trap</a>.</p>'
+    },
+    {
+      id: 'global-south-and-indigenous-cultures',
+      title: 'The Global South & Indigenous Cultures',
+      parent: 'clash-of-civilisations',
+      html: '<p><em>The Global South and Indigenous cultures</em> stand in an uneasy place in the contest of civilisations: often treated as terrain to be won rather than parties to the decision, yet holding most of the world’s population and much of its cultural and ecological knowledge. Their assertion – through new alignments, claims to sovereignty and alternative visions of development – is reshaping world order.</p>'
+    },
+    {
+      id: 'macroeconomic-crisis',
+      title: 'Macroeconomic Crisis: Major Disruption',
+      parent: 'problem-complex',
+      html: '<p>The <em>macroeconomic crisis</em> is the prospect of major disruption to the global economy: financial instability, unsustainable debt, the displacement of work by technology and the ageing of populations. Each strains the growth-dependent model on which modern economies rely.</p>'
+    },
+    {
+      id: 'global-financial-crisis',
+      title: 'Global Financial Crisis',
+      parent: 'macroeconomic-crisis',
+      html: '<p>A <em>global financial crisis</em> is a breakdown of the world’s financial system in which failures spread across institutions and countries. The crisis of 2007–08, triggered by the collapse of the US housing market, caused the deepest recession since the 1930s; the conditions behind it – leverage, complexity and interdependence – have since grown in many respects.</p>'
+    },
+    {
+      id: 'world-debt-crisis',
+      title: 'World Debt Crisis',
+      parent: 'macroeconomic-crisis',
+      html: '<p>The <em>world debt crisis</em> is the accumulation of public, corporate and household debt to levels without peacetime precedent, now well over twice the size of the world economy. High debt leaves states and firms fragile to rising interest rates and slowing growth, and ties economies to growth they may not be able to sustain.</p>'
+    },
+    {
+      id: 'technological-unemployment',
+      title: 'Technological Unemployment & Labour-for-Income-for-Consumption Cycle',
+      parent: 'macroeconomic-crisis',
+      html: '<p><em>Technological unemployment</em> is the loss of jobs to automation faster than new ones appear. It threatens the cycle on which market economies depend – people sell their labour for income, and spend that income on consumption that sustains demand – since if machines do the work, wages fall and with them the demand that keeps production running.</p>'
+    },
+    {
+      id: 'ageing-populations',
+      title: 'Ageing Populations & Demographic Collapse',
+      parent: 'macroeconomic-crisis',
+      html: '<p><em>Ageing populations</em> result from falling birth rates and longer lives. In many countries fertility is now far below replacement, so that the working-age population shrinks while the number of retirees grows – straining pensions, health systems and growth, and in some places pointing towards demographic collapse.</p>'
+    },
+    {
+      id: 'bio-psycho-social-crisis',
+      title: 'Bio-Psycho-Social Crisis: Population-Level Pathology',
+      parent: 'problem-complex',
+      html: '<p>The <em>bio-psycho-social crisis</em> is the decline of health – physical, mental and social – across whole populations. Chronic disease, mental illness, loneliness and social pathology are rising together in many societies, suggesting causes in the shared conditions of modern life rather than in individuals alone.</p>'
+    },
+    {
+      id: 'global-public-health-crisis',
+      title: 'Global Public Health Crisis',
+      parent: 'bio-psycho-social-crisis',
+      html: '<p>The <em>global public health crisis</em> is the burden of disease that modern societies have failed to prevent: chronic, non-communicable diseases tied to diet, inactivity, pollution and stress now cause most deaths worldwide, while infectious diseases persist where poverty is greatest.</p>'
+    },
+    {
+      id: 'heart-disease',
+      title: 'Heart Disease',
+      parent: 'global-public-health-crisis',
+      html: '<p><em>Heart disease</em> – above all coronary artery disease – is the leading cause of death worldwide. Most cases are linked to modifiable risks: diet, smoking, inactivity, high blood pressure and chronic stress.</p>'
+    },
+    {
+      id: 'cancer',
+      title: 'Cancer',
+      parent: 'global-public-health-crisis',
+      html: '<p><em>Cancer</em> is the second leading cause of death worldwide. Its incidence is rising with ageing populations and with exposures of modern life – tobacco, alcohol, obesity, pollution and inactivity.</p>'
+    },
+    {
+      id: 'alzheimers-and-dementias',
+      title: 'Alzheimers & Dementias',
+      parent: 'global-public-health-crisis',
+      html: '<p><em>Alzheimer’s disease and other dementias</em> affect more than fifty-five million people worldwide, a number rising quickly as populations age. They have no cure, and their care falls heavily on families and health systems.</p>'
+    },
+    {
+      id: 'malaria',
+      title: 'Malaria',
+      parent: 'global-public-health-crisis',
+      html: '<p><em>Malaria</em>, a parasitic disease spread by mosquitoes, kills around six hundred thousand people a year, most of them young children in sub-Saharan Africa. It is preventable and treatable, and its persistence is a measure of global inequality.</p>'
+    },
+    {
+      id: 'hiv-aids',
+      title: 'HIV-AIDS',
+      parent: 'global-public-health-crisis',
+      html: '<p><em>HIV</em>, the virus that causes AIDS, has killed more than forty million people since the 1980s, and around forty million live with it today. Treatment now allows a near-normal life, but access remains uneven.</p>'
+    },
+    {
+      id: 'global-mental-health-crisis',
+      title: 'Global Mental Health Crisis',
+      parent: 'bio-psycho-social-crisis',
+      html: '<p>The <em>global mental health crisis</em> is the high and in many places rising prevalence of depression, anxiety, addiction and suicide, alongside a large gap in care. Its causes are sought increasingly in social conditions – isolation, insecurity, digital life – as well as in individual biology.</p>'
+    },
+    {
+      id: 'suicide-epidemic',
+      title: 'Suicide Epidemic',
+      parent: 'global-mental-health-crisis',
+      html: '<p>The <em>suicide epidemic</em> refers to the hundreds of thousands of deaths by suicide each year worldwide, and to rising rates among particular groups in some countries, including young people and middle-aged men. Suicide is often treated as a social as well as an individual tragedy, reflecting despair, isolation and economic loss.</p>'
+    },
+    {
+      id: 'addiction-epidemic',
+      title: 'Addiction Epidemic',
+      parent: 'global-mental-health-crisis',
+      html: '<p>The <em>addiction epidemic</em> covers the spread of dependence on substances such as opioids, alcohol and stimulants, and on behaviours engineered to be compulsive, from gambling to social media. The opioid crisis in the United States alone has caused hundreds of thousands of deaths.</p>'
+    },
+    {
+      id: 'loneliness-epidemic',
+      title: 'Loneliness Epidemic',
+      parent: 'global-mental-health-crisis',
+      refs: ['Office of the US Surgeon General, <em>Our Epidemic of Loneliness and Isolation</em> (2023).'],
+      html: '<p>The <em>loneliness epidemic</em> is the widespread experience of social isolation in modern societies. In 2023 the US Surgeon General declared it a public health crisis, citing evidence that loneliness raises the risk of heart disease, dementia and early death as much as smoking.</p>'
+    },
+    {
+      id: 'global-psychological-disorder',
+      title: 'Global Psychological Disorder',
+      parent: 'bio-psycho-social-crisis',
+      html: '<p><em>Global psychological disorder</em> names patterns of disordered psychology at the scale of whole populations – aggression, anti-social behaviour, manipulative and callous traits, and radicalisation – understood as products of social conditions and selection pressures rather than only of individual pathology.</p>'
+    },
+    {
+      id: 'aggression-and-anti-social-behaviour',
+      title: 'Aggression Levels & Anti-Social Behaviour',
+      parent: 'global-psychological-disorder',
+      html: '<p><em>Aggression and anti-social behaviour</em> – violence, hostility and disregard for others – vary greatly between societies and over time, and respond to inequality, insecurity and social fragmentation. Their levels are one measure of the health of a social order.</p>'
+    },
+    {
+      id: 'dark-triad-traits',
+      title: 'Dark Triad Traits',
+      parent: 'global-psychological-disorder',
+      refs: ['Delroy L. Paulhus and Kevin M. Williams, “The Dark Triad of personality: Narcissism, Machiavellianism, and psychopathy”, <em>Journal of Research in Personality</em> 36, no. 6 (2002).'],
+      html: '<p>The <em>dark triad</em> is the cluster of three socially aversive personality traits identified by Delroy Paulhus and Kevin Williams in 2002: narcissism, Machiavellianism and psychopathy. Where institutions reward ruthlessness and self-promotion, people high in these traits may rise to positions of power. See the <a href="#psychopathic-selection-hypothesis">psychopathic selection hypothesis</a>.</p>'
+    },
+    {
+      id: 'political-radicalisation',
+      title: 'Political Radicalisation',
+      parent: 'global-psychological-disorder',
+      html: '<p><em>Political radicalisation</em> is the process by which people come to hold extreme political views and, sometimes, to support or use violence for them. It is driven by grievance, identity and the search for meaning, and accelerated by online networks.</p>'
+    },
+    {
+      id: 'global-infertility',
+      title: 'Global Infertility Levels',
+      parent: 'bio-psycho-social-crisis',
+      html: '<p><em>Infertility</em> affects around one in six people at some point in their lives, according to the World Health Organization. Studies also report a marked decline in sperm counts in many countries over recent decades, with environmental chemicals among the suspected causes.</p>'
+    },
+    {
+      id: 'arms-races-and-tragedies-of-the-commons',
+      title: 'Arms Races & Tragedies of the Commons',
+      parent: 'generative-dynamics',
+      html: '<p><em>Arms races</em> and <em>tragedies of the commons</em> are two forms of the same trap. In an arms race, each party builds power to avoid falling behind, so all end up less secure; in a <a href="#tragedy-of-the-commons">tragedy of the commons</a>, each takes more from a shared resource, so it is exhausted. In both, actions that are rational for each are ruinous for all.</p>'
+    },
+    {
+      id: 'instrumental-convergence-and-strategy-stealing',
+      title: 'Instrumental Convergence & Strategy Stealing',
+      parent: 'generative-dynamics',
+      refs: ['Stephen M. Omohundro, “The Basic AI Drives”, in <em>Artificial General Intelligence 2008</em> (2008).', 'Nick Bostrom, “The Superintelligent Will”, <em>Minds and Machines</em> 22 (2012).'],
+      html: '<p><em>Instrumental convergence</em> is the thesis, set out by Steve Omohundro and Nick Bostrom, that agents with almost any final goal will pursue the same intermediate ones – resources, power, self-preservation – because these help achieve almost anything. <em>Strategy stealing</em>, from Paul Christiano, asks whether any strategy for gaining power can be copied by others; where it cannot, whoever finds it first may gain a decisive advantage.</p><p>Together they describe why competing agents, human or artificial, converge on the pursuit of power.</p>'
+    },
+    {
+      id: 'narrow-metric-optimisation',
+      title: 'Narrow Metric Optimisation & Negative Externalities',
+      parent: 'generative-dynamics',
+      html: '<p><em>Narrow metric optimisation</em> is the pursuit of a single measurable target – profit, GDP, engagement – at the expense of everything the metric leaves out. What it ignores becomes a <em>negative externality</em>: a cost borne by others or by the living world, which the optimiser has no reason to count.</p>'
+    },
+    {
+      id: 'positive-feedback-loops-and-power-asymmetries',
+      title: 'Positive Feedback Loops & Power Asymmetries',
+      parent: 'generative-dynamics',
+      html: '<p><em>Positive feedback loops</em> amplify whatever they act on: advantage brings further advantage, so that wealth, influence and capability concentrate. The resulting <em>power asymmetries</em> let the strongest shape the rules in their own favour, reinforcing the loop. See <a href="#feedback-loop">feedback loop</a>.</p>'
+    },
+    {
+      id: 'exponential-technological-acceleration',
+      title: 'Exponential Technological Acceleration',
+      parent: 'generative-dynamics',
+      html: '<p><em>Exponential technological acceleration</em> is the compounding growth of technological capability, in which each advance makes the next easier. Because institutions, cultures and minds change at a far slower pace, the gap between what we can do and what we can govern keeps widening. See <a href="#exponential-technology">exponential technology</a>.</p>'
+    },
+    {
+      id: 'life-blind-search-processes',
+      title: 'Life-Blind Search Processes',
+      parent: 'generative-dynamics',
+      html: '<p><em>Life-blind search processes</em> are processes – markets, competitive selection, optimisation by algorithm – that search for whatever succeeds by their own criterion while remaining blind to its effects on life. They produce great ingenuity, but nothing in them steers towards wellbeing unless wellbeing happens to pay. See <a href="#market-as-life-blind-watchmaker">the market as life-blind watchmaker</a>.</p>'
+    },
+    {
+      id: 'abstraction-extraction-accumulation-cycle',
+      title: 'Abstraction-Extraction-Accumulation Cycle',
+      parent: 'generative-dynamics',
+      html: '<p>The <em>abstraction-extraction-accumulation cycle</em> describes how living systems are first abstracted – reduced to quantities such as resources, labour or data – then extracted, and the value accumulated as capital, which funds further abstraction and extraction. Each turn of the cycle converts more of the living world into a stock of abstract value.</p>'
+    },
+    {
+      id: 'perverse-incentive-structures',
+      title: 'Perverse Incentive Structures',
+      parent: 'generative-dynamics',
+      html: '<p><em>Perverse incentive structures</em> reward the opposite of what they are meant to achieve: health systems paid for treatment rather than health, media rewarded for outrage rather than truth, firms for short-term returns rather than lasting value. Where incentives are perverse, even good people produce bad outcomes.</p>'
+    },
+    {
+      id: 'left-hemispheric-conditioning',
+      title: 'Ubiquitous Left-hemispheric Conditioning',
+      parent: 'generative-dynamics',
+      ref: 'McGilchrist',
+      refs: ['Iain McGilchrist, <em>The Master and His Emissary: The Divided Brain and the Making of the Western World</em> (2009).'],
+      html: '<p><em>Ubiquitous left-hemispheric conditioning</em> draws on Iain McGilchrist’s account, in <a href="#the-master-and-his-emissary">The Master and His Emissary</a> (2009), of the two hemispheres’ different modes of attention: the left narrow, analytic and focused on grasping and using; the right broad, contextual and attuned to the living whole. McGilchrist argues that modern Western culture has come to be dominated by the left hemisphere’s way of seeing, and that a world built in its image reinforces it in turn.</p>'
+    },
+    {
+      id: 'modernist-cultural-paradigm',
+      title: 'Modernist Cultural Paradigm',
+      parent: 'generative-dynamics',
+      ref: 'Pollock',
+      html: '<p>The <em>modernist cultural paradigm</em> is the set of views and values that shape modern societies: individualism, materialism, faith in progress through growth and technology, and the separation of humans from nature and of facts from values. Rufus Pollock and the Second Renaissance project argue that the interconnected crises of the present are rooted in this paradigm, and that a fundamental shift in worldview is needed.</p>'
+    },
+    {
+      id: 'scarcity-rivalry-orientation',
+      title: 'Scarcity-Rivalry Orientation',
+      parent: 'generative-dynamics',
+      ref: 'Joseph',
+      html: '<p>The <em>scarcity-rivalry orientation</em> is Peter Joseph’s description of the assumption at the root of market economies: that resources are scarce and must be competed for. Built into economic structures, it conditions people to treat one another as rivals, rewards hoarding and exploitation, and is reproduced even where technology could provide abundance. See <a href="#root-socio-economic-orientation">root socio-economic orientation</a>.</p>'
+    },
+    {
+      id: 'psychopathic-selection-hypothesis',
+      title: 'Psychopathic Selection Hypothesis',
+      parent: 'generative-dynamics',
+      ref: 'Elliott',
+      html: '<p>The <em>psychopathic selection hypothesis</em> is Greg Elliott’s proposal that, as human life is increasingly mediated by large-scale symbolic systems – markets, bureaucracies, institutions – selection pressures shift into these systems, where scale, anonymity and delayed consequences give advantage to instrumental, callous and exploitative strategies. Such strategies become built into the logic of institutions themselves and are reproduced by anyone who plays the game, whether or not they are personally psychopathic.</p>'
+    },
+    {
+      id: 'collective-psychological-alienation',
+      title: 'Collective Psychological Alienation',
+      parent: 'generative-dynamics',
+      ref: 'Temple (Stein, Wilber, Gafni)',
+      refs: ['David J. Temple, <em>First Principles and First Values: Forty-Two Propositions on CosmoErotic Humanism, the Meta-Crisis, and the World to Come</em> (2024).'],
+      html: '<p><em>Collective psychological alienation</em> is the estrangement of people from one another, from nature and from any sense of shared value. David J. Temple – the joint pseudonym of Marc Gafni, Zachary Stein and Ken Wilber – calls it a <em>global intimacy disorder</em>, and argues that it is the root of the metacrisis: a failure to experience ourselves within a field of shared intrinsic value, which leaves rivalry and win–lose metrics to fill the gap.</p>'
+    },
+    {
+      id: 'reductionist-world-modelling',
+      title: 'Reductionist World-Modelling',
+      parent: 'generative-dynamics',
+      html: '<p><em>Reductionist world-modelling</em> represents the world by breaking it into parts and studying each in isolation. It has been enormously productive, but used alone it misses the relationships, emergent properties and whole-system effects where many of today’s problems arise.</p>'
+    },
+    {
+      id: 'isolated-problem-solving',
+      title: 'Isolated Problem-Solving',
+      parent: 'generative-dynamics',
+      html: '<p><em>Isolated problem-solving</em> treats each problem separately, optimising a solution for one without regard to its effects on others. Because the crises of the problem complex are interconnected, solutions designed in isolation often create new problems elsewhere – the pattern of <a href="#problem-solution-externality-history">problem-solution-externality history</a>.</p>'
+    },
+    {
+      id: 'structural-and-superstructural-separation',
+      title: 'Structural & Superstructural Separation',
+      parent: 'generative-dynamics',
+      html: '<p><em>Structural and superstructural separation</em> is the treatment of a civilisation’s institutions and its culture as separate domains: reformers change laws or economies without regard to the values and worldviews that sustain them, or try to change minds without changing the structures that shape them. Because the two condition each other, change in one alone tends to be reabsorbed by the other.</p>'
+    },
+    {
+      id: 'moral-wisdom-gap',
+      title: 'Moral Wisdom Gap',
+      parent: 'the-wisdom-gap',
+      html: '<p>The <em>moral wisdom gap</em> is the distance between humanity’s power to act and its understanding of how it ought to act – the ethical maturity needed to use great power for good.</p>'
+    },
+    {
+      id: 'structural-wisdom-gap',
+      title: 'Structural Wisdom Gap',
+      parent: 'the-wisdom-gap',
+      html: '<p>The <em>structural wisdom gap</em> is the distance between the power of a civilisation’s technologies and the capacity of its institutions to govern them – the gap between what can be built and what can be coordinated.</p>'
+    },
+    {
+      id: 'epistemic-wisdom-gap',
+      title: 'Epistemic Wisdom Gap',
+      parent: 'the-wisdom-gap',
+      html: '<p>The <em>epistemic wisdom gap</em> is the distance between the complexity of the problems a civilisation faces and its capacity to understand them – to know what is true and to model the consequences of its actions.</p>'
+    },
+    {
+      id: 'escalating-system-dynamics',
+      title: 'Escalating System-Dynamics',
+      parent: 'first-attractor',
+      html: '<p><em>Escalating system-dynamics</em> are the self-reinforcing processes – runaway warming, cascading financial failure, ecological collapse – that can drive a civilisation into catastrophe without anyone choosing it, as feedback loops push systems past their tipping points.</p>'
+    },
+    {
+      id: 'escalating-state-competition',
+      title: 'Escalating Competition & Conflict between State Actors',
+      parent: 'first-attractor',
+      html: '<p><em>Escalating competition and conflict between states</em> – arms races, trade wars, proxy wars and great-power rivalry – is one road to the first attractor: each state’s pursuit of security makes all less secure, and the destructive power at stake grows with every round.</p>'
+    },
+    {
+      id: 'escalating-rogue-actors',
+      title: 'Escalating Power of Malevolent Rogue Actors',
+      parent: 'first-attractor',
+      html: '<p>The <em>escalating power of malevolent rogue actors</em> is the spread of catastrophic capabilities – engineered pathogens, cyberweapons, autonomous drones – to small groups and individuals outside the control of states. As destructive power becomes cheap and accessible, it takes only one malevolent actor to cause disaster.</p>'
+    },
+    {
+      id: 'global-stable-totalitarianism',
+      title: 'Global Stable Totalitarianism',
+      parent: 'second-attractor',
+      html: '<p><em>Global stable totalitarianism</em> is a worldwide regime of total control that could, with modern surveillance and enforcement, become permanent – unchallengeable from within and with no outside to escape to. It is sometimes counted among existential risks because it could lock in a bad future indefinitely.</p>'
+    },
+    {
+      id: 'hyper-surveillance-capitalism',
+      title: 'Hyper-Surveillance Capitalism',
+      parent: 'second-attractor',
+      html: '<p><em>Hyper-surveillance capitalism</em> is the intensification of <a href="#surveillance-capitalism">surveillance capitalism</a> to the point where every action and expression is recorded, predicted and shaped by commercial and state systems working together – control exercised less by force than by the management of behaviour.</p>'
+    },
+    {
+      id: 'despotic-drift-and-closed-society',
+      title: 'Despotic Drift & Closed Society',
+      parent: 'second-attractor',
+      html: '<p><em>Despotic drift</em> is the gradual slide of a state towards autocracy – emergency powers that become permanent, checks that erode, dissent that is criminalised – ending in a <a href="#closed-society">closed society</a>, in which information is restricted and decisions are imposed from above.</p>'
+    },
+    {
+      id: 'decentralised-coordination',
+      title: 'Decentralised Coordination',
+      parent: 'third-attractor',
+      html: '<p><em>Decentralised coordination</em> is the capacity of many actors to coordinate at scale without a central authority: through shared protocols, transparent information, aligned incentives and trust. It offers a way to manage dangerous technologies and shared resources without concentrating the power that leads to the second attractor.</p>'
+    },
+    {
+      id: 'pluralistic-civilisation-alignment',
+      title: 'Pluralistic Civilisation Alignment',
+      parent: 'meta-utopia',
+      html: '<p><em>Pluralistic civilisation alignment</em> is alignment that does not impose a single vision of the good but holds many together: a civilisation whose institutions allow different communities and value systems to coexist, cooperate and correct one another. See <a href="#civilisation-alignment">civilisation alignment</a>.</p>'
+    },
+    {
+      id: 'world-democratic-federation',
+      title: 'World Democratic Federation',
+      parent: 'meta-utopia',
+      html: '<p>A <em>world democratic federation</em> is a global political order in which nations federate under a democratic government with limited, defined powers over global matters – war, the environment, dangerous technologies – while keeping self-government in everything else. It aims at the coordination of a world state without the tyranny of a centralised one.</p>'
+    },
+    {
+      id: 'moral-parliament-of-ai-representatives',
+      title: 'Moral Parliament of AI Representatives',
+      parent: 'meta-utopia',
+      html: '<p>A <em>moral parliament of AI representatives</em> extends the “parliamentary” approach to moral uncertainty proposed by Nick Bostrom and Toby Ord – in which competing moral views are imagined as delegates negotiating in proportion to our confidence in them – into an institution: AI systems representing the values and interests of different people, traditions and beings, deliberating to reach decisions no single perspective would impose.</p>'
+    },
+    {
+      id: 'genealogy-of-the-metacrisis',
+      title: 'Genealogy: Precursors within Intellectual History',
+      parent: 'metacrisis',
+      html: '<p>The analysis of the metacrisis has precursors throughout intellectual history: models of how societies are drawn between disorder and tyranny, and of the narrow paths between them. This genealogy traces the ideas on which the three-attractors model builds, from ancient theories of political cycles to recent work on existential risk and state power.</p>'
+    },
+    {
+      id: 'three-attractors-model',
+      title: 'The Three Attractors Model',
+      parent: 'genealogy-of-the-metacrisis',
+      ref: 'Schmachtenberger',
+      html: '<p>The <em>three attractors model</em>, developed by Daniel Schmachtenberger, describes the trajectories available to a civilisation with exponential technology: the <a href="#first-attractor">first attractor</a> of catastrophe, from uncoordinated power; the <a href="#second-attractor">second attractor</a> of dystopia, from the control imposed to prevent it; and the <a href="#third-attractor">third attractor</a>, a civilisation able to coordinate without centralising unaccountable power.</p>'
+    },
+    {
+      id: 'the-narrow-corridor',
+      title: 'The Narrow Corridor',
+      parent: 'genealogy-of-the-metacrisis',
+      ref: 'Acemoglu, Robinson',
+      refs: ['Daron Acemoglu and James A. Robinson, <em>The Narrow Corridor: States, Societies, and the Fate of Liberty</em> (2019).'],
+      html: '<p><em>The Narrow Corridor</em> (2019) is Daron Acemoglu and James Robinson’s account of how liberty arises. Liberty, they argue, depends on a balance between the power of the state and the power of society: too little state power leaves people at the mercy of violence and custom; too much leaves them at the mercy of the state. Only in the narrow corridor between, where state and society keep growing in strength together – the “Red Queen” effect – does liberty flourish.</p><h2>Absent Leviathan</h2><p>Where the state is weak or missing, there is no authority to resolve conflicts or restrain the strong. People are trapped by violence, feuding and the cage of custom – the condition Hobbes described as war of all against all.</p><h2>Despotic Leviathan</h2><p>Where the state overpowers society, it can provide order and even growth, but answers to no one. Its power is used at the discretion of its rulers, and society is left without the means to resist.</p><h2>Shackled Leviathan</h2><p>Where a strong state is matched by a strong, mobilised society, each checks the other. The state is capable but accountable, and society is protected both from disorder and from despotism. Staying in this corridor requires constant effort, as each side must keep pace with the other.</p>'
+    },
+    {
+      id: 'anacyclosis',
+      title: 'Anacyclosis: Cycle of Political Evolution',
+      parent: 'genealogy-of-the-metacrisis',
+      ref: 'Plato, Aristotle, Polybius',
+      refs: ['Plato, <em>Republic</em>, book VIII.', 'Aristotle, <em>Politics</em>, books III–V.', 'Polybius, <em>Histories</em>, book VI.'],
+      html: '<p><em>Anacyclosis</em> is the ancient theory that forms of government succeed one another in a cycle, each good form decaying into its corrupt counterpart and giving way to the next. Sketched by Plato in the <em>Republic</em> and by Aristotle in the <em>Politics</em>, it was set out most fully by Polybius in the sixth book of his <em>Histories</em>, who argued that Rome had escaped the cycle through a mixed constitution combining all three good forms.</p><h2>Monarchy → Tyranny</h2><p>Rule by one begins as kingship, accepted for its justice and ability; as power passes to heirs who know only privilege, it degenerates into tyranny, the rule of one in his own interest, until the best citizens overthrow it.</p><h2>Aristocracy → Oligarchy</h2><p>Rule by the few begins as aristocracy, government by the best; their descendants turn it into oligarchy, the rule of the few for their own wealth and pleasure, until the people rise against them.</p><h2>Democracy → Ochlocracy</h2><p>Rule by the many begins as democracy, in which equality and freedom are prized; over generations it decays into ochlocracy, mob rule, in which demagogues and violence prevail – until order is restored by a single strong ruler, and the cycle begins again.</p>'
     }
   ];
 
@@ -4643,21 +5206,29 @@
   // within it – with the concept itself picked out.
   function clusterHtml(c) {
     if (!(c.id in STRUCT_PARENT)) return '';
-    // Up to the block's head: the concept just below the section, or the subheading above.
-    var x = c.id, p = STRUCT_PARENT[x];
-    while (typeof p === 'string' && !(p in NEW_STRUCTURE)) { x = p; p = STRUCT_PARENT[x]; }
     function node(x) {
       if (typeof x === 'string') x = [x, []];
+      if (!Array.isArray(x)) return '<li><span class="nested-head">' + esc(x.head) + '</span><ul>' + x.items.map(node).join('') + '</ul></li>';
       var n = byId[x[0]], kids = x[1] || [];
       if (!n) return '';
       return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : '<a href="' + href(n) + '">' + esc(n.title) + '</a>') +
         (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
     }
-    if (p === x) p = null;
-    if (typeof p === 'string' && STRUCT_KIDS[p] && STRUCT_KIDS[p].indexOf(x) >= 0) return '<ul class="nested">' + node([p, STRUCT_KIDS[p]]) + '</ul>';   // (the section's own list within itself)
-    if (p && typeof p === 'object') {   // a subheading's list: the subheading, then its concepts (unless it only repeats the section's name)
-      var list = (STRUCT_SIBS[x] || []).map(node).join('');
-      return '<ul class="nested">' + (byId[p.parent] && byId[p.parent].title === p.title ? list : '<li><span class="nested-head">' + esc(p.title) + '</span><ul>' + list + '</ul></li>') + '</ul>';
+    // Up to the block it belongs to: the nearest leading group of its section above it (or itself),
+    // or a subheading at the top of the section.
+    var x = c.id;
+    for (var guard = 0; guard < 50; guard++) {
+      if (TOP_BLOCKS[x]) return '<ul class="nested">' + node([x, STRUCT_KIDS[x] || []]) + '</ul>';
+      var p = STRUCT_PARENT[x];
+      if (p && typeof p === 'object') {
+        if (p.parent in NEW_STRUCTURE) {   // a subheading's list: the subheading, then its concepts (unless it only repeats the section's name)
+          var list = (STRUCT_SIBS[x] || []).map(node).join('');
+          return '<ul class="nested">' + (byId[p.parent] && byId[p.parent].title === p.title ? list : '<li><span class="nested-head">' + esc(p.title) + '</span><ul>' + list + '</ul></li>') + '</ul>';
+        }
+        x = p.parent; continue;
+      }
+      if (typeof p !== 'string' || p === x || (p in NEW_STRUCTURE && !TOP_BLOCKS[p])) break;
+      x = p;
     }
     return '<ul class="nested">' + node([x, STRUCT_KIDS[x] || []]) + '</ul>';
   }
@@ -4692,11 +5263,47 @@
       ['civilisation-design', ['ontological-design', 'axiological-design', 'geodesign', 'institutional-design', 'mechanism-design', 'behavioural-design', 'social-design']],
       ['civilisation-x', ['civilisation-design-space', 'blue-skies-social-science', 'utopian-studies', 'meta-utopia', 'viatopia']],
       ['the-emergence-model', ['metastructure', 'inter-structure', 'infra-structure', 'super-structure', 'sub-structure', 'biostructure']],
-      ['third-attractor', ['first-attractor', 'second-attractor']],
+      ['third-attractor', ['first-attractor', 'second-attractor'], { also: true }],
       ['the-fourth-frontier', ['third-frontier', 'second-frontier', 'first-frontier']],
       ['game-b', ['anti-rivalrous-dynamics', 'antifragility', 'broadcast-vs-network-modality', 'protobs', 'society-4-0']],
       ['cybernetic-economics', ['integral', 'natural-law-resource-based-economy', 'resource-based-economy', 'project-cybersyn']],
       ['the-post-status-quo', ['post-capitalism', 'post-statism', 'post-humanism', 'post-genderism']]
+    ],
+    'metacrisis': [
+      ['civilisational-crisis', ['polycrisis', 'permacrisis', 'omnicrisis']],
+      ['metacrisis', ['problem-complex', 'generative-dynamics', 'attractor-states'], { label: 'The Metacrisis' }],
+      ['problem-complex', [
+        ['ecological-crisis', ['climate-migration', 'the-anthropocene',
+          ['planetary-boundaries', ['crossed-planetary-boundaries', 'safe-operating-space', 'tipping-points']],
+          ['the-great-simplification', ['carbon-pulse', 'energy-blindness', 'the-mordor-economy', 'jevons-paradox']]], { dropdown: true }],
+        ['technological-crisis', ['twin-nuclei-problem', 'artificial-intelligence-risks', 'synthetic-biotechnology-risks'], { dropdown: true }],
+        ['cultural-crisis', [
+          ['techno-epistemic-dynamics', ['algorithmic-political-polarisation', 'information-overload', 'memetic-warfare']],
+          ['the-sensemaking-crisis', ['the-darwinian-crisis', 'the-cartesian-crisis', 'the-nietzschean-crisis']]], { dropdown: true }],
+        ['geopolitical-crisis', ['international-competition-conflict-and-control',
+          ['world-war-iii', ['nuclear-war', 'resource-war', 'thucydides-trap']],
+          ['clash-of-civilisations', ['west-versus-islam', 'us-versus-china', 'global-south-and-indigenous-cultures']]], { dropdown: true }],
+        ['macroeconomic-crisis', ['global-financial-crisis', 'world-debt-crisis', 'technological-unemployment', 'ageing-populations'], { dropdown: true }],
+        ['bio-psycho-social-crisis', [
+          ['global-public-health-crisis', ['heart-disease', 'cancer', 'alzheimers-and-dementias', 'malaria', 'hiv-aids']],
+          ['global-mental-health-crisis', ['suicide-epidemic', 'addiction-epidemic', 'loneliness-epidemic']],
+          ['global-psychological-disorder', ['aggression-and-anti-social-behaviour', 'dark-triad-traits', 'political-radicalisation']],
+          'global-infertility'], { dropdown: true }]
+      ]],
+      ['generative-dynamics', [
+        { head: 'Game-Theoretic', items: ['zero-sum-game', 'arms-races-and-tragedies-of-the-commons', 'multipolar-trap', 'instrumental-convergence-and-strategy-stealing'] },
+        { head: 'Systems-Theoretic', items: ['narrow-metric-optimisation', 'positive-feedback-loops-and-power-asymmetries', 'exponential-technological-acceleration', 'life-blind-search-processes'] },
+        { head: 'Behavioural-Economic', items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures'] },
+        { head: 'Cultural-Psychological', items: ['left-hemispheric-conditioning', 'modernist-cultural-paradigm', 'scarcity-rivalry-orientation', 'psychopathic-selection-hypothesis', 'collective-psychological-alienation'] },
+        { head: 'Epistemic-Ontological', items: ['reductionist-world-modelling', 'isolated-problem-solving', 'structural-and-superstructural-separation'] },
+        { head: 'Mytho-poetic', items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
+      ]],
+      ['attractor-states', ['third-attractor', 'first-attractor', 'second-attractor']],
+      ['first-attractor', ['escalating-system-dynamics', 'escalating-state-competition', 'escalating-rogue-actors'], { label: 'The First Attractor: Decentralised Destruction' }],
+      ['second-attractor', ['global-stable-totalitarianism', 'hyper-surveillance-capitalism', 'despotic-drift-and-closed-society'], { label: 'The Second Attractor: Centralised Control' }],
+      ['third-attractor', ['cultural-enlightenment', 'decentralised-coordination',
+        ['meta-utopia', ['pluralistic-civilisation-alignment', 'world-democratic-federation', 'moral-parliament-of-ai-representatives']]], { label: 'The Third Attractor: Autopoietic Alignment' }],
+      ['genealogy-of-the-metacrisis', ['three-attractors-model', ['vulnerable-world-hypothesis', [], { also: true }], 'the-narrow-corridor', 'anacyclosis']]
     ],
     'civilisation-transition': [
       ['civilisation-transition', ['civilisational-paradigm-shift', 'theory-of-life-world-systems-change', 'phase-transition']],
@@ -4706,11 +5313,16 @@
   };
   // Each concept's place in the Civilisation Research Paradigm, as filed above: its parent there
   // (a concept, or a plain subheading), or nothing if it has not yet been filed.
-  var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {};   // (the concepts nested beneath each, and the list each is filed in)
+  // A node may carry options as a third element: { label } shows it under another name there,
+  // { dropdown } folds its concepts away behind it on the Map, and { also } marks a concept listed
+  // there too though filed elsewhere (it takes neither its place nor its nested concepts from there).
+  var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {}, TOP_BLOCKS = {};   // (the concepts nested beneath each, the list each is filed in, and each section's leading groups)
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
     (function walk(list, parent) {
       list.forEach(function (x) {
         if (typeof x === 'string') { if (!(x in STRUCT_PARENT)) { STRUCT_PARENT[x] = parent; STRUCT_SIBS[x] = list; } return; }
+        if (Array.isArray(x) && x[2] && x[2].also) return;
+        if (Array.isArray(x) && list === NEW_STRUCTURE[sec]) TOP_BLOCKS[x[0]] = true;
         if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT) && x[0] !== parent) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length && !STRUCT_KIDS[x[0]]) STRUCT_KIDS[x[0]] = x[1]; walk(x[1] || [], x[0]); return; }
         walk(x.items, { title: x.head, heading: true, parent: parent });
       });
@@ -4818,10 +5430,13 @@
     function structHtml(list, top) {
       return list.map(function (x) {
         if (typeof x === 'string') x = [x, []];
-        if (!Array.isArray(x)) return '<li class="is-category struct-head"><span>' + esc(x.head) + '</span><ul>' + structHtml(x.items) + '</ul></li>';
-        var c = byId[x[0]], kids = x[1] || [];
+        if (!Array.isArray(x)) return '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span><ul>' + structHtml(x.items) + '</ul></li>';
+        var c = byId[x[0]], kids = x[1] || [], o = x[2] || {};
         if (!c) return '';
-        return '<li' + (top ? ' class="is-category"' : '') + '><a href="' + href(c) + '">' + esc(c.title) + '</a>' +
+        var link = '<a href="' + href(c) + '">' + esc(o.label || c.title) + '</a>';
+        if (o.dropdown && kids.length)   // (folded: the marker opens it, the name still leads to the entry)
+          return '<li class="struct-drop' + (top ? ' is-category' : '') + '"><details><summary>' + link + '</summary><ul>' + structHtml(kids) + '</ul></details></li>';
+        return '<li' + (top ? ' class="is-category"' : '') + '>' + link +
           (kids.length ? '<ul>' + structHtml(kids) + '</ul>' : '') + '</li>';
       }).join('');
     }
