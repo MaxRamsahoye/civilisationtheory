@@ -1130,6 +1130,10 @@
   .description sup.sn-ref { margin-left: 0.1em; font-size: 0.5em; }
   .description .ab-list .sidenote { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; line-height: 1.55; }
   .description .sidenote .sn-num { vertical-align: super; margin-right: 0.3em; }
+  /* Pointing at a note's number, its sentence or the note itself lights up the pair together */
+  .description .sn-anchor, .description .sidenote[data-sn] { border-radius: 3px; transition: background-color .25s ease, box-shadow .25s ease; }
+  .description .sn-anchor.sn-on { background: var(--hl); box-shadow: 0 0 0 2px var(--hl); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+  .description .sidenote.sn-on { background: var(--hl); box-shadow: 0 0 0 0.45rem var(--hl); }
   /* (its lists are prose lists, not the other views' columns of links) */
   .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
   .description .ce-list.ab-list li { margin: 0 0 0.4rem; }
@@ -1879,8 +1883,8 @@
         '<p>This wiki site serves to create a <a href="#conceptual-adaptive-system"><em>conceptual adaptive system</em></a> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
 
         '<h2>Project Context</h2>',
-        '<aside class="sidenote"><span class="sn-num">1</span>The Civilisational Map is an independent project that is not affiliated with the <a href="#civilization-research-institute">Civilization Research Institute</a>.</aside>',
-        '<p>The Civilisation Theory Map is inspired by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> (ported over to this site <a href="#the-map/consilience-project">here</a>) and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>.<sup class="sn-ref">1</sup> More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
+        '<aside class="sidenote" data-sn="1"><span class="sn-num">1</span>The Civilisational Map is an independent project that is not affiliated with the <a href="#civilization-research-institute">Civilization Research Institute</a>.</aside>',
+        '<p><span class="sn-anchor" data-sn="1">The Civilisation Theory Map is inspired by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> (ported over to this site <a href="#the-map/consilience-project">here</a>) and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>.<sup class="sn-ref">1</sup></span> More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
         '<ul>',
         '<li><strong>The Meta-space:</strong> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>',
         '<li><strong>The PARA-academic space:</strong> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>',
@@ -8676,6 +8680,18 @@
       if (location.hash !== '#the-map') return;
       setMapTail(); joinSeqRules(); toMapView();
     }, 500);
+  });
+
+  // Sidenotes: pointing at a note's number, the sentence it belongs to, or the note itself
+  // highlights the sentence and the note together.
+  ['mouseover', 'mouseout'].forEach(function (type) {
+    document.addEventListener(type, function (e) {
+      var el = e.target.closest && e.target.closest('[data-sn]');
+      if (!el) return;
+      var to = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('[data-sn="' + el.getAttribute('data-sn') + '"]');
+      if (type === 'mouseout' && to) return;   // (still within the pair)
+      document.querySelectorAll('[data-sn="' + el.getAttribute('data-sn') + '"]').forEach(function (n) { n.classList.toggle('sn-on', type === 'mouseover'); });
+    });
   });
 
   // A link to the Map view already open (e.g. an ⓘ while on About the Project): the address does
