@@ -1305,6 +1305,25 @@
     html.page-map .index-tabs .tab-name { font-size: clamp(0.58rem, calc((100cqi - 13rem) / 55), 1.22rem); }
     html.page-map .index-tabs .tab-meta { font-size: clamp(0.52rem, calc((100cqi - 13rem) / 87), 0.7rem); }
   }
+  /* Before a view is chosen, a pulse of the accent colour courses along the tab line – left to
+     right, then back – inviting a choice. (Desktop: the one full-width line; narrower: each tab's
+     own stretch of line.) */
+  @keyframes tab-flow { from { background-position: -55% 0; } to { background-position: 155% 0; } }
+  html.page-map[data-index="none"] .description .index-tabs,
+  html.page-map[data-index="none"] .index-tabs button { position: relative; }
+  html.page-map[data-index="none"] .description .index-tabs::before,
+  html.page-map[data-index="none"] .index-tabs button::before {
+    content: ''; position: absolute; z-index: 1; left: 0; right: 0; top: -1px; height: 2px; pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent) no-repeat;
+    background-size: 35% 100%;
+    animation: tab-flow 3.2s ease-in-out infinite alternate;
+  }
+  @media (min-width: 1000px) { html.page-map[data-index="none"] .index-tabs button::before { content: none; } }
+  @media (max-width: 999px) { html.page-map[data-index="none"] .description .index-tabs::before { content: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    html.page-map[data-index="none"] .description .index-tabs::before,
+    html.page-map[data-index="none"] .index-tabs button::before { animation: none; content: none; }
+  }
   /* The new structure's sections, after the curated sequence */
   .description .seq-structure { margin-top: 4rem; }
   .description .index-domain > .rl-empty { margin: 0; }
