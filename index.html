@@ -4586,34 +4586,28 @@
   function byTitle(a, b) { return sortKey(a).localeCompare(sortKey(b)); }
   // cpOnly: the Consilience Project's own version of a concept the map already has; it appears
   // only in the Consilience Project view, never in the tree, A–Z, counts or search.
-  // A concept entry closes with its References (the works it draws on, from refs) and its Nested
-  // Concepts (those filed beneath it in the Civilisation Research Paradigm); either is left out when empty.
-  function nestedHtml(list) {
-    return list.map(function (x) {
-      if (typeof x === 'string') x = [x, []];
-      var c = byId[x[0]], kids = x[1] || [];
-      if (!c) return '';
-      return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a>' + (kids.length ? '<ul>' + nestedHtml(kids) + '</ul>' : '') + '</li>';
-    }).join('');
-  }
-  // The Concept Cluster: the concept's local tree in the paradigm – the line of concepts above it
-  // from its section down, its fellows beside it, and everything nested beneath it.
+  // A concept entry closes with its References (the works it draws on, from refs) and its Concept
+  // Cluster (its block of the Civilisation Research Paradigm); either is left out when empty.
+  // The Concept Cluster: the block of the paradigm the concept belongs to, as the Civilisation Research
+  // Paradigm shows it – the group at the top of its section (or the subheading's list) and all nested
+  // within it – with the concept itself picked out.
   function clusterHtml(c) {
-    var path = crumbPath(c);
-    if (!path || !(c.id in STRUCT_PARENT)) return '';
-    var above = path.slice(1, -1);   // section … parent (subheadings included, unlinked)
-    var here = '<li><span class="nested-self">' + esc(c.title) + '</span>' + (STRUCT_KIDS[c.id] ? '<ul>' + nestedHtml(STRUCT_KIDS[c.id]) + '</ul>' : '') + '</li>';
-    var level = (STRUCT_SIBS[c.id] || [c.id]).map(function (x) {
-      var id = typeof x === 'string' ? x : Array.isArray(x) ? x[0] : null;
-      if (id === c.id) return here;
-      if (!id) return '<li><span class="nested-head">' + esc(x.head) + '</span></li>';
-      var s = byId[id]; return s ? '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>' : '';
-    }).join('');
-    for (var i = above.length - 1; i >= 0; i--) {
-      var a = above[i];
-      level = '<li>' + (a.heading ? '<span class="nested-head">' + esc(a.title) + '</span>' : '<a href="' + href(a) + '">' + esc(a.title) + '</a>') + '<ul>' + level + '</ul></li>';
+    if (!(c.id in STRUCT_PARENT)) return '';
+    // Up to the block's head: the concept just below the section, or the subheading above.
+    var x = c.id, p = STRUCT_PARENT[x];
+    while (typeof p === 'string' && !(p in NEW_STRUCTURE)) { x = p; p = STRUCT_PARENT[x]; }
+    function node(x) {
+      if (typeof x === 'string') x = [x, []];
+      var n = byId[x[0]], kids = x[1] || [];
+      if (!n) return '';
+      return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : '<a href="' + href(n) + '">' + esc(n.title) + '</a>') +
+        (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
     }
-    return '<ul class="nested">' + level + '</ul>';
+    if (p && typeof p === 'object') {   // a subheading's list: the subheading, then its concepts (unless it only repeats the section's name)
+      var list = (STRUCT_SIBS[x] || []).map(node).join('');
+      return '<ul class="nested">' + (byId[p.parent] && byId[p.parent].title === p.title ? list : '<li><span class="nested-head">' + esc(p.title) + '</span><ul>' + list + '</ul></li>') + '</ul>';
+    }
+    return '<ul class="nested">' + node([x, STRUCT_KIDS[x] || []]) + '</ul>';
   }
   function endSectionsHtml(c) {
     var out = '';
@@ -5748,8 +5742,8 @@
       filter.connect(out).connect(audioCtx.destination);
     } catch (e) {}
   }
-  // Reaching the end of the progress bar: two bright notes rising (G6, then C7), an octave above
-  // the clicks' chime, so it reads as a small arrival.
+  // Reaching the end of the progress bar: one soft, swelling tone (C6, just above the clicks' chime)
+  // with its fifth sounding faintly inside it – a quiet settling rather than a ring.
   function doneChime() {
     if (!soundOn) return;
     var AC = window.AudioContext || window.webkitAudioContext;
@@ -5757,21 +5751,18 @@
     try {
       audioCtx = audioCtx || new AC();
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      var t0 = audioCtx.currentTime;
-      [[1567.98, 0], [2093.0, 0.11]].forEach(function (n) {
-        var t = t0 + n[1], out = audioCtx.createGain(), filter = audioCtx.createBiquadFilter();
-        filter.type = 'lowpass'; filter.frequency.value = 5200;
-        out.gain.setValueAtTime(0.0001, t);
-        out.gain.exponentialRampToValueAtTime(0.035, t + 0.01);
-        out.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
-        [[1, 1], [2, 0.12]].forEach(function (h) {
-          var osc = audioCtx.createOscillator(), g = audioCtx.createGain();
-          osc.type = 'sine'; osc.frequency.value = n[0] * h[0]; g.gain.value = h[1];
-          osc.connect(g).connect(filter);
-          osc.start(t); osc.stop(t + 1.15);
-        });
-        filter.connect(out).connect(audioCtx.destination);
+      var t = audioCtx.currentTime, out = audioCtx.createGain(), filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass'; filter.frequency.value = 2400;
+      out.gain.setValueAtTime(0.0001, t);
+      out.gain.exponentialRampToValueAtTime(0.03, t + 0.09);   // (a gentle swell, not a strike)
+      out.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
+      [[1, 1], [1.5, 0.22], [2, 0.06]].forEach(function (h) {
+        var osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+        osc.type = 'sine'; osc.frequency.value = 1046.5 * h[0]; g.gain.value = h[1];
+        osc.connect(g).connect(filter);
+        osc.start(t); osc.stop(t + 1.65);
       });
+      filter.connect(out).connect(audioCtx.destination);
     } catch (e) {}
   }
   // The title's keys: short, soft plucks from the same pentatonic scale as the clicks' chime but an
