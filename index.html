@@ -49,6 +49,7 @@
     // The loading sequence plays only when the Map itself is opened or refreshed (not one of its
     // views); a refresh on any other page simply reopens that page.
     document.documentElement.setAttribute('data-theme-after', t);
+    if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
     // The loading screen is shown in the blue (midnight) theme; the reader's own theme – light by
@@ -836,6 +837,10 @@
     }
   }
 
+  @container (min-width: 66rem) {
+    body.sidebar-closed .description .ab-list .sidenote { width: 12rem; margin: 0.35rem -14.5rem 0 0; }
+  }
+
   /* ---------- Right-click menu: Copy, Copy Link to Highlight (in the find bar's style) ---------- */
   #ctx-menu {
     position: fixed; z-index: 60; min-width: 13.5rem; padding: 0.3rem;
@@ -1096,6 +1101,19 @@
   :root[data-index="cp"] .index-list,
   :root[data-index="cp"] .az-view,
   :root[data-index="cp"] .ce-list:not(.cp-list) { display: none; }
+  /* About the Project view */
+  :root:not([data-index="ab"]) .ab-list,
+  :root[data-index="ab"] .index-list,
+  :root[data-index="ab"] .az-view,
+  :root[data-index="ab"] .ce-list:not(.ab-list) { display: none; }
+  .description .ab-list { max-width: 39rem; }
+  /* (its lists are prose lists, not the other views' columns of links) */
+  .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
+  .description .ce-list.ab-list li { margin: 0 0 0.4rem; }
+  .description .ce-list.ab-list ul.totals { list-style: none; padding: 0; margin: 0.6rem 0 0; font-size: 0.88rem; }
+  .description .ce-list.ab-list ul.totals li { margin: 0; }
+  html.page-map #toc { display: none !important; }   /* (the Map has no contents column, the About view included) */
+  .description .ab-list > h2:first-of-type { margin-top: 3rem; }
   /* Curated Sequence view */
   :root:not([data-index="cs"]) .cs-list,
   :root[data-index="cs"] .index-list,
@@ -1163,6 +1181,7 @@
   :root[data-index="az"] .index-tabs [data-view="az"],
   :root[data-index="ce"] .index-tabs [data-view="ce"],
   :root[data-index="cp"] .index-tabs [data-view="cp"],
+  :root[data-index="ab"] .index-tabs [data-view="ab"],
   :root[data-index="rl"] .index-tabs [data-view="rl"],
   :root[data-index="cs"] .index-tabs [data-view="cs"],
   :root[data-index="tree"] .index-tabs [data-view="cs"] {
@@ -1342,7 +1361,8 @@
   :root[data-index="rl"].page-map .index-tabs [data-view="rl"],
   :root[data-index="az"].page-map .index-tabs [data-view="az"],
   :root[data-index="ce"].page-map .index-tabs [data-view="ce"],
-  :root[data-index="cp"].page-map .index-tabs [data-view="cp"] { background: var(--hl); border-radius: 0 0 5px 5px; }
+  :root[data-index="cp"].page-map .index-tabs [data-view="cp"],
+  :root[data-index="ab"].page-map .index-tabs [data-view="ab"] { background: var(--hl); border-radius: 0 0 5px 5px; }
   /* Everything on the Map in full ink: the muted grey is redefined as the text colour within it */
   html.page-map #entry .description { --muted: var(--text); }
   html.page-map .description > p:first-child { text-align: left; }
@@ -1766,7 +1786,7 @@
   </div>
   <div class="side-icons">
     <a href="#the-map" data-page="the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
-    <a href="#theproject" data-page="home" aria-label="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>
+    <a href="#the-map/theproject" data-page="home" aria-label="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>
     <a href="#search" data-page="search" aria-label="Search" aria-keyshortcuts="/"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg></a>
     <a href="#infinite" data-page="infinite" aria-label="Infinite" hidden><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
   </div>
@@ -1784,7 +1804,7 @@
     <a class="head-title" href="#the-map">Civilisational</a>
     <nav class="head-icons" aria-label="Site">
       <a href="#the-map" data-page="the-map" aria-label="The Map" title="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>
-      <a href="#theproject" data-page="home" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>
+      <a href="#the-map/theproject" data-page="home" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>
       <a href="#infinite" data-page="infinite" aria-label="Infinite" title="Infinite" hidden><svg viewBox="-6.8 -6.8 113.5 113.5" aria-hidden="true"><rect x="8" y="30" width="62" height="58"/><polyline points="22,30 22,21 80,21 80,72 70,72"/><polyline points="36,21 36,12 92,12 92,60 80,60"/></svg></a>
       <a href="#search" class="head-search" data-page="search" aria-label="Search concepts" title="Search ( / )" aria-keyshortcuts="/">
         <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
@@ -7540,16 +7560,27 @@
   // Every node listed on the landscape (its own entries and the concepts placed on it), counted as
   // the Research Landscape tab and the About page's totals both show it
   function landscapeNodeCount() {
-    function count(list) {
-      var n = 0;
-      list.forEach(function (x) {
-        if (typeof x === 'string') n++;
-        else if (Array.isArray(x)) { if (!NEW_STRUCTURE[x[0]]) n++; n += count(x[1] || []); }   // (a section listed within itself is not counted)
-        else n += count(x.items);
-      });
-      return n;
-    }
-    return LANDSCAPE.reduce(function (t, sec) { return t + sec.groups.reduce(function (u, g) { return u + count(g.items); }, 0); }, 0);
+    var seen = {};
+    LANDSCAPE.forEach(function (sec) { sec.groups.forEach(function (g) { structIds(g.items, seen); }); });
+    return Object.keys(seen).length;   // (a node listed in more than one place counted once)
+  }
+  // The ids listed in a structure (paradigm or landscape), gathered into `seen`: each once, however
+  // often it appears; a section listed within itself is not one of its own concepts.
+  function structIds(list, seen) {
+    list.forEach(function (x) {
+      if (typeof x === 'string') seen[x] = true;
+      else if (Array.isArray(x)) { if (!NEW_STRUCTURE[x[0]]) seen[x[0]] = true; structIds(x[1] || [], seen); }
+      else structIds(x.items, seen);
+    });
+    return seen;
+  }
+  // The concepts of the Civilisation Research Paradigm: those filed in its sections and those of its
+  // High-Level section, each counted once.
+  function paradigmCount() {
+    var seen = {};
+    CONCEPTS.forEach(function (c) { if (c.id in STRUCT_PARENT && isConcept(c)) seen[c.id] = true; });
+    curatedSequence().forEach(function (c) { if (isConcept(c)) seen[c.id] = true; });
+    return Object.keys(seen).length;
   }
   var LANDSCAPE = [
     { title: 'Cybernetic Economics', entry: 'cybernetic-economics',
@@ -7651,7 +7682,7 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
     });
   }
-  function href(c) { return c === ROOT ? '#theproject' : c.view ? mapViewHref(c.view) : '#' + c.id; }
+  function href(c) { return c === ROOT ? mapViewHref('ab') : c.view ? mapViewHref(c.view) : '#' + c.id; }
   // In lists outside the Conceptual Engineerings view itself, each of the map creator's own
   // conceptual engineerings carries a small CE after its title.
   function markCoined(root) {
@@ -7712,15 +7743,8 @@
     var overviewDesc = '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation: ' + (['', '', '', '', '', '', '', '', '', 'nine', 'ten', 'eleven'][sections.length] || sections.length) + ' fields in three sets – ' +
       '<em>civilisational</em> (mechanics, design, transition, alignment), <em>meta</em> (crisis, modernism, theory) ' +
       'and <em>macro</em> (history, sociology, strategy).</p>';
-    function structCount(list) {
-      var n = 0;
-      list.forEach(function (x) {
-        if (typeof x === 'string') n++;
-        else if (Array.isArray(x)) { if (!NEW_STRUCTURE[x[0]]) n++; n += structCount(x[1] || []); }   // (a section listed within itself is not counted)
-        else n += structCount(x.items);
-      });
-      return n;
-    }
+    // (each concept counted once, however many places it is listed in)
+    function structCount(list) { return Object.keys(structIds(list, {})).length; }
     function structHtml(list, top) {
       return list.map(function (x) {
         if (typeof x === 'string') x = [x, []];
@@ -7832,11 +7856,11 @@
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc +
       // (every concept filed in the paradigm, counted once)
-      '<p class="ce-intro">Concepts: ' + concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length + '</p>' + sectionMenuHtml() +
+      '<p class="ce-intro">Concepts: ' + paradigmCount() + '</p>' + sectionMenuHtml() +
       // First the curated sequence, as a section of its own (High-Level, unnumbered and not in the
       // menu); then the numbered sections with their concepts.
       '<div class="seq-structure"><section class="index-domain set-start" id="nidx-high-level">' +
-        '<p class="domain-label">' + seq.length + ' concepts</p><h3 class="domain-title">High-Level</h3>' +
+        '<p class="domain-label">' + seq.filter(function (c, i) { return seq.indexOf(c) === i; }).length + ' concepts</p><h3 class="domain-title">High-Level</h3>' +
         '<p class="domain-desc">The major frames that structure the civilisation research paradigm.</p>' +
         '<div class="seq-list">' + sequenceListHtml(null) + '</div></section>' +
         sectionsHtml() + '</div></div>';
@@ -7848,7 +7872,7 @@
       '<p class="ce-desc">The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' +
       '<p class="ce-intro">Nodes: ' + rlCount + '</p><div class="seq-structure">' +
       LANDSCAPE.map(function (sec, i) {
-        var n = sec.groups.reduce(function (t, g) { return t + structCount(g.items); }, 0), e = sec.entry && byId[sec.entry];
+        var n = Object.keys(sec.groups.reduce(function (seen, g) { return structIds(g.items, seen); }, {})).length, e = sec.entry && byId[sec.entry];
         return '<section class="index-domain' + (i === 0 ? ' set-start' : '') + '">' +
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + ' nodes</p>' +
           '<h3 class="domain-title">' + (e ? '<a href="' + href(e) + '">' + esc(sec.title) + '</a>' : esc(sec.title)) + '</h3>' +
@@ -7857,18 +7881,20 @@
             return '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items) + '</ul></li>';
           }).join('') + '</ul>' : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
-    // The views as two rows of three tabs, each with its own tally beneath its name.
+    // About the Project: the site's introduction (the root entry), as a view of the Map.
+    var ab = '<div class="ce-list ab-list"><h3 class="ce-title">About the Project</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
+    // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
         '<span class="tab-meta">' + meta + '</span></button>';
     }
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
-      tab('cs', 'Civilisation Research Paradigm', sections.length + ' sections – ' + concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length + ' concepts') +
+      tab('ab', 'About the Project', (concepts.length + CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length) + ' entries') +
+      tab('cs', 'Civilisation Research Paradigm', sections.length + ' sections – ' + paradigmCount() + ' concepts') +
       tab('rl', 'Civilisation Research Landscape', rlCount + ' nodes') +
       tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') +
-      tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
-      tab('cp', 'Consilience Project', cpTerms.length + ' glossary terms') + '</nav>' +
-      (concepts.length ? az + ce + cp + cs + rl : '');
+      tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') + '</nav>' +
+      (concepts.length ? ab + az + ce + cp + cs + rl : '');
   }
 
   // k = how many of the earliest nodes step out into the vertical stack above the line.
@@ -8335,7 +8361,7 @@
   }
 
   // The addresses of the Map's five views
-  var MAP_VIEWS = { cs: 'civilisation-research-paradigm', rl: 'civilisation-research-landscape', az: 'a-z', ce: 'conceptual-engineerings', cp: 'consilience-project' };
+  var MAP_VIEWS = { ab: 'theproject', cs: 'civilisation-research-paradigm', rl: 'civilisation-research-landscape', az: 'a-z', ce: 'conceptual-engineerings', cp: 'consilience-project' };
   function mapViewHref(v) { return '#the-map/' + MAP_VIEWS[v]; }
   // The A–Z's letters fill three columns in reading order with no later letter set higher than an
   // earlier one: each goes, in turn, to whichever column lets it start highest, but never above
@@ -8377,6 +8403,7 @@
   var viewPause = 60;   // (before a view's address brings the view up)
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (id === ROOT.id) { id = 'the-map/' + MAP_VIEWS.ab; history.replaceState(null, '', '#' + id); }   // (the About page is now a view of the Map)
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
     // The Map's five views have their own addresses (#the-map/…): the Map, opened on that view.
     var mapView = null;
@@ -8388,7 +8415,7 @@
       tagsHtml(c) +
       '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) +
         // (the Map's title carries a small ⓘ to the About page, as in the header)
-        (c.id === 'the-map' ? '<a class="h1-about" href="#theproject" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>' : '') + '</h1>' +
+        (c.id === 'the-map' ? '<a class="h1-about" href="#the-map/theproject" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>' : '') + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()) +
       (isConcept(c) && !PAGES[c.id] ? endSectionsHtml(c) : '') +
       '</div>';
@@ -8886,13 +8913,14 @@
   // nodes and the About page (only the glossary-only definitions, which live on the CP view, are not).
   // …and so are the Map's five views, each found by its name and description.
   var VIEW_ENTRIES = [
+    { id: 'view-ab', view: 'ab', title: 'About the Project', html: ROOT.html },
     { id: 'view-cs', view: 'cs', title: 'Civilisation Research Paradigm', html: '<p>The map’s concepts arranged as a research paradigm for the study of civilisation: ten fields in three sets – civilisational (mechanics, design, transition, alignment), meta (crisis, modernism, theory) and macro (history, sociology, strategy).</p>' },
     { id: 'view-rl', view: 'rl', title: 'Civilisation Research Landscape', html: '<p>The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' },
     { id: 'view-az', view: 'az', title: 'Alphabetical A–Z', html: '<p>Every concept on the map organised into an alphabetical list.</p>' },
     { id: 'view-ce', view: 'ce', title: 'Conceptual Engineerings', html: '<p>The map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities.</p>' },
     { id: 'view-cp', view: 'cp', title: 'Consilience Project', html: '<p>The terms of the glossary of The Consilience Project, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations.</p>' }
   ];
-  var searchIndex = CONCEPTS.filter(function (c) { return !c.cpOnly; }).concat(VIEW_ENTRIES).map(function (c) {
+  var searchIndex = CONCEPTS.filter(function (c) { return !c.cpOnly && c !== ROOT; }).concat(VIEW_ENTRIES).map(function (c) {
     var tmp = document.createElement('div');
     tmp.innerHTML = c.html;
     var raw = tmp.textContent.replace(/\s+/g, ' ').trim();
@@ -9086,8 +9114,8 @@
   // conceptual engineerings among them) and the landscape's nodes – together, its entries.
   function totalsHtml() {
     var concepts = CONCEPTS.filter(isConcept);
-    var filed = concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length;
-    var coined = concepts.filter(function (c) { return c.coined; }).length;
+    var filed = paradigmCount();
+    var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Conceptual Engineerings tab counts them)
     var nodes = CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length;   // (the landscape's own entries, for the total)
     function row(label, n) { return '<li><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
     return '<h2>Totals</h2><ul class="totals">' +
@@ -9511,7 +9539,7 @@
       setHudless(false);
     } else if (document.documentElement.classList.contains('page-map') && !e.repeat && (/^[1-5]$/.test(e.key) || e.key === 'Enter')) {
       // The Map's views: 1–5 in tab order (Enter = 1)
-      var vs = ['cs', 'rl', 'az', 'ce', 'cp'], v = vs[e.key === 'Enter' ? 0 : +e.key - 1];
+      var vs = ['ab', 'cs', 'rl', 'az', 'ce'], v = vs[e.key === 'Enter' ? 0 : +e.key - 1];
       var btn = document.querySelector('#entry .index-tabs [data-view="' + v + '"]');
       if (btn) { e.preventDefault(); btn.click(); }
     } else if ((e.key === 'a' || e.key === 'A') && !e.repeat) {
