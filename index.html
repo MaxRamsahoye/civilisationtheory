@@ -1328,8 +1328,8 @@
   .slide-title a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); }
   @media (max-width: 899px) { .description .slide-title { font-size: 2.1rem; } }
 
-  /* A–Z: letters dealt across three columns (A, B, C, then D under A, E under B…), each letter's
-     concepts listed down beneath it; each column keeps its own height, so no row gaps */
+  /* A–Z: letters set across three columns in reading order, each letter's concepts listed down
+     beneath it (placed by layoutAZ, so that no later letter starts higher than an earlier one) */
   .az-list {
     margin-top: 2.4rem; font-size: 0.9em; line-height: 1.3;
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 1.4rem; row-gap: 2rem;
@@ -5103,6 +5103,43 @@
   // The addresses of the Map's five views
   var MAP_VIEWS = { cs: 'civilisation-research-paradigm', rl: 'civilisation-research-landscape', az: 'a-z', ce: 'conceptual-engineerings', cp: 'consilience-project' };
   function mapViewHref(v) { return '#the-map/' + MAP_VIEWS[v]; }
+  // The A–Z's letters fill three columns in reading order with no later letter set higher than an
+  // earlier one: each goes, in turn, to whichever column lets it start highest, but never above
+  // the letter before it (pushed down to that letter's line where need be).
+  var azWatch = null;
+  function layoutAZ() {
+    var list = document.querySelector('#entry .az-list');
+    if (!list || !list.offsetWidth) return;
+    var cols = list.querySelectorAll('.az-col'), groups = Array.prototype.slice.call(list.querySelectorAll('.az-group'));
+    groups.sort(function (a, b) { return a.style.order - b.style.order; });
+    groups.forEach(function (g) { g.style.marginTop = ''; });
+    if (getComputedStyle(list).display !== 'grid' || cols.length < 2) return;   // one column: plain order
+    var gap = parseFloat(getComputedStyle(cols[0]).rowGap) || 0, bottoms = [], prevTop = 0, k;
+    for (k = 0; k < cols.length; k++) bottoms.push(null);
+    groups.forEach(function (g) {
+      var best = 0, bestTop = Infinity;
+      for (k = 0; k < cols.length; k++) {
+        var natural = bottoms[k] === null ? 0 : bottoms[k] + gap, top = Math.max(natural, prevTop);
+        if (top < bestTop - 0.5) { bestTop = top; best = k; }
+      }
+      var natural = bottoms[best] === null ? 0 : bottoms[best] + gap;
+      cols[best].appendChild(g);
+      g.style.marginTop = (bestTop - natural) + 'px';
+      bottoms[best] = bestTop + g.offsetHeight; prevTop = bestTop;
+    });
+  }
+  function watchAZ() {
+    if (azWatch) { azWatch.disconnect(); azWatch = null; }
+    var list = document.querySelector('#entry .az-list');
+    if (!list) return;
+    var w = -1;
+    if (window.ResizeObserver) {
+      azWatch = new ResizeObserver(function () { if (list.offsetWidth !== w) { w = list.offsetWidth; layoutAZ(); } });
+      azWatch.observe(list);
+    }
+    layoutAZ();
+    if (document.fonts) document.fonts.ready.then(layoutAZ);
+  }
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
@@ -5142,6 +5179,7 @@
 
     buildToc();
     markCoined(document.getElementById('entry'));
+    watchAZ();
     // The Map is the front page, and carries the site's own title; the root entry is its About page.
     document.title = c.id === 'the-map' ? 'Civilisational' : (c === ROOT ? 'About' : c.title) + ' · Civilisation Theory Map';
     var pageId = c === ROOT ? 'home' : c.id;
