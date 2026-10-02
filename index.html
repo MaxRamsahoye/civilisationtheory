@@ -7318,7 +7318,7 @@
     var cpTerms = CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); }).sort(byTitle);
     var cp = '<div class="ce-list cp-list">' +
       '<h3 class="ce-title">Consilience Project</h3>' +
-      '<p class="ce-desc">The terms of the <a href="https://consilienceproject.org/glossary/" target="_blank" rel="noopener">glossary</a> of <em>The Consilience Project</em>, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations. Where the map already had its own entry for a term, the Consilience Project’s definition is given as a separate entry here.</p>' +
+      '<p class="ce-desc">The terms of the <a href="https://consilienceproject.org/glossary/" target="_blank" rel="noopener">glossary of <em>The Consilience Project</em></a>, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations. Where the map has its own entry for a term, the Consilience Project’s definition is given as a separate entry here.</p>' +
       '<p class="ce-intro">Glossary terms: ' + cpTerms.length + '</p><ul>' +
       // The list jumps to each term's definition below; each definition's title opens its entry.
       cpTerms.map(function (c) { return '<li><a href="#" data-jump="cpd-' + c.id + '">' + esc(c.title) + '</a></li>'; }).join('') +
