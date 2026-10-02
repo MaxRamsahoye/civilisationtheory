@@ -838,7 +838,10 @@
   }
 
   @container (min-width: 66rem) {
-    body.sidebar-closed .description .ab-list .sidenote { width: 12rem; margin: 0.35rem -16.5rem 0 0; }
+    body.sidebar-closed .description .ab-list .sidenote {
+      --snw: clamp(8rem, calc((100vw - 39rem) / 2 - 5.7rem), 18rem);   /* (reaching right as far as the margin allows, clear of the screen edge) */
+      width: var(--snw); margin: 0.35rem calc(-1 * (var(--snw) + 4.5rem)) 0 0;
+    }
   }
 
   /* ---------- Right-click menu: Copy, Copy Link to Highlight (in the find bar's style) ---------- */
