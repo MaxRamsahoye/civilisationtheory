@@ -789,6 +789,31 @@
   mark.find-hit.current { background: var(--accent); color: var(--bg); }
   html.hudless #find-bar { opacity: 1 !important; visibility: visible !important; }
 
+  /* ---------- Right-click menu: Copy, Copy Link to Highlight (in the find bar's style) ---------- */
+  #ctx-menu {
+    position: fixed; z-index: 60; min-width: 13.5rem; padding: 0.3rem;
+    background: var(--bg-side); border: 1px solid var(--rule); border-radius: 3px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    animation: ctx-in .14s ease;
+  }
+  @keyframes ctx-in { from { opacity: 0; transform: translateY(-0.25rem); } }
+  #ctx-menu button {
+    display: flex; align-items: center; gap: 0.6rem; width: 100%; text-align: left;
+    font: inherit; font-size: 0.8rem; color: var(--text); background: none; border-radius: 2px;
+    padding: 0.42rem 0.55rem;
+  }
+  #ctx-menu button:hover:not(:disabled), #ctx-menu button:focus-visible { background: var(--select); }
+  #ctx-menu button:disabled { color: var(--muted); opacity: 0.55; cursor: default; }
+  #ctx-menu svg { width: 0.85rem; height: 0.85rem; flex: none; fill: none; stroke: var(--muted); stroke-width: 1.4px; overflow: visible; }
+  #ctx-menu svg * { vector-effect: non-scaling-stroke; }
+  #ctx-menu .ctx-key { margin-left: auto; padding-left: 1.2rem; font-size: 0.64rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
+  #ctx-menu .ctx-done { color: var(--accent); }
+  html.hudless #ctx-menu { opacity: 1 !important; visibility: visible !important; }
+  /* the passage a highlight link points to */
+  ::highlight(link-hit) { background-color: var(--hl); color: inherit; }
+  ::target-text { background-color: var(--hl); color: inherit; }
+
   /* ---------- Footer ---------- */
   #site-footer {
     border-top: 1px solid var(--rule);
@@ -8893,6 +8918,123 @@
       stepFind(e.shiftKey ? -1 : 1);
     }
   });
+
+  // ---------- Right-click menu: Copy, and Copy Link to Highlight ----------
+  // In place of the browser's own menu (which Shift+right-click still opens, as do text fields and
+  // links out of the site): Copy copies the selected text; Copy Link to Highlight copies a link to
+  // this page that, when opened, scrolls to the selected passage and highlights it (a standard
+  // text-fragment link, #page:~:text=…, which other browsers also follow).
+  var ctxMenu = document.createElement('div');
+  ctxMenu.id = 'ctx-menu'; ctxMenu.hidden = true; ctxMenu.setAttribute('role', 'menu');
+  var isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+  ctxMenu.innerHTML =
+    '<button type="button" role="menuitem" data-ctx="copy"><svg viewBox="0 0 100 100" aria-hidden="true"><rect x="34" y="34" width="50" height="54" rx="4"/><path d="M66,22 V16 a4,4 0 0 0 -4,-4 H20 a4,4 0 0 0 -4,4 V62 a4,4 0 0 0 4,4 H26"/></svg>' +
+      '<span class="ctx-label">Copy</span><span class="ctx-key">' + (isMac ? '⌘C' : 'Ctrl+C') + '</span></button>' +
+    '<button type="button" role="menuitem" data-ctx="link"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M44,58 a14,14 0 0 0 20,0 l14,-14 a14,14 0 0 0 -20,-20 l-6,6"/><path d="M56,42 a14,14 0 0 0 -20,0 l-14,14 a14,14 0 0 0 20,20 l6,-6"/></svg>' +
+      '<span class="ctx-label">Copy Link to Highlight</span></button>';
+  document.body.appendChild(ctxMenu);
+  var ctxText = '';
+  function closeCtx() { ctxMenu.hidden = true; }
+  function selText() { return String(window.getSelection() || '').replace(/\s+/g, ' ').trim(); }
+  document.addEventListener('contextmenu', function (e) {
+    if (e.shiftKey) return;
+    var t = e.target;
+    if (t.closest && (t.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]') ||
+        (t.closest('a[href]') && !/^#/.test(t.closest('a[href]').getAttribute('href'))))) return;
+    e.preventDefault();
+    ctxText = selText();
+    ctxMenu.querySelectorAll('button').forEach(function (b) { b.disabled = !ctxText; });
+    ctxMenu.querySelectorAll('.ctx-label').forEach(function (l, i) { l.textContent = i ? 'Copy Link to Highlight' : 'Copy'; l.classList.remove('ctx-done'); });
+    ctxMenu.hidden = false;
+    ctxMenu.style.animation = 'none'; void ctxMenu.offsetWidth; ctxMenu.style.animation = '';
+    var w = ctxMenu.offsetWidth, h = ctxMenu.offsetHeight;
+    ctxMenu.style.left = Math.max(8, Math.min(e.clientX, window.innerWidth - w - 8)) + 'px';
+    ctxMenu.style.top = Math.max(8, e.clientY + h + 8 > window.innerHeight ? e.clientY - h : e.clientY) + 'px';
+  });
+  // Encode a piece of text for a text fragment (its commas, dashes and ampersands too).
+  function fragEnc(t) { return encodeURIComponent(t).replace(/-/g, '%2D').replace(/,/g, '%2C'); }
+  function highlightLink(text) {
+    var words = text.split(' '), frag = words.length > 10
+      ? fragEnc(words.slice(0, 5).join(' ')) + ',' + fragEnc(words.slice(-5).join(' '))
+      : fragEnc(text);
+    var page = location.hash && location.hash !== '#' ? location.hash : '#' + ROOT.id;
+    return location.href.split('#')[0] + page + ':~:text=' + frag;
+  }
+  function copyText(text, sel) {
+    // the selection itself (keeping its formatting) where the browser allows; otherwise the text
+    var ok = false;
+    if (sel) { try { ok = document.execCommand('copy'); } catch (err) {} }
+    if (ok) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(function () {});
+    else {
+      var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (err) {} ta.remove();
+    }
+  }
+  ctxMenu.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ctx]');
+    if (!b || b.disabled) return;
+    var kind = b.getAttribute('data-ctx');
+    if (kind === 'copy') copyText(ctxText, true);
+    else copyText(highlightLink(ctxText), false);
+    var label = b.querySelector('.ctx-label');
+    label.textContent = kind === 'copy' ? 'Copied' : 'Link copied'; label.classList.add('ctx-done');
+    if (soundOn) chime();
+    setTimeout(closeCtx, 650);
+  });
+  ctxMenu.addEventListener('mousedown', function (e) { e.preventDefault(); });   // (the selection stays as it is)
+  document.addEventListener('pointerdown', function (e) { if (!ctxMenu.hidden && !ctxMenu.contains(e.target)) closeCtx(); }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ctxMenu.hidden) { e.stopPropagation(); closeCtx(); } }, true);
+  window.addEventListener('scroll', closeCtx, { passive: true });
+  window.addEventListener('blur', closeCtx);
+  window.addEventListener('hashchange', closeCtx);
+
+  // Opening a highlight link: the browser keeps the :~:text= part out of the address the page
+  // sees, so it is read from the navigation itself; once the page has drawn, the passage is found
+  // in its visible text, highlighted and brought to the middle of the screen.
+  (function followHighlightLink() {
+    var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    var m = nav && /:~:text=([^&#]+)/.exec(nav.name);
+    if (!m || !window.CSS || !CSS.highlights || typeof Highlight === 'undefined') return;
+    var parts = m[1].split(',').filter(function (p) { return !/^-|-$/.test(p); }).map(function (p) {   // (prefix- and -suffix are not needed here)
+      try { return decodeURIComponent(p); } catch (err) { return p; }
+    });
+    if (!parts.length) return;
+    function pattern(t) {
+      return t.trim().split(/\s+/).map(function (w) { return w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('\\s*');
+    }
+    var tries = 0;
+    (function attempt() {
+      var entry = document.getElementById('entry'), nodes = [], text = '';
+      var walk = document.createTreeWalker(entry, NodeFilter.SHOW_TEXT, null);
+      for (var n; (n = walk.nextNode());) {
+        if (!n.parentElement || !n.parentElement.getClientRects().length) continue;   // (hidden views)
+        nodes.push({ n: n, at: text.length }); text += n.data;
+      }
+      var a = new RegExp(pattern(parts[0]), 'i').exec(text), end = null;
+      if (a && parts[1]) {
+        var re = new RegExp(pattern(parts[1]), 'ig'); re.lastIndex = a.index + a[0].length; end = re.exec(text);
+      }
+      if (!a || (parts[1] && !end) || document.documentElement.classList.contains('loading-hud')) {
+        if (++tries < 40) setTimeout(attempt, 400);
+        return;
+      }
+      var from = a.index, to = end ? end.index + end[0].length : a.index + a[0].length;
+      function point(i, isEnd) {
+        for (var k = nodes.length - 1; k >= 0; k--) {
+          if (nodes[k].at < i || (!isEnd && nodes[k].at === i)) return [nodes[k].n, Math.min(i - nodes[k].at, nodes[k].n.data.length)];
+        }
+        return [nodes[0].n, 0];
+      }
+      var r = document.createRange(), s0 = point(from, false), s1 = point(to, true);
+      r.setStart(s0[0], s0[1]); r.setEnd(s1[0], s1[1]);
+      CSS.highlights.set('link-hit', new Highlight(r));
+      var box = r.getBoundingClientRect();
+      window.scrollTo({ top: window.scrollY + box.top - window.innerHeight / 2 + box.height / 2, behavior: 'smooth' });
+      // the highlight is let go on leaving the page
+      window.addEventListener('hashchange', function () { CSS.highlights.delete('link-hit'); }, { once: true });
+    })();
+  })();
 
   // Buttons and links clicked with the mouse don't keep the focus (Tab still moves it as usual).
   document.addEventListener('click', function (e) {
