@@ -1109,7 +1109,7 @@
   .description .ab-list { max-width: 39rem; margin-left: auto; margin-right: auto; }
   .description .ab-list .ab-kicker {
     margin: 5.5rem 0 0.6rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+    font-size: 0.9rem; font-weight: 600; letter-spacing: 0.02em;
   }
   html.page-map .description .ab-list .ab-kicker + .ce-title { margin-top: 0; }
   .description .ab-list em { font: inherit; font-style: italic; letter-spacing: inherit; }   /* (italics at the size and weight of their text) */
@@ -1122,7 +1122,13 @@
   .description .ce-list.ab-list li { margin: 0 0 0.4rem; }
   .description .ce-list.ab-list ul.totals { list-style: none; padding: 0; margin: 0.6rem 0 0; font-size: 0.88rem; }
   .description .ce-list.ab-list ul.totals li { margin: 0; }
-  html.page-map #toc { display: none !important; }   /* (the Map has no contents column, the About view included) */
+  /* On the Map, contents only for the About view, once past the opening screen */
+  html.page-map:not([data-index="ab"]) #toc, html.page-map:not(.map-past-opening) #toc { display: none !important; }
+  /* …set in the left margin of the About view's centred column */
+  html.page-map[data-index="ab"] #toc {
+    position: fixed; top: 50vh; left: calc(50% - 19.5rem - 2.8rem); transform: translate(-100%, -50%);
+    width: max-content; max-width: 11rem; z-index: 4;
+  }
   .description .ab-list > h2:first-of-type { margin-top: 3rem; }
   /* Curated Sequence view */
   :root:not([data-index="cs"]) .cs-list,
@@ -8236,6 +8242,7 @@
       if (!live() || e.target.closest('a, button, input, textarea, select, label, [role="tab"]')) return;
       var p = local(e); if (!p.inside) return;
       pushes.push({ x: p.x, y: p.y, age: 0, amp: 0, hill: 0 }); if (pushes.length > 6) pushes.shift();
+      chime();   // (a click on the land sounds as a click on a link does)
     });
     return {
       // The landscape holds still until the site is built and running smoothly (see the loading
@@ -8736,7 +8743,9 @@
     return 'h-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   }
   function buildToc() {
-    tocHeads = Array.prototype.slice.call(document.querySelectorAll('#entry h1, #entry h2:not(.slide-title)'));
+    tocHeads = Array.prototype.slice.call(document.querySelectorAll(document.documentElement.classList.contains('page-map')
+      ? '#entry .ab-list > .ce-title, #entry .ab-list > h2'   // (on the Map: the About view's own)
+      : '#entry h1, #entry h2:not(.slide-title)'));
     tocHeads.forEach(function (h) { h.id = slug(h.textContent); });
     // The concept heading titles the contents; its subheadings are listed beneath.
     var head = tocHeads[0];
@@ -8762,7 +8771,10 @@
   function onScroll() {
     var max = document.documentElement.scrollHeight - window.innerHeight;
     var y = window.scrollY;
-    progressEl.style.transform = 'scaleY(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+    // On the Map, the bar measures the view below the opening screen: it starts at the tab line.
+    var from = 0, tabsEl = document.documentElement.classList.contains('page-map') && document.querySelector('#entry .index-tabs');
+    if (tabsEl) from = Math.min(Math.max(0, max - 1), docY(tabsEl, 'top'));
+    progressEl.style.transform = 'scaleY(' + (max > from ? Math.max(0, Math.min(1, (y - from) / (max - from))) : 0) + ')';
     // The bar's completion – the foot of any page that scrolls – rings a small chime,
     // once, until the reader has moved back up some way.
     if (max > 40 && y >= max - 2) { if (!progressDone) { progressDone = true; doneChime(); } }
