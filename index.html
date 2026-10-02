@@ -838,7 +838,7 @@
   }
 
   @container (min-width: 66rem) {
-    body.sidebar-closed .description .ab-list .sidenote { width: 12rem; margin: 0.35rem -14.5rem 0 0; }
+    body.sidebar-closed .description .ab-list .sidenote { width: 12rem; margin: 0.35rem -16.5rem 0 0; }
   }
 
   /* ---------- Right-click menu: Copy, Copy Link to Highlight (in the find bar's style) ---------- */
@@ -1111,11 +1111,12 @@
     margin: 5.5rem 0 0.6rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.9rem; font-weight: 600; letter-spacing: 0.02em;
   }
-  html.page-map .description .ab-list .ab-kicker + .ce-title { margin-top: 0; }
+  html.page-map .description .ab-list .ab-kicker + .ce-title { margin-top: 0; white-space: nowrap; font-size: min(2.1rem, calc((100vw - 2.4rem) / 18.6)); }   /* (the title on one line, at any width) */
   .description .ab-list em { font: inherit; font-style: italic; letter-spacing: inherit; }   /* (italics at the size and weight of their text) */
   /* A sidenote's number: in the text, and again at the head of the note */
-  .description sup.sn-ref, .description .sidenote .sn-num { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62em; font-weight: 600; line-height: 0; }
-  .description sup.sn-ref { margin-left: 0.1em; }
+  .description sup.sn-ref, .description .sidenote .sn-num { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62em; font-weight: 300; line-height: 0; }
+  .description sup.sn-ref { margin-left: 0.1em; font-size: 0.5em; }
+  .description .ab-list .sidenote { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; line-height: 1.55; }
   .description .sidenote .sn-num { vertical-align: super; margin-right: 0.3em; }
   /* (its lists are prose lists, not the other views' columns of links) */
   .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
@@ -1860,7 +1861,7 @@
       title: 'Civilisation Theory',
       parent: null,
       html: [
-        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstucture), compatible with 21st century technology (infrastructure).</p>',
+        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure).</p>',
 
         '<h2>A Conceptual Adaptive System</h2>',
         '<p>This wiki site serves to create a <em>conceptual adaptive system</em> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
@@ -1891,7 +1892,7 @@
       parent: null,
       master: true,
       coined: true,
-      html: '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>'
+      html: '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure).</p>'
     },
 
     {
