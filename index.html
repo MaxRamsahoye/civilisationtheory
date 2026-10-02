@@ -1322,6 +1322,11 @@
        after the interface is revealed; arriving from another page, the page's own fade */
     animation-delay: 1s;
   }
+  /* …and it stops while the tab bar is pointed at, fading out and resuming once the pointer leaves */
+  html.page-map[data-index="none"] .description .index-tabs::before,
+  html.page-map[data-index="none"] .index-tabs button::before { transition: opacity .3s ease; }
+  html.page-map[data-index="none"] .description .index-tabs:hover::before,
+  html.page-map[data-index="none"] .index-tabs:hover button::before { opacity: 0; animation-play-state: paused; }
   html.page-map.loading-hud .description .index-tabs::before, html.page-map.loading-hud .index-tabs button::before { content: none; }
   html.page-map.flow-late .description .index-tabs::before, html.page-map.flow-late .index-tabs button::before { animation-delay: 1.9s; }   /* (flow-late: set for the opening sequence, cleared on leaving the page) */
   @media (min-width: 1000px) { html.page-map[data-index="none"] .index-tabs button::before { content: none; } }
