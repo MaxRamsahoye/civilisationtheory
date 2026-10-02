@@ -1071,7 +1071,8 @@
   html.page-map .description .index-domain { margin-top: 3.6rem; padding-top: 2.8rem; }
   html.page-map .description .index-domain.set-start { margin-top: 4.8rem; }
   html.page-map .description .domain-desc { margin-bottom: 2.4rem; }
-  html.page-map .description .index-menu { padding-bottom: 2rem; }
+  html.page-map .description .index-menu { padding: 1.6rem 0 2.4rem; }
+  html.page-map .description .index-menu .menu-cats { display: block; }
   html.page-map .description .menu-cols { gap: 2.4rem; }
   @media (min-width: 641px) { html.page-map .description .menu-col + .menu-col { padding-left: 2.4rem; } }
   html.page-map .description .menu-sec { margin-bottom: 1.4rem; }
@@ -5626,7 +5627,20 @@
           (kids.length ? '<ul>' + structHtml(kids) + '</ul>' : '') + '</li>';
       }).join('');
     }
-    // The nine sections in turn: numbering, heading and description, with their concepts where filed.
+    // A menu of the sections at the head of the paradigm: one column per set, each section numbered
+    // as below and jumping down to it.
+    function sectionMenuHtml() {
+      var names = ['Civilisational', 'Meta', 'Macro'];
+      return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + sectionSets(sections).map(function (set, k) {
+        return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d) {
+          var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id]) : 0;
+          return '<li class="menu-sec"><span class="menu-num">' + (NUMERALS[i] || i + 1) + '</span><span>' +
+            '<a class="menu-section" href="#" data-jump="nidx-' + d.id + '">' + esc(d.title) + '</a>' +
+            '<span class="menu-cats">' + n + ' concepts</span></span></li>';
+        }).join('') + '</ul></div>';
+      }).join('') + '</div></nav>';
+    }
+    // The sections in turn: numbering, heading and description, with their concepts where filed.
     function sectionsHtml() {
       return sections.map(function (d, i) {
         var tmp = document.createElement('div');
@@ -5708,7 +5722,7 @@
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
-      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc +
+      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc + sectionMenuHtml() +
       '<p class="ce-intro">Curated sequence: ' + seq.length + ' entries</p><div class="seq-list">' + sequenceListHtml(null) + '</div>' +
       // Then the same sections as the original structure, each still to receive its concepts.
       '<div class="seq-structure">' + sectionsHtml() + '</div></div>';
