@@ -7159,6 +7159,7 @@
   // themselves, the site's own pages, and the concepts filed in the paradigm; null for the rest.
   function crumbPath(c) {
     if (c === ROOT) return [ROOT];
+    if (c.view) return [ROOT, PAGES['the-map'], c];   // (a Map view)
     if (c.kind === 'node') {   // Civilisation Theory › Civilisation Research Landscape › section › group › … › the node
       var found = null;
       LANDSCAPE.forEach(function (sec) {
@@ -7202,7 +7203,7 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
     });
   }
-  function href(c) { return c === ROOT ? '#' : '#' + c.id; }
+  function href(c) { return c === ROOT ? '#' : c.view ? mapViewHref(c.view) : '#' + c.id; }
   // In lists outside the Conceptual Engineerings view itself, each of the map creator's own
   // conceptual engineerings carries a small CE after its title.
   function markCoined(root) {
@@ -8432,7 +8433,17 @@
   // ---------- Search ----------
   var searchInput = document.getElementById('search-input');
   var searchList = document.getElementById('search-results');
-  var searchIndex = CONCEPTS.filter(function (c) { return isConcept(c) || c.kind === 'node'; }).map(function (c) {
+  // Every page with an entry of its own is searchable: concepts, the sections, the landscape's
+  // nodes and the About page (only the glossary-only definitions, which live on the CP view, are not).
+  // …and so are the Map's five views, each found by its name and description.
+  var VIEW_ENTRIES = [
+    { id: 'view-cs', view: 'cs', title: 'Civilisation Research Paradigm', html: '<p>The map’s concepts arranged as a research paradigm for the study of civilisation: ten fields in three sets – civilisational (mechanics, design, transition, alignment), meta (crisis, modernism, theory) and macro (history, sociology, strategy).</p>' },
+    { id: 'view-rl', view: 'rl', title: 'Civilisation Research Landscape', html: '<p>The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' },
+    { id: 'view-az', view: 'az', title: 'Alphabetical A–Z', html: '<p>Every concept on the map organised into an alphabetical list.</p>' },
+    { id: 'view-ce', view: 'ce', title: 'Conceptual Engineerings', html: '<p>The map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities.</p>' },
+    { id: 'view-cp', view: 'cp', title: 'Consilience Project', html: '<p>The terms of the glossary of The Consilience Project, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations.</p>' }
+  ];
+  var searchIndex = CONCEPTS.filter(function (c) { return !c.cpOnly; }).concat(VIEW_ENTRIES).map(function (c) {
     var tmp = document.createElement('div');
     tmp.innerHTML = c.html;
     var raw = tmp.textContent.replace(/\s+/g, ' ').trim();
@@ -8528,7 +8539,7 @@
     treeEl.hidden = true;
     sideResults.hidden = false;
     var total = r.titles.length + r.mentions.length, html = '';
-    html += '<p class="sr-count">' + (total ? total + (total === 1 ? ' result' : ' results') : 'No matching concepts') + '</p>';
+    html += '<p class="sr-count">' + (total ? total + (total === 1 ? ' result' : ' results') : 'No matching entries') + '</p>';
     if (r.titles.length) {
       html += '<p class="sr-head">Concepts</p>' + r.titles.map(function (x) { return sideItem(x.e.c, r.tokens, false); }).join('');
     }
@@ -8580,7 +8591,7 @@
       hits = []; sel = -1;
       if (!r) { box.hidden = true; box.innerHTML = ''; return; }
       var all = r.titles.concat(r.mentions), total = all.length;
-      box.innerHTML = '<p class="sr-count">' + (total ? total + (total === 1 ? ' result' : ' results') : 'No matching concepts') + '</p>' +
+      box.innerHTML = '<p class="sr-count">' + (total ? total + (total === 1 ? ' result' : ' results') : 'No matching entries') + '</p>' +
         all.slice(0, 8).map(function (x, i) { return sideItem(x.e.c, r.tokens, false); }).join('') +
         (total > 8 ? '<a class="sr-more" href="#search">All ' + total + ' results on the Search page →</a>' : '');
       box.hidden = false;
@@ -8661,11 +8672,11 @@
     var meta = document.getElementById('sp-meta'), list = document.getElementById('sp-results');
     var total = searchIndex.length;
     if (!q) {
-      meta.textContent = 'Search ' + total + ' concepts by title or description';
+      meta.textContent = 'Search ' + total + ' entries by title or description';
       list.innerHTML = ''; spSel = -1; return;
     }
     var res = searchResults(q, Infinity);
-    meta.textContent = res.length ? res.length + (res.length === 1 ? ' result' : ' results') : 'No matching concepts';
+    meta.textContent = res.length ? res.length + (res.length === 1 ? ' result' : ' results') : 'No matching entries';
     spSel = res.length ? 0 : -1;
     list.innerHTML = res.map(function (r, i) {
       var path = (crumbPath(r.c) || [r.c]).slice(1, -1).map(function (p) { return esc(p.title); }).join(' &gt; ');
