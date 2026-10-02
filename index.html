@@ -1199,7 +1199,10 @@
   @keyframes topo-in { from { opacity: 0; } to { opacity: 1; } }
   html.no-loadin.topo-go #map-topo canvas { animation-duration: .7s; }   /* (opened straight on a view: a quicker rise) */   /* the terrain rises into view as the site opens */
   html.page-map #map-topo { display: block; transition: opacity .6s ease; }
-  html.topo-off #map-topo { opacity: 0; }   /* A hides the topography */
+  html.topo-off #map-topo { opacity: 0; }
+  /* Between the Map's views: the one leaving fades out, the one arriving fades in */
+  html.page-map .description > .az-view, html.page-map .description > .ce-list { transition: opacity .3s ease; }
+  html.page-map.view-fading .description > .az-view, html.page-map.view-fading .description > .ce-list { opacity: 0; transition-duration: .22s; }   /* A hides the topography */
   html.page-map #entry { position: relative; z-index: 1; }
   /* Hudless on the Map: the tab line goes with the rest of the interface; the topography stays */
   html.hudless.page-map #entry .index-tabs { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
@@ -8059,16 +8062,30 @@
   document.getElementById('entry').addEventListener('click', function (e) {
     var b = e.target.closest('.index-view button');
     if (!b) return;
-    var view = b.getAttribute('data-view');
-    document.documentElement.setAttribute('data-index', view);
-    if (document.documentElement.classList.contains('snap-slides')) updateSlideNav();
-    // On the Map, choosing a view from its opening screen brings that view's content up.
-    if (b.closest('.index-tabs') && document.documentElement.classList.contains('page-map')) {
-      // The address follows the view chosen (without reloading the page).
-      if (MAP_VIEWS[view]) { history.replaceState(null, '', mapViewHref(view)); trail[trail.length - 1].hash = location.hash; }
-      setMapTail(); joinSeqRules(); toMapView();
+    var view = b.getAttribute('data-view'), root = document.documentElement;
+    var onMap = b.closest('.index-tabs') && root.classList.contains('page-map');
+    function show() {
+      root.setAttribute('data-index', view);
+      if (root.classList.contains('snap-slides')) updateSlideNav();
+      // On the Map, choosing a view from its opening screen brings that view's content up.
+      if (onMap) {
+        // The address follows the view chosen (without reloading the page).
+        if (MAP_VIEWS[view]) { history.replaceState(null, '', mapViewHref(view)); trail[trail.length - 1].hash = location.hash; }
+        setMapTail(); joinSeqRules(); toMapView();
+      }
     }
+    // On the Map, one view fades out before the next fades in.
+    if (!onMap || reduceMotion.matches) { show(); return; }
+    clearTimeout(viewFadeTimer);
+    var prev = root.getAttribute('data-index');
+    root.classList.add('view-fading');
+    viewFadeTimer = setTimeout(function () {
+      show();
+      void document.body.offsetWidth;
+      requestAnimationFrame(function () { root.classList.remove('view-fading'); });
+    }, prev === 'none' || prev === view ? 0 : 230);
   });
+  var viewFadeTimer;
   function toMapView() {
     var panel = Array.prototype.find.call(document.querySelectorAll('#entry .description > .az-view, #entry .description > .ce-list'),
       function (el) { return getComputedStyle(el).display !== 'none'; });
