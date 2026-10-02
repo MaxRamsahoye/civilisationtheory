@@ -2292,7 +2292,7 @@
     },
     {
       id: 'zero-sum-game',
-      title: 'Zero-Sum Game',
+      title: 'Zero-Sum Games',
       parent: 'game-theory',
       ref: 'von Neumann & Morgenstern, Theory of Games and Economic Behavior (1944)',
       html: '<p>A <em>zero-sum game</em>, formalised by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944), is one in which any gain for one party is exactly matched by a loss for another, so the total stays fixed. Many real situations are not zero-sum – trade, cooperation and innovation can enlarge the total – yet <em>zero-sum thinking</em>, the habit of treating them as if they were, drives rivalry, protectionism and arms races. Shifting from zero-sum to positive-sum games is a recurring theme in visions of a <a href="#win-win">win-win</a> civilisation.</p>'
@@ -5215,17 +5215,14 @@
         (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
     }
     // Up to the block it belongs to: the nearest leading group of its section above it (or itself),
-    // or a subheading at the top of the section.
+    // or the nearest subheading's group.
     var x = c.id;
     for (var guard = 0; guard < 50; guard++) {
       if (TOP_BLOCKS[x]) return '<ul class="nested">' + node([x, STRUCT_KIDS[x] || []]) + '</ul>';
       var p = STRUCT_PARENT[x];
-      if (p && typeof p === 'object') {
-        if (p.parent in NEW_STRUCTURE) {   // a subheading's list: the subheading, then its concepts (unless it only repeats the section's name)
-          var list = (STRUCT_SIBS[x] || []).map(node).join('');
-          return '<ul class="nested">' + (byId[p.parent] && byId[p.parent].title === p.title ? list : '<li><span class="nested-head">' + esc(p.title) + '</span><ul>' + list + '</ul></li>') + '</ul>';
-        }
-        x = p.parent; continue;
+      if (p && typeof p === 'object') {   // a subheading's group: the subheading, then its concepts (unless it only repeats the section's name)
+        var list = (STRUCT_SIBS[x] || []).map(node).join('');
+        return '<ul class="nested">' + (byId[p.parent] && byId[p.parent].title === p.title ? list : '<li><span class="nested-head">' + esc(p.title) + '</span><ul>' + list + '</ul></li>') + '</ul>';
       }
       if (typeof p !== 'string' || p === x || (p in NEW_STRUCTURE && !TOP_BLOCKS[p])) break;
       x = p;
