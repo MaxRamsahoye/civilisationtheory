@@ -5658,7 +5658,7 @@
     },
     {
       id: 'great-man-theory',
-      title: 'Great Man',
+      title: 'Great Man Theory',
       parent: 'theory-of-history',
       ref: 'Carlyle',
       refs: ['Thomas Carlyle, <em>On Heroes, Hero-Worship, and the Heroic in History</em> (1841).'],
@@ -5666,7 +5666,7 @@
     },
     {
       id: 'great-founder-theory',
-      title: 'Great Founder',
+      title: 'Great Founder Theory',
       parent: 'theory-of-history',
       ref: 'Burja',
       refs: ['Samo Burja, <em>Great Founder Theory</em> (2020).'],
@@ -7330,11 +7330,13 @@
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
-      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc + sectionMenuHtml() +
+      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc +
+      // (every concept filed in the paradigm, counted once)
+      '<p class="ce-intro">Concepts: ' + concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length + '</p>' + sectionMenuHtml() +
       // First the curated sequence, as a section of its own (High-Level, unnumbered and not in the
       // menu); then the numbered sections with their concepts.
       '<div class="seq-structure"><section class="index-domain set-start" id="nidx-high-level">' +
-        '<p class="domain-label">Curated sequence · ' + seq.length + ' entries</p><h3 class="domain-title">High-Level</h3>' +
+        '<p class="domain-label">' + seq.length + ' concepts</p><h3 class="domain-title">High-Level</h3>' +
         '<p class="domain-desc">The major frames that structure the civilisation research paradigm.</p>' +
         '<div class="seq-list">' + sequenceListHtml(null) + '</div></section>' +
         sectionsHtml() + '</div></div>';
