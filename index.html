@@ -8920,7 +8920,7 @@
     clearTimeout(hit._hit); hit._hit = setTimeout(function () { hit.classList.remove('letter-hit'); }, 700);
     return true;
   }
-  // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, T = theme, C = accent links, M = sound, H = hudless, A = topography, 1–5 / Enter = the Map's views ----------
+  // ---------- Keyboard shortcuts: Backspace = top (then back), Space = map, S = search, T = theme, C = accent links, M = sound, H = hudless, A = topography, 1–5 / Enter = the Map's views ----------
   document.addEventListener('keydown', function (e) {
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     var el = e.target;
@@ -8948,6 +8948,17 @@
       if (!e.repeat && !mapOpening && !document.body.classList.contains('footer-in-view') && !document.documentElement.classList.contains('hudless')) sideBtn.click();
     } else if (/^[a-z]$/i.test(e.key) && !e.shiftKey && letterJump(e.key.toUpperCase())) {
       e.preventDefault();
+    } else if ((e.key === 's' || e.key === 'S') && !e.repeat) {
+      // Search: in the Map's opening screen, its search box in the top corner; anywhere else, the
+      // find-in-page bar (the site's own Ctrl/Cmd+F).
+      e.preventDefault();
+      var ms = document.getElementById('map-search'), msIn = document.getElementById('map-search-input');
+      var msBox = ms.getBoundingClientRect();
+      var root2 = document.documentElement;
+      if (root2.classList.contains('page-map') && !root2.classList.contains('hudless') && !root2.classList.contains('loading-hud') &&
+          getComputedStyle(ms).display !== 'none' && msBox.bottom > 0) {
+        msIn.focus({ preventScroll: true }); msIn.select();
+      } else openFind();
     } else if ((e.key === 't' || e.key === 'T') && !e.repeat) {
       document.getElementById('theme-toggle').click();
       var r = document.documentElement;
