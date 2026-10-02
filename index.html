@@ -4827,7 +4827,7 @@
     // The ground answers the reader. Under the cursor it swells into a low hill that follows it
     // (trailing only slightly); a click instead shoves the land itself aside: the
     // contours around the point are pushed outward, opening a clearing, then ease back into place.
-    var hover = { x: 0, y: 0, tx: 0, ty: 0, on: false, h: 0 }, pushes = [];
+    var hover = { x: 0, y: 0, tx: 0, ty: 0, on: false, h: 0, pin: 0, px: 0, py: 0 }, pushes = [];
     var HILL = 0.34, HILL_R = 117, PUSH = 150, PUSH_R = 165, PUSH_LIFE = 4;
     function lift(x, y) {
       if (hover.h < 0.001) return 0;
@@ -4848,8 +4848,7 @@
           var d = Math.sqrt(d2) || 1, m = PUSH * r.amp * Math.exp(-d2 / (PUSH_R * PUSH_R));
           sx -= dx / d * Math.min(m, d * 0.9); sy -= dy / d * Math.min(m, d * 0.9);
         }
-        // (the hill is part of the ground, so a click's push shoves it aside with the rest)
-        grid[j * (cols + 1) + i] = field(sx * S, sy * S, t) + lift(sx, sy);
+        grid[j * (cols + 1) + i] = field(sx * S, sy * S, t) + lift(x, y);
       }
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, Hh);
@@ -4887,9 +4886,13 @@
       var visible = document.documentElement.classList.contains('page-map') && !document.documentElement.classList.contains('topo-off') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
       if (visible && started) {
         clock += dt / 1000;
-        var f = 1 - Math.exp(-dt / 1000 * 10);   // (a slight trail behind the cursor)
-        hover.x += (hover.tx - hover.x) * f; hover.y += (hover.ty - hover.y) * f;
-        hover.h += ((hover.on ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * (hover.on ? 6.5 : 1.7)));
+        // For a moment after a click, the hill stays where the click left it, whatever the cursor does;
+        // then it goes back to following.
+        if (hover.pin > 0) hover.pin -= dt / 1000;
+        var pinned = hover.pin > 0, f = 1 - Math.exp(-dt / 1000 * 10);   // (a slight trail behind the cursor)
+        hover.x += ((pinned ? hover.px : hover.tx) - hover.x) * f; hover.y += ((pinned ? hover.py : hover.ty) - hover.y) * f;
+        var lifted = hover.on || pinned;
+        hover.h += ((lifted ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * (lifted ? 6.5 : 1.7)));
         for (var k = pushes.length - 1; k >= 0; k--) { var r = pushes[k]; r.age += dt / 1000; r.amp = shove(r.age); if (r.age > PUSH_LIFE) pushes.splice(k, 1); }
         if (frame++ % 2 === 0) draw(now);
       }
@@ -4911,6 +4914,7 @@
       if (!live() || e.target.closest('a, button, input, textarea, select, label, [role="tab"]')) return;
       var p = local(e); if (!p.inside) return;
       pushes.push({ x: p.x, y: p.y, age: 0, amp: 0 }); if (pushes.length > 6) pushes.shift();
+      hover.pin = 1.4; hover.px = p.x; hover.py = p.y;
     });
     return {
       // The landscape holds still until the site is built and running smoothly (see the loading
