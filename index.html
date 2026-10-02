@@ -934,6 +934,7 @@
   .description ul.nested ul { list-style: none; padding-left: 1.1rem; margin: 0.2rem 0; }
   .description ul.nested li { margin: 0.25rem 0; }
   .description ul.nested .nested-self { font-weight: 600; }
+  .description ul.nested .nested-head { color: var(--muted); }
   p { margin: 0 0 1.1rem; }
   /* Body text: 1.4 line spacing, 15px between paragraphs (and list items) */
   .description { font-size: 1.1rem; line-height: 1.4; }
@@ -4595,11 +4596,30 @@
       return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a>' + (kids.length ? '<ul>' + nestedHtml(kids) + '</ul>' : '') + '</li>';
     }).join('');
   }
+  // The Concept Cluster: the concept's local tree in the paradigm – the line of concepts above it
+  // from its section down, its fellows beside it, and everything nested beneath it.
+  function clusterHtml(c) {
+    var path = crumbPath(c);
+    if (!path || !(c.id in STRUCT_PARENT)) return '';
+    var above = path.slice(1, -1);   // section … parent (subheadings included, unlinked)
+    var here = '<li><span class="nested-self">' + esc(c.title) + '</span>' + (STRUCT_KIDS[c.id] ? '<ul>' + nestedHtml(STRUCT_KIDS[c.id]) + '</ul>' : '') + '</li>';
+    var level = (STRUCT_SIBS[c.id] || [c.id]).map(function (x) {
+      var id = typeof x === 'string' ? x : Array.isArray(x) ? x[0] : null;
+      if (id === c.id) return here;
+      if (!id) return '<li><span class="nested-head">' + esc(x.head) + '</span></li>';
+      var s = byId[id]; return s ? '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>' : '';
+    }).join('');
+    for (var i = above.length - 1; i >= 0; i--) {
+      var a = above[i];
+      level = '<li>' + (a.heading ? '<span class="nested-head">' + esc(a.title) + '</span>' : '<a href="' + href(a) + '">' + esc(a.title) + '</a>') + '<ul>' + level + '</ul></li>';
+    }
+    return '<ul class="nested">' + level + '</ul>';
+  }
   function endSectionsHtml(c) {
     var out = '';
     if (c.refs && c.refs.length) out += '<h2 id="references">References</h2><ol class="refs">' + c.refs.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ol>';
-    // (headed by the concept itself, so the nesting shows)
-    if (STRUCT_KIDS[c.id]) out += '<h2 id="nested-concepts">Nested Concepts</h2><ul class="nested"><li><span class="nested-self">' + esc(c.title) + '</span><ul>' + nestedHtml(STRUCT_KIDS[c.id]) + '</ul></li></ul>';
+    var cluster = clusterHtml(c);
+    if (cluster) out += '<h2 id="concept-cluster">Concept Cluster</h2>' + cluster;
     return out;
   }
   function isConcept(c) { return c !== ROOT && c.kind !== 'category' && !c.cpOnly; }
@@ -4635,12 +4655,12 @@
   };
   // Each concept's place in the Civilisation Research Paradigm, as filed above: its parent there
   // (a concept, or a plain subheading), or nothing if it has not yet been filed.
-  var STRUCT_PARENT = {}, STRUCT_KIDS = {};   // (STRUCT_KIDS: the concepts nested beneath each, as filed)
+  var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {};   // (the concepts nested beneath each, and the list each is filed in)
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
     (function walk(list, parent) {
       list.forEach(function (x) {
-        if (typeof x === 'string') { if (!(x in STRUCT_PARENT)) STRUCT_PARENT[x] = parent; return; }
-        if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT)) STRUCT_PARENT[x[0]] = parent; if (x[1] && x[1].length && !STRUCT_KIDS[x[0]]) STRUCT_KIDS[x[0]] = x[1]; walk(x[1] || [], x[0]); return; }
+        if (typeof x === 'string') { if (!(x in STRUCT_PARENT)) { STRUCT_PARENT[x] = parent; STRUCT_SIBS[x] = list; } return; }
+        if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT)) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length && !STRUCT_KIDS[x[0]]) STRUCT_KIDS[x[0]] = x[1]; walk(x[1] || [], x[0]); return; }
         walk(x.items, { title: x.head, heading: true, parent: parent });
       });
     })(NEW_STRUCTURE[sec], sec);
