@@ -9244,11 +9244,9 @@
     var concepts = CONCEPTS.filter(isConcept);
     var filed = paradigmCount();
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Conceptual Engineerings tab counts them)
-    var sections = childrenOf(ROOT.id).filter(function (c) { return c.kind === 'category'; }).length;
     function row(label, n) { return '<li><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
     return '<ul class="totals">' +
       row('Concepts', concepts.length) +
-      row('Sections', sections) +
       row('Civilisation Research Paradigm', filed) +
       row('Civilisation Research Landscape Nodes', landscapeNodeCount()) +
       row('Conceptual Engineerings', coined) +
