@@ -1065,6 +1065,9 @@
   .description ul.totals { list-style: none; padding: 0; margin: 0.6rem 0 0; max-width: 30rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.88rem; }
   .description ul.totals li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); margin: 0; }
   .description ul.totals li.sub { padding-left: 1.2rem; color: var(--muted); }
+  /* the reconciling lines: the rows' sum, less the entries in more than one row */
+  .description ul.totals li.sum { border-top: 1px solid var(--text); margin-top: -1px; }
+  .description ul.totals li.sum, .description ul.totals li.overlap { font-size: 0.92em; opacity: 0.75; }
   .description ul.totals li.all { border-bottom: 0; border-top: 1px solid var(--text); font-weight: 600; margin-top: -1px; }
   .description ul.totals .n { font-variant-numeric: tabular-nums; }
   .description ol.refs li { margin: 0.35rem 0; padding-left: 0.2rem; }
@@ -7634,10 +7637,14 @@
   // movements (landscape nodes, by id; nested and grouped as in the paradigm's structure).
   // Every node listed on the landscape (its own entries and the concepts placed on it), counted as
   // the Research Landscape tab and the About page's totals both show it
-  function landscapeNodeCount() {
+  function landscapeNodeCount() { return Object.keys(landscapeIds()).length; }   // (a node listed in more than one place counted once)
+  function landscapeIds() {
     var seen = {};
-    LANDSCAPE.forEach(function (sec) { sec.groups.forEach(function (g) { structIds(g.items, seen); }); });
-    return Object.keys(seen).length;   // (a node listed in more than one place counted once)
+    LANDSCAPE.forEach(function (sec) {
+      if (sec.entry && byId[sec.entry]) seen[sec.entry] = true;   // (its sections' own entries counted, as the paradigm's are)
+      sec.groups.forEach(function (g) { structIds(g.items, seen); });
+    });
+    return seen;
   }
   // The ids listed in a structure (paradigm or landscape), gathered into `seen`: each once, however
   // often it appears; a section listed within itself is not one of its own concepts.
@@ -7651,11 +7658,12 @@
   }
   // The concepts of the Civilisation Research Paradigm: those filed in its sections and those of its
   // High-Level section, each counted once.
-  function paradigmCount() {
+  function paradigmCount() { return Object.keys(paradigmIds()).length; }
+  function paradigmIds() {
     var seen = {};
     CONCEPTS.forEach(function (c) { if ((c.id in STRUCT_PARENT && isConcept(c)) || (c.kind === 'category' && c.parent === ROOT.id)) seen[c.id] = true; });   // (the ten sections' own entries included)
     curatedSequence().forEach(function (c) { if (isConcept(c)) seen[c.id] = true; });   // (each section once, however often it is listed)
-    return Object.keys(seen).length;
+    return seen;
   }
   var LANDSCAPE = [
     { title: 'Cybernetic Economics', entry: 'cybernetic-economics',
@@ -9248,13 +9256,23 @@
     var concepts = CONCEPTS.filter(isConcept);
     var filed = paradigmCount();
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Conceptual Engineerings tab counts them)
-    function row(label, n) { return '<li><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
+    function row(label, n, cls) { return '<li' + (cls ? ' class="' + cls + '"' : '') + '><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
+    // The rows overlap (an entry can be in several of them), so the sum is reconciled with the
+    // total: the entries counted in more than one row are taken off once for each extra row.
+    var sets = [{}, paradigmIds(), landscapeIds(), {}], union = {};
+    concepts.forEach(function (c) { sets[0][c.id] = true; });
+    CONCEPTS.forEach(function (c) { if (c.coined && c !== ROOT && !c.cpOnly) sets[3][c.id] = true; });
+    var sum = 0;
+    sets.forEach(function (set) { Object.keys(set).forEach(function (id) { union[id] = true; sum++; }); });
+    var total = Object.keys(union).length;
     return '<ul class="totals">' +
       row('Concepts', concepts.length) +
       row('Civilisation Research Paradigm', filed) +
       row('Civilisation Research Landscape Nodes', landscapeNodeCount()) +
       row('Conceptual Engineerings', coined) +
-      '<li class="all"><span>Entries in total</span><span class="n">' + entriesTotal() + '</span></li></ul>';
+      row('Sum of the above', sum, 'sum') +
+      row('Entries listed in more than one of the above', '−' + (sum - total), 'overlap') +
+      '<li class="all"><span>Entries in total</span><span class="n">' + total + '</span></li></ul>';
   }
   // Every entry on the site, each once: the concepts, the ten sections' own entries and the landscape's nodes.
   function entriesTotal() {
