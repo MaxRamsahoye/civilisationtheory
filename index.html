@@ -1850,6 +1850,14 @@
       ].join('\n')
     },
     {
+      id: 'civilisation-theory',
+      title: 'Civilisation Theory',
+      parent: null,
+      master: true,
+      html: '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>'
+    },
+
+    {
       id: 'metacrisis',
       title: 'The Metacrisis',
       kind: 'category',
@@ -7598,6 +7606,7 @@
   // themselves, the site's own pages, and the concepts filed in the paradigm; null for the rest.
   function crumbPath(c) {
     if (c === ROOT) return [ROOT];
+    if (c.master) return [c];   // (the master concept: the head of every tree string)
     if (c.view) return [ROOT, PAGES['the-map'], c];   // (a Map view)
     if (c.kind === 'node') {   // Civilisation Theory › Civilisation Research Landscape › section › group › … › the node
       var found = null;
@@ -7870,7 +7879,7 @@
     var nodes = path.map(function (p, i, arr) {
       return i === arr.length - 1 || p.heading
         ? '<span class="node">' + esc(p.title) + '</span>'
-        : '<a class="node" href="' + href(p) + '">' + esc(p.title) + '</a>';
+        : '<a class="node" href="' + (p === ROOT ? '#civilisation-theory' : href(p)) + '">' + esc(p.title) + '</a>';   // (“Civilisation Theory” opens the master concept)
     });
     if (!k) return nodes.join('<span class="sep">&gt;</span><wbr>');
     // Each stacked node keeps its arrow, pointing on to the next line.
@@ -8271,7 +8280,7 @@
   function curatedGroups() {
     var sections = childrenOf(ROOT.id), sets = sectionSets(sections);
     return [
-      { name: 'Foundation', items: [byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
+      { name: 'Foundation', items: [byId['civilisation-theory'], byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
       { name: 'Civilisational', subs: [
         { name: 'I', items: sets[0] },
         { name: 'II', items: [byId['civilisation-alignment'], byId['civilisational-collapse'], byId['civilisational-risk'], byId['civilisation-scale'], byId['civilisational-paradigm']] }
@@ -8368,7 +8377,6 @@
   var viewPause = 60;   // (before a view's address brings the view up)
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
-    if (id === 'civilisation-theory') { id = ROOT.id; history.replaceState(null, '', '#' + ROOT.id); }   // (the About page's former address)
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
     // The Map's five views have their own addresses (#the-map/…): the Map, opened on that view.
     var mapView = null;
@@ -9578,7 +9586,7 @@
   if (noLoadIn) {
     var openId = decodeURIComponent(location.hash.replace(/^#/, ''));
     var isView = Object.keys(MAP_VIEWS).some(function (v) { return location.hash === mapViewHref(v); });
-    if (!(isView || byId[openId] || PAGES[openId] || openId === ROOT.id || openId === 'civilisation-theory') || (openId === 'infinite' && !SHOW_INFINITE)) {
+    if (!(isView || byId[openId] || PAGES[openId] || openId === ROOT.id) || (openId === 'infinite' && !SHOW_INFINITE)) {
       noLoadIn = false;
       document.documentElement.classList.remove('no-loadin');
       document.documentElement.setAttribute('data-theme', 'midnight');
