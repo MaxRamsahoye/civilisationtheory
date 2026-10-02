@@ -489,6 +489,35 @@
     margin-top: 0.35rem;
   }
 
+  /* The Map's own search, in the top-left corner (part of the interface: it arrives with it, and
+     H hides it) – results drop down beneath it */
+  #map-search { display: none; position: fixed; top: 0.95rem; left: 1.4rem; z-index: 25; width: 15rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; }
+  html.page-map #map-search { display: block; }
+  #map-search > svg { position: absolute; left: 0; top: 0.5rem; width: 0.8rem; height: 0.8rem; fill: none; stroke: var(--muted); stroke-width: 1.4px; pointer-events: none; }
+  #map-search > svg * { vector-effect: non-scaling-stroke; }
+  #map-search-input {
+    width: 100%; font: inherit; font-size: 0.72rem; letter-spacing: 0.04em; color: var(--text); background: transparent;
+    border: 0; border-bottom: 1px solid var(--rule); padding: 0.35rem 0 0.35rem 1.3rem; border-radius: 0; outline: none;
+    transition: border-color .2s ease;
+  }
+  #map-search-input::placeholder { color: var(--muted); }
+  #map-search-input:focus { border-bottom-color: var(--text); }
+  #map-search-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  #map-search-results {
+    margin-top: 0.4rem; padding: 0.6rem 0.9rem; max-height: 60vh; overflow-y: auto; width: 22rem; max-width: calc(100vw - 2.8rem);
+    background: var(--bg); border: 1px solid var(--rule); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); font-size: 1rem;
+  }
+  #map-search-results .sr-count { margin: 0 0 0.5rem; font-size: 0.69rem; font-weight: 600; color: var(--muted); }
+  #map-search-results .sr-item { display: block; margin: 0 -0.55rem; padding: 0.42rem 0.55rem 0.48rem; border-radius: 5px; color: var(--text); text-decoration: none; line-height: 1.3; font-family: 'ET Bembo', 'ETBembo', Palatino, Georgia, serif; }
+  #map-search-results .sr-item.sel { background: color-mix(in srgb, var(--hl) 55%, transparent); }
+  #map-search-results .sr-title { display: block; }
+  #map-search-results .sr-path { display: block; margin-top: 0.18rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.64rem; font-weight: 500; letter-spacing: 0.02em; color: var(--muted); }
+  #map-search-results mark { background: var(--hl); color: inherit; border-radius: 2px; }
+  #map-search-results .sr-more { display: block; margin: 0.6rem 0 0.1rem; font-size: 0.66rem; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-decoration: none; }
+  #map-search-results .sr-more:hover { color: var(--text); }
+  html.hudless #map-search { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+  @media (max-width: 640px) { html.page-map #map-search { display: none; } }   /* (phones: the header's search icon) */
+
   /* Sidebar search results */
   #side-results { font-size: 1rem; }
   #side-results .sr-count, #side-results .sr-head {
@@ -1525,7 +1554,7 @@
   html.theme-shift body, html.theme-shift body * { transition: background-color 1.4s ease, color 1.4s ease, border-color 1.4s ease !important; }
   html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
   /* …first the title and subtitle, then (a moment later) the interface: header, controls, tab line */
-  html.loading-hud #site-header, html.loading-hud #head-menu, html.loading-hud .control, html.loading-hud #sidebar,
+  html.loading-hud #site-header, html.loading-hud #head-menu, html.loading-hud .control, html.loading-hud #sidebar, html.loading-hud #map-search,
   html.loading-hud #progress, html.loading-hud #entry .index-tabs { opacity: 0 !important; pointer-events: none !important; }
   /* …but first the title types itself out, alone on the terrain, as one phrase */
   html.title-typing body > *:not(#map-topo):not(script):not(main),
@@ -1534,7 +1563,7 @@
   #entry h1 .tw.on { visibility: visible; }
   html.topo-reveal #entry > *,
   html.topo-reveal body > *:not(#map-topo):not(script),
-  html.topo-reveal #site-header, html.topo-reveal #head-menu, html.topo-reveal .control, html.topo-reveal #entry .index-tabs { transition: opacity 1.4s ease; }
+  html.topo-reveal #site-header, html.topo-reveal #head-menu, html.topo-reveal .control, html.topo-reveal #map-search, html.topo-reveal #entry .index-tabs { transition: opacity 1.4s ease; }
   .loader-mark, .loader-ring { z-index: 2; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
   /* Ring encircles the title, scaled from the title's width, and fills in step with the typewriter */
@@ -1632,6 +1661,11 @@
 </nav>
 <div id="scrim"></div>
 
+<div id="map-search" role="search">
+  <svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>
+  <input id="map-search-input" type="search" placeholder="Search" aria-label="Search the map" autocomplete="off" spellcheck="false">
+  <div id="map-search-results" hidden></div>
+</div>
 <header id="site-header">
   <div class="head-inner">
     <a class="head-title" href="#the-map">Civilisational</a>
@@ -7369,7 +7403,7 @@
         '<span class="tab-meta">' + meta + '</span></button>';
     }
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
-      tab('cs', 'Civilisation Research Paradigm', sections.length + ' sections') +
+      tab('cs', 'Civilisation Research Paradigm', sections.length + ' sections – ' + concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length + ' concepts') +
       tab('rl', 'Civilisation Research Landscape', rlCount + ' nodes') +
       tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') +
       tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
@@ -8525,6 +8559,50 @@
       if (sideHits[sideSel]) { e.preventDefault(); sideHits[sideSel].click(); }
     } else if (e.key === 'Escape') { searchInput.value = ''; filterTree(); searchInput.blur(); }
   });
+
+  // ---------- The Map's corner search: the best matches as you type, the rest on the Search page ----------
+  (function () {
+    var input = document.getElementById('map-search-input'), box = document.getElementById('map-search-results');
+    var hits = [], sel = -1, timer;
+    function run() {
+      var r = rankSide(input.value);
+      hits = []; sel = -1;
+      if (!r) { box.hidden = true; box.innerHTML = ''; return; }
+      var all = r.titles.concat(r.mentions), total = all.length;
+      box.innerHTML = '<p class="sr-count">' + (total ? total + (total === 1 ? ' result' : ' results') : 'No matching concepts') + '</p>' +
+        all.slice(0, 8).map(function (x, i) { return sideItem(x.e.c, r.tokens, false); }).join('') +
+        (total > 8 ? '<a class="sr-more" href="#search">All ' + total + ' results on the Search page →</a>' : '');
+      box.hidden = false;
+      hits = [].slice.call(box.querySelectorAll('.sr-item'));
+      if (hits.length) { sel = 0; hits[0].classList.add('sel'); }
+    }
+    function move(d) {
+      if (!hits.length) return;
+      hits[sel].classList.remove('sel'); sel = (sel + d + hits.length) % hits.length; hits[sel].classList.add('sel');
+      hits[sel].scrollIntoView({ block: 'nearest' });
+    }
+    function clear() { input.value = ''; run(); }
+    input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(run, 80); });
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Enter') { e.preventDefault(); if (hits[sel]) hits[sel].click(); else if (input.value.trim()) { lastQuery = input.value; location.hash = '#search'; } }
+      else if (e.key === 'Escape') { clear(); input.blur(); }
+    });
+    box.addEventListener('mousemove', function (e) {
+      var a = e.target.closest('.sr-item');
+      if (!a || a.classList.contains('sel')) return;
+      if (hits[sel]) hits[sel].classList.remove('sel'); sel = hits.indexOf(a); a.classList.add('sel');
+    });
+    box.addEventListener('click', function (e) {
+      if (e.target.closest('.sr-more')) lastQuery = input.value;
+      if (e.target.closest('a')) setTimeout(clear, 0);
+    });
+    // Clicking elsewhere closes the results (the query stays, to reopen on focus).
+    document.addEventListener('pointerdown', function (e) { if (!e.target.closest('#map-search')) box.hidden = true; });
+    input.addEventListener('focus', function () { if (input.value.trim()) run(); });
+    window.addEventListener('hashchange', function () { if (location.hash.indexOf('#the-map') !== 0) clear(); });
+  })();
 
   // ---------- Search page (the header's search icon, or pressing /) ----------
   var lastQuery = '';
