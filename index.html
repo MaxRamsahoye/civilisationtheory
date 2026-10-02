@@ -7529,6 +7529,20 @@
   // there too though filed elsewhere (it takes neither its place nor its nested concepts from there).
   // The Civilisation Research Landscape: its sections, each with its individuals, organisations and
   // movements (landscape nodes, by id; nested and grouped as in the paradigm's structure).
+  // Every node listed on the landscape (its own entries and the concepts placed on it), counted as
+  // the Research Landscape tab and the About page's totals both show it
+  function landscapeNodeCount() {
+    function count(list) {
+      var n = 0;
+      list.forEach(function (x) {
+        if (typeof x === 'string') n++;
+        else if (Array.isArray(x)) { if (!NEW_STRUCTURE[x[0]]) n++; n += count(x[1] || []); }   // (a section listed within itself is not counted)
+        else n += count(x.items);
+      });
+      return n;
+    }
+    return LANDSCAPE.reduce(function (t, sec) { return t + sec.groups.reduce(function (u, g) { return u + count(g.items); }, 0); }, 0);
+  }
   var LANDSCAPE = [
     { title: 'Cybernetic Economics', entry: 'cybernetic-economics',
       desc: 'Thinkers, organisations and movements developing a new form of economics steered by information and feedback, obsoleting the traditional functions of states and markets – from Beer and Fuller to Fresco’s resource-based economy and Joseph’s Integral.', groups: [
@@ -7819,7 +7833,7 @@
         sectionsHtml() + '</div></div>';
     // Civilisation Research Landscape: the field around the paradigm (entries tagged 'landscape').
     // …in its sections, each with its individuals, organisations and movements side by side.
-    var rlCount = LANDSCAPE.reduce(function (t, sec) { return t + sec.groups.reduce(function (u, g) { return u + structCount(g.items); }, 0); }, 0);
+    var rlCount = landscapeNodeCount();
     var rl = '<div class="ce-list rl-list">' +
       '<h3 class="ce-title">Civilisation Research Landscape</h3>' +
       '<p class="ce-desc">The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' +
@@ -9065,12 +9079,12 @@
     var concepts = CONCEPTS.filter(isConcept);
     var filed = concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length;
     var coined = concepts.filter(function (c) { return c.coined; }).length;
-    var nodes = CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length;
+    var nodes = CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length;   // (the landscape's own entries, for the total)
     function row(label, n) { return '<li><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
     return '<h2>Totals</h2><ul class="totals">' +
       row('Concepts', concepts.length) +
       row('Civilisation Research Paradigm', filed) +
-      row('Civilisation Research Landscape Nodes', nodes) +
+      row('Civilisation Research Landscape Nodes', landscapeNodeCount()) +
       row('Conceptual Engineerings', coined) +
       '<li class="all"><span>Entries in total</span><span class="n">' + (concepts.length + nodes) + '</span></li></ul>';
   }
