@@ -839,8 +839,10 @@
 
   @container (min-width: 66rem) {
     body.sidebar-closed .description .ab-list .sidenote {
-      --snw: clamp(8rem, calc((100vw - 39rem) / 2 - 5.7rem), 15rem);   /* (reaching right as far as the margin allows, clear of the screen edge) */
-      width: var(--snw); margin: 0.35rem calc(-1 * (var(--snw) + 4.5rem)) 0 0;
+      /* centred in the right-hand column (text edge to screen edge), equal space either side */
+      --snR: calc((100vw - 39rem) / 2);
+      --snw: clamp(8rem, calc(var(--snR) - 3rem), 15rem);
+      width: var(--snw); margin: 0.35rem calc(-1 * (var(--snR) + var(--snw)) / 2) 0 0;
     }
   }
 
