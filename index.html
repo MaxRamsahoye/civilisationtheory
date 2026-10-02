@@ -1071,7 +1071,7 @@
   html.page-map .description .index-domain { margin-top: 3.6rem; padding-top: 2.8rem; }
   html.page-map .description .index-domain.set-start { margin-top: 4.8rem; }
   html.page-map .description .domain-desc { margin-bottom: 2.4rem; }
-  html.page-map .description .index-menu { padding: 1.6rem 0 2.4rem; }
+  html.page-map .description .index-menu { padding: 1.6rem 0 4.4rem; }
   html.page-map .description .index-menu .menu-cats { display: block; }
   html.page-map .description .menu-cols { gap: 2.4rem; }
   @media (min-width: 641px) { html.page-map .description .menu-col + .menu-col { padding-left: 2.4rem; } }
@@ -5723,9 +5723,13 @@
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
       '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc + sectionMenuHtml() +
-      '<p class="ce-intro">Curated sequence: ' + seq.length + ' entries</p><div class="seq-list">' + sequenceListHtml(null) + '</div>' +
-      // Then the same sections as the original structure, each still to receive its concepts.
-      '<div class="seq-structure">' + sectionsHtml() + '</div></div>';
+      // First the curated sequence, as a section of its own (High-Level, unnumbered and not in the
+      // menu); then the numbered sections with their concepts.
+      '<div class="seq-structure"><section class="index-domain set-start" id="nidx-high-level">' +
+        '<p class="domain-label">Curated sequence · ' + seq.length + ' entries</p><h3 class="domain-title">High-Level</h3>' +
+        '<p class="domain-desc">A reading path through the map: the paradigm’s foundations, its sections and the concepts that frame them.</p>' +
+        '<div class="seq-list">' + sequenceListHtml(null) + '</div></section>' +
+        sectionsHtml() + '</div></div>';
     // Civilisation Research Landscape: the field around the paradigm (entries tagged 'landscape').
     var rlTerms = concepts.filter(function (c) { return c.tags && c.tags.indexOf('landscape') >= 0; });
     var rl = '<div class="ce-list rl-list">' +
