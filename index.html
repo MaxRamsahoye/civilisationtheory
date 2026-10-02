@@ -1531,7 +1531,7 @@
   }
 </style>
 </head>
-<body>
+<body class="sidebar-closed">
 
 <div id="loader" aria-hidden="true">
   <div class="loader-mark">
@@ -5450,8 +5450,8 @@
   });
   document.getElementById('scrim').addEventListener('click', function () { setSidebar(false, false); });
 
-  var narrow = window.matchMedia('(max-width: 899px)').matches;
-  setSidebar(!narrow, false);
+  // The sidebar starts closed on every load and refresh, whatever the page; Space or its button opens it.
+  setSidebar(false, false);
 
   // ---------- Theme toggle ----------
   document.getElementById('theme-toggle').addEventListener('click', function () {
