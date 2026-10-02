@@ -5384,19 +5384,21 @@
   // within it – with the concept itself picked out.
   function clusterHtml(c) {
     if (!(c.id in STRUCT_PARENT)) return '';
+    var head = null;
     function node(x) {
       if (typeof x === 'string') x = [x, []];
       if (!Array.isArray(x)) return '<li><span class="nested-head">' + esc(x.head) + '</span><ul>' + x.items.map(node).join('') + '</ul></li>';
       var n = byId[x[0]], kids = x[1] || [];
       if (!n) return '';
+      if (x[2] && x[2].dropdown && x[0] !== head) kids = [];   // (a dropdown within the block shows folded, as on the Map)
       return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : '<a href="' + href(n) + '">' + esc(n.title) + '</a>') +
         (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
     }
-    // Up to the block it belongs to: the nearest leading group of its section above it (or itself),
-    // or the nearest subheading's group.
+    // Up to the block it belongs to: the nearest leading group of its section (or dropdown) above it
+    // (or itself), or the nearest subheading's group.
     var x = c.id;
     for (var guard = 0; guard < 50; guard++) {
-      if (TOP_BLOCKS[x]) return '<ul class="nested">' + node([x, STRUCT_KIDS[x] || []]) + '</ul>';
+      if (TOP_BLOCKS[x]) { head = x; return '<ul class="nested">' + node([x, STRUCT_KIDS[x] || []]) + '</ul>'; }
       var p = STRUCT_PARENT[x];
       if (p && typeof p === 'object') {   // a subheading's group: the subheading, then its concepts (unless it only repeats the section's name)
         var list = (STRUCT_SIBS[x] || []).map(node).join('');
@@ -5516,7 +5518,7 @@
       list.forEach(function (x) {
         if (typeof x === 'string') { if (!(x in STRUCT_PARENT)) { STRUCT_PARENT[x] = parent; STRUCT_SIBS[x] = list; } return; }
         if (Array.isArray(x) && x[2] && x[2].also) return;
-        if (Array.isArray(x) && list === NEW_STRUCTURE[sec]) TOP_BLOCKS[x[0]] = true;
+        if (Array.isArray(x) && (list === NEW_STRUCTURE[sec] || (x[2] && x[2].dropdown))) TOP_BLOCKS[x[0]] = true;   // (a dropdown is a block of its own too)
         if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT) && x[0] !== parent) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length && !STRUCT_KIDS[x[0]]) STRUCT_KIDS[x[0]] = x[1]; walk(x[1] || [], x[0]); return; }
         walk(x.items, { title: x.head, heading: true, parent: parent });
       });
