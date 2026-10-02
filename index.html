@@ -4566,6 +4566,56 @@
       title: 'Post-genderism',
       parent: 'the-post-status-quo',
       html: '<p><em>Post-genderism</em> is the view that gender roles, and perhaps gender itself, could become optional or disappear, whether through social change or through technologies that loosen the link between biological sex and social role. It draws on feminist, queer and transhumanist thought, and appears in xenofeminism among other currents.</p>'
+    },
+    {
+      id: 'civilisational-paradigm-shift',
+      title: 'Civilisational Paradigm-Shift',
+      parent: 'civilisation-transition',
+      html: '<p>A <em>civilisational paradigm-shift</em> is a change in the basic framework through which a civilisation understands itself and organises its life – its <a href="#civilisational-paradigm">civilisational paradigm</a>. The idea extends Thomas Kuhn’s account of scientific revolutions: just as a science changes its paradigm when anomalies pile up that the old one cannot absorb, a civilisation may reach a point where its accumulated crises can no longer be managed within its existing assumptions.</p><p>Such a shift is not a reform within the system but a change in what counts as a problem, a solution and a good life – and, like a scientific revolution, it tends to look impossible until it is under way.</p>'
+    },
+    {
+      id: 'theory-of-life-world-systems-change',
+      title: 'Theory of Life-World-Systems Change',
+      parent: 'civilisation-transition',
+      html: '<p>A <em>theory of life-world-systems change</em> is an account of how a whole <a href="#life-world-system">life-world-system</a> – the coupled system of human societies and the living world they depend on – can move from its present state to a viable one. Where theories of social change typically address a single institution, movement or country, it asks how change propagates across economy, culture, technology and ecology together, and what conditions allow a transition to cascade rather than stall.</p><p>It treats transition as a systems problem: identifying the leverage points, feedback loops and thresholds through which a new configuration can take hold.</p>'
+    },
+    {
+      id: 'phase-transition',
+      title: 'Phase Transition',
+      parent: 'civilisation-transition',
+      html: '<p>A <em>phase transition</em> is a change in the state of a system – as water turns to ice or steam – in which gradual changes in some condition produce a sudden, qualitative change in the whole. Near the critical point, small fluctuations can spread across the entire system and the old order gives way to a new one.</p><p>Applied to civilisation, the concept suggests that transitions need not be gradual: pressures can build within a seemingly stable order until it reorganises rapidly into a different state, for better or worse. The task of transition design is to prepare the configuration a civilisation will move into when that point is reached.</p>'
+    },
+    {
+      id: 'lone-country-transition',
+      title: 'Lone-Country Transition',
+      parent: 'civilisation-transition',
+      html: '<p>A <em>lone-country transition</em> is a strategy in which a single nation moves to a new socio-economic system ahead of the rest of the world, serving as proof of concept and, ideally, as a model for others. Its precedent and warning is “socialism in one country”, the doctrine adopted in the Soviet Union in the 1920s.</p><p>Its difficulty is that a country changing alone remains exposed to the world system around it – to capital flight, trade pressure, sanctions and military threat – which may force it to compromise or close itself off. Whether a transition can survive in one place, under that pressure, is the question the strategy must answer.</p>'
+    },
+    {
+      id: 'distributed-world-network',
+      title: 'Distributed World-Network',
+      parent: 'civilisation-transition',
+      html: '<p>A <em>distributed world-network</em> is a strategy of transition in which a new civilisation grows not inside one country but across a network of communities, projects and institutions spread around the world, linked by shared principles, technologies and exchange. Each node is small enough to start now; together they form a parallel system that can learn from itself, support its members and expand as the old system weakens.</p><p>It trades the power of a state for resilience and reach: no single government can capture or crush it, but it must find ways to coordinate without one.</p>'
+    },
+    {
+      id: 'transitional-projects',
+      title: 'Transitional Projects',
+      parent: 'civilisation-transition',
+      html: '<p><em>Transitional projects</em> are concrete attempts to build parts of a successor civilisation now – model communities, economic systems, governance experiments and technologies designed to demonstrate a different way of living and to serve as nuclei for wider change. They turn civilisation design from theory into prototypes that can be tested, improved and copied.</p>'
+    },
+    {
+      id: 'civium',
+      title: 'Civium',
+      parent: 'transitional-projects',
+      ref: 'Hall',
+      html: '<p><em>Civium</em> is Jordan Hall’s project to re-imagine the city, the basic civic unit, for a world beyond “Game A”. A civium would be a community built at human scale around trust and shared life: partially self-sufficient, governed in new ways, and using technology to support humane coordination rather than growth for its own sake.</p><p>Hall presents it as a practical vehicle for civilisation design, drawing together ideas from the <a href="#game-b">Game B</a> discourse into a form that can be built and lived in.</p>'
+    },
+    {
+      id: 'regen-villages',
+      title: 'ReGen Villages',
+      parent: 'transitional-projects',
+      ref: 'Ehrlich',
+      html: '<p><em>ReGen Villages</em> is a company founded by James Ehrlich in 2016, as a spin-off from Stanford University, to design and build regenerative neighbourhoods: communities of around a hundred families that produce their own organic food, clean water and renewable energy, and recycle their waste into resources on site.</p><p>Its operating software, VillageOS, uses machine learning to design and run these closed-loop systems, with a first neighbourhood planned near Almere in the Netherlands. It offers a model of self-reliant, resilient settlement that could be replicated at scale.</p>'
     }
   ];
 
@@ -4647,6 +4697,11 @@
       ['game-b', ['anti-rivalrous-dynamics', 'antifragility', 'broadcast-vs-network-modality', 'protobs', 'society-4-0']],
       ['cybernetic-economics', ['integral', 'natural-law-resource-based-economy', 'resource-based-economy', 'project-cybersyn']],
       ['the-post-status-quo', ['post-capitalism', 'post-statism', 'post-humanism', 'post-genderism']]
+    ],
+    'civilisation-transition': [
+      ['civilisation-transition', ['civilisational-paradigm-shift', 'theory-of-life-world-systems-change', 'phase-transition']],
+      { head: 'Theory of Systems-Change', items: ['lone-country-transition', 'distributed-world-network'] },
+      ['transitional-projects', ['integral', 'civium', 'regen-villages']]
     ]
   };
   // Each concept's place in the Civilisation Research Paradigm, as filed above: its parent there
