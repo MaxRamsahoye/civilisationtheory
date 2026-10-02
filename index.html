@@ -5353,10 +5353,15 @@
   // ---------- Scroll: progress bar, back-to-top, active contents entry ----------
   var progressEl = document.getElementById('progress');
   var topBtn = document.getElementById('to-top');
+  var progressDone = false;
   function onScroll() {
     var max = document.documentElement.scrollHeight - window.innerHeight;
     var y = window.scrollY;
     progressEl.style.transform = 'scaleY(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+    // The bar's completion – the foot of any page that scrolls – rings a small chime,
+    // once, until the reader has moved back up some way.
+    if (max > 40 && y >= max - 2) { if (!progressDone) { progressDone = true; doneChime(); } }
+    else if (y < max - Math.min(60, max / 2)) progressDone = false;
     topBtn.classList.toggle('visible', y > 300);
     var root = document.documentElement, wasPast = root.classList.contains('map-past-opening');
     root.classList.toggle('map-past-opening', y > window.innerHeight * 0.85);
@@ -5453,6 +5458,32 @@
         osc.stop(t + 0.95);
       });
       filter.connect(out).connect(audioCtx.destination);
+    } catch (e) {}
+  }
+  // Reaching the end of the progress bar: two bright notes rising (G6, then C7), an octave above
+  // the clicks' chime, so it reads as a small arrival.
+  function doneChime() {
+    if (!soundOn) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    try {
+      audioCtx = audioCtx || new AC();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      var t0 = audioCtx.currentTime;
+      [[1567.98, 0], [2093.0, 0.11]].forEach(function (n) {
+        var t = t0 + n[1], out = audioCtx.createGain(), filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass'; filter.frequency.value = 5200;
+        out.gain.setValueAtTime(0.0001, t);
+        out.gain.exponentialRampToValueAtTime(0.035, t + 0.01);
+        out.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
+        [[1, 1], [2, 0.12]].forEach(function (h) {
+          var osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+          osc.type = 'sine'; osc.frequency.value = n[0] * h[0]; g.gain.value = h[1];
+          osc.connect(g).connect(filter);
+          osc.start(t); osc.stop(t + 1.15);
+        });
+        filter.connect(out).connect(audioCtx.destination);
+      });
     } catch (e) {}
   }
   // A typewriter's key: a short burst of filtered noise (the strike) over a low knock (the type bar),
