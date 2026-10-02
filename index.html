@@ -929,6 +929,12 @@
   h1, h2 { scroll-margin-top: 1.5rem; }
   /* An entry's closing References and Nested Concepts */
   .description ol.refs { padding-left: 1.4rem; font-size: 0.92em; }
+  /* The About page's totals: label and number on one line, the whole set apart beneath */
+  .description ul.totals { list-style: none; padding: 0; margin: 0.6rem 0 0; max-width: 30rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.88rem; }
+  .description ul.totals li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); margin: 0; }
+  .description ul.totals li.sub { padding-left: 1.2rem; color: var(--muted); }
+  .description ul.totals li.all { border-bottom: 0; border-top: 1px solid var(--text); font-weight: 600; margin-top: -1px; }
+  .description ul.totals .n { font-variant-numeric: tabular-nums; }
   .description ol.refs li { margin: 0.35rem 0; padding-left: 0.2rem; }
   .description ul.nested { list-style: none; padding-left: 0; }
   .description ul.nested ul { list-style: none; padding-left: 1.1rem; margin: 0.2rem 0; }
@@ -1677,6 +1683,7 @@
 
         '<h2 class="has-icon"><a class="h-icon" href="#the-map" aria-label="The Map"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="6,22 36,10 64,22 94,10 94,78 64,90 36,78 6,90"/><line x1="36" y1="10" x2="36" y2="78"/><line x1="64" y1="22" x2="64" y2="90"/></svg></a>The Map</h2>',
         '<p><a href="#the-map">The Map</a> is a complete index of the concepts on this site. Over time, it will extend to cover hundreds of entries. It can be read in four views – the civilisation research paradigm, an alphabetical A–Z, the map creator’s own conceptual engineerings, and the glossary of <em>The Consilience Project</em> – and browsed at any time from the sidebar.</p>',
+        '<!--TOTALS-->',
 
         '<h2 class="has-icon"><a class="h-icon" href="https://maxramsahoye.github.io/max/" aria-label="Max Ramsahoye"><svg viewBox="-9.5 -9.5 118.9 118.9" aria-hidden="true"><polygon points="10,90 10,10 30,10 50,40 70,10 90,10 90,90 70,90 70,46 50,74 30,46 30,90"/></svg></a>The Cartographer</h2>',
         '<p><em>Civilisational</em> (The Civilisation Theory Map) is a conceptual architecture and artifact created by <a href="https://maxramsahoye.github.io/max/">Max Ramsahoye</a> (with the assistance of Claude for the purposes of speed).</p>'
@@ -7953,7 +7960,7 @@
       (crumbsHtml(c) ? '<p class="tree-string" data-for="' + c.id + '">' + crumbsHtml(c) + '</p>' : '') +
       tagsHtml(c) +
       '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) + '</h1>' +
-      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()) +
+      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()) +
       (isConcept(c) && !PAGES[c.id] ? endSectionsHtml(c) : '') +
       '</div>';
     // Slides snap gently into place as you scroll.
@@ -8576,6 +8583,29 @@
     if (q) lastQuery = q;
     if (location.hash === '#search') { var i = document.getElementById('sp-input'); if (i) i.focus(); }
     else location.hash = '#search';
+  }
+  // The About page's tally of the site: every kind of entry, counted as it stands, and the whole.
+  function totalsHtml() {
+    var sections = childrenOf(ROOT.id);
+    var concepts = CONCEPTS.filter(isConcept);
+    var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Map counts them, sections included)
+    var filed = concepts.filter(function (c) { return c.id in STRUCT_PARENT; }).length;
+    var categories = CONCEPTS.filter(function (c) { return c.kind === 'category' && c.parent !== ROOT.id; }).length;
+    var nodes = CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length;
+    var glossary = CONCEPTS.filter(function (c) { return c.cpOnly; }).length;
+    var pages = 1 + Object.keys(PAGES).filter(function (id) { return id !== 'infinite' || SHOW_INFINITE; }).length;   // About, the Map, Search…
+    var total = concepts.length + sections.length + categories + nodes + glossary + pages;
+    function row(label, n, sub) { return '<li' + (sub ? ' class="sub"' : '') + '><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
+    return '<h2>Totals</h2><ul class="totals">' +
+      row('Concepts', concepts.length) +
+      row('Filed in the Civilisation Research Paradigm', filed, true) +
+      row('Conceptual Engineerings', coined) +
+      row('Sections', sections.length) +
+      row('Categories', categories) +
+      row('Research Landscape nodes', nodes) +
+      row('Consilience Project glossary definitions', glossary) +
+      row('Site pages', pages) +
+      '<li class="all"><span>Entries in total</span><span class="n">' + total + '</span></li></ul>';
   }
   function searchPageHtml() {
     return '<div class="sp">' +
