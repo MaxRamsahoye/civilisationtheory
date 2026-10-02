@@ -32,10 +32,10 @@
     var t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'midnight' : 'light';
     document.documentElement.setAttribute('data-theme', t);
     setFavicon(t);
-    // The loading sequence plays only when the Map itself is opened or refreshed; a refresh on any
-    // other page simply reopens that page.
+    // The loading sequence plays only when the Map itself is opened or refreshed (not one of its
+    // views); a refresh on any other page simply reopens that page.
     document.documentElement.setAttribute('data-theme-after', t);
-    var h = location.hash, onMap = !h || h === '#' || h === '#the-map' || h.indexOf('#the-map/') === 0;
+    var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
     // The loading screen is shown in the blue (midnight) theme; the reader's own theme – light by
     // default – takes over as the site settles (see the loading screen).
@@ -6143,7 +6143,8 @@
   var noLoadIn = document.documentElement.classList.contains('no-loadin');
   if (noLoadIn) {
     var openId = decodeURIComponent(location.hash.replace(/^#/, ''));
-    if (!(byId[openId] || PAGES[openId] || openId === ROOT.id) || (openId === 'infinite' && !SHOW_INFINITE)) {
+    var isView = Object.keys(MAP_VIEWS).some(function (v) { return location.hash === mapViewHref(v); });
+    if (!(isView || byId[openId] || PAGES[openId] || openId === ROOT.id) || (openId === 'infinite' && !SHOW_INFINITE)) {
       noLoadIn = false;
       document.documentElement.classList.remove('no-loadin');
       document.documentElement.setAttribute('data-theme', 'midnight');
