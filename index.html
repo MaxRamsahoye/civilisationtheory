@@ -1874,6 +1874,7 @@
       title: 'Civilisation Theory',
       parent: null,
       master: true,
+      coined: true,
       html: '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution to avoid both destruction and dystopia is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure), a viable life-world-system.</p>'
     },
 
@@ -7658,6 +7659,9 @@
       return found ? [ROOT, { title: 'Civilisation Research Landscape', heading: true }].concat(found, [c]) : null;
     }
     if (c.parent === ROOT.id && (c.kind === 'category' || PAGES[c.id])) return [ROOT, c];
+    // A concept listed in more than one place takes the path of the place it was opened from.
+    var via = LOC_VIA[c.id] && pathFromLoc(LOC_VIA[c.id], c);
+    if (via) return via;
     if (!(c.id in STRUCT_PARENT)) return null;
     var path = [c], p = STRUCT_PARENT[c.id];
     while (p) {
@@ -7672,6 +7676,27 @@
     path.unshift(ROOT);
     return path;
   }
+  // Where a concept was last opened from in the paradigm (its listing's path: section, headings and
+  // concepts above it, each link carrying it as data-path), so that its tree string follows that place.
+  var LOC_VIA = {};
+  function locPath(trail) { return trail.map(encodeURIComponent).join('|'); }
+  function pathFromLoc(loc, c) {
+    var path = [ROOT];
+    var ok = loc.split('|').every(function (seg) {
+      seg = decodeURIComponent(seg);
+      if (seg.indexOf('h:') === 0) {
+        var t = seg.slice(2), prev = path[path.length - 1];
+        if (t && prev.title !== t) path.push({ title: t, heading: true });   // (a heading named as its parent, or a group without one, is not shown)
+        return true;
+      }
+      return byId[seg] ? (path.push(byId[seg]), true) : false;
+    });
+    return ok ? path.concat([c]) : null;
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-path]');
+    if (a) LOC_VIA[a.getAttribute('href').slice(1)] = a.getAttribute('data-path');
+  }, true);
   function pathTo(c) {
     var path = [];
     while (c) { path.unshift(c); c = c.parent ? byId[c.parent] : null; }
@@ -7745,18 +7770,19 @@
       'and <em>macro</em> (history, sociology, strategy).</p>';
     // (each concept counted once, however many places it is listed in)
     function structCount(list) { return Object.keys(structIds(list, {})).length; }
-    function structHtml(list, top) {
+    function structHtml(list, top, trail) {
+      trail = trail || [];
       return list.map(function (x) {
         if (typeof x === 'string') x = [x, []];
-        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span><ul>' + structHtml(x.items) + '</ul></li>'
-          : '<li class="is-category struct-plain"><ul>' + structHtml(x.items) + '</ul></li>';   // (a group without a heading)
+        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span><ul>' + structHtml(x.items, false, trail.concat(['h:' + x.head])) + '</ul></li>'
+          : '<li class="is-category struct-plain"><ul>' + structHtml(x.items, false, trail) + '</ul></li>';   // (a group without a heading)
         var c = byId[x[0]], kids = x[1] || [], o = x[2] || {};
         if (!c) return '';
-        var link = '<a href="' + href(c) + '">' + esc(o.label || c.title) + '</a>';
+        var link = '<a href="' + href(c) + '"' + (trail.length ? ' data-path="' + esc(locPath(trail)) + '"' : '') + '>' + esc(o.label || c.title) + '</a>';
         if (o.dropdown && kids.length)   // (folded: the marker opens it, the name still leads to the entry)
-          return '<li class="struct-drop' + (top ? ' is-category' : '') + '"><details><summary>' + link + '</summary><ul>' + structHtml(kids) + '</ul></details></li>';
+          return '<li class="struct-drop' + (top ? ' is-category' : '') + '"><details><summary>' + link + '</summary><ul>' + structHtml(kids, false, trail.concat([x[0]])) + '</ul></details></li>';
         return '<li' + (top ? ' class="is-category"' : '') + '>' + link +
-          (kids.length ? '<ul>' + structHtml(kids) + '</ul>' : '') + '</li>';
+          (kids.length ? '<ul>' + structHtml(kids, false, trail.concat([x[0]])) + '</ul>' : '') + '</li>';
       }).join('');
     }
     // A menu of the sections at the head of the paradigm: one column per set, each section numbered
@@ -7783,7 +7809,7 @@
           '<h3 class="domain-title"><a href="' + href(d) + '">' + esc(d.title) + '</a></h3>' +
           // First sentence only; the full description is on the section's own page.
           (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
-          (NEW_STRUCTURE[d.id] ? '<ul class="index-cols struct-cols">' + structHtml(NEW_STRUCTURE[d.id], true) + '</ul>' : '<p class="rl-empty">Concepts to be added.</p>') + '</section>';
+          (NEW_STRUCTURE[d.id] ? '<ul class="index-cols struct-cols">' + structHtml(NEW_STRUCTURE[d.id], true, [d.id]) + '</ul>' : '<p class="rl-empty">Concepts to be added.</p>') + '</section>';
       }).join('');
     }
     // Alternative A–Z view: every concept alphabetically, grouped by first letter.
@@ -7889,7 +7915,7 @@
         '<span class="tab-meta">' + meta + '</span></button>';
     }
     return '<nav class="index-view index-tabs" aria-label="Index view">' +
-      tab('ab', 'About the Project', (concepts.length + CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length) + ' entries') +
+      tab('ab', 'About the Project', entriesTotal() + ' entries') +
       tab('cs', 'Civilisation Research Paradigm', sections.length + ' sections – ' + paradigmCount() + ' concepts') +
       tab('rl', 'Civilisation Research Landscape', rlCount + ' nodes') +
       tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') +
@@ -7903,9 +7929,10 @@
     var path = crumbPath(c);
     if (!path) return '';   // not yet filed in the paradigm: no tree string
     var nodes = path.map(function (p, i, arr) {
+      var above = arr.slice(1, i).map(function (q) { return q.heading ? 'h:' + q.title : q.id; });
       return i === arr.length - 1 || p.heading
         ? '<span class="node">' + esc(p.title) + '</span>'
-        : '<a class="node" href="' + (p === ROOT ? '#civilisation-theory' : href(p)) + '">' + esc(p.title) + '</a>';   // (“Civilisation Theory” opens the master concept)
+        : '<a class="node" href="' + (p === ROOT ? '#civilisation-theory' : href(p)) + '"' + (above.length ? ' data-path="' + esc(locPath(above)) + '"' : '') + '>' + esc(p.title) + '</a>';   // (“Civilisation Theory” opens the master concept)
     });
     if (!k) return nodes.join('<span class="sep">&gt;</span><wbr>');
     // Each stacked node keeps its arrow, pointing on to the next line.
@@ -8334,7 +8361,7 @@
   function sequenceListHtml(current) {
     function list(items) {
       return '<ul class="seq-group">' + items.map(function (s) {
-        return s === current ? '<li aria-current="step"><span>' + esc(s.title) + '</span></li>' : '<li><a href="' + href(s) + '">' + esc(s.title) + '</a></li>';
+        return s === current ? '<li aria-current="step"><span>' + esc(s.title) + '</span></li>' : '<li><a href="' + href(s) + '"' + (isConcept(s) && !s.master ? ' data-path="' + esc(locPath(['h:High-Level'])) + '"' : '') + '>' + esc(s.title) + '</a></li>';
       }).join('') + '</ul>';
     }
     function block(g) {
@@ -9116,14 +9143,19 @@
     var concepts = CONCEPTS.filter(isConcept);
     var filed = paradigmCount();
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Conceptual Engineerings tab counts them)
-    var nodes = CONCEPTS.filter(function (c) { return c.kind === 'node'; }).length;   // (the landscape's own entries, for the total)
+    var sections = childrenOf(ROOT.id).filter(function (c) { return c.kind === 'category'; }).length;
     function row(label, n) { return '<li><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
     return '<h2>Totals</h2><ul class="totals">' +
       row('Concepts', concepts.length) +
+      row('Sections', sections) +
       row('Civilisation Research Paradigm', filed) +
       row('Civilisation Research Landscape Nodes', landscapeNodeCount()) +
       row('Conceptual Engineerings', coined) +
-      '<li class="all"><span>Entries in total</span><span class="n">' + (concepts.length + nodes) + '</span></li></ul>';
+      '<li class="all"><span>Entries in total</span><span class="n">' + entriesTotal() + '</span></li></ul>';
+  }
+  // Every entry on the site, each once: the concepts, the ten sections' own entries and the landscape's nodes.
+  function entriesTotal() {
+    return CONCEPTS.filter(function (c) { return isConcept(c) || c.kind === 'node' || (c.kind === 'category' && c.parent === ROOT.id); }).length;
   }
   function searchPageHtml() {
     return '<div class="sp">' +
