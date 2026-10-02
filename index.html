@@ -1472,7 +1472,7 @@
   /* …first the title and subtitle, then (a moment later) the interface: header, controls, tab line */
   html.loading-hud #site-header, html.loading-hud #head-menu, html.loading-hud .control, html.loading-hud #sidebar,
   html.loading-hud #progress, html.loading-hud #entry .index-tabs { opacity: 0 !important; pointer-events: none !important; }
-  /* …but first the title types itself out, alone on the terrain: Civilisational, then The and Map together */
+  /* …but first the title types itself out, alone on the terrain, as one phrase */
   html.title-typing body > *:not(#map-topo):not(script):not(main),
   html.title-typing #entry > *:not(h1) { opacity: 0 !important; pointer-events: none !important; }
   #entry h1 .tw { visibility: hidden; }
@@ -5527,37 +5527,32 @@
       });
     } catch (e) {}
   }
-  // A typewriter's key: a short burst of filtered noise (the strike) over a low knock (the type bar),
-  // a little different each time. Browsers may hold back sound until the reader first interacts.
-  var clickNoise = null;
-  function keyClick(strong) {
+  // The title's keys: short, soft plucks from the same pentatonic scale as the clicks' chime but an
+  // octave below (C4–A4), wandering a step at a time – the chime's family, as a quiet patter.
+  var keyNote = 2;
+  function keyClick() {
     if (!soundOn) return;
     var AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     try {
       audioCtx = audioCtx || new AC();
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      var t = audioCtx.currentTime, vol = strong ? 1.35 : 1;
-      if (!clickNoise) {
-        clickNoise = audioCtx.createBuffer(1, Math.round(audioCtx.sampleRate * 0.06), audioCtx.sampleRate);
-        var d = clickNoise.getChannelData(0);
-        for (var n = 0; n < d.length; n++) d[n] = (Math.random() * 2 - 1) * Math.pow(1 - n / d.length, 3);
-      }
-      var src = audioCtx.createBufferSource(), band = audioCtx.createBiquadFilter(), g = audioCtx.createGain();
-      src.buffer = clickNoise; src.playbackRate.value = 0.85 + Math.random() * 0.3;
-      band.type = 'bandpass'; band.frequency.value = 1900 + Math.random() * 1400; band.Q.value = 1.1;
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.exponentialRampToValueAtTime(0.11 * vol, t + 0.002);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
-      src.connect(band).connect(g).connect(audioCtx.destination);
-      src.start(t); src.stop(t + 0.06);
-      var o = audioCtx.createOscillator(), og = audioCtx.createGain();
-      o.type = 'triangle'; o.frequency.setValueAtTime(170 + Math.random() * 40, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.05);
-      og.gain.setValueAtTime(0.0001, t);
-      og.gain.exponentialRampToValueAtTime(0.05 * vol, t + 0.003);
-      og.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
-      o.connect(og).connect(audioCtx.destination);
-      o.start(t); o.stop(t + 0.08);
+      var step = Math.random() < 0.5 ? -1 : 1;
+      if (keyNote + step < 0 || keyNote + step >= NOTES.length) step = -step;   // turning back at either end
+      keyNote += step;
+      var t = audioCtx.currentTime, f = NOTES[keyNote] / 2;
+      var out = audioCtx.createGain(), filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass'; filter.frequency.value = 1800;
+      out.gain.setValueAtTime(0.0001, t);
+      out.gain.exponentialRampToValueAtTime(0.05, t + 0.005);
+      out.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+      [[1, 1], [2, 0.2]].forEach(function (h) {
+        var osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+        osc.type = 'sine'; osc.frequency.value = f * h[0]; g.gain.value = h[1];
+        osc.connect(g).connect(filter);
+        osc.start(t); osc.stop(t + 0.2);
+      });
+      filter.connect(out).connect(audioCtx.destination);
     } catch (e) {}
   }
   document.addEventListener('click', function (e) {
@@ -6155,20 +6150,20 @@
     var root = document.documentElement, loader = document.getElementById('loader');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var finished = false, timer, typing = null, endTyping = null;
-    // The title types itself: "Civilisational" first, then "The" and "Map" at once, letter by letter.
+    // The title types itself out, letter by letter, as one phrase.
     function typeTitle(done) {
       var h1 = document.querySelector('#entry h1'), text = h1 ? h1.textContent : '', html = h1 ? h1.innerHTML : '';
-      var mid = text.indexOf('Civilisational');
-      if (!h1 || mid < 0 || reduce) { done(); return; }
+      if (!h1 || !text || reduce) { done(); return; }
       h1.setAttribute('aria-label', text);
-      function chars(t) { return t.split('').map(function (ch) { return ch === ' ' ? ' ' : '<span class="tw" aria-hidden="true">' + esc(ch) + '</span>'; }).join(''); }
-      h1.innerHTML = chars(text);
-      var spans = h1.querySelectorAll('.tw'), before = text.slice(0, mid).replace(/ /g, '').length, word = 'Civilisational'.length;
-      var head = Array.prototype.slice.call(spans, 0, before), tail = Array.prototype.slice.call(spans, before + word);
-      var steps = [], k;
-      for (k = 0; k < word; k++) steps.push([spans[before + k]]);
-      steps.push([], [], []);   // a beat between the two
-      for (k = 0; k < Math.max(head.length, tail.length); k++) steps.push([head[k], tail[k]].filter(Boolean));
+      // One phrase, letter by letter, with a little more time at each space.
+      var steps = [];
+      text.split('').forEach(function (ch) {
+        if (ch === ' ') { steps.push(null); return; }
+        var sp = document.createElement('span'); sp.className = 'tw'; sp.setAttribute('aria-hidden', 'true'); sp.textContent = ch;
+        steps.push(sp);
+      });
+      h1.textContent = '';
+      steps.forEach(function (sp) { h1.appendChild(sp || document.createTextNode(' ')); });
       var i = 0;
       endTyping = function () {
         endTyping = null; clearTimeout(typing);
@@ -6178,9 +6173,8 @@
       (function tick() {
         if (i >= steps.length) { typing = setTimeout(endTyping, 300); return; }
         var step = steps[i++];
-        step.forEach(function (s) { s.classList.add('on'); });
-        if (step.length) keyClick(step.length > 1);
-        typing = setTimeout(tick, 90 + Math.random() * 40);
+        if (step) { step.classList.add('on'); keyClick(); }
+        typing = setTimeout(tick, (step ? 85 : 140) + Math.random() * 40);
       })();
     }
     function finish() {
