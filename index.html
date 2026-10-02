@@ -4826,7 +4826,7 @@
     // (eased, so it trails a little behind); a click instead shoves the land itself aside: the
     // contours around the point are pushed outward, opening a clearing, then ease back into place.
     var hover = { x: 0, y: 0, tx: 0, ty: 0, on: false, h: 0 }, pushes = [];
-    var HILL = 0.42, HILL_R = 110, PUSH = 150, PUSH_R = 165, PUSH_LIFE = 4;
+    var HILL = 0.26, HILL_R = 125, PUSH = 150, PUSH_R = 165, PUSH_LIFE = 4;
     function lift(x, y) {
       if (hover.h < 0.001) return 0;
       var dx = x - hover.x, dy = y - hover.y;
@@ -4884,9 +4884,9 @@
       var visible = document.documentElement.classList.contains('page-map') && !document.documentElement.classList.contains('topo-off') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
       if (visible && started) {
         clock += dt / 1000;
-        var f = 1 - Math.exp(-dt / 1000 * 5);
+        var f = 1 - Math.exp(-dt / 1000 * 1.8);
         hover.x += (hover.tx - hover.x) * f; hover.y += (hover.ty - hover.y) * f;
-        hover.h += ((hover.on ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * 2.5));
+        hover.h += ((hover.on ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * 1.1));
         for (var k = pushes.length - 1; k >= 0; k--) { var r = pushes[k]; r.age += dt / 1000; r.amp = shove(r.age); if (r.age > PUSH_LIFE) pushes.splice(k, 1); }
         if (frame++ % 2 === 0) draw(now);
       }
