@@ -1873,10 +1873,10 @@
       title: 'Civilisation Theory',
       parent: null,
       html: [
-        '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure).</p>',
+        '<p><a href="#civilisation-theory"><em>Civilisation Theory</em></a> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure).</p>',
 
         '<h2>A Conceptual Adaptive System</h2>',
-        '<p>This wiki site serves to create a <em>conceptual adaptive system</em> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
+        '<p>This wiki site serves to create a <a href="#conceptual-adaptive-system"><em>conceptual adaptive system</em></a> for this ultimate project. For civilisation to adapt, we must first adapt the concepts we use to understand it: our map of the territory or world-model. In other words, recursively within the civilisational crisis, is an epistemic crisis to process it. The <a href="https://maxramsahoye.github.io/civilisationtheory">Civilisation Theory Map</a> is a response to this crisis: a collective knowledge base to aid the formation of collective understanding, and in turn, collective action.</p>',
 
         '<h2>Project Context</h2>',
         '<aside class="sidenote"><span class="sn-num">1</span>The Civilisational Map is an independent project that is not affiliated with the <a href="#civilization-research-institute">Civilization Research Institute</a>.</aside>',
@@ -9229,7 +9229,7 @@
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Conceptual Engineerings tab counts them)
     var sections = childrenOf(ROOT.id).filter(function (c) { return c.kind === 'category'; }).length;
     function row(label, n) { return '<li><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
-    return '<h2>Totals</h2><ul class="totals">' +
+    return '<ul class="totals">' +
       row('Concepts', concepts.length) +
       row('Sections', sections) +
       row('Civilisation Research Paradigm', filed) +
