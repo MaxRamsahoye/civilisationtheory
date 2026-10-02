@@ -4825,10 +4825,10 @@
     function field(x, y, t) { return tnoise(x, y, t) * 0.7 + tnoise(x * 2.1 + 17, y * 2.1 + 9, t * 1.6) * 0.3; }
     var STEP = 0.075, CELL = 9, grid = null, cols = 0, rows = 0;
     // The ground answers the reader. Under the cursor it swells into a low hill that follows it
-    // (right under it, with no lag); a click instead shoves the land itself aside: the
+    // (trailing only slightly); a click instead shoves the land itself aside: the
     // contours around the point are pushed outward, opening a clearing, then ease back into place.
     var hover = { x: 0, y: 0, tx: 0, ty: 0, on: false, h: 0 }, pushes = [];
-    var HILL = 0.26, HILL_R = 125, PUSH = 150, PUSH_R = 165, PUSH_LIFE = 4;
+    var HILL = 0.34, HILL_R = 117, PUSH = 150, PUSH_R = 165, PUSH_LIFE = 4;
     function lift(x, y) {
       if (hover.h < 0.001) return 0;
       var dx = x - hover.x, dy = y - hover.y;
@@ -4886,9 +4886,9 @@
       var visible = document.documentElement.classList.contains('page-map') && !document.documentElement.classList.contains('topo-off') && !document.hidden && window.scrollY < wrap.offsetTop + Hh;
       if (visible && started) {
         clock += dt / 1000;
-        hover.x = hover.tx; hover.y = hover.ty;
-        // (up at once under the cursor; sinking away gently once it leaves)
-        hover.h += ((hover.on ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * (hover.on ? 18 : 1.1)));
+        var f = 1 - Math.exp(-dt / 1000 * 10);   // (a slight trail behind the cursor)
+        hover.x += (hover.tx - hover.x) * f; hover.y += (hover.ty - hover.y) * f;
+        hover.h += ((hover.on ? 1 : 0) - hover.h) * (1 - Math.exp(-dt / 1000 * (hover.on ? 6.5 : 1.7)));
         for (var k = pushes.length - 1; k >= 0; k--) { var r = pushes[k]; r.age += dt / 1000; r.amp = shove(r.age); if (r.age > PUSH_LIFE) pushes.splice(k, 1); }
         if (frame++ % 2 === 0) draw(now);
       }
