@@ -7602,7 +7602,7 @@
       ['the-emergence-model', ['metastructure', 'macrostructure', ['inter-structure', [['integral', [], { also: true }], 'inter-structure-democracy-3']], ['infra-structure', ['infra-structure-global-redesign-institute']], ['super-structure', ['metamodernism']], ['sub-structure', ['evolutionary-match']], ['biostructure', ['biowisdom']]]],
       ['third-attractor', ['first-attractor', 'second-attractor'], { also: true }],
       ['the-fourth-frontier', ['third-frontier', 'second-frontier', 'first-frontier']],
-      ['game-b', ['anti-rivalrous-dynamics', 'antifragility', 'broadcast-vs-network-modality', 'protobs', 'society-4-0']],
+      ['game-b', ['anti-rivalrous-dynamics', 'antifragility', 'broadcast-vs-network-modality', 'protobs', 'society-4-0', 'collective-intelligence', 'commons']],
       ['cybernetic-economics', ['cybernetics', 'heterodox-economics', 'integral', 'natural-law-resource-based-economy', 'resource-based-economy', ['world-livingry-service', ['livingry']], ['project-cybersyn', ['the-liberty-machine', ['viable-system-model', ['requisite-variety']]]],
         ['history-begins-again', [['the-end-of-history', [], { also: true }], 'hayeks-great-wall',
           ['coherence-of-civilisations', [['clash-of-civilisations', [], { also: true }], 'convergent-cultural-evolution']]]]]],
@@ -7725,7 +7725,7 @@
     'macrostrategy': [
       ['macrostrategy', ['macrosecuritisation', 'global-priorities-research', 'crucial-consideration', 'trajectory-change', 'state-vs-transition-risk']],
       ['future-of-humanity', ['extinction', 'recurrent-collapse', 'plateau', 'posthumanity']],
-      ['differential-progress', ['differential-technological-development', 'differential-intellectual-progress', 'pacing-problem']],
+      ['differential-progress', ['differential-technological-development', 'differential-intellectual-progress', ['pacing-problem', ['collingridge-dilemma']]]],
       ['vulnerable-world-hypothesis', ['urn-of-invention', 'high-tech-panopticon']],
       ['longtermism', ['strong-vs-weak-longtermism', 'the-hinge-of-history', 'cosmic-endowment', 'grand-futures', 'astronomical-waste',
         ['population-ethics', ['total-view', 'person-affecting-view']], 'survival-vs-flourishing', 'moral-uncertainty', 'option-value', 'the-long-reflection']],
@@ -8564,7 +8564,8 @@
         { name: 'I', items: sets[2] },
         { name: 'II', items: [byId['macroeconomics'], byId['macroevolution'], byId['macrocosm']] }
       ] },
-      { name: 'Core', items: [byId['life-world-system'], byId['integral'], byId['regen-villages']] }
+      { name: 'Core', items: [byId['life-world-system'], byId['integral'], byId['regen-villages']] },
+      { name: 'Other', items: [byId['conceptual-adaptive-system'], byId['complex-adaptive-system']] }
     ].map(function (g) {
       // A group may be divided into numbered sub-groups (I, II, …); its items are theirs in order.
       if (g.subs) g.subs.forEach(function (sg) { sg.items = sg.items.filter(Boolean); });
@@ -8586,9 +8587,10 @@
       return '<div class="seq-block seq-' + g.name.toLowerCase() + '"><p class="seq-head">' + g.name + '</p>' +
         (g.subs ? g.subs.map(function (sg) { return list(sg.items); }).join('<hr class="seq-divide">') : list(g.items)) + '</div>';
     }
-    // Four columns, each stacking its own groups at their own height (Core directly beneath Foundation).
+    // Four columns, each stacking its own groups at their own height (Core directly beneath Foundation,
+    // Other beneath Macro).
     var gs = curatedGroups();
-    return [[gs[0], gs[4]], [gs[1]], [gs[2]], [gs[3]]].map(function (col) {
+    return [[gs[0], gs[4]], [gs[1]], [gs[2]], [gs[3], gs[5]]].map(function (col) {
       return '<div class="seq-col">' + col.filter(Boolean).map(block).join('') + '</div>';
     }).join('');
   }
