@@ -5368,7 +5368,7 @@
     },
     {
       id: 'genealogy-of-the-metacrisis',
-      title: 'Genealogy: Precursors within Intellectual History',
+      title: 'Genealogy of the Three Attractor Model',
       parent: 'metacrisis',
       html: '<p>The analysis of the metacrisis has precursors throughout intellectual history: models of how societies are drawn between disorder and tyranny, and of the narrow paths between them. This genealogy traces the ideas on which the three-attractors model builds, from ancient theories of political cycles to recent work on existential risk and state power.</p>'
     },
@@ -7560,7 +7560,7 @@
     ],
     'metacrisis': [
       ['civilisational-crisis', ['polycrisis', 'permacrisis', 'omnicrisis']],
-      { head: 'Problem Complex', desc: 'The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.', items: [
+      { head: 'Problem Complex', entry: 'problem-complex', desc: 'The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.', items: [
         ['ecological-crisis', ['climate-migration', 'the-anthropocene',
           ['planetary-boundaries', ['crossed-planetary-boundaries', 'safe-operating-space', 'tipping-points']],
           ['the-great-simplification', ['carbon-pulse', 'energy-blindness', 'the-mordor-economy', 'jevons-paradox']]], { dropdown: true }],
@@ -7578,7 +7578,7 @@
           ['global-psychological-disorder', ['aggression-and-anti-social-behaviour', 'dark-triad-traits', 'political-radicalisation']],
           'global-infertility'], { dropdown: true }]
       ] },
-      { head: 'Generative Dynamics', desc: 'Generative dynamics are the underlying patterns and processes that re-produce problems and amplify them to a global catastrophic scale and severity.', items: [
+      { head: 'Generative Dynamics', entry: 'generative-dynamics', desc: 'Generative dynamics are the underlying patterns and processes that re-produce problems and amplify them to a global catastrophic scale and severity.', items: [
         { head: 'Game-Theoretic', items: ['zero-sum-game', 'arms-races-and-tragedies-of-the-commons', 'multipolar-trap', 'instrumental-convergence-and-strategy-stealing'] },
         { head: 'Systems-Theoretic', items: ['narrow-metric-optimisation', 'positive-feedback-loops-and-power-asymmetries', 'exponential-technological-acceleration', 'life-blind-search-processes'] },
         { head: 'Behavioural-Economic', items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures'] },
@@ -7586,12 +7586,12 @@
         { head: 'Epistemic-Ontological', items: ['reductionist-world-modelling', 'isolated-problem-solving', 'structural-and-superstructural-separation'] },
         { head: 'Mytho-poetic', items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
       ] },
-      { head: 'Attractor States', desc: 'Attractor states are extreme stable conditions in the future possibility space of civilisation, that existing trajectories converge towards. Overall, there are three macro-scale attractors.', blocks: true, items: [   // (each attractor a block of its own)
+      { head: 'Attractor States', entry: 'attractor-states', desc: 'Attractor states are extreme stable conditions in the future possibility space of civilisation, that existing trajectories converge towards. Overall, there are three macro-scale attractors.', blocks: true, items: [   // (each attractor a block of its own)
         ['first-attractor', ['escalating-system-dynamics', 'escalating-state-competition', 'escalating-rogue-actors']],
         ['second-attractor', ['global-stable-totalitarianism', 'hyper-surveillance-capitalism', 'despotic-drift-and-closed-society']],
         ['third-attractor', ['cultural-enlightenment', 'decentralised-coordination',
-          ['meta-utopia', ['pluralistic-civilisation-alignment', 'world-democratic-federation', 'moral-parliament-of-ai-representatives']]]]] },
-      ['genealogy-of-the-metacrisis', ['three-attractors-model', ['vulnerable-world-hypothesis', [], { also: true }], 'the-narrow-corridor', 'anacyclosis']]
+          ['meta-utopia', ['pluralistic-civilisation-alignment', 'world-democratic-federation', 'moral-parliament-of-ai-representatives']]]],
+        ['genealogy-of-the-metacrisis', ['three-attractors-model', ['vulnerable-world-hypothesis', [], { also: true }], 'the-narrow-corridor', 'anacyclosis']]] }
     ],
     'civilisational-alignment': [
       ['civilisation-alignment', ['hierarchical-agency']],
@@ -7693,7 +7693,7 @@
     list.forEach(function (x) {
       if (typeof x === 'string') seen[x] = true;
       else if (Array.isArray(x)) { if (!NEW_STRUCTURE[x[0]]) seen[x[0]] = true; structIds(x[1] || [], seen); }
-      else structIds(x.items, seen);
+      else { if (x.entry) seen[x.entry] = true; structIds(x.items, seen); }   // (a subheading standing for an entry counts as that entry)
     });
     return seen;
   }
@@ -7753,6 +7753,10 @@
         if (Array.isArray(x) && x[2] && x[2].also) return;
         if (Array.isArray(x) && (list === NEW_STRUCTURE[sec] || blocks || (x[2] && x[2].dropdown))) TOP_BLOCKS[x[0]] = true;   // (a dropdown, or one under a subheading marked blocks, is a block of its own too)
         if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT) && x[0] !== parent) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length) STRUCT_KIDS[x[0]] = mergeKids(STRUCT_KIDS[x[0]], x[1]); walk(x[1] || [], x[0]); return; }
+        if (x.entry && !(x.entry in STRUCT_PARENT)) {   // (a subheading standing for an entry: the entry is filed here, heading the group)
+          STRUCT_PARENT[x.entry] = parent; STRUCT_SIBS[x.entry] = list; STRUCT_KIDS[x.entry] = x.items;
+          if (list === NEW_STRUCTURE[sec]) TOP_BLOCKS[x.entry] = true;
+        }
         walk(x.items, { title: x.head, heading: true, parent: parent }, !!x.blocks);
       });
     })(NEW_STRUCTURE[sec], sec);
