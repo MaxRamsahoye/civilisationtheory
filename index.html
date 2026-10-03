@@ -7480,7 +7480,7 @@
   });
   // The landscape's places: a listing's path starts L:section, then h:group (or a heading), q: for a
   // quiet heading (left out of tree strings), and the nodes above it; its tree string starts at the landscape.
-  var CRL_HEAD = { title: 'Civilisation Research Landscape', heading: true, crl: true };
+  var CRL_HEAD = { title: 'Civilisation Research Landscape', heading: true, crl: true, href: '#the-map/civilisation-research-landscape' };
   function landSec(title) { return LANDSCAPE.filter(function (sec) { return sec.title === title; })[0]; }
   function landscapeLoc(id) {   // (the first place a node is listed on the landscape)
     var found = null;
@@ -7536,7 +7536,7 @@
     var path = [ROOT];
     var ok = loc.split('|').every(function (seg) {
       seg = decodeURIComponent(seg);
-      if (seg.indexOf('L:') === 0) { path = [CRL_HEAD, { title: seg.slice(2), heading: true, land: true }]; return !!landSec(seg.slice(2)); }   // (a landscape place)
+      if (seg.indexOf('L:') === 0) { var ls = landSec(seg.slice(2)); path = [CRL_HEAD, { title: seg.slice(2), heading: true, land: true, href: ls && ls.entry && byId[ls.entry] ? '#' + ls.entry : null }]; return !!ls; }   // (a landscape place)
       if (seg.indexOf('q:') === 0) return true;
       if (seg.indexOf('h:') === 0) {
         var t = seg.slice(2), prev = path[path.length - 1];
@@ -7774,6 +7774,7 @@
     if (!path) return '';   // not yet filed in the paradigm: no tree string
     var nodes = path.map(function (p, i, arr) {
       var above = arr.slice(arr[0] === ROOT ? 1 : 0, i).filter(function (q) { return !q.crl; }).map(function (q) { return q.land ? 'L:' + q.title : q.heading ? 'h:' + q.title : q.id; });
+      if (p.heading && p.href && i < arr.length - 1) return '<a class="node" href="' + p.href + '">' + esc(p.title) + '</a>';   // (the landscape and its sections open as entries)
       return i === arr.length - 1 || p.heading
         ? '<span class="node">' + esc(p.title) + '</span>'
         : '<a class="node" href="' + (p === ROOT ? '#civilisation-theory' : href(p)) + '"' + (above.length ? ' data-path="' + esc(locPath(above)) + '"' : '') + '>' + esc(p.title) + '</a>';   // (“Civilisation Theory” opens the master concept)
@@ -8171,7 +8172,8 @@
   // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
   var TAGS = {
     consilience: { label: 'Consilience Project', view: 'cp' },   // opens the Map's Consilience Project view
-    ce: { label: 'Conceptual Engineering', view: 'ce' }          // the map's own novel terms, marked coined (added automatically)
+    ce: { label: 'Conceptual Engineering', view: 'ce' },         // the map's own novel terms, marked coined (added automatically)
+    landscape: { label: 'Civilisation Research Landscape', view: 'rl' }   // the landscape's nodes: opens the Map's Research Landscape view
   };
   // The Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
   // Grouped under subheadings: Foundation (the paradigm), the three sets of sections, then Core (its aim).
