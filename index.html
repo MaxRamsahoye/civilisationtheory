@@ -765,15 +765,16 @@
   #to-top { view-transition-name: ui-top; }
   #progress { view-transition-name: ui-progress; }
   #map-search { view-transition-name: ui-search; }
+  #site-header .head-icons { view-transition-name: ui-headicons; }   /* (the header's Map, ⓘ and search icons: their press plays out live across a page change) */
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none; }
   ::view-transition-group(ui-sidebar), ::view-transition-group(ui-toggle), ::view-transition-group(ui-back),
   ::view-transition-group(ui-theme), ::view-transition-group(ui-top), ::view-transition-group(ui-progress),
-  ::view-transition-group(ui-search) { z-index: 5; }
+  ::view-transition-group(ui-search), ::view-transition-group(ui-headicons) { z-index: 5; }
   /* …shown live throughout, so a press effect begun on one of them keeps running instead of freezing in
      the old page's snapshot */
   ::view-transition-old(ui-sidebar), ::view-transition-old(ui-toggle), ::view-transition-old(ui-back),
   ::view-transition-old(ui-theme), ::view-transition-old(ui-top), ::view-transition-old(ui-progress),
-  ::view-transition-old(ui-search) { display: none; }
+  ::view-transition-old(ui-search), ::view-transition-old(ui-headicons) { display: none; }
   ::view-transition-old(root) { animation: page-fade-out .22s ease-in both; }
   ::view-transition-new(root) { animation: page-fade-in .32s ease-out .2s both; }
   @keyframes page-fade-out { to { opacity: 0; } }
