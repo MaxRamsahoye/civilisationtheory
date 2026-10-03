@@ -7661,20 +7661,20 @@
           'global-infertility'], { dropdown: true }]
       ] },
       { head: 'Generative Dynamics', entry: 'generative-dynamics', desc: 'Generative dynamics are the underlying patterns and processes that re-produce problems and amplify them to a global catastrophic scale and severity.', items: [
-        { head: 'Game-Theoretic', items: ['zero-sum-game', ['arms-races-and-tragedies-of-the-commons', ['arms-race', 'tragedy-of-the-commons']], 'multipolar-trap', 'instrumental-convergence-and-strategy-stealing'] },
-        { head: 'Systems-Theoretic', items: ['narrow-metric-optimisation', 'positive-feedback-loops-and-power-asymmetries', 'exponential-technological-acceleration', 'life-blind-search-processes'] },
-        { head: 'Behavioural-Economic', items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures', 'goodharts-law'] },
-        { head: 'Cultural-Psychological', items: ['left-hemispheric-conditioning', 'modernist-cultural-paradigm', 'scarcity-rivalry-orientation', 'psychopathic-selection-hypothesis', 'collective-psychological-alienation'] },
-        { head: 'Epistemic-Ontological', items: ['reductionist-world-modelling', 'isolated-problem-solving', 'structural-and-superstructural-separation'] },
-        { head: 'Mytho-poetic', items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
+        { head: 'Game-Theoretic', dropdown: true, items: ['zero-sum-game', ['arms-races-and-tragedies-of-the-commons', ['arms-race', 'tragedy-of-the-commons']], 'multipolar-trap', 'instrumental-convergence-and-strategy-stealing'] },
+        { head: 'Systems-Theoretic', dropdown: true, items: ['narrow-metric-optimisation', 'positive-feedback-loops-and-power-asymmetries', 'exponential-technological-acceleration', 'life-blind-search-processes'] },
+        { head: 'Behavioural-Economic', dropdown: true, items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures', 'goodharts-law'] },
+        { head: 'Cultural-Psychological', dropdown: true, items: ['left-hemispheric-conditioning', 'modernist-cultural-paradigm', 'scarcity-rivalry-orientation', 'psychopathic-selection-hypothesis', 'collective-psychological-alienation'] },
+        { head: 'Epistemic-Ontological', dropdown: true, items: ['reductionist-world-modelling', 'isolated-problem-solving', 'structural-and-superstructural-separation'] },
+        { head: 'Mytho-poetic', dropdown: true, items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
       ] },
       ['multipolar-trap', [   // (its family of traps, problems and dilemmas, as they are named in turn)
-        { head: 'Traps', items: ['hobbesian-trap', 'social-trap', 'darwinian-trap',
+        { head: 'Traps', dropdown: true, items: ['hobbesian-trap', 'social-trap', 'darwinian-trap',
           ['goliath-traps', [['arms-race', [], { also: true, label: 'Arms Races' }], 'status-races', ['race-to-the-bottom', [], { label: 'Races to the Bottom' }]]]] },
-        { head: 'Problems', items: ['coordination-problem', 'collective-action-problem'] },
-        { head: 'Dilemmas', items: ['prisoners-dilemma', 'security-dilemma'] },
-        { head: 'Game Theory', items: [['race-to-the-bottom', [], { also: true }], ['arms-race', [], { also: true }], 'red-queen-effect', ['tragedy-of-the-commons', [], { also: true }], 'free-rider-problem'] },
-        { head: 'Common Parlance', items: ['crab-mentality', 'tyranny-of-small-decisions'] }]],
+        { head: 'Problems', dropdown: true, items: ['coordination-problem', 'collective-action-problem'] },
+        { head: 'Dilemmas', dropdown: true, items: ['prisoners-dilemma', 'security-dilemma'] },
+        { head: 'Game Theory', dropdown: true, items: [['race-to-the-bottom', [], { also: true }], ['arms-race', [], { also: true }], 'red-queen-effect', ['tragedy-of-the-commons', [], { also: true }], 'free-rider-problem'] },
+        { head: 'Common Parlance', dropdown: true, items: ['crab-mentality', 'tyranny-of-small-decisions'] }]],
       { head: 'Attractor States', entry: 'attractor-states', desc: 'Attractor states are extreme stable conditions in the future possibility space of civilisation, that existing trajectories converge towards. Overall, there are three macro-scale attractors.', blocks: true, items: [   // (each attractor a block of its own)
         ['first-attractor', ['escalating-system-dynamics', 'escalating-state-competition', 'escalating-rogue-actors']],
         ['second-attractor', ['global-stable-totalitarianism', 'hyper-surveillance-capitalism', ['despotic-drift-and-closed-society', ['despotic-drift', 'closed-society']], 'high-modern-panopticon']],
@@ -8021,6 +8021,8 @@
       trail = trail || [];
       return list.map(function (x) {
         if (typeof x === 'string') x = [x, []];
+        if (!Array.isArray(x) && x.head && x.dropdown && !top)   // (a subheading folded: the marker opens it)
+          return '<li class="struct-sub struct-drop"><details><summary><span>' + esc(x.head) + '</span></summary><ul>' + structHtml(x.items, false, trail.concat(['h:' + x.head])) + '</ul></details></li>';
         if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])) + '</ul></li>'
           : '<li class="is-category struct-plain"><ul>' + structHtml(x.items, false, trail) + '</ul></li>';   // (a group without a heading)
         var c = byId[x[0]], kids = x[1] || [], o = x[2] || {};
