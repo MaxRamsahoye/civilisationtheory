@@ -8553,7 +8553,7 @@
         { name: 'I', items: sets[2] },
         { name: 'II', items: [byId['macroeconomics'], byId['macroevolution'], byId['macrocosm']] }
       ] },
-      { name: 'Core', items: [byId['4e-ontology'], byId['life-world-system'], byId['integral'], byId['regen-villages']] }
+      { name: 'Core', items: [byId['life-world-system'], byId['integral'], byId['regen-villages']] }
     ].map(function (g) {
       // A group may be divided into numbered sub-groups (I, II, …); its items are theirs in order.
       if (g.subs) g.subs.forEach(function (sg) { sg.items = sg.items.filter(Boolean); });
