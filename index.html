@@ -1475,6 +1475,7 @@
   /* A subheading in the new structure (no entry of its own) */
   .description .struct-head > span { font-weight: 700; }
   .description .struct-sub > span { color: var(--muted); }
+  .description .struct-head > .struct-desc { margin: 0.3rem 0 0.8rem; font-size: 0.86em; line-height: 1.45; font-style: italic; }   /* (a subheading's own description) */
   /* The landscape's groups and their subgroups set well apart from the entries beneath them */
   html.page-map .description .rl-list .struct-cols > li.struct-head > span { display: block; font-size: 1.22em; font-weight: 700; margin-bottom: 0.2rem; }
   html.page-map .description .rl-list .struct-sub > span { display: block; font-style: italic; font-weight: 600; font-size: 1.05em; color: var(--text); margin: 0.5rem 0 0.1rem; }
@@ -1926,7 +1927,10 @@
       kind: 'category',
       parent: 'theproject',
       order: 5,
-      html: '<p>The <em>metacrisis</em> is the underlying pattern that connects the many crises of the 21st century – ecological, technological, political, economic and psychological – as expressions of shared generative dynamics rather than as separate problems. Where a polycrisis names the interaction of many crises, the metacrisis names what lies beneath them: above all, rivalrous competition under exponential technology (see <a href="#multipolar-trap">multipolar trap</a>), and the extraction of value from complex systems faster than they can regenerate.</p><p>Because these dynamics are built into the dominant paradigm of civilisation itself, addressing symptoms without addressing their generators tends to relocate harm rather than remove it. Associated with Daniel Schmachtenberger, <em>The Consilience Project</em> and the <em>Civilization Research Institute</em>, the concept frames <a href="#existential-risk">existential risk</a> as its most acute expression, and a response adequate to it as a matter of <a href="#civilisation-design">civilisation design</a> rather than piecemeal reform.</p>'
+      html: '<p>‘The Metacrisis’ is a conceptual frame for capturing civilisation’s total problem complex, the generative dynamics that (re)produce it and the attractor states its vectors towards. It marks the terminal phase in the developmental process of the current world-system, which is now emergently posing an <a href="#existential-risk">existential risk</a> to humanity.</p>' +
+        '<h2>Problem Complex</h2><p>The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.</p>' +
+        '<h2>Generative Dynamics</h2><p>Generative dynamics are the underlying patterns and processes that re-produce problems and amplify them to a global catastrophic scale and severity.</p>' +
+        '<h2>Attractor States</h2><p>Attractor states are extreme stable conditions in the future possibility space of civilisation, that existing trajectories converge towards. Overall, there are three macro-scale attractors (see <a href="#three-attractors-model">the three attractors model</a>).</p>'
     },
     {
       id: 'existential-risk',
@@ -7452,10 +7456,10 @@
   function placeFromLoc(loc, c) {
     var segs = loc.split('|').map(decodeURIComponent), sec = segs.shift();
     if (!NEW_STRUCTURE[sec]) return null;
-    var parentOf = {}, sibsOf = {}, topOf = {}, kidsOf = {}, cur = NEW_STRUCTURE[sec], parent = sec;
+    var parentOf = {}, sibsOf = {}, topOf = {}, kidsOf = {}, cur = NEW_STRUCTURE[sec], parent = sec, blocks = false;
     function at(id, x) {   // (its parent, list, block and nested concepts at this place)
       parentOf[id] = parent; sibsOf[id] = cur;
-      topOf[id] = Array.isArray(x) && (cur === NEW_STRUCTURE[sec] || !!(x[2] && x[2].dropdown));
+      topOf[id] = Array.isArray(x) && (cur === NEW_STRUCTURE[sec] || blocks || !!(x[2] && x[2].dropdown));
       kidsOf[id] = Array.isArray(x) ? x[1] || [] : [];
     }
     function find(list, id) { return list.filter(function (x) { return x === id || (Array.isArray(x) && x[0] === id); })[0]; }
@@ -7464,12 +7468,12 @@
       if (seg.indexOf('h:') === 0) {
         var h = cur.filter(function (x) { return x && !Array.isArray(x) && typeof x === 'object' && x.head === seg.slice(2); })[0];
         if (!h) return null;
-        parent = { title: h.head, heading: true, parent: parent }; cur = h.items;
+        parent = { title: h.head, heading: true, parent: parent }; cur = h.items; blocks = !!h.blocks;
       } else {
         var x = find(cur, seg);
         if (!x) return null;
         at(seg, x);
-        parent = seg; cur = Array.isArray(x) ? x[1] || [] : [];
+        parent = seg; cur = Array.isArray(x) ? x[1] || [] : []; blocks = false;
       }
     }
     var self = find(cur, c.id);
@@ -7556,8 +7560,7 @@
     ],
     'metacrisis': [
       ['civilisational-crisis', ['polycrisis', 'permacrisis', 'omnicrisis']],
-      ['metacrisis', ['problem-complex', 'generative-dynamics', 'attractor-states']],
-      ['problem-complex', [
+      { head: 'Problem Complex', desc: 'The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.', items: [
         ['ecological-crisis', ['climate-migration', 'the-anthropocene',
           ['planetary-boundaries', ['crossed-planetary-boundaries', 'safe-operating-space', 'tipping-points']],
           ['the-great-simplification', ['carbon-pulse', 'energy-blindness', 'the-mordor-economy', 'jevons-paradox']]], { dropdown: true }],
@@ -7574,20 +7577,20 @@
           ['global-mental-health-crisis', ['suicide-epidemic', 'addiction-epidemic', 'loneliness-epidemic']],
           ['global-psychological-disorder', ['aggression-and-anti-social-behaviour', 'dark-triad-traits', 'political-radicalisation']],
           'global-infertility'], { dropdown: true }]
-      ]],
-      ['generative-dynamics', [
+      ] },
+      { head: 'Generative Dynamics', desc: 'Generative dynamics are the underlying patterns and processes that re-produce problems and amplify them to a global catastrophic scale and severity.', items: [
         { head: 'Game-Theoretic', items: ['zero-sum-game', 'arms-races-and-tragedies-of-the-commons', 'multipolar-trap', 'instrumental-convergence-and-strategy-stealing'] },
         { head: 'Systems-Theoretic', items: ['narrow-metric-optimisation', 'positive-feedback-loops-and-power-asymmetries', 'exponential-technological-acceleration', 'life-blind-search-processes'] },
         { head: 'Behavioural-Economic', items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures'] },
         { head: 'Cultural-Psychological', items: ['left-hemispheric-conditioning', 'modernist-cultural-paradigm', 'scarcity-rivalry-orientation', 'psychopathic-selection-hypothesis', 'collective-psychological-alienation'] },
         { head: 'Epistemic-Ontological', items: ['reductionist-world-modelling', 'isolated-problem-solving', 'structural-and-superstructural-separation'] },
         { head: 'Mytho-poetic', items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
-      ]],
-      ['attractor-states', ['third-attractor', 'first-attractor', 'second-attractor']],
-      ['first-attractor', ['escalating-system-dynamics', 'escalating-state-competition', 'escalating-rogue-actors']],
-      ['second-attractor', ['global-stable-totalitarianism', 'hyper-surveillance-capitalism', 'despotic-drift-and-closed-society']],
-      ['third-attractor', ['cultural-enlightenment', 'decentralised-coordination',
-        ['meta-utopia', ['pluralistic-civilisation-alignment', 'world-democratic-federation', 'moral-parliament-of-ai-representatives']]]],
+      ] },
+      { head: 'Attractor States', desc: 'Attractor states are extreme stable conditions in the future possibility space of civilisation, that existing trajectories converge towards. Overall, there are three macro-scale attractors.', blocks: true, items: [   // (each attractor a block of its own)
+        ['first-attractor', ['escalating-system-dynamics', 'escalating-state-competition', 'escalating-rogue-actors']],
+        ['second-attractor', ['global-stable-totalitarianism', 'hyper-surveillance-capitalism', 'despotic-drift-and-closed-society']],
+        ['third-attractor', ['cultural-enlightenment', 'decentralised-coordination',
+          ['meta-utopia', ['pluralistic-civilisation-alignment', 'world-democratic-federation', 'moral-parliament-of-ai-representatives']]]]] },
       ['genealogy-of-the-metacrisis', ['three-attractors-model', ['vulnerable-world-hypothesis', [], { also: true }], 'the-narrow-corridor', 'anacyclosis']]
     ],
     'civilisational-alignment': [
@@ -7744,13 +7747,13 @@
     return had.concat(add.filter(function (x) { var id = nodeId(x); return !id || seen.indexOf(id) < 0; }));
   }
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
-    (function walk(list, parent) {
+    (function walk(list, parent, blocks) {
       list.forEach(function (x) {
         if (typeof x === 'string') { if (!(x in STRUCT_PARENT) && !(x in NEW_STRUCTURE)) { STRUCT_PARENT[x] = parent; STRUCT_SIBS[x] = list; } return; }
         if (Array.isArray(x) && x[2] && x[2].also) return;
-        if (Array.isArray(x) && (list === NEW_STRUCTURE[sec] || (x[2] && x[2].dropdown))) TOP_BLOCKS[x[0]] = true;   // (a dropdown is a block of its own too)
+        if (Array.isArray(x) && (list === NEW_STRUCTURE[sec] || blocks || (x[2] && x[2].dropdown))) TOP_BLOCKS[x[0]] = true;   // (a dropdown, or one under a subheading marked blocks, is a block of its own too)
         if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT) && x[0] !== parent) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length) STRUCT_KIDS[x[0]] = mergeKids(STRUCT_KIDS[x[0]], x[1]); walk(x[1] || [], x[0]); return; }
-        walk(x.items, { title: x.head, heading: true, parent: parent });
+        walk(x.items, { title: x.head, heading: true, parent: parent }, !!x.blocks);
       });
     })(NEW_STRUCTURE[sec], sec);
   });
@@ -7894,7 +7897,7 @@
       trail = trail || [];
       return list.map(function (x) {
         if (typeof x === 'string') x = [x, []];
-        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span><ul>' + structHtml(x.items, false, trail.concat(['h:' + x.head])) + '</ul></li>'
+        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat(['h:' + x.head])) + '</ul></li>'
           : '<li class="is-category struct-plain"><ul>' + structHtml(x.items, false, trail) + '</ul></li>';   // (a group without a heading)
         var c = byId[x[0]], kids = x[1] || [], o = x[2] || {};
         if (!c) return '';
