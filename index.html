@@ -6950,13 +6950,13 @@
     var self = find(cur, c.id);
     if (!self) return null;
     at(c.id, self);
-    return { parentOf: parentOf, sibsOf: sibsOf, topOf: topOf, kidsOf: kidsOf, also: Array.isArray(self) && !!(self[2] && self[2].also) };
+    return { parentOf: parentOf, sibsOf: sibsOf, topOf: topOf, kidsOf: kidsOf, homeCluster: Array.isArray(self) && !!(self[2] && self[2].homeCluster) };
   }
   function clusterHtml(c) {
     if (!(c.id in STRUCT_PARENT)) return '';
     // Opened from one of its places in the paradigm: the cluster of that place.
     var place = LOC_VIA[c.id] && placeFromLoc(LOC_VIA[c.id], c);
-    if (place && place.also) place = null;   // (a concept only cross-listed there shows the cluster of its own home)
+    if (place && place.homeCluster) place = null;   // (a listing marked homeCluster shows the cluster of the concept's own home)
     var PARENT = place ? place.parentOf : STRUCT_PARENT, SIBS = place ? place.sibsOf : STRUCT_SIBS;
     function isTop(id) { return place && id in place.topOf ? place.topOf[id] : TOP_BLOCKS[id]; }
     function kidsAt(id) { return STRUCT_KIDS[id] || (place && place.kidsOf[id]) || []; }   // (its sub-concepts from every place it is listed)
@@ -7032,12 +7032,12 @@
       ['the-post-status-quo', ['post-capitalism', 'post-statism', 'post-humanism', 'post-genderism']]
     ],
     'metacrisis': [
-      ['civilisational-crisis', ['polycrisis', 'permacrisis', 'omnicrisis', 'metacrisis']],
+      ['civilisational-crisis', ['metacrisis', 'polycrisis', 'permacrisis', 'omnicrisis']],
       { head: 'Problem Complex', entry: 'problem-complex', desc: 'The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.', items: [
         ['ecological-crisis', ['climate-migration', 'the-anthropocene',
           ['planetary-boundaries', ['crossed-planetary-boundaries', 'safe-operating-space', 'tipping-points']],
           ['the-great-simplification', ['carbon-pulse', 'energy-blindness', 'the-mordor-economy', 'jevons-paradox']]], { dropdown: true }],
-        ['technological-crisis', ['twin-nuclei-problem', ['artificial-intelligence-risks', [], { also: true }], ['synthetic-biotechnology-risks', [], { also: true }]], { dropdown: true }],
+        ['technological-crisis', ['twin-nuclei-problem', ['artificial-intelligence-risks', [], { also: true, homeCluster: true }], ['synthetic-biotechnology-risks', [], { also: true, homeCluster: true }]], { dropdown: true }],
         ['cultural-crisis', [
           ['techno-epistemic-dynamics', ['algorithmic-political-polarisation', 'information-overload', 'memetic-warfare']],
           ['the-sensemaking-crisis', ['the-darwinian-crisis', 'the-cartesian-crisis', 'the-nietzschean-crisis']]], { dropdown: true }],
