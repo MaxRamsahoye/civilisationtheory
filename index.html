@@ -1287,7 +1287,7 @@
   html.page-map .description .index-menu .menu-cats { display: block; font-size: 0.8rem; margin-top: 0.4rem; }
   /* (set larger on the Map, as the paradigm's own contents) */
   html.page-map .description .index-menu .menu-set { font-size: 0.82rem; margin-bottom: 1.4rem; }
-  html.page-map .description .index-menu .menu-sec { grid-template-columns: 2.6rem 1fr; margin-bottom: 1.5rem; }
+  html.page-map .description .index-menu .menu-sec { grid-template-columns: 1fr; margin-bottom: 1.5rem; }   /* (named without numerals) */
   html.page-map .description .index-menu .menu-num { font-size: 0.74rem; padding-top: 0.32rem; }
   html.page-map .description .index-menu .menu-section { font-size: 1.12rem; }
   html.page-map .description .index-menu .menu-cols { gap: 2rem; }
@@ -7926,9 +7926,7 @@
     var concepts = CONCEPTS.filter(isConcept).sort(byTitle);
     var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
     var sections = childrenOf(ROOT.id);
-    var overviewDesc = '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation: ' + (['', '', '', '', '', '', '', '', '', 'nine', 'ten', 'eleven'][sections.length] || sections.length) + ' fields in three sets – ' +
-      '<em>civilisational</em> (mechanics, design, transition, alignment), <em>meta</em> (crisis, modernism, theory) ' +
-      'and <em>macro</em> (history, sociology, strategy).</p>';
+    var overviewDesc = '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation.</p>';
     // (each concept counted once, however many places it is listed in)
     function structCount(list, self) { var ids = structIds(list, {}); delete ids[self]; return Object.keys(ids).length; }   // (a section listed within its own list is not one of its concepts)
     function structHtml(list, top, trail) {
@@ -7953,7 +7951,7 @@
       return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + sectionSets(sections).map(function (set, k) {
         return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d) {
           var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0;
-          return '<li class="menu-sec"><span class="menu-num">' + (NUMERALS[i] || i + 1) + '</span><span>' +
+          return '<li class="menu-sec"><span>' +
             '<a class="menu-section" href="#" data-jump="nidx-' + d.id + '">' + esc(d.title) + '</a>' +
             '<span class="menu-cats">' + n + ' concepts</span></span></li>';
         }).join('') + '</ul></div>';
@@ -9172,7 +9170,7 @@
   // …and so are the Map's five views, each found by its name and description.
   var VIEW_ENTRIES = [
     { id: 'view-ab', view: 'ab', title: 'About the Project', html: ROOT.html },
-    { id: 'view-cs', view: 'cs', title: 'Civilisation Research Paradigm', html: '<p>The map’s concepts arranged as a research paradigm for the study of civilisation: ten fields in three sets – civilisational (mechanics, design, transition, alignment), meta (crisis, modernism, theory) and macro (history, sociology, strategy).</p>' },
+    { id: 'view-cs', view: 'cs', title: 'Civilisation Research Paradigm', html: '<p>The map’s concepts arranged as a research paradigm for the study of civilisation.</p>' },
     { id: 'view-rl', view: 'rl', title: 'Civilisation Research Landscape', html: '<p>The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' },
     { id: 'view-az', view: 'az', title: 'Alphabetical A–Z', html: '<p>Every concept on the map organised into an alphabetical list.</p>' },
     { id: 'view-ce', view: 'ce', title: 'Conceptual Engineerings', html: '<p>The map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities.</p>' },
