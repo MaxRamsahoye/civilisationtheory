@@ -7103,10 +7103,11 @@
     var parentOf = {}, sibsOf = {}, topOf = {}, kidsOf = {}, cur = root, parent = land ? { title: land.title, heading: true } : sec, blocks = false;
     function at(id, x) {   // (its parent, list, block and nested concepts at this place)
       parentOf[id] = parent; sibsOf[id] = cur;
+      if (x && !Array.isArray(x) && typeof x === 'object') { topOf[id] = cur === root; kidsOf[id] = x.items; return; }   // (a subheading standing for its entry)
       topOf[id] = Array.isArray(x) && (cur === root || blocks || !!(x[2] && x[2].dropdown));
       kidsOf[id] = Array.isArray(x) ? x[1] || [] : [];
     }
-    function find(list, id) { return list.filter(function (x) { return x === id || (Array.isArray(x) && x[0] === id); })[0]; }
+    function find(list, id) { return list.filter(function (x) { return x === id || (Array.isArray(x) && x[0] === id) || (x && typeof x === 'object' && x.entry === id); })[0]; }
     for (var i = 0; i < segs.length; i++) {
       var seg = segs[i];
       if (land && cur === root && seg.indexOf('h:') === 0 && land.groups.some(function (g) { return g.name === seg.slice(2); })) {   // (a named group)
@@ -7149,7 +7150,7 @@
       if (!n) return '';
       if (x[2] && x[2].dropdown && x[0] !== head) kids = [];   // (a dropdown within the block shows folded, as on the Map)
       return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : clusterLink(n, trail)) +
-        (kids.length ? '<ul>' + kids.map(node, trail && trail.concat([x[0]])).join('') + '</ul>' : '') + '</li>';
+        (kids.length ? '<ul>' + kids.map(node, trail && trail.concat([x[0] in HEAD_OF ? 'h:' + HEAD_OF[x[0]] : x[0]])).join('') + '</ul>' : '') + '</li>';   // (a subheading's entry: its concepts under the subheading)
     }
     // Up to the block it belongs to: the nearest leading group of its section (or dropdown) above it
     // (or itself), or the nearest subheading's group.
@@ -7173,7 +7174,7 @@
     return function (x) {   // (the path to the list x stands in)
       if (!loc) return null;
       if (x === c.id) return segs;
-      var i = segs.indexOf(x);
+      var i = segs.lastIndexOf(x);   // (a section's block headed by its own name: the inner one)
       return i < 0 ? null : segs.slice(0, i);
     };
   }
@@ -7181,15 +7182,34 @@
     var ok = trail && trail.length && placeFromLoc(locPath(trail), n);
     return '<a href="' + href(n) + '"' + (ok ? ' data-path="' + esc(locPath(trail)) + '"' : '') + '>' + esc(n.title) + '</a>';
   }
-  // A concept's own place in the paradigm (where it is filed), as a listing's path.
+  // A concept's own place in the paradigm (the first place it is filed, as the paradigm's walk
+  // takes it), as a listing's path.
   function structLoc(id) {
-    var segs = [], p = STRUCT_PARENT[id];
+    var segs = [], p = STRUCT_PARENT[id];   // (first, the place its tree string shows by default)
     for (var guard = 0; p && guard < 50; guard++) {
       if (typeof p === 'string') { segs.unshift(p); p = p in NEW_STRUCTURE ? null : STRUCT_PARENT[p]; }
-      else { if (p.title) segs.unshift('h:' + p.title); p = p.parent; }
+      else { if (p.title !== undefined) segs.unshift('h:' + p.title); p = p.parent; }
     }
     if (segs.length && !placeFromLoc(locPath(segs), byId[id]) && NEW_STRUCTURE[segs[0]]) segs.splice(1, 0, segs[0]);   // (filed in the block a section heads with its own name)
-    return segs.length && placeFromLoc(locPath(segs), byId[id]) ? locPath(segs) : null;
+    if (segs.length && placeFromLoc(locPath(segs), byId[id])) return locPath(segs);
+    var found = null;
+    Object.keys(NEW_STRUCTURE).some(function (sec) {
+      (function seek(list, trail) {
+        list.forEach(function (x) {
+          if (found || !x) return;
+          if (typeof x === 'string') { if (x === id) found = trail; return; }
+          if (Array.isArray(x)) {
+            if (x[2] && x[2].also) return;   // (a cross-listing is not its home)
+            if (x[0] === id) { found = trail; return; }
+            seek(x[1] || [], trail.concat([x[0]])); return;
+          }
+          if (x.entry === id) { found = trail; return; }   // (a subheading standing for its entry)
+          seek(x.items, trail.concat(['h:' + x.head]));
+        });
+      })(NEW_STRUCTURE[sec], [sec]);
+      return found;
+    });
+    return found && placeFromLoc(locPath(found), byId[id]) ? locPath(found) : null;
   }
   // On the landscape, a node's cluster is the nested group at the top of its list that holds it,
   // with the sub-nodes listed there; a node in no such group has none.
@@ -7463,6 +7483,7 @@
     var seen = had.map(nodeId);
     return had.concat(add.filter(function (x) { var id = nodeId(x); return !id || seen.indexOf(id) < 0; }));
   }
+  var HEAD_OF = {};   // (an entry a subheading stands for: that subheading)
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
     (function walk(list, parent, blocks) {
       list.forEach(function (x) {
@@ -7470,6 +7491,7 @@
         if (Array.isArray(x) && x[2] && x[2].also) return;
         if (Array.isArray(x) && (list === NEW_STRUCTURE[sec] || blocks || (x[2] && x[2].dropdown))) TOP_BLOCKS[x[0]] = true;   // (a dropdown, or one under a subheading marked blocks, is a block of its own too)
         if (Array.isArray(x)) { if (!(x[0] in STRUCT_PARENT) && x[0] !== parent) { STRUCT_PARENT[x[0]] = parent; STRUCT_SIBS[x[0]] = list; } if (x[1] && x[1].length) STRUCT_KIDS[x[0]] = mergeKids(STRUCT_KIDS[x[0]], x[1]); walk(x[1] || [], x[0]); return; }
+        if (x.entry) HEAD_OF[x.entry] = x.head;
         if (x.entry && !(x.entry in STRUCT_PARENT)) {   // (a subheading standing for an entry: the entry is filed here, heading the group)
           STRUCT_PARENT[x.entry] = parent; STRUCT_SIBS[x.entry] = list; STRUCT_KIDS[x.entry] = x.items;
           if (list === NEW_STRUCTURE[sec]) TOP_BLOCKS[x.entry] = true;
@@ -7543,6 +7565,7 @@
         if (t && prev.title !== t) path.push({ title: t, heading: true });   // (a heading named as its parent, or a group without one, is not shown)
         return true;
       }
+      if (byId[seg] && byId[seg] === path[path.length - 1]) return true;   // (a section's block headed by its own name is not shown twice)
       return byId[seg] ? (path.push(byId[seg]), true) : false;
     });
     return ok ? path.concat([c]) : null;
