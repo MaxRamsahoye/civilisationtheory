@@ -2687,6 +2687,9 @@
     {
       id: 'civilisation-alignment',
       title: 'Civilisation Alignment',
+      kind: 'category',
+      parent: 'theproject',
+      order: 4,
       html: '<p><em>Civilisation alignment</em> is the problem of aligning civilisation as a whole – its economies, states, technologies and cultures – with the wellbeing of the people and the living world it depends on. It extends the question of <a href="#ai-alignment">AI alignment</a> from a single artificial system to the larger system of which AI is only the newest part: markets, institutions and nation-states are themselves optimising processes that pursue proxies of value (profit, growth, power) and can drift away from the ends they were meant to serve.</p><p>Seen this way, a misaligned civilisation is one whose institutions reward what they were never meant to – short-term gain, unpriced harm, power for its own sake – and so drift towards outcomes no one chose. Aligning it means changing what the system rewards until it coincides with what is actually good – a problem that, unlike AI alignment, has been worked on for as long as there have been constitutions. See also <a href="#the-great-alignment">the great alignment</a>.</p>'
     },
     {
@@ -5056,14 +5059,7 @@
       refs: ['Plato, <em>Republic</em>, book VIII.', 'Aristotle, <em>Politics</em>, books III–V.', 'Polybius, <em>Histories</em>, book VI.'],
       html: '<p><em>Anacyclosis</em> is the ancient theory that forms of government succeed one another in a cycle, each good form decaying into its corrupt counterpart and giving way to the next. Sketched by Plato in the <em>Republic</em> and by Aristotle in the <em>Politics</em>, it was set out most fully by Polybius in the sixth book of his <em>Histories</em>, who argued that Rome had escaped the cycle through a mixed constitution combining all three good forms.</p><h2>Monarchy → Tyranny</h2><p>Rule by one begins as kingship, accepted for its justice and ability; as power passes to heirs who know only privilege, it degenerates into tyranny, the rule of one in his own interest, until the best citizens overthrow it.</p><h2>Aristocracy → Oligarchy</h2><p>Rule by the few begins as aristocracy, government by the best; their descendants turn it into oligarchy, the rule of the few for their own wealth and pleasure, until the people rise against them.</p><h2>Democracy → Ochlocracy</h2><p>Rule by the many begins as democracy, in which equality and freedom are prized; over generations it decays into ochlocracy, mob rule, in which demagogues and violence prevail – until order is restored by a single strong ruler, and the cycle begins again.</p>'
     },
-    {
-      id: 'civilisational-alignment',
-      title: 'Civilisational Alignment',
-      kind: 'category',
-      parent: 'theproject',
-      order: 4,
-      html: '<p><em>Civilisational alignment</em> is the study of how the optimising systems that make up a civilisation – artificial intelligences, markets, states, corporations, evolutionary processes and human beings themselves – can be brought to serve the flourishing of the people and the living world they act on. It widens the question of AI alignment from a single artificial system to every level at which goals are pursued and can drift from the ends they were meant to serve.</p><p>It asks what alignment means at each scale, whose values are to be aligned with and how, and how alignment at one level can be secured without being undone at another.</p>'
-    },
+
     {
       id: 'hierarchical-agency',
       title: 'Hierarchical Agency & Vertical Game-Theory',
@@ -7066,8 +7062,8 @@
           ['meta-utopia', ['pluralistic-civilisation-alignment', 'world-democratic-federation', 'moral-parliament-of-ai-representatives']]]],
         ['genealogy-of-the-metacrisis', ['three-attractors-model', ['vulnerable-world-hypothesis', [], { also: true }], 'the-narrow-corridor', 'anacyclosis']]] }
     ],
-    'civilisational-alignment': [
-      ['civilisation-alignment', ['hierarchical-agency', 'planetary-reverse-turing-test', 'complex-adaptive-agency', 'ai-as-anthropological-mirror', 'behaviour-of-a-system']],
+    'civilisation-alignment': [
+      { head: '', items: ['hierarchical-agency', 'planetary-reverse-turing-test', 'complex-adaptive-agency', 'ai-as-anthropological-mirror', 'behaviour-of-a-system'] },   // (the section's own concepts, under its heading)
       ['human-alignment', ['population-level-motivation-selection', 'human-collective-intelligence', 'self-alignment']],
       { head: 'Multi', items: ['multi-scale-alignment', 'multi-principal-alignment', 'multi-agent-alignment'] },
       { head: 'Societal', items: ['institutional-alignment', 'ai-developer-alignment'] },
@@ -7931,7 +7927,7 @@
       { name: 'Foundation', items: [byId['civilisation-theory'], byId['civilisation-research-paradigm'], byId['civilization-research-institute'], byId['civilization-emerging']] },
       { name: 'Civilisational', subs: [
         { name: 'I', items: sets[0] },
-        { name: 'II', items: [byId['civilisation-alignment'], byId['civilisational-collapse'], byId['civilisational-risk'], byId['civilisation-scale'], byId['civilisational-paradigm']] }
+        { name: 'II', items: [byId['civilisational-collapse'], byId['civilisational-risk'], byId['civilisation-scale'], byId['civilisational-paradigm']] }
       ] },
       { name: 'Meta', subs: [
         { name: 'I', items: sets[1] },
@@ -8025,6 +8021,7 @@
   var viewPause = 60;   // (before a view's address brings the view up)
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (id === 'civilisational-alignment') { id = 'civilisation-alignment'; history.replaceState(null, '', '#' + id); }   // (the section's former address)
     if (id === ROOT.id) { id = 'the-map/' + MAP_VIEWS.ab; history.replaceState(null, '', '#' + id); }   // (the About page is now a view of the Map)
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
     // The Map's five views have their own addresses (#the-map/…): the Map, opened on that view.
