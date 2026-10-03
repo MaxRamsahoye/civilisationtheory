@@ -50,6 +50,9 @@
     // views); a refresh on any other page simply reopens that page.
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
+    // Former addresses (a renamed section, merged entries) lead on to their pages.
+    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism' };
+    if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
     // The loading screen is shown in the blue (midnight) theme; the reader's own theme – light by
@@ -2044,7 +2047,7 @@
     },
     {
       id: 'dominant-paradigm',
-      title: 'Dominant Paradigm',
+      title: 'Dominant Civilisational Paradigm',
       html: '<p>The <em>dominant paradigm</em> is the set of shared assumptions – about value, progress, nature, the self and the good life – out of which a civilisation’s institutions arise, and which usually goes unexamined because it is taken as reality itself. The term draws on Thomas Kuhn’s account of paradigms in <em>The Structure of Scientific Revolutions</em> (1962), while Donella Meadows (1999) identified the paradigm as one of the highest leverage points for changing any system. The present paradigm of growth, competition and extraction can be read as one of the origins of the <a href="#metacrisis">metacrisis</a>, alongside civilisation’s developmental process and initial conditions.</p>'
     },
     {
@@ -2555,6 +2558,37 @@
         '<li>and in the <a href="#sub-structure">sub-structure</a>, as the conditioning of our evolved drives – for status, security and more – to serve it.</li></ul>' +
         '<p>Because these structures condition one another in feedback loops, the pattern reproduces itself: each structure legitimates and requires the others. Whilst a novel phenomenon, the <a href="#metacrisis">metacrisis</a> is emergent from this civilisational paradigm. Technological revolutions – industrial, nuclear, biotechnological, informational and now artificial intelligence – have not changed its axioms but served only to elaborate them, amplifying the scale and severity of the harm it externalises: globalising it, as extraction and competition came to span the planet, and existentialising it, as the powers they wield came to threaten the survival of civilisation itself.</p>' +
         '<p>This is why the metacrisis cannot be solved from within the paradigm that generates it (see <a href="#generator-functions">generator functions</a>): treating its symptoms in one structure leaves the pattern intact in the others. A <a href="#civilisation-transition">civilisational transition</a> is at bottom a change of paradigm across all four structures at once – the task of <a href="#civilisation-design">civilisation design</a>, and the reason the <a href="#dominant-paradigm">dominant paradigm</a> is among the deepest <a href="#leverage-points">leverage points</a> in the world-system.</p>'
+    },
+    {
+      id: 'counter-hegemonic-civilisational-paradigm',
+      title: 'Counter-Hegemonic Civilisational Paradigm',
+      refs: ['Antonio Gramsci, <em>Prison Notebooks</em> (1929–35).', 'Donella Meadows, “Leverage Points: Places to Intervene in a System” (1999).'],
+      html: '<p>A <em>counter-hegemonic civilisational paradigm</em> is a pattern of civilisation that stands against the <a href="#dominant-paradigm">dominant civilisational paradigm</a> – a different set of axioms about nature, value, security and progress, expressed across all of a civilisation’s structures at once. The term draws on Antonio Gramsci’s account of hegemony, in which a ruling order sustains itself less by force than by the consent of a common sense it has made seem natural, and of counter-hegemony, the building of an alternative common sense within the old order. Where the dominant paradigm treats nature as resource, value as accumulation, security as dominance and progress as growth, a counter-hegemonic paradigm would treat nature as kin, value as wellbeing, security as mutual flourishing and progress as maturation. Because a paradigm is, as Donella Meadows argued, among the deepest <a href="#leverage-points">leverage points</a> in a system, the emergence of a coherent counter-hegemonic paradigm is a precondition of <a href="#civilisation-transition">civilisational transition</a>. See <a href="#civilisational-paradigm">civilisational paradigm</a>.</p>'
+    },
+    {
+      id: 'megamachine',
+      title: 'Megamachine',
+      refs: ['Lewis Mumford, <em>The Myth of the Machine</em>, vol. 1: <em>Technics and Human Development</em> (1967).'],
+      html: '<p>The <em>megamachine</em> is Lewis Mumford’s term, from <em>The Myth of the Machine</em> (1967–70), for the vast organisation of human beings into a single machine – the first and largest machine of all, made not of metal but of people. In the ancient kingdoms of Egypt and Mesopotamia, divine kingship, bureaucracy, a priesthood and an army assembled tens of thousands of workers and soldiers into a coordinated apparatus capable of building pyramids, irrigating river valleys and waging war on an unprecedented scale. Mumford argued that the megamachine has been reassembled in the modern age, on a far greater scale, from science, industry, the military and the state – a system that subordinates human life to the pursuit of power, speed and control. See <a href="#pentagon-of-power">the pentagon of power</a> and <a href="#doomsday-megamachine">the doomsday megamachine</a>.</p>'
+    },
+    {
+      id: 'pentagon-of-power',
+      title: 'The Pentagon of Power',
+      refs: ['Lewis Mumford, <em>The Myth of the Machine</em>, vol. 2: <em>The Pentagon of Power</em> (1970).'],
+      html: '<p><em>The Pentagon of Power</em> (1970) is the second volume of Lewis Mumford’s <em>The Myth of the Machine</em>, which traces how the ancient <a href="#megamachine">megamachine</a> was rebuilt in the modern world. Its title names the five interlocking sides of the modern power complex – power, property, productivity, profit and publicity – which, Mumford argued, together drive a technological civilisation towards ever greater centralisation and control, culminating in the nuclear and space age. Against this “power complex” he set an organic, life-centred alternative, in which technology would be scaled to human needs and the living world.</p>'
+    },
+    {
+      id: 'longtermism-as-secular-theodicy',
+      title: 'Longtermism as Secular Theodicy',
+      coined: true,
+      html: '<p><em>Longtermism as secular theodicy</em> reads <a href="#longtermism">longtermism</a> as performing, in secular form, the work that theodicy performed for religion: justifying present suffering by appeal to a vast and glorious future. Where traditional theodicy reconciled evil with a good God by placing it within a divine plan, longtermism can reconcile present harms – to the poor, to non-humans, to the living – with the good by placing them within a calculus whose payoff lies in trillions of future lives, so that present suffering becomes a regrettable but justified cost of securing the cosmic future. See <a href="#tyranny-of-the-cosmic-majority">tyranny of the cosmic majority</a>.</p>'
+    },
+    {
+      id: 'future-utility-monster',
+      title: 'Future Utility Monster',
+      coined: true,
+      refs: ['Robert Nozick, <em>Anarchy, State, and Utopia</em> (1974).'],
+      html: '<p>The <em>future utility monster</em> adapts Robert Nozick’s “utility monster” (1974) – a being that gains so much more utility from each resource than anyone else that utilitarianism would require everything be given to it – to the reasoning of <a href="#longtermism">longtermism</a>. Here the monster is the future itself: the astronomical number of potential future beings whose aggregate welfare so outweighs that of the present that, on a straightforward expected-value calculus, every present interest can be sacrificed to them. See <a href="#astronomical-waste">astronomical waste</a> and <a href="#tyranny-of-the-cosmic-majority">tyranny of the cosmic majority</a>.</p>'
     },
     {
       id: 'meta-system',
@@ -3326,12 +3360,6 @@
       title: 'Surveillance Capitalism',
       ref: 'Zuboff',
       html: '<p><em>Surveillance capitalism</em> is Shoshana Zuboff’s term, from <em>The Age of Surveillance Capitalism</em> (2019), for an economic order that claims human experience as raw material, turning behavioural data into predictions sold to those who wish to influence behaviour. Its ultimate product, Zuboff argues, is not information but the ability to modify what people do.</p>'
-    },
-    {
-      id: 'demons-of-surveillance-capitalism',
-      title: 'Demons of Surveillance Capitalism',
-      coined: true,
-      html: '<p>The <em>demons of surveillance capitalism</em> are the automated, profit-seeking processes – recommendation engines, ad-targeting systems, engagement optimisers – that act on people continuously and invisibly. Like the demons of older cosmologies, they are unseen agents that influence desire and belief, serving ends that are not those of the people they act upon.</p>'
     },
     {
       id: 'psychopolitics',
@@ -4322,7 +4350,7 @@
       id: 'demons-of-techno-capitalism',
       title: 'The Demons of Techno-Capitalism',
       coined: true,
-      html: '<p>The <em>demons of techno-capitalism</em> are the autonomous, impersonal forces produced by the fusion of technology and capital – optimisation processes, algorithms and market dynamics that act with apparent intention, pursuing growth, engagement and profit through human beings without any human fully directing them. Surveillance capitalism’s demons are one species of the wider family.</p>'
+      html: '<p>The <em>demons of techno-capitalism</em> are the autonomous, impersonal forces produced by the fusion of technology and capital – optimisation processes, algorithms and market dynamics that act with apparent intention, pursuing growth, engagement and profit through human beings without any human fully directing them.</p><p>The <em>demons of surveillance capitalism</em> are one species of this wider family: the automated, profit-seeking processes – recommendation engines, ad-targeting systems, engagement optimisers – that act on people continuously and invisibly. Like the demons of older cosmologies, they are unseen agents that influence desire and belief, serving ends that are not those of the people they act upon. See <a href="#surveillance-capitalism">surveillance capitalism</a>.</p>'
     },
     {
       id: 'marl-by-market-feedback',
@@ -7472,17 +7500,18 @@
       ['world-risk-society', ['manufactured-risk', 'reflexive-modernisation']],
       ['hyper-agents', ['hyper-agential-hyper-realism', 'hyper-agents-of-doom', 'economic-superorganism', 'the-technium', ['the-stack', ['the-black-stack', 'the-red-stack', 'the-green-stack']], 'what-progress-wants', 'moloch', 'leviathan', 'kraken', 'the-benevolent-dictator', ['gaia', [], { also: true }]]],
       ['hyperobjects', ['climate', ['capitalism', [], { also: true }], 'space', 'the-internet']],
-      ['critical-alien-phenomenology', ['reverse-extended-mind-thesis', 'reverse-prosthesis', 'inverse-instrumentality', 'loop-in-the-human', 'the-gaze']],
+      ['critical-alien-phenomenology', ['reverse-extended-mind-thesis', 'reverse-prosthesis', 'inverse-instrumentality', 'loop-in-the-human', 'the-gaze', 'darwin-among-the-machines', 'demons-of-techno-capitalism']],
+      ['civilisational-paradigm', ['dominant-paradigm', 'counter-hegemonic-civilisational-paradigm']],
       ['4e-ontology', ['4e-cognition', '4e-intelligence', '4e-agency', '4e-global-catastrophic-risk', '4e-power', '4e-utopia']],
       { head: 'Order', items: ['natural-order', 'artificial-order', ['spontaneous-order', ['spontaneous-disorder', 'spontaneous-totalitarian-order']]] },
       ['technological-revolutions', ['cognitive-evolution', 'agricultural-revolution', 'industrial-revolution', 'information-revolution', ['intelligence-revolution', ['neomechanisation-and-autonomisation']]]],
-      ['capitalism', ['primitive-accumulation', 'industrial-capitalism', 'surveillance-capitalism', 'late-stage-capitalism', 'end-stage-capitalism', 'post-capitalism', 'technocapitalism', 'techno-feudalism']],
+      ['capitalism', ['primitive-accumulation', 'industrial-capitalism', 'surveillance-capitalism', 'disaster-capitalism', 'late-stage-capitalism', 'end-stage-capitalism', 'post-capitalism', 'technocapitalism', 'techno-feudalism']],
       { head: 'Economy', items: ['amoral-economy', 'attention-economy', 'attachment-economy', 'ascended-economy'] }
     ],
     'civilisation-design': [
-      ['civilisation-design', ['ontological-design', 'axiological-design', 'geodesign', 'institutional-design', 'mechanism-design', ['behavioural-design', ['technology-of-behaviour']], 'social-design']],
+      ['civilisation-design', [['design-science', [], { also: true, label: 'Design Science' }], 'ontological-design', 'axiological-design', 'geodesign', 'institutional-design', 'mechanism-design', ['behavioural-design', ['technology-of-behaviour']], 'social-design']],
       ['civilisation-x', ['civilisation-design-space', 'blue-skies-social-science', 'utopian-studies', ['utopia', [['viatopia', [['the-long-reflection', [], { also: true }]]], ['paretotopia', ['win-win']], ['meta-utopia', ['pluralistic-civilisation-alignment', 'world-democratic-federation', 'moral-parliament-of-ai-representatives']]]]]],
-      ['the-emergence-model', ['metastructure', 'macrostructure', 'inter-structure', ['infra-structure', ['infra-structure-global-redesign-institute']], 'super-structure', 'sub-structure', ['biostructure', ['biowisdom']]]],
+      ['the-emergence-model', ['metastructure', 'macrostructure', ['inter-structure', [['integral', [], { also: true }], 'inter-structure-democracy-3']], ['infra-structure', ['infra-structure-global-redesign-institute']], 'super-structure', 'sub-structure', ['biostructure', ['biowisdom']]]],
       ['third-attractor', ['first-attractor', 'second-attractor'], { also: true }],
       ['the-fourth-frontier', ['third-frontier', 'second-frontier', 'first-frontier']],
       ['game-b', ['anti-rivalrous-dynamics', 'antifragility', 'broadcast-vs-network-modality', 'protobs', 'society-4-0']],
@@ -7576,7 +7605,7 @@
         ['new-materialism', ['intra-action']],
         ['second-order-cybernetics', ['participant-observers']],
         ['ecological-psychology', [['affordance', [], { label: 'Affordances' }]]]] },
-      { head: 'Concepts', items: ['emergence', 'ontological-stratification', 'transcend-and-include', 'multi-perspectivalism'] }
+      { head: 'Concepts', items: ['emergence', 'ontological-stratification', 'transcend-and-include', 'multi-perspectivalism', 'dialectics'] }
     ],
     'macrohistory': [
       ['macrohistory', ['big-history', 'cliodynamics', 'structural-demographic-theory', 'world-systems-analysis', ['cultural-evolution', ['memetics']], 'high-modernism']],
@@ -7585,6 +7614,7 @@
       ['collapsology', [['critical-collapsology', ['applied-collapsology']]]],
       ['geological-epochs', ['the-anthropocene', 'the-deep-anthropocene', 'capitalocene', 'the-novacene']],
       ['goliaths-curse', ['goliath-traps', 'tree-of-doom', 'agents-of-doom', 'darker-angels-of-our-nature']],
+      ['megamachine', ['doomsday-megamachine', 'pentagon-of-power']],
       { head: '20th Century', items: ['the-age-of-ideology', 'the-great-acceleration', 'the-long-twentieth-century', 'decolonisation'] },
       { head: 'The Great X', items: ['the-great-divergence', 'the-great-convergence', ['the-great-acceleration', [], { also: true }], 'the-great-alignment', 'the-great-turning'] },
       ['twenty-first-century-civilisational-hypothesis', [['clash-of-civilisations', [], { label: 'The Clash of Civilisations?' }], ['the-end-of-history', [], { label: 'The End of History?' }]]]
@@ -7592,7 +7622,7 @@
     'macrosociology': [
       { head: 'Macrosociological Approaches', items: [['structural-functionalism', ['functional-prerequisites']], ['conflict-theory', ['marxism', 'critical-theory']]] },
       ['science-and-technology-studies', ['the-techno-onto-logical', 'actor-network-theory', ['theories-of-technology', ['social-construction-of-technology', ['technological-determinism', ['technocratic-solutionism', 'techno-capital-and-technomic', 'techno-capitalist-progress-narrative']]]]]],
-      { head: 'Critical Social Theory', items: ['the-angel-of-history', 'the-great-refusal', 'the-new-categorical-imperative', 'dialectic-of-enlightenment', 'colonisation-of-the-lifeworld', 'means-ends-reversal', 'social-pathology', 'recognition-justice', 'business-government', ['biopower', ['necropolitics', 'psychopolitics']]] },
+      { head: 'Critical Social Theory', items: ['the-divide', 'the-angel-of-history', 'the-great-refusal', 'the-new-categorical-imperative', 'dialectic-of-enlightenment', 'colonisation-of-the-lifeworld', 'means-ends-reversal', 'social-pathology', 'recognition-justice', 'business-government', ['biopower', ['necropolitics', 'psychopolitics']]] },
       ['social-ontology', ['organicism', 'mechanism-society-as-machine', 'cyberneticism']],
       ['structure-and-agency', ['structuration-theory', 'morphogenetic-approach', 'critical-realism']],
       ['base-and-superstructure', ['dominant-ideology', 'hegemony', 'ideological-state-apparatus', 'culture-industry', 'one-dimensional-man']],
@@ -7605,6 +7635,7 @@
       ['vulnerable-world-hypothesis', ['urn-of-invention', 'high-tech-panopticon']],
       ['longtermism', ['strong-vs-weak-longtermism', 'the-hinge-of-history', 'cosmic-endowment', 'grand-futures', 'astronomical-waste',
         ['population-ethics', ['total-view', 'person-affecting-view']], 'survival-vs-flourishing', 'moral-uncertainty', 'option-value', 'the-long-reflection']],
+      { head: 'Critique', items: ['drone-warfare-utilitarianism', 'tyranny-of-the-cosmic-majority', 'longtermism-as-secular-theodicy', 'future-utility-monster'] },
       ['space-governance', ['observable-and-accessible-universe', 'space-colonisation', 'grabby-aliens', 'von-neumann-probes', 'nightwatchman-probes', 'singleton', 'kardashev-scale', 'outside-context-problems']],
       ['civilisational-risk', ['existential-risk',
         ['extinction-risk', ['ai-takeover', 'engineered-pandemics']],
@@ -8525,7 +8556,7 @@
   var viewPause = 60;   // (before a view's address brings the view up)
   function render() {
     var id = decodeURIComponent(location.hash.replace(/^#/, ''));
-    if (id === 'civilisational-alignment') { id = 'civilisation-alignment'; history.replaceState(null, '', '#' + id); }   // (the section's former address)
+    if (MOVED[id]) { id = MOVED[id]; history.replaceState(null, '', '#' + id); }
     if (id === ROOT.id) { id = 'the-map/' + MAP_VIEWS.ab; history.replaceState(null, '', '#' + id); }   // (the About page is now a view of the Map)
     if (id === 'infinite' && !SHOW_INFINITE) id = '';
     // The Map's five views have their own addresses (#the-map/…): the Map, opened on that view.
