@@ -1166,6 +1166,7 @@
     position: fixed; top: 50vh; left: 4.6rem; transform: translateY(-50%);   /* (clear of the icon rail, its names wrapping to the margin's width) */
     width: max-content; max-width: var(--tocW, 7rem); z-index: 4;
   }
+  #toc li.toc-rule { border-top: 1px solid var(--rule); margin-top: 0.55rem; padding-top: 0.55rem; }
   html.page-map.toc-narrow[data-index="cs"] #toc, html.page-map.toc-narrow[data-index="rl"] #toc { display: none !important; }
   /* …set in the left margin of the About view's centred column */
   html.page-map[data-index="ab"] #toc {
@@ -8890,8 +8891,11 @@
       '<button type="button" data-ver="short" aria-pressed="' + !long + '" aria-label="Short version" title="Short version"><svg viewBox="0 0 100 100" aria-hidden="true"><line x1="12" y1="38" x2="88" y2="38"/><line x1="12" y1="62" x2="56" y2="62"/></svg></button>' +
       '<button type="button" data-ver="long" aria-pressed="' + long + '" aria-label="Long version" title="Long version"><svg viewBox="0 0 100 100" aria-hidden="true"><line x1="12" y1="14" x2="88" y2="14"/><line x1="12" y1="38" x2="88" y2="38"/><line x1="12" y1="62" x2="88" y2="62"/><line x1="12" y1="86" x2="56" y2="86"/></svg></button></div>' : '') +
       '<a href="#" class="toc-title" data-target="' + head.id + '">' + esc({ cs: 'Paradigm', rl: 'Landscape' }[listOf ? mapView : ''] || head.textContent) + '</a><ul>' +   // (the Map's two wide views: their short names)
-      tocHeads.slice(1).map(function (h) {
-        return '<li><a href="#" data-target="' + h.id + '">' + esc(h.textContent) + '</a></li>';
+      tocHeads.slice(1).map(function (h, i) {
+        // On the Paradigm, a rule between High-Level and each of the three sets of sections (and its
+        // sections named without their article: Metacrisis).
+        var sec = listOf && h.closest('.index-domain'), rule = i > 0 && sec && sec.classList.contains('set-start');
+        return '<li' + (rule ? ' class="toc-rule"' : '') + '><a href="#" data-target="' + h.id + '">' + esc(mapView === 'cs' ? h.textContent.replace(/^The\s+/, '') : h.textContent) + '</a></li>';
       }).join('') + '</ul>';
   }
   // On the Map's Research Paradigm and Landscape views the contents sit centred in the left margin
