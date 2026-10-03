@@ -1490,6 +1490,7 @@
   html.page-map .description .rl-list .struct-cols > li.struct-head > span { display: block; font-size: 1.22em; font-weight: 700; margin-bottom: 0.2rem; }
   html.page-map .description .rl-list .struct-sub > span { display: block; font-style: italic; font-weight: 600; font-size: 1.05em; color: var(--text); margin: 0.5rem 0 0.1rem; }
   html.page-map .description .rl-list .struct-cols li a { font-weight: 400; font-size: 0.97em; }
+  html.page-map .description .rl-list .struct-cols > li.is-category > a { font-weight: 700; }   /* (a cluster heading a column, as in the paradigm) */
   html.page-map .description .ce-list.cs-list .struct-cols > li.struct-plain > ul { padding-left: 0; margin-top: 0; }
   .description .struct-drop details > summary { list-style: none; cursor: pointer; }
   .description .struct-drop details > summary::-webkit-details-marker { display: none; }
@@ -7042,20 +7043,24 @@
   // list it sits in at that place, and at each place above it; null if the path no longer leads to it.
   function placeFromLoc(loc, c) {
     var segs = loc.split('|').map(decodeURIComponent), sec = segs.shift();
-    if (!NEW_STRUCTURE[sec]) return null;
-    var parentOf = {}, sibsOf = {}, topOf = {}, kidsOf = {}, cur = NEW_STRUCTURE[sec], parent = sec, blocks = false;
+    var land = sec.indexOf('L:') === 0 && landSec(sec.slice(2));   // (a place on the landscape: its groups' lists are its blocks)
+    if (!NEW_STRUCTURE[sec] && !land) return null;
+    var root = land ? [].concat.apply([], land.groups.filter(function (g) { return !g.name; }).map(function (g) { return g.items; })) : NEW_STRUCTURE[sec];
+    var parentOf = {}, sibsOf = {}, topOf = {}, kidsOf = {}, cur = root, parent = land ? { title: land.title, heading: true } : sec, blocks = false;
     function at(id, x) {   // (its parent, list, block and nested concepts at this place)
       parentOf[id] = parent; sibsOf[id] = cur;
-      topOf[id] = Array.isArray(x) && (cur === NEW_STRUCTURE[sec] || blocks || !!(x[2] && x[2].dropdown));
+      topOf[id] = Array.isArray(x) && (cur === root || blocks || !!(x[2] && x[2].dropdown));
       kidsOf[id] = Array.isArray(x) ? x[1] || [] : [];
     }
     function find(list, id) { return list.filter(function (x) { return x === id || (Array.isArray(x) && x[0] === id); })[0]; }
     for (var i = 0; i < segs.length; i++) {
       var seg = segs[i];
-      if (seg.indexOf('h:') === 0) {
+      if (land && cur === root && seg.indexOf('h:') === 0 && land.groups.some(function (g) { return g.name === seg.slice(2); })) {   // (a named group)
+        cur = land.groups.filter(function (g) { return g.name === seg.slice(2); })[0].items; parent = { title: seg.slice(2), heading: true, parent: parent }; blocks = true;
+      } else if (seg.indexOf('h:') === 0 || seg.indexOf('q:') === 0) {
         var h = cur.filter(function (x) { return x && !Array.isArray(x) && typeof x === 'object' && x.head === seg.slice(2); })[0];
         if (!h) return null;
-        parent = { title: h.head, heading: true, parent: parent }; cur = h.items; blocks = !!h.blocks;
+        parent = { title: h.head, heading: true, parent: parent }; cur = h.items; blocks = !!h.blocks || !!land;
       } else {
         var x = find(cur, seg);
         if (!x) return null;
@@ -7066,13 +7071,16 @@
     var self = find(cur, c.id);
     if (!self) return null;
     at(c.id, self);
-    return { parentOf: parentOf, sibsOf: sibsOf, topOf: topOf, kidsOf: kidsOf, homeCluster: Array.isArray(self) && !!(self[2] && self[2].homeCluster) };
+    return { land: !!land, parentOf: parentOf, sibsOf: sibsOf, topOf: topOf, kidsOf: kidsOf, homeCluster: Array.isArray(self) && !!(self[2] && self[2].homeCluster) };
   }
   function clusterHtml(c) {
-    if (!(c.id in STRUCT_PARENT)) return '';
-    // Opened from one of its places in the paradigm: the cluster of that place.
+    // Opened from one of its places in the paradigm or on the landscape: the cluster of that place
+    // (a landscape node opened otherwise: that of its first place on the landscape).
     var place = LOC_VIA[c.id] && placeFromLoc(LOC_VIA[c.id], c);
+    if (!place && c.kind === 'node') place = landscapeLoc(c.id) && placeFromLoc(landscapeLoc(c.id), c);
     if (place && place.homeCluster) place = null;   // (a listing marked homeCluster shows the cluster of the concept's own home)
+    if (place && place.land) return landClusterHtml(c, place);
+    if (!(c.id in STRUCT_PARENT)) return '';
     var PARENT = place ? place.parentOf : STRUCT_PARENT, SIBS = place ? place.sibsOf : STRUCT_SIBS;
     function isTop(id) { return place && id in place.topOf ? place.topOf[id] : TOP_BLOCKS[id]; }
     function kidsAt(id) { return STRUCT_KIDS[id] || (place && place.kidsOf[id]) || []; }   // (its sub-concepts from every place it is listed)
@@ -7100,6 +7108,26 @@
       x = p;
     }
     return '<ul class="nested">' + node([x, kidsAt(x)]) + '</ul>';
+  }
+  // On the landscape, a node's cluster is the nested group at the top of its list that holds it,
+  // with the sub-nodes listed there; a node in no such group has none.
+  function landClusterHtml(c, place) {
+    function node(x) {
+      if (typeof x === 'string') x = [x, []];
+      if (!Array.isArray(x)) return '';
+      var n = byId[x[0]], kids = x[1] || [];
+      if (!n) return '';
+      return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : '<a href="' + href(n) + '">' + esc(n.title) + '</a>') +
+        (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
+    }
+    var x = c.id;
+    for (var guard = 0; guard < 50 && !place.topOf[x]; guard++) {
+      var p = place.parentOf[x];
+      if (typeof p !== 'string') return '';
+      x = p;
+    }
+    var kids = place.kidsOf[x] || [];
+    return place.topOf[x] && kids.length ? '<ul class="nested">' + node([x, kids]) + '</ul>' : '';
   }
   function endSectionsHtml(c) {
     var out = '';
@@ -7337,7 +7365,7 @@
         { head: 'AI Alignment', items: ['paul-christiano', 'jan-kulveit'] }] }] },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox currents of theory that broke with the humanist and constructivist consensus of late twentieth-century thought – turning to technology, matter and the non-human in accelerationism, xenofeminism and speculative realism.', groups: [
-      { name: 'Currents', items: [
+      { items: [
         ['accelerationism', ['landian-accelerationism', 'unconditional-accelerationism', 'left-accelerationism-and-the-red-stack', 'right-accelerationism', 'effective-accelerationism']],
         ['xenofeminism', ['cyberfeminism', 'post-genderism', 'gender-abolitionism', 'anti-essentialism']],
         ['speculative-realism', ['new-materialism', 'assemblage-theory', 'actor-network-theory', 'object-oriented-ontology', 'dark-ecology', 'alien-phenomenology']]] }] }
@@ -7364,29 +7392,37 @@
       });
     })(NEW_STRUCTURE[sec], sec);
   });
+  // The landscape's places: a listing's path starts L:section, then h:group (or a heading), q: for a
+  // quiet heading (left out of tree strings), and the nodes above it; its tree string starts at the landscape.
+  var CRL_HEAD = { title: 'Civilisation Research Landscape', heading: true, crl: true };
+  function landSec(title) { return LANDSCAPE.filter(function (sec) { return sec.title === title; })[0]; }
+  function landscapeLoc(id) {   // (the first place a node is listed on the landscape)
+    var found = null;
+    LANDSCAPE.forEach(function (sec) {
+      sec.groups.forEach(function (g) {
+        (function seek(list, trail) {
+          list.forEach(function (x) {
+            if (found) return;
+            if (x && !Array.isArray(x) && typeof x === 'object') { seek(x.items, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])); return; }
+            var xid = typeof x === 'string' ? x : x[0];
+            if (xid === id) { found = locPath(trail); return; }
+            if (Array.isArray(x)) seek(x[1] || [], trail.concat([xid]));
+          });
+        })(g.items, ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []));
+      });
+    });
+    return found;
+  }
   // The tree string's path: Civilisation Theory › section › … › the concept – for the sections
   // themselves, the site's own pages, and the concepts filed in the paradigm; null for the rest.
   function crumbPath(c) {
     if (c === ROOT) return [ROOT];
     if (c.master) return [c];   // (the master concept: the head of every tree string)
     if (c.view) return [ROOT, PAGES['the-map'], c];   // (a Map view)
-    if (c.kind === 'node') {   // Civilisation Theory › Civilisation Research Landscape › section › group › … › the node
-      var found = null;
-      LANDSCAPE.forEach(function (sec) {
-        sec.groups.forEach(function (g) {
-          (function seek(list, trail) {
-            list.forEach(function (x) {
-              if (found) return;
-              if (x && !Array.isArray(x) && typeof x === 'object') { seek(x.items, x.quiet ? trail : trail.concat([{ title: x.head, heading: true }])); return; }   // (a quiet subgroup is left out of tree strings)
-              var id = typeof x === 'string' ? x : x[0];
-              if (id === c.id) { found = trail; return; }
-              if (Array.isArray(x) && byId[id]) seek(x[1] || [], trail.concat([byId[id]]));
-            });
-          })(g.items, [{ title: sec.title, heading: true }, { title: g.name, heading: true }]);
-        });
-      });
-      if (!found && LANDSCAPE.some(function (sec) { return sec.entry === c.id; })) found = [];   // (a section's own entry)
-      return found ? [ROOT, { title: 'Civilisation Research Landscape', heading: true }].concat(found, [c]) : null;
+    if (c.kind === 'node') {   // Civilisation Research Landscape › section › group › … › the node (as opened, or its first place)
+      var loc = (LOC_VIA[c.id] && LOC_VIA[c.id].indexOf('L:') === 0 && LOC_VIA[c.id]) || landscapeLoc(c.id);
+      if (loc) return pathFromLoc(loc, c);
+      return LANDSCAPE.some(function (sec) { return sec.entry === c.id; }) ? [CRL_HEAD, c] : null;   // (a section's own entry)
     }
     if (c.parent === ROOT.id && (c.kind === 'category' || PAGES[c.id])) return [ROOT, c];
     // A concept listed in more than one place takes the path of the place it was opened from.
@@ -7414,6 +7450,8 @@
     var path = [ROOT];
     var ok = loc.split('|').every(function (seg) {
       seg = decodeURIComponent(seg);
+      if (seg.indexOf('L:') === 0) { path = [CRL_HEAD, { title: seg.slice(2), heading: true, land: true }]; return !!landSec(seg.slice(2)); }   // (a landscape place)
+      if (seg.indexOf('q:') === 0) return true;
       if (seg.indexOf('h:') === 0) {
         var t = seg.slice(2), prev = path[path.length - 1];
         if (t && prev.title !== t) path.push({ title: t, heading: true });   // (a heading named as its parent, or a group without one, is not shown)
@@ -7491,7 +7529,7 @@
       trail = trail || [];
       return list.map(function (x) {
         if (typeof x === 'string') x = [x, []];
-        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat(['h:' + x.head])) + '</ul></li>'
+        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])) + '</ul></li>'
           : '<li class="is-category struct-plain"><ul>' + structHtml(x.items, false, trail) + '</ul></li>';   // (a group without a heading)
         var c = byId[x[0]], kids = x[1] || [], o = x[2] || {};
         if (!c) return '';
@@ -7621,7 +7659,9 @@
           '<h3 class="domain-title">' + (e ? '<a href="' + href(e) + '">' + esc(sec.title) + '</a>' : esc(sec.title)) + '</h3>' +
           (sec.desc ? '<p class="domain-desc">' + esc(sec.desc) + '</p>' : '') +
           (sec.groups.length ? '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
-            return '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items) + '</ul></li>';
+            var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);   // (each listing carries its landscape place)
+            return g.name ? '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li>'
+              : structHtml(g.items, true, trail);   // (a group without a name: its clusters side by side, across the columns)
           }).join('') + '</ul>' : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
     // About the Project: the site's introduction (the root entry), as a view of the Map.
@@ -7646,7 +7686,7 @@
     var path = crumbPath(c);
     if (!path) return '';   // not yet filed in the paradigm: no tree string
     var nodes = path.map(function (p, i, arr) {
-      var above = arr.slice(1, i).map(function (q) { return q.heading ? 'h:' + q.title : q.id; });
+      var above = arr.slice(arr[0] === ROOT ? 1 : 0, i).filter(function (q) { return !q.crl; }).map(function (q) { return q.land ? 'L:' + q.title : q.heading ? 'h:' + q.title : q.id; });
       return i === arr.length - 1 || p.heading
         ? '<span class="node">' + esc(p.title) + '</span>'
         : '<a class="node" href="' + (p === ROOT ? '#civilisation-theory' : href(p)) + '"' + (above.length ? ' data-path="' + esc(locPath(above)) + '"' : '') + '>' + esc(p.title) + '</a>';   // (“Civilisation Theory” opens the master concept)
@@ -8163,7 +8203,7 @@
         // (the Map's title carries a small ⓘ to the About page, as in the header)
         (c.id === 'the-map' ? '<a class="h1-about" href="#the-map/theproject" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>' : '') + '</h1>' +
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()) +
-      (isConcept(c) && !PAGES[c.id] ? endSectionsHtml(c) : '') +
+      ((isConcept(c) || c.kind === 'node') && !PAGES[c.id] ? endSectionsHtml(c) : '') +   // (landscape nodes too)
       '</div>';
     // Slides snap gently into place as you scroll.
     document.documentElement.classList.toggle('snap-slides', c.id === 'infinite');
