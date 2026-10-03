@@ -7031,7 +7031,7 @@
       ['the-post-status-quo', ['post-capitalism', 'post-statism', 'post-humanism', 'post-genderism']]
     ],
     'metacrisis': [
-      ['civilisational-crisis', ['polycrisis', 'permacrisis', 'omnicrisis']],
+      ['civilisational-crisis', ['polycrisis', 'permacrisis', 'omnicrisis', 'metacrisis']],
       { head: 'Problem Complex', entry: 'problem-complex', desc: 'The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.', items: [
         ['ecological-crisis', ['climate-migration', 'the-anthropocene',
           ['planetary-boundaries', ['crossed-planetary-boundaries', 'safe-operating-space', 'tipping-points']],
@@ -7362,7 +7362,7 @@
       '<em>civilisational</em> (mechanics, design, transition, alignment), <em>meta</em> (crisis, modernism, theory) ' +
       'and <em>macro</em> (history, sociology, strategy).</p>';
     // (each concept counted once, however many places it is listed in)
-    function structCount(list) { return Object.keys(structIds(list, {})).length; }
+    function structCount(list, self) { var ids = structIds(list, {}); delete ids[self]; return Object.keys(ids).length; }   // (a section listed within its own list is not one of its concepts)
     function structHtml(list, top, trail) {
       trail = trail || [];
       return list.map(function (x) {
@@ -7384,7 +7384,7 @@
       var names = ['Civilisational', 'Meta', 'Macro'];
       return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + sectionSets(sections).map(function (set, k) {
         return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d) {
-          var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id]) : 0;
+          var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0;
           return '<li class="menu-sec"><span class="menu-num">' + (NUMERALS[i] || i + 1) + '</span><span>' +
             '<a class="menu-section" href="#" data-jump="nidx-' + d.id + '">' + esc(d.title) + '</a>' +
             '<span class="menu-cats">' + n + ' concepts</span></span></li>';
@@ -7398,7 +7398,7 @@
         tmp.innerHTML = d.html;
         // Sections come in sets; a stronger rule opens each set.
         return '<section class="index-domain' + (setStart(i) ? ' set-start' : '') + '" id="nidx-' + d.id + '">' +
-          '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + (NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id]) : 0) + ' concepts</p>' +
+          '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + (NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0) + ' concepts</p>' +
           '<h3 class="domain-title"><a href="' + href(d) + '">' + esc(d.title) + '</a></h3>' +
           // First sentence only; the full description is on the section's own page.
           (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
