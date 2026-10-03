@@ -7132,47 +7132,77 @@
     // (a landscape node opened otherwise: that of its first place on the landscape).
     var place = LOC_VIA[c.id] && placeFromLoc(LOC_VIA[c.id], c);
     if (!place && c.kind === 'node') place = landscapeLoc(c.id) && placeFromLoc(landscapeLoc(c.id), c);
+    var loc = place && (LOC_VIA[c.id] && placeFromLoc(LOC_VIA[c.id], c) ? LOC_VIA[c.id] : landscapeLoc(c.id));
     if (place && place.homeCluster) place = null;   // (a listing marked homeCluster shows the cluster of the concept's own home)
-    if (place && place.land) return landClusterHtml(c, place);
+    if (place && place.land) return landClusterHtml(c, place, loc);
     if (!(c.id in STRUCT_PARENT)) return '';
+    var trailTo = clusterTrails(c, place ? loc : structLoc(c.id));
     var PARENT = place ? place.parentOf : STRUCT_PARENT, SIBS = place ? place.sibsOf : STRUCT_SIBS;
     function isTop(id) { return place && id in place.topOf ? place.topOf[id] : TOP_BLOCKS[id]; }
     function kidsAt(id) { return STRUCT_KIDS[id] || (place && place.kidsOf[id]) || []; }   // (its sub-concepts from every place it is listed)
     var head = null;
     function node(x) {
       if (typeof x === 'string') x = [x, []];
-      if (!Array.isArray(x)) return x.head ? '<li><span class="nested-head">' + esc(x.head) + '</span><ul>' + x.items.map(node).join('') + '</ul></li>' : x.items.map(node).join('');
+      var trail = Array.isArray(this) ? this : null;   // (the place this list stands at, if known)
+      if (!Array.isArray(x)) return x.head ? '<li><span class="nested-head">' + esc(x.head) + '</span><ul>' + x.items.map(node, trail && trail.concat(['h:' + x.head])).join('') + '</ul></li>' : x.items.map(node, trail).join('');
       var n = byId[x[0]], kids = x[1] || [];
       if (!n) return '';
       if (x[2] && x[2].dropdown && x[0] !== head) kids = [];   // (a dropdown within the block shows folded, as on the Map)
-      return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : '<a href="' + href(n) + '">' + esc(n.title) + '</a>') +
-        (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
+      return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : clusterLink(n, trail)) +
+        (kids.length ? '<ul>' + kids.map(node, trail && trail.concat([x[0]])).join('') + '</ul>' : '') + '</li>';
     }
     // Up to the block it belongs to: the nearest leading group of its section (or dropdown) above it
     // (or itself), or the nearest subheading's group.
     var x = c.id;
     for (var guard = 0; guard < 50; guard++) {
-      if (isTop(x)) { head = x; return '<ul class="nested">' + node([x, kidsAt(x)]) + '</ul>'; }
+      if (isTop(x)) { head = x; return '<ul class="nested">' + node.call(trailTo(x), [x, kidsAt(x)]) + '</ul>'; }
       var p = x in PARENT ? PARENT[x] : STRUCT_PARENT[x];
       if (p && typeof p === 'object') {   // a subheading's group: the subheading, then its concepts (unless it only repeats the section's name)
-        var list = ((x in SIBS ? SIBS[x] : STRUCT_SIBS[x]) || []).map(node).join('');
+        var list = ((x in SIBS ? SIBS[x] : STRUCT_SIBS[x]) || []).map(node, trailTo(x)).join('');
         return '<ul class="nested">' + (!p.title || (byId[p.parent] && byId[p.parent].title === p.title) ? list : '<li><span class="nested-head">' + esc(p.title) + '</span><ul>' + list + '</ul></li>') + '</ul>';
       }
       if (typeof p !== 'string' || p === x || (p in NEW_STRUCTURE && !isTop(p))) break;
       x = p;
     }
-    return '<ul class="nested">' + node([x, kidsAt(x)]) + '</ul>';
+    return '<ul class="nested">' + node.call(trailTo(x), [x, kidsAt(x)]) + '</ul>';
+  }
+  // The links of a cluster carry the place they are listed at (as the Map's do), so that each opens
+  // with the tree string and cluster of this place; a concept gathered here from another place has none.
+  function clusterTrails(c, loc) {
+    var segs = loc ? loc.split('|').map(decodeURIComponent) : [];
+    return function (x) {   // (the path to the list x stands in)
+      if (!loc) return null;
+      if (x === c.id) return segs;
+      var i = segs.indexOf(x);
+      return i < 0 ? null : segs.slice(0, i);
+    };
+  }
+  function clusterLink(n, trail) {
+    var ok = trail && trail.length && placeFromLoc(locPath(trail), n);
+    return '<a href="' + href(n) + '"' + (ok ? ' data-path="' + esc(locPath(trail)) + '"' : '') + '>' + esc(n.title) + '</a>';
+  }
+  // A concept's own place in the paradigm (where it is filed), as a listing's path.
+  function structLoc(id) {
+    var segs = [], p = STRUCT_PARENT[id];
+    for (var guard = 0; p && guard < 50; guard++) {
+      if (typeof p === 'string') { segs.unshift(p); p = p in NEW_STRUCTURE ? null : STRUCT_PARENT[p]; }
+      else { if (p.title) segs.unshift('h:' + p.title); p = p.parent; }
+    }
+    if (segs.length && !placeFromLoc(locPath(segs), byId[id]) && NEW_STRUCTURE[segs[0]]) segs.splice(1, 0, segs[0]);   // (filed in the block a section heads with its own name)
+    return segs.length && placeFromLoc(locPath(segs), byId[id]) ? locPath(segs) : null;
   }
   // On the landscape, a node's cluster is the nested group at the top of its list that holds it,
   // with the sub-nodes listed there; a node in no such group has none.
-  function landClusterHtml(c, place) {
+  function landClusterHtml(c, place, loc) {
+    var trailTo = clusterTrails(c, loc);
     function node(x) {
+      var trail = Array.isArray(this) ? this : null;   // (the place this list stands at, if known)
       if (typeof x === 'string') x = [x, []];
       if (!Array.isArray(x)) return '';
       var n = byId[x[0]], kids = x[1] || [];
       if (!n) return '';
-      return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : '<a href="' + href(n) + '">' + esc(n.title) + '</a>') +
-        (kids.length ? '<ul>' + kids.map(node).join('') + '</ul>' : '') + '</li>';
+      return '<li>' + (n === c ? '<span class="nested-self">' + esc(n.title) + '</span>' : clusterLink(n, trail)) +
+        (kids.length ? '<ul>' + kids.map(node, trail && trail.concat([x[0]])).join('') + '</ul>' : '') + '</li>';
     }
     var x = c.id;
     for (var guard = 0; guard < 50 && !place.topOf[x]; guard++) {
@@ -7181,7 +7211,7 @@
       x = p;
     }
     var kids = place.kidsOf[x] || [];
-    return place.topOf[x] && kids.length ? '<ul class="nested">' + node([x, kids]) + '</ul>' : '';
+    return place.topOf[x] && kids.length ? '<ul class="nested">' + node.call(trailTo(x), [x, kids]) + '</ul>' : '';
   }
   function endSectionsHtml(c) {
     var out = '';
@@ -7520,6 +7550,7 @@
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[data-path]');
     if (a) LOC_VIA[a.getAttribute('href').slice(1)] = a.getAttribute('data-path');
+    else if ((a = e.target.closest && e.target.closest('a[href^="#"]'))) delete LOC_VIA[a.getAttribute('href').slice(1)];   // (a link without a place: the concept's own)
   }, true);
   function esc(s) {
     return s.replace(/[&<>"]/g, function (ch) {
