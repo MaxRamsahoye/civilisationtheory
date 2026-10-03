@@ -6950,12 +6950,13 @@
     var self = find(cur, c.id);
     if (!self) return null;
     at(c.id, self);
-    return { parentOf: parentOf, sibsOf: sibsOf, topOf: topOf, kidsOf: kidsOf };
+    return { parentOf: parentOf, sibsOf: sibsOf, topOf: topOf, kidsOf: kidsOf, also: Array.isArray(self) && !!(self[2] && self[2].also) };
   }
   function clusterHtml(c) {
     if (!(c.id in STRUCT_PARENT)) return '';
     // Opened from one of its places in the paradigm: the cluster of that place.
     var place = LOC_VIA[c.id] && placeFromLoc(LOC_VIA[c.id], c);
+    if (place && place.also) place = null;   // (a concept only cross-listed there shows the cluster of its own home)
     var PARENT = place ? place.parentOf : STRUCT_PARENT, SIBS = place ? place.sibsOf : STRUCT_SIBS;
     function isTop(id) { return place && id in place.topOf ? place.topOf[id] : TOP_BLOCKS[id]; }
     function kidsAt(id) { return STRUCT_KIDS[id] || (place && place.kidsOf[id]) || []; }   // (its sub-concepts from every place it is listed)
