@@ -938,6 +938,12 @@
     font-size: 0.85rem;
     line-height: 1.35;
   }
+  /* Long and short versions of an entry: short by default, the toggle above the contents */
+  html:not(.ver-long) .description .long-only, html.ver-long .description .short-only { display: none; }
+  #toc .ver-toggle { display: inline-flex; margin: 0 0 1rem; border: 1px solid var(--rule); border-radius: 999px; padding: 2px; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; }
+  #toc .ver-toggle button { font: inherit; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.03em; color: var(--muted); background: none; border-radius: 999px; padding: 0.2rem 0.75rem; transition: background-color .2s ease, color .2s ease; }
+  #toc .ver-toggle button:hover { color: var(--text); }
+  #toc .ver-toggle button[aria-pressed="true"] { background: var(--hl); color: var(--text); }
   /* The contents and sidenotes fade in whenever they appear (with a page, a view, or past the Map's opening) */
   @keyframes margin-fade-in { from { opacity: 0; } }
   #toc:not([hidden]), .description .sidenote { animation: margin-fade-in .7s ease .15s both; }
@@ -3683,20 +3689,21 @@
       ref: 'Consilience Project',
       refs: ['The Consilience Project, “Technology is Not Values Neutral: Ending the Reign of Nihilistic Design” (26 June 2022).', 'Langdon Winner, <em>Autonomous Technology: Technics-out-of-Control as a Theme in Political Thought</em> (1977).', 'Lewis Mumford, <em>Technics and Civilization</em> (1934).'],
       html: '<p><em>Axiological design</em> is the approach to technology proposed by <a href="#the-consilience-project">the Consilience Project</a> in “Technology is Not Values Neutral: Ending the Reign of Nihilistic Design” (2022): “design that factors and leverages the intrinsic values inevitably encoded in all technology-human interfaces.” Axiology is the philosophical study of value, and axiological design is the application of principled judgment about value to the design of technology – not a single method but a general model, which treats the effects of a technology on how people think, behave and relate as core design goals and constraints, rather than as afterthoughts.</p>' +
-        '<h2>Technology Is Not Values Neutral</h2><p>The starting point is that “technologies encode practices and values into the societies that adopt them”, often unpredictably and unintentionally, as second- and third-order effects. Every technology is created in pursuit of certain values, and in spreading it creates new ones. A GPS was designed to get people where they need to go, not to weaken their sense of direction – yet it does both. The bathroom scale made body weight newly visible and so overvalued as an index of health. The plough, made for easier labour and food surpluses, came to favour men as farmers, to bring fortified settlements and the domestication of draught animals, and in the long run to support a narrative of human dominion over nature. Alongside the physical externalities of technology, there are therefore <em>psychosocial externalities</em>: its ethical, cultural and psychological consequences, which are harder to see and still largely ignored.</p>' +
+        '<h2>Technology Is Not Values Neutral</h2><p>The starting point is that “technologies encode practices and values into the societies that adopt them”, often unpredictably and unintentionally, as second- and third-order effects. Every technology is created in pursuit of certain values, and in spreading it creates new ones. <span class="long-only">A GPS was designed to get people where they need to go, not to weaken their sense of direction – yet it does both. The bathroom scale made body weight newly visible and so overvalued as an index of health. The plough, made for easier labour and food surpluses, came to favour men as farmers, to bring fortified settlements and the domestication of draught animals, and in the long run to support a narrative of human dominion over nature. </span>Alongside the physical externalities of technology, there are therefore <em>psychosocial externalities</em>: its ethical, cultural and psychological consequences, which are harder to see and still largely ignored.</p>' +
         '<h2>Four Approaches to Design</h2><ul>' +
           '<li><strong>Naively optimistic design</strong>, from early modernity, assumes that positive values are built into every technology.</li>' +
           '<li><strong>Luddite design</strong>, reacting against the machine age, assumes negative values are built into every technology and seeks to roll it back – a stance that disempowers those who take it, since technologies confer power on those who adopt them.</li>' +
           '<li><strong>Nihilistic design</strong>, the dominant approach today, ignores or downplays value altogether: technology is held to be neutral, only as good or bad as its users. It corresponds to what Langdon Winner called the “technological orthodoxy”, whose tenets are that we fully understand the technologies we create, that they are under our control, that they are neutral, and that building ever larger and more demanding systems is itself progress.</li>' +
           '<li><strong>Axiological design</strong>, responding to the crises of late modernity, including <a href="#existential-risk">existential risk</a>, understands technology as intrinsically value-laden and value-creating, and designs with that in mind.</li></ul>' +
-        '<h2>Five Propositions</h2><p>Drawing on value-sensitive, human-centred and related design traditions, the article sets out five propositions toward axiological design:</p><ol>' +
+        '<p class="short-only">Technologies, in this view, never exist alone: tools, technologies, ecologies of technologies, infrastructures and whole technological epochs build on one another into a “second nature” to which people must adapt. As it concludes: “The dangerous reign of nihilistic design must end if our civilization is not to.” See <a href="#design-science">design science</a>.</p>' +
+        '<div class="long-only"><h2>Five Propositions</h2><p>Drawing on value-sensitive, human-centred and related design traditions, the article sets out five propositions toward axiological design:</p><ol>' +
           '<li>Technology is created in pursuit of values, and results in the creation and transformation of values.</li>' +
           '<li>Technology requires the creation of more and different technology; multiple new technologies evolve together as functionally bound sets, forming evolving ecologies of technologies.</li>' +
           '<li>Technology shapes our bodies and movements as a human-created habitat, and thus is deeply habit forming, both for individuals and societies.</li>' +
           '<li>Technology changes the nature of power dynamics in unpredictable ways, creating an environment that advantages some humans over others, setting up selection pressures that force personal adaptation to and adoption of new technologies.</li>' +
           '<li>Technology impacts the kinds of ideas we value, the quality of attention we pay, and our conceptions of self and world.</li></ol>' +
         '<p>Technologies, in this view, never exist alone: tools, technologies, ecologies of technologies, infrastructures and whole technological epochs build on one another into a “second nature” to which people must adapt. The smartphone and the ecosystem of technologies around it are the article’s central example of how much this can change minds, relationships and cultures within two decades.</p>' +
-        '<h2>Ending Nihilistic Design</h2><p>The article argues that today’s digital environment amounts to an “accidental planetary computational stack”, shaped by near-term market forces rather than by any holistic design. Overcoming nihilistic design means putting ethics first and engineering second; taking ecologies of technologies, rather than single devices, as the unit of analysis; weighing effects on power at every scale; and clarifying the fundamentals of human value, so that technologies are judged by their effects on bodies, minds, families, cultures and the environment, and constrained by limits such as sanity, dignity and justice. As it concludes: “The dangerous reign of nihilistic design must end if our civilization is not to.” See <a href="#design-science">design science</a>.</p>'
+        '<h2>Ending Nihilistic Design</h2><p>The article argues that today’s digital environment amounts to an “accidental planetary computational stack”, shaped by near-term market forces rather than by any holistic design. Overcoming nihilistic design means putting ethics first and engineering second; taking ecologies of technologies, rather than single devices, as the unit of analysis; weighing effects on power at every scale; and clarifying the fundamentals of human value, so that technologies are judged by their effects on bodies, minds, families, cultures and the environment, and constrained by limits such as sanity, dignity and justice. As it concludes: “The dangerous reign of nihilistic design must end if our civilization is not to.” See <a href="#design-science">design science</a>.</p></div>'
     },
     {
       id: 'ontological-design',
@@ -8854,20 +8861,29 @@
   function buildToc() {
     tocHeads = Array.prototype.slice.call(document.querySelectorAll(document.documentElement.classList.contains('page-map')
       ? '#entry .ab-list > .ce-title, #entry .ab-list > h2'   // (on the Map: the About view's own)
-      : '#entry h1, #entry h2:not(.slide-title)'));
+      : '#entry h1, #entry h2:not(.slide-title)')).filter(function (h) { return !h.closest('.long-only, .short-only') || h.getClientRects().length; });   // (not those of a hidden version)
     tocHeads.forEach(function (h) { h.id = slug(h.textContent); });
     // The concept heading titles the contents; its subheadings are listed beneath.
     var head = tocHeads[0];
     // An entry without subheadings has nothing to navigate, so no contents.
     tocEl.hidden = tocHeads.length < 2;
     tocEl.style.animation = 'none'; void tocEl.offsetWidth; tocEl.style.animation = '';   // (it fades in afresh with each page)
-    tocEl.innerHTML = '<a href="#" class="toc-title" data-target="' + head.id + '">' + esc(head.textContent) + '</a><ul>' +
+    var twoVersions = !!document.querySelector('#entry .long-only'), long = document.documentElement.classList.contains('ver-long');
+    if (twoVersions) tocEl.hidden = false;
+    tocEl.innerHTML = (twoVersions ? '<div class="ver-toggle" role="group" aria-label="Version"><button type="button" data-ver="short" aria-pressed="' + !long + '">Short</button><button type="button" data-ver="long" aria-pressed="' + long + '">Long</button></div>' : '') +
+      '<a href="#" class="toc-title" data-target="' + head.id + '">' + esc(head.textContent) + '</a><ul>' +
       tocHeads.slice(1).map(function (h) {
         return '<li><a href="#" data-target="' + h.id + '">' + esc(h.textContent) + '</a></li>';
       }).join('') + '</ul>';
   }
   // Contents links scroll within the page without touching the concept route in the URL hash.
   tocEl.addEventListener('click', function (e) {
+    var v = e.target.closest('[data-ver]');
+    if (v) {   // (long or short: the page shows that version, and its contents follow)
+      document.documentElement.classList.toggle('ver-long', v.getAttribute('data-ver') === 'long');
+      buildToc(); tocEl.style.animation = 'none'; onScroll();
+      return;
+    }
     var a = e.target.closest('a[data-target]');
     if (!a) return;
     e.preventDefault();
