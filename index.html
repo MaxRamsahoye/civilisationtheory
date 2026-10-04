@@ -1714,6 +1714,7 @@
   .description .index-menu ul { list-style: none; padding: 0; margin: 0; }
   .description .menu-sec { display: grid; grid-template-columns: 1.9rem 1fr; margin: 0 0 1.15rem; padding: 0; }
   .description .menu-sec:last-child { margin-bottom: 0; }
+  .description .menu-sec.menu-rule { border-top: 1px solid var(--rule); padding-top: 1.15rem; }
   .description .menu-num {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.62rem;
@@ -8839,9 +8840,10 @@
       var cols = sectionSets(sections).slice(0, 3);
       (sectionSets(sections)[3] || []).forEach(function (d) { cols[d.id === 'civilisation-theory' ? 0 : 1].push(d); });
       return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + cols.map(function (set, k) {
-        return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d) {
+        return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d, j) {
           var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0;
-          return '<li class="menu-sec"><span>' +
+          // (in the Meta column, a rule after its first three sections, before the meta-frames)
+          return '<li class="menu-sec' + (k === 1 && j === 3 ? ' menu-rule' : '') + '"><span>' +
             '<a class="menu-section" href="#" data-jump="nidx-' + d.id + '">' + esc(d.title) + '</a>' +
             '<span class="menu-cats">' + n + ' concepts</span></span></li>';
         }).join('') + '</ul></div>';
