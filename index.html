@@ -9460,7 +9460,7 @@
     tocEl.innerHTML = (twoVersions ? '<div class="ver-toggle" role="group" aria-label="Version">' +
       '<button type="button" data-ver="short" aria-pressed="' + !long + '" aria-label="Short version" title="Short version"><svg viewBox="0 0 100 100" aria-hidden="true"><line x1="12" y1="38" x2="88" y2="38"/><line x1="12" y1="62" x2="56" y2="62"/></svg></button>' +
       '<button type="button" data-ver="long" aria-pressed="' + long + '" aria-label="Long version" title="Long version"><svg viewBox="0 0 100 100" aria-hidden="true"><line x1="12" y1="14" x2="88" y2="14"/><line x1="12" y1="38" x2="88" y2="38"/><line x1="12" y1="62" x2="88" y2="62"/><line x1="12" y1="86" x2="56" y2="86"/></svg></button></div>' : '') +
-      '<a href="#" class="toc-title" data-target="' + head.id + '">' + esc({ cs: 'Paradigm', rl: 'Landscape' }[listOf ? mapView : ''] || head.textContent) + '</a><ul>' +   // (the Map's two wide views: their short names)
+      '<a href="#" class="toc-title' + (listOf ? ' toc-tab' : '') + '" data-target="' + head.id + '">' + esc({ cs: 'Paradigm', rl: 'Landscape' }[listOf ? mapView : ''] || head.textContent) + '</a><ul>' +   // (the Map's two wide views: their short names)
       tocHeads.slice(1).map(function (h, i) {
         // On the Paradigm, a rule between High-Level and each of the three sets of sections (and its
         // sections named without their article: Metacrisis).
@@ -9498,6 +9498,9 @@
     var a = e.target.closest('a[data-target]');
     if (!a) return;
     e.preventDefault();
+    // (the Paradigm's and Landscape's own headings: up to the tab line, their tab at the top of the screen)
+    var tabs = a.classList.contains('toc-tab') && document.querySelector('#entry .index-tabs');
+    if (tabs) { window.scrollTo({ top: docY(tabs, 'top'), behavior: 'smooth' }); return; }
     var to = document.getElementById(a.getAttribute('data-target')), sec = to.closest('#entry .index-domain');
     if (sec) window.scrollTo({ top: window.scrollY + sec.getBoundingClientRect().top + (parseFloat(getComputedStyle(sec).borderTopWidth) || 0) + 2, behavior: 'smooth' });   // (a section of the Map's views: to just below its dividing line)
     else to.scrollIntoView({ behavior: 'smooth' });
