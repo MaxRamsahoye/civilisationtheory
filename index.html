@@ -8092,7 +8092,7 @@
       ['hyperobjects', ['climate', ['capitalism-as-hyperobject', [], { label: 'Capitalism' }], 'space', 'the-internet']],
       ['critical-alien-phenomenology', ['reverse-extended-mind-thesis', 'reverse-prosthesis', 'inverse-instrumentality', 'loop-in-the-human', 'the-gaze', 'darwin-among-the-machines', 'demons-of-techno-capitalism', 'market-as-life-blind-watchmaker', 'seeing-like-a-state']],
       ['civilisational-paradigm', ['paradigm', 'dominant-paradigm', 'counter-hegemonic-civilisational-paradigm', ['civilisational-paradigm-shift', [], { also: true }], 'paradigm-shift', ['civilisational-paradigm-paralysis', ['paradigm-paralysis']]]],
-      ['world-system', ['world-command-and-control-system', 'world-system-securitisation', 'empire', 'capitalist-world-system', 'post-capitalist-world-system', 'complex-world-system-dynamics', 'life-world-system', 'viable-life-world-system', 'life-world-systems-change']],
+      ['world-system', ['world-command-and-control-system', 'world-system-securitisation', 'empire', 'capitalist-world-system', 'post-capitalist-world-system', 'complex-world-system-dynamics', ['life-world-system', ['viable-life-world-system']], 'life-world-systems-change']],
       ['4e-ontology', ['4e-cognition', '4e-intelligence', '4e-agency', '4e-global-catastrophic-risk', '4e-power', '4e-utopia']],
       { head: 'Order', items: ['natural-order', 'artificial-order', ['spontaneous-order', ['spontaneous-disorder', ['spontaneous-totalitarian-order', ['stable-inverted-totalitarianism']]]]] },
       ['technological-revolutions', ['cognitive-evolution', 'agricultural-revolution', 'industrial-revolution', 'information-revolution', ['intelligence-revolution', [['neomechanisation-and-autonomisation', ['the-capital-curse']]]]]],
@@ -8174,7 +8174,7 @@
     'metamodernism': [
       { head: '', items: ['primitivism', 'classicism', 'premodernism', 'modernism', 'postmodernism', 'metamodernism'] },
       ['meta-frames', [
-        ['metanarrative', ['hypernormalisation', ['capitalist-realism', ['capitalist-theodicy', 'capitalist-problem-of-evil', 'lost-futures']]]],
+        ['metanarrative', ['hypernormalisation', ['capitalist-realism', [['capitalist-theodicy', ['capitalist-problem-of-evil']], 'lost-futures']]]],
         ['metaphysics', ['process-philosophy', 'idealism']],
         ['metarationality', ['relevance-realisation-and-combinatorial-explosion', 'epistemic-uncertainty-and-cluelessness']]]],
       { head: 'Related Concepts', items: ['cultural-paradigm', 'stadial-theories-of-history', 'historical-dialectic', 'ideology'] },
@@ -8642,7 +8642,10 @@
         if (c.id === sec) { lead.push(c); return; }
         (subs[key] = subs[key] || []).push(c);
       });
-      var out = Object.keys(subs).sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); }).map(function (key) {
+      var keys = Object.keys(subs).sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); });
+      // (a block with a single novel term needs no subheading: the term joins the category's own list)
+      keys.filter(function (key) { return subs[key].length === 1; }).forEach(function (key) { lead.push(subs[key][0]); });
+      var out = keys.filter(function (key) { return subs[key].length > 1; }).map(function (key) {
         var h = key.indexOf('h:') === 0;
         return { name: h ? key.slice(2) : (byId[key] || {}).title || key, link: h ? null : byId[key], items: subs[key] };
       });
@@ -8682,8 +8685,8 @@
       // Two ways to read them: by category (the default) or A–Z.
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
       '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
-        return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p><ul>' +
-          ceTreeHtml(g.subs ? g.subs.lead : g.items) + '</ul>' +
+        return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p>' +
+          (g.subs && !g.subs.lead.length ? '' : '<ul>' + ceTreeHtml(g.subs ? g.subs.lead : g.items) + '</ul>') +
           (g.subs ? g.subs.groups.map(function (s) {
             return '<p class="ce-sub-head">' + (s.link ? '<a href="' + href(s.link) + '">' + esc(s.name) + '</a>' : esc(s.name)) + '</p><ul class="ce-sub">' +
               ceTreeHtml(s.items) + '</ul>';
