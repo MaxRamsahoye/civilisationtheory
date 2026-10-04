@@ -5479,6 +5479,24 @@
       html: '<p><em>Global stable totalitarianism</em> is a worldwide regime of total control that could, with modern surveillance and enforcement, become permanent – unchallengeable from within and with no outside to escape to. It is sometimes counted among existential risks because it could lock in a bad future indefinitely.</p>'
     },
     {
+      id: 'totalitarianism',
+      title: 'Totalitarianism',
+      refs: ['Hannah Arendt, <em>The Origins of Totalitarianism</em> (1951).', 'Carl J. Friedrich and Zbigniew Brzezinski, <em>Totalitarian Dictatorship and Autocracy</em> (1956).'],
+      html: '<p><em>Totalitarianism</em> is a form of rule that seeks total control over every aspect of public and private life, abolishing the distinction between state and society. Unlike older tyrannies, which were content with obedience, totalitarian regimes – above all Nazi Germany and the Soviet Union under Stalin – sought to remake human beings themselves, through a single mass party, an official ideology claiming to explain all of history, a monopoly of communications and weapons, a centrally directed economy and systematic terror by a secret police. Hannah Arendt, in <em>The Origins of Totalitarianism</em> (1951), traced it to the atomisation of modern mass society and the loneliness it bred, and saw in the concentration camp its defining institution. See <a href="#stable-totalitarianism">stable totalitarianism</a>.</p>'
+    },
+    {
+      id: 'stable-totalitarianism',
+      title: 'Stable Totalitarianism',
+      refs: ['Bryan Caplan, “The Totalitarian Threat”, in Nick Bostrom and Milan M. Ćirković (eds.), <em>Global Catastrophic Risks</em> (2008).'],
+      html: '<p><em>Stable totalitarianism</em> is a <a href="#totalitarianism">totalitarian</a> regime that does not fall – one that, unlike the totalitarian states of the twentieth century, overcomes the weaknesses that brought them down, and so persists indefinitely. The economist Bryan Caplan (2008) argued that past totalitarian regimes collapsed chiefly through succession crises, comparison with freer and richer neighbours, and the impossibility of total surveillance, and that new technologies could remove each of these: perfect surveillance, the control of information, and even life extension for leaders. A totalitarian regime that became global, with no outside to compare itself to or flee to, could last for centuries, and so counts as an existential risk – a permanent curtailment of humanity’s potential. See <a href="#global-stable-totalitarianism">global stable totalitarianism</a>.</p>'
+    },
+    {
+      id: 'hyper-capitalism',
+      title: 'Hyper-Capitalism',
+      refs: ['Jeremy Rifkin, <em>The Age of Access: The New Culture of Hypercapitalism</em> (2000).'],
+      html: '<p><em>Hyper-capitalism</em> is capitalism intensified and extended to the point where market relations penetrate every sphere of life – not only the production of goods, but time, attention, relationships, identity, experience and culture itself become commodities to be bought, sold and optimised. The term was used by Jeremy Rifkin in <em>The Age of Access</em> (2000) for an economy in which access to experiences and networks replaces the ownership of things, and has since been applied to the digital economy, in which every interaction generates data and every moment is a potential site of monetisation. Combined with pervasive data collection, it becomes <a href="#hyper-surveillance-capitalism">hyper-surveillance capitalism</a>. See <a href="#surveillance-capitalism">surveillance capitalism</a>.</p>'
+    },
+    {
       id: 'hyper-surveillance-capitalism',
       title: 'Hyper-Surveillance Capitalism',
       coined: true,
@@ -7828,7 +7846,7 @@
       { head: 'Major Frames', items: ['exponential-technology', ['existential-risk', [], { also: true }], 'sensemaking-and-choicemaking', 'the-master-and-his-emissary'] },
       { head: 'Attractor States', entry: 'attractor-states', desc: 'Attractor states are extreme stable conditions in the future possibility space of civilisation, that existing trajectories converge towards. Overall, there are three macro-scale attractors.', blocks: true, items: [   // (each attractor a block of its own)
         ['first-attractor', ['escalating-system-dynamics', 'escalating-state-competition', 'escalating-rogue-actors'], { dropdown: true }],
-        ['second-attractor', ['global-stable-totalitarianism', 'hyper-surveillance-capitalism', ['despotic-drift-and-closed-society', ['despotic-drift', 'closed-society']], ['high-modern-panopticon', [['high-tech-panopticon', [], { also: true }], 'the-panopticon', ['high-modernism', [], { also: true }]]]], { dropdown: true }],
+        ['second-attractor', [['global-stable-totalitarianism', ['stable-totalitarianism', 'totalitarianism']], ['hyper-surveillance-capitalism', [['surveillance-capitalism', [], { also: true }], 'hyper-capitalism']], ['despotic-drift-and-closed-society', ['despotic-drift', 'closed-society']], ['high-modern-panopticon', [['high-tech-panopticon', [], { also: true }], 'the-panopticon', ['high-modernism', [], { also: true }]]]], { dropdown: true }],
         ['third-attractor', ['cultural-enlightenment', 'decentralised-coordination',
           'meta-utopia', 'open-society'], { dropdown: true }],
         ['genealogy-of-the-metacrisis', ['three-attractors-model', ['vulnerable-world-hypothesis', [], { also: true }], 'the-narrow-corridor', 'anacyclosis'], { dropdown: true }]] }
@@ -7930,7 +7948,7 @@
         ['extinction-risk', ['ai-takeover', 'engineered-pandemics']],
         ['catastrophic-risk', ['nuclear-world-war-iii', 'catastrophic-climate-change']],
         ['suffering-risk', ['incidental-vs-agential-s-risks', 'factory-farming', 'digital-hells', 'suffering-subroutines']]]],
-      ['dystopian-risk', [['global-stable-totalitarianism', [], { label: 'Stable Totalitarianism' }], 'hyper-surveillance-capitalism', 'algorithmic-value-erosion', 'meta-dystopia']],
+      ['dystopian-risk', ['stable-totalitarianism', 'hyper-surveillance-capitalism', 'algorithmic-value-erosion', 'meta-dystopia']],
       ['disempowerment-risk', ['gradual-disempowerment', 'the-intelligence-curse', 'agential-inequality']],
       ['value-lock-in-risk', ['the-iron-cage', 'the-silicon-cage', 'the-golden-cage']],
       ['systemic-risk', ['supply-chain-disruption', 'critical-infrastructure-breakdown', 'global-financial-crisis', ['cyberhacking-and-q-day', ['q-day']], 'global-economic-expansion-and-extreme-externalities']],
