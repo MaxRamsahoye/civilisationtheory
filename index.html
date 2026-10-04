@@ -7971,7 +7971,15 @@
   }
   function setStart(i) { for (var k = 0, n = 0; k < SET_SIZES.length; n += SET_SIZES[k++]) if (i === n) return true; return false; }
   function isConcept(c) { return c !== ROOT && c.kind !== 'category' && c.kind !== 'node' && !c.cpOnly; }   // (landscape nodes – people, organisations, movements – are not concepts)
-  function inAZ(c) { return isConcept(c) || (c.kind === 'category' && c.parent === ROOT.id); }   // (the A–Z: every concept and the ten sections' own entries)
+  // (the A–Z: every concept and the ten sections' own entries – bar the Consilience Project's glossary
+  // terms not yet filed in the paradigm, which appear only in its own view)
+  var azParadigm = null;
+  function inAZ(c) {
+    if (c.kind === 'category' && c.parent === ROOT.id) return true;
+    if (!isConcept(c)) return false;
+    if (!(c.tags && c.tags.indexOf('consilience') >= 0)) return true;
+    return !!(azParadigm || (azParadigm = paradigmIds()))[c.id];
+  }
   function childrenOf(id) {
     return CONCEPTS.filter(function (c) { return c.parent === id && !c.cpOnly; })
       .sort(function (a, b) { return ((a.order || 1000) - (b.order || 1000)) || byTitle(a, b); });
