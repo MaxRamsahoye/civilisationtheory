@@ -1190,6 +1190,10 @@
   .description ul.controls .keys { white-space: nowrap; }
   .description kbd { font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 0.72em; letter-spacing: 0.02em; color: var(--text);
     border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px; padding: 0.05em 0.42em; background: var(--bg-side); }
+  .description ul.fiction-list { list-style: none; padding: 0; margin: 1.6rem 0 0; }
+  .description ul.fiction-list > li { margin: 0 0 1.2rem; }
+  .description ul.fiction-list .fiction-theme { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+  .description ul.fiction-list ul { list-style: none; padding-left: 1.2rem; margin: 0; }
   .description ul.controls .k-sep { color: var(--muted); font-size: 0.8em; margin: 0 0.1em; }
   @media (max-width: 560px) { .description .ce-list.ab-list ul.controls li { grid-template-columns: 1fr; gap: 0.15rem; } }
   /* Curated Sequence view */
@@ -2474,7 +2478,7 @@
       id: 'fiction',
       title: 'Fiction',
       kind: 'category',
-      html: '<p>Works of fiction – novels, stories, poems and films – that illuminate the concepts of the map: imagined worlds in which its dynamics, risks and possibilities are played out, each filed under the theme it is read for.</p>'
+      html: '<p>Works of fiction – novels, stories, poems and films – that illuminate the concepts of the map: imagined worlds in which its dynamics, risks and possibilities are played out, each filed under the theme it is read for.</p><!--FICTION-->'
     },
     {
       id: 'age-of-em',
@@ -8920,7 +8924,7 @@
       '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) +
         // (the Map's title carries a small ⓘ to the About page, as in the header)
         (c.id === 'the-map' ? '<a class="h1-about" href="#the-map/theproject" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>' : '') + '</h1>' +
-      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()) +
+      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()).replace('<!--FICTION-->', fictionListHtml()) +
       ((isConcept(c) || c.kind === 'node') && !PAGES[c.id] ? endSectionsHtml(c) : '') +   // (landscape nodes too)
       '</div>';
     // Slides snap gently into place as you scroll.
@@ -9709,6 +9713,15 @@
       row('Sum of the above', sum, 'sum') +
       row('Entries listed in more than one of the above', '−' + (sum - total), 'overlap') +
       '<li class="all"><span>Entries in total</span><span class="n">' + total + '</span></li></ul>';
+  }
+  // The Fiction page's list of its works, each under the theme it is filed for (as the Map lists them).
+  function fictionListHtml() {
+    return '<ul class="fiction-list">' + (NEW_STRUCTURE.fiction || []).map(function (g) {
+      return '<li><span class="fiction-theme">' + esc(g.head) + '</span><ul>' + g.items.map(function (id) {
+        var c = byId[id];
+        return c ? '<li><a href="' + href(c) + '" data-path="' + esc(locPath(['fiction', 'h:' + g.head])) + '">' + esc(c.title) + '</a></li>' : '';
+      }).join('') + '</ul></li>';
+    }).join('') + '</ul>';
   }
   // Every entry on the site, each once: the concepts, the ten sections' own entries and the landscape's nodes.
   function entriesTotal() {
