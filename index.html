@@ -1194,6 +1194,13 @@
   .description ul.fiction-list > li { margin: 0 0 1.2rem; }
   .description ul.fiction-list .fiction-theme { display: block; font-weight: 600; margin-bottom: 0.3rem; }
   .description ul.fiction-list ul { list-style: none; padding-left: 1.2rem; margin: 0; }
+  /* The Review page (#review): entries not yet reviewed, in columns; flagged claims under their entry. */
+  .description h2 .rv-n { color: var(--muted); font-weight: 400; margin-left: 0.15rem; }
+  .description ul.rv-list { list-style: none; padding: 0; margin: 0.8rem 0 2rem; columns: 3 13rem; column-gap: 2rem; }
+  .description ul.rv-list > li { break-inside: avoid; margin: 0 0 0.35rem; }
+  .description ul.rv-list.rv-checks { columns: 1; }
+  .description ul.rv-list.rv-checks > li { margin-bottom: 0.9rem; }
+  .description ul.rv-list .rv-check { display: block; color: var(--muted); font-size: 0.92em; margin-top: 0.15rem; }
   .description ul.controls .k-sep { color: var(--muted); font-size: 0.8em; margin: 0 0.1em; }
   @media (max-width: 560px) { .description .ce-list.ab-list ul.controls li { grid-template-columns: 1fr; gap: 0.15rem; } }
   /* Curated Sequence view */
@@ -2006,6 +2013,7 @@
     {
       id: 'existential-risk',
       title: 'Existential Risk',
+      refs: ['Nick Bostrom, “Existential Risks: Analyzing Human Extinction Scenarios and Related Hazards”, <em>Journal of Evolution and Technology</em> 9 (2002).', 'Toby Ord, <em>The Precipice: Existential Risk and the Future of Humanity</em> (2020).'],
       html: '<p>An <em>existential risk</em> is a risk that threatens the extinction of humanity, or the permanent and drastic curtailment of its potential. Formalised by Nick Bostrom (2002) and developed within existential risk studies, the concept is usually applied to discrete hazards such as advanced AI, engineered pandemics, nuclear war and severe climate change.</p><p>Seen through the <a href="#metacrisis">metacrisis</a>, these hazards appear instead as emergent outcomes of shared underlying dynamics, and any response must avoid two failure modes at once: destruction, when powerful technology remains in the hands of uncoordinated, competing actors; and dystopia, when that risk is controlled through concentrated, unaccountable power.</p>'
     },
     {
@@ -2070,6 +2078,7 @@
     {
       id: 'multipolar-trap',
       title: 'Multipolar Trap',
+      refs: ['Scott Alexander, “Meditations on Moloch”, <em>Slate Star Codex</em> (2014).'],
       html: '<p>A <em>multipolar trap</em> is a situation in which each actor, acting rationally in competition with others, is driven towards an outcome that is worse for everyone – including itself – because no single actor can stop without losing ground to the rest. It generalises the prisoner’s dilemma and the tragedy of the commons to many actors, and appears in arms races, regulatory races to the bottom, the attention economy and the race to deploy powerful technologies before they are understood.</p><p>Popularised by Scott Alexander’s <em>Meditations on Moloch</em> (2014) and developed by Daniel Schmachtenberger as a generator function of the <a href="#metacrisis">metacrisis</a>, the trap becomes a source of <a href="#existential-risk">existential risk</a> under exponential technology, and can only be escaped by changing the incentive structure itself.</p>'
     },
     {
@@ -2134,6 +2143,7 @@
     },
     {
       id: 'infrastructural-gaianism',
+      check: '“The new infrastructuralism” is a gloss, not a citation. Confirm the sense you intended, and whether a source should be cited.',
       title: 'Infrastructural Gaianism',
       coined: true,
       refs: ['James Lovelock, <em>Gaia: A New Look at Life on Earth</em> (1979).'],
@@ -2147,6 +2157,7 @@
     },
     {
       id: 'the-twin-neural-problem',
+      check: 'The interpretation was drafted from the title alone. Confirm it is what you mean by the term.',
       title: 'The Twin Neural Problem',
       coined: true,
       html: '<p><em>The twin neural problem</em> is the recognition that the alignment of artificial intelligence and the alignment of human beings are, at bottom, the same problem in two substrates. Both artificial neural networks and human brains are opaque systems whose values and dispositions were not written down but formed by optimisation – gradient descent on training data in the one case, evolution and cultural conditioning in the other – so that neither can simply be read or rewritten from outside. The difficulties of AI alignment – interpretability, misgeneralisation, goals that diverge from those intended, behaviour that changes with scale and context – mirror the long-standing difficulties of aligning people and institutions with what is good. Progress on either can inform the other, and neither can be solved alone, since aligned machines in the hands of misaligned humans, or aligned humans served by misaligned machines, would fail together. See <a href="#human-inner-alignment-problem">the human inner alignment problem</a> and <a href="#ai-as-anthropological-mirror">AI as anthropological mirror</a>.</p>'
@@ -2191,6 +2202,7 @@
     },
     {
       id: 'singers-world-systems-change-cruxes',
+      check: 'The interpretation, and the five cruxes listed, were drafted from the title alone. Confirm or replace them with your own.',
       title: 'Singer’s World-Systems Change Cruxes',
       coined: true,
       refs: ['Peter Singer, “Famine, Affluence, and Morality”, <em>Philosophy &amp; Public Affairs</em> 1 (1972).', 'Peter Singer, <em>The Life You Can Save</em> (2009).'],
@@ -2211,6 +2223,7 @@
     {
       id: 'polycrisis',
       title: 'Polycrisis',
+      refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
       html: '<p>A <em>polycrisis</em> is a condition in which multiple crises – ecological, economic, geopolitical, technological – interact so that their combined effect is greater than the sum of their parts. The term was introduced by Edgar Morin and Anne Brigitte Kern in <em>Homeland Earth</em> (1993) and popularised by the historian Adam Tooze in the early 2020s. Where the polycrisis describes how crises entangle and cascade, the <a href="#metacrisis">metacrisis</a> asks why they arise together at all: the polycrisis is the surface pattern, the metacrisis its underlying cause.</p>'
     },
 
@@ -2238,26 +2251,31 @@
     {
       id: 'systems-theory',
       title: 'Systems Theory',
+      refs: ['Ludwig von Bertalanffy, <em>General System Theory</em> (1968).', 'Donella H. Meadows, <em>Thinking in Systems: A Primer</em> (2008).'],
       html: '<p><em>Systems theory</em> is the study of wholes – how interacting parts give rise to behaviour that none of them has alone. Developed through Ludwig von Bertalanffy’s general system theory, Norbert Wiener’s cybernetics (1948) and later work such as Donella Meadows’s <em>Thinking in Systems</em> (2008), it is concerned with feedback loops, stocks and flows, emergence, self-organisation and resilience. Its founding move, in Ludwig von Bertalanffy’s general systems theory of the 1940s and 1950s, was to look for principles – feedback, hierarchy, equifinality – that hold across physics, biology and society alike.</p>'
     },
     {
       id: 'viable-system-model',
       title: 'Viable System Model',
+      refs: ['Stafford Beer, <em>Brain of the Firm</em> (1972).'],
       html: '<p>The <em>viable system model</em> is Stafford Beer’s cybernetic model of any system able to maintain its identity and survive in a changing environment. Set out in <em>Brain of the Firm</em> (1972), it describes five interacting functions – operations, coordination, control, intelligence and policy – repeated recursively at every scale, so that each viable system contains and is contained by others. Beer applied it to national economic management in Chile’s Project Cybersyn (1971–73). Its recursive structure – every viable system contains, and is contained by, other viable systems – makes it one of the few models of organisation that scales from a workshop to a state.</p>'
     },
     {
       id: 'evolutionary-theory',
       title: 'Evolutionary Theory',
+      refs: ['Charles Darwin, <em>On the Origin of Species</em> (1859).'],
       html: '<p><em>Evolutionary theory</em> explains how complex forms arise through variation, selection and inheritance, without any designer. Beginning with Charles Darwin’s <em>On the Origin of Species</em> (1859), it has since been extended from genes to cultures, technologies and institutions. Applied to societies, it asks which selection pressures have favoured some social forms over others – and warns that what wins in competition is not necessarily what is good for its members or able to endure.</p>'
     },
     {
       id: 'critical-theory',
       title: 'Critical Theory',
+      refs: ['Max Horkheimer, “Traditional and Critical Theory” (1937).'],
       html: '<p><em>Critical theory</em> is the tradition of social theory that examines society in order to change it, exposing the forms of power and ideology that present particular arrangements as natural or inevitable. It originated with the Frankfurt School – Max Horkheimer’s essay “Traditional and Critical Theory” (1937), Theodor Adorno, Herbert Marcuse and later Jürgen Habermas. Its central claim is that social arrangements presented as natural or inevitable are historical, and so can be changed – and that criticism worth the name aims at freeing people, not only at describing them.</p>'
     },
     {
       id: 'game-theory',
       title: 'Game Theory',
+      refs: ['John von Neumann and Oskar Morgenstern, <em>Theory of Games and Economic Behavior</em> (1944).'],
       html: '<p><em>Game theory</em> is the formal study of strategic interaction: how the outcome for each actor depends on the choices of all the others. Founded by John von Neumann and Oskar Morgenstern in <em>Theory of Games and Economic Behavior</em> (1944) and extended by John Nash’s concept of equilibrium (1950), it distinguishes zero-sum from positive-sum games and shows how individually rational choices can produce collectively irrational outcomes. Its best-known results – the <a href="#prisoners-dilemma">prisoner’s dilemma</a>, the <a href="#tragedy-of-the-commons">tragedy of the commons</a>, the Nash equilibrium – show how individually rational choices can combine into outcomes no one wants, and what repetition, rules or trust allow players to escape them.</p>'
     },
     {
@@ -2266,6 +2284,7 @@
       kind: 'category',
       order: 6,
       parent: 'theproject',
+      refs: ['Timotheus Vermeulen and Robin van den Akker, “Notes on Metamodernism”, <em>Journal of Aesthetics &amp; Culture</em> 2 (2010).', 'Hanzi Freinacht, <em>The Listening Society</em> (2017).'],
       html: '<p><em>Metamodernism</em> is a cultural and philosophical sensibility that moves beyond postmodernism without returning to modernism: it holds the modern capacity for sincerity, hope and grand projects together with the postmodern awareness of irony, context and multiple perspectives. The term was introduced by Timotheus Vermeulen and Robin van den Akker (2010), and developed politically by Hanzi Freinacht in <em>The Listening Society</em> (2017). Its characteristic mood is what Timotheus Vermeulen and Robin van den Akker called an oscillation: sincere commitment to large aims, held together with an ironic awareness of their limits.</p>'
     },
     {
@@ -2282,6 +2301,7 @@
     {
       id: 'planetary-boundaries',
       title: 'Crossing Planetary Boundaries',
+      refs: ['Johan Rockström et al., “A Safe Operating Space for Humanity”, <em>Nature</em> 461 (2009).'],
       html: '<p><em>Planetary boundaries</em> are the limits of nine Earth-system processes – including climate change, biosphere integrity, land-system change and biogeochemical flows – within which humanity can continue to develop safely. The framework was introduced by Johan Rockström and colleagues in 2009, and a 2023 assessment found six of the nine boundaries already transgressed. In their 2023 update, the framework’s authors reported that six of the nine boundaries – including climate change, biosphere integrity and the flows of nitrogen and phosphorus – had already been crossed.</p>'
     },
     {
@@ -2314,6 +2334,7 @@
     {
       id: 'sensemaking',
       title: 'Sensemaking',
+      refs: ['Karl E. Weick, <em>Sensemaking in Organizations</em> (1995).'],
       html: '<p><em>Sensemaking</em> is the process by which individuals and groups construct an understanding of their situation, so that they can act within it. The term was developed in organisational theory by Karl Weick (1995), and has since been used more broadly for the collective capacity of a society to perceive reality accurately, reason about it together and make good choices. Weick’s own examples were often disasters – most famously the Mann Gulch fire of 1949, in which a firefighting crew’s shared picture of their situation fell apart – which is why the idea now serves for whole societies whose shared picture of reality is breaking down (see <a href="#epistemic-crisis">epistemic crisis</a>).</p>'
     },
     {
@@ -2325,71 +2346,85 @@
     {
       id: 'attention-economy',
       title: 'Attention Economy',
+      refs: ['Herbert A. Simon, “Designing Organizations for an Information-Rich World” (1971).'],
       html: '<p>The <em>attention economy</em> is the economic system in which human attention is the scarce resource that platforms and media compete to capture and sell. Herbert Simon observed in 1971 that “a wealth of information creates a poverty of attention”, and the term itself was popularised by Michael Goldhaber in the late 1990s. Because engagement rather than understanding is rewarded, the attention economy favours content that provokes outrage, fear and tribal identity – making it a <a href="#race-to-the-bottom">race to the bottom</a> among competing platforms and a principal driver of polarisation.</p>'
     },
     {
       id: 'prisoners-dilemma',
       title: 'Prisoner’s Dilemma',
+      refs: ['Robert Axelrod, <em>The Evolution of Cooperation</em> (1984).'],
       html: '<p>The <em>prisoner’s dilemma</em> is the canonical game in <a href="#game-theory">game theory</a> in which two players each gain by defecting against the other, yet both end up worse off than if they had cooperated. First formalised by Merrill Flood and Melvin Dresher at the RAND Corporation in 1950 and named by Albert Tucker, it shows how individually rational choices can produce collectively irrational outcomes. Robert Axelrod’s <em>The Evolution of Cooperation</em> (1984) showed how cooperation can emerge when the game is repeated. The <a href="#multipolar-trap">multipolar trap</a> generalises the dilemma to many players.</p>'
     },
     {
       id: 'tragedy-of-the-commons',
       title: 'Tragedy of the Commons',
+      refs: ['Garrett Hardin, “The Tragedy of the Commons”, <em>Science</em> 162 (1968).', 'Elinor Ostrom, <em>Governing the Commons: The Evolution of Institutions for Collective Action</em> (1990).'],
       html: '<p>The <em>tragedy of the commons</em> is the depletion of a shared resource by individuals who each benefit fully from using more of it while bearing only a fraction of the cost. It was set out by Garrett Hardin in 1968, who concluded that commons must be either privatised or regulated by the state. Elinor Ostrom’s <em>Governing the Commons</em> (1990) showed a third possibility: communities that successfully manage shared resources through their own institutions. The tragedy is a many-player form of the <a href="#prisoners-dilemma">prisoner’s dilemma</a>, and Ostrom’s answer informs the design of the <a href="#commons">commons</a>.</p>'
     },
     {
       id: 'coordination-problem',
       title: 'Coordination Problem',
+      refs: ['Thomas C. Schelling, <em>The Strategy of Conflict</em> (1960).'],
       html: '<p>A <em>coordination problem</em> is a situation in which all actors would be better off acting together, but none can do so alone: a better outcome exists, but reaching it requires that everyone move at once, or that each can trust the others to follow. They range from the trivial – which side of the road to drive on, settled once by convention – to the intractable: fisheries, emissions and arms control, where every party gains from agreement but each is tempted to defect. Thomas Schelling’s <em>The Strategy of Conflict</em> (1960) and Elinor Ostrom’s work on the <a href="#commons">commons</a> remain the classic accounts of how such problems actually get solved.</p>'
     },
     {
       id: 'cybernetics',
       title: 'Cybernetics',
+      refs: ['Norbert Wiener, <em>Cybernetics: Or Control and Communication in the Animal and the Machine</em> (1948).'],
       html: '<p><em>Cybernetics</em> is the science of control and communication in animals and machines, as Norbert Wiener defined it in his book of that name (1948). It studies how systems regulate themselves through <a href="#feedback-loop">feedback</a> – sensing the effects of their actions and adjusting accordingly – and was developed by W. Ross Ashby, Heinz von Foerster, Gregory Bateson and Stafford Beer, among others. Cybernetics underpins a lineage of cybernetic approaches to economics and governance, and Beer’s <a href="#viable-system-model">viable system model</a> is its application to the organisation of societies.</p>'
     },
     {
       id: 'requisite-variety',
       title: 'Requisite Variety',
+      refs: ['W. Ross Ashby, <em>An Introduction to Cybernetics</em> (1956).'],
       html: '<p>The <em>law of requisite variety</em>, formulated by W. Ross Ashby in <em>An Introduction to Cybernetics</em> (1956), states that a regulator can only control a system if it has at least as much variety – as many possible responses – as the disturbances it must counter; in Ashby’s phrase, “only variety can destroy variety”. Applied to institutions, it implies that a regulator designed for a slower and simpler world cannot govern a faster and more complex one, however good its intentions. Governance must therefore gain variety – through distributed, adaptive and <a href="#viable-system-model">recursive</a> structures – rather than simply more central control.</p>'
     },
     {
       id: 'feedback-loop',
       title: 'Feedback Loop',
+      refs: ['Donella H. Meadows, <em>Thinking in Systems: A Primer</em> (2008).'],
       html: '<p>A <em>feedback loop</em> is a circular chain of cause and effect in which the output of a system returns as an input that influences its future behaviour. Balancing (negative) feedback counteracts change and keeps a system stable, as a thermostat does; reinforcing (positive) feedback amplifies change, producing growth, collapse or runaway escalation. Arms races, compound interest and viral content are reinforcing loops; thermostats, prices and predator–prey cycles are balancing ones – and much of systems thinking consists in asking which balancing loop a runaway process is missing.</p>'
     },
     {
       id: 'emergence',
       title: 'Emergence',
+      refs: ['P. W. Anderson, “More Is Different”, <em>Science</em> 177 (1972).'],
       html: '<p><em>Emergence</em> is the appearance, in a system of interacting parts, of properties or behaviours that belong to the whole and cannot be found in any part alone – as consciousness emerges from neurons, or traffic jams from individual drivers. It is central to <a href="#systems-theory">systems theory</a> and the study of <a href="#complex-adaptive-system">complex adaptive systems</a>. Flocking birds, traffic jams and market prices are standard examples: each is produced by individuals following local rules, yet none can be found in any of them – which is also why emergent outcomes can be harmful without anyone having intended them.</p>'
     },
     {
       id: 'complex-adaptive-system',
       title: 'Complex Adaptive System',
+      refs: ['John H. Holland, <em>Hidden Order: How Adaptation Builds Complexity</em> (1995).'],
       html: '<p>A <em>complex adaptive system</em> is a system of many interacting agents that adapt to one another and to their environment, so that the system as a whole learns and evolves – ecosystems, economies, immune systems and civilisations are examples. The concept was developed at the Santa Fe Institute, notably by John Holland. Such systems exhibit <a href="#emergence">emergence</a>, self-organisation and non-linear change, and cannot be controlled from above in the way that complicated machines can. Civilisation itself can be understood as a complex adaptive system, and the <a href="#conceptual-adaptive-system">conceptual adaptive system</a> takes its name from the idea.</p>'
     },
     {
       id: 'leverage-points',
       title: 'Leverage Points',
+      refs: ['Donella H. Meadows, “Leverage Points: Places to Intervene in a System” (1999).'],
       html: '<p><em>Leverage points</em> are places within a system where a small intervention can produce large changes in its behaviour. In her essay “Leverage Points: Places to Intervene in a System” (1999), Donella Meadows ranked twelve such points, from the weakest – parameters such as taxes and subsidies – to the strongest: the goals of the system, the <a href="#dominant-paradigm">paradigm</a> out of which it arises, and the power to transcend paradigms altogether. On this view the deepest leverage lies at the level of paradigm, while the shallowest – parameters such as taxes, subsidies and standards – is where most policy effort goes.</p>'
     },
     {
       id: 'resilience',
       title: 'Resilience',
+      refs: ['C. S. Holling, “Resilience and Stability of Ecological Systems”, <em>Annual Review of Ecology and Systematics</em> 4 (1973).'],
       html: '<p><em>Resilience</em> is the capacity of a system to absorb disturbance and reorganise while retaining its essential function, structure and identity. The concept was introduced to ecology by C. S. Holling (1973), who distinguished it from mere stability: a resilient system may change a great deal while persisting, whereas an efficient but brittle one may fail suddenly. There is usually a trade-off with efficiency: redundancy, diversity and slack look wasteful in normal times, which is why systems optimised for efficiency – just-in-time supply chains are the textbook case – tend to be fragile when the shock arrives.</p>'
     },
     {
       id: 'project-cybersyn',
       title: 'Project Cybersyn',
+      refs: ['Eden Medina, <em>Cybernetic Revolutionaries: Technology and Politics in Allende’s Chile</em> (2011).'],
       html: '<p><em>Project Cybersyn</em> was a Chilean project (1971–73) to manage the nationalised economy in real time using cybernetic principles, designed by Stafford Beer at the invitation of Salvador Allende’s government, with Fernando Flores. It linked factories to a central operations room through a network of telex machines, using Beer’s <a href="#viable-system-model">viable system model</a> to balance local autonomy with national coordination. The project was ended by the military coup of 1973. It remains a reference point in cybernetic economics as an early attempt at computer-assisted, non-authoritarian economic coordination.</p>'
     },
     {
       id: 'cultural-evolution',
       title: 'Cultural Evolution',
+      refs: ['Robert Boyd and Peter J. Richerson, <em>Culture and the Evolutionary Process</em> (1985).', 'Joseph Henrich, <em>The Secret of Our Success</em> (2016).'],
       html: '<p><em>Cultural evolution</em> is the application of <a href="#evolutionary-theory">evolutionary theory</a> to culture: the idea that beliefs, practices, technologies and institutions vary, are selected and are transmitted between people, and so change over time in ways analogous to biological evolution. It was developed by Robert Boyd and Peter Richerson (1985), among others. Its sobering lesson is that cultural forms spread for reasons of transmissibility and competitive success, which need not coincide with their being good for the people who hold them.</p>'
     },
     {
       id: 'multilevel-selection',
       title: 'Multilevel Selection',
+      refs: ['Elliott Sober and David Sloan Wilson, <em>Unto Others: The Evolution and Psychology of Unselfish Behavior</em> (1998).'],
       html: '<p><em>Multilevel selection</em> is the view that natural selection operates at several levels at once – on genes, individuals and groups – and that these levels can pull in opposite directions. David Sloan Wilson and E. O. Wilson (2007) summarised it: “selfishness beats altruism within groups; altruistic groups beat selfish groups”. It explains how cooperation can evolve despite the advantage of defection, in David Sloan Wilson and E. O. Wilson’s summary (2007): “selfishness beats altruism within groups; altruistic groups beat selfish groups.”</p>'
     },
     {
@@ -2400,41 +2435,49 @@
     {
       id: 'hegemony',
       title: 'Cultural Hegemony',
+      refs: ['Antonio Gramsci, <em>Prison Notebooks</em> (written 1929–35).'],
       html: '<p><em>Hegemony</em>, in Antonio Gramsci’s sense, is the rule of a dominant group through consent rather than force: its interests and worldview come to be accepted as common sense by society as a whole. Gramsci developed the concept in his <em>Prison Notebooks</em> (1929–35), and it became central to <a href="#critical-theory">critical theory</a> and cultural studies. It explains how a social order can reproduce itself without needing to be imposed, and why lasting change involves a contest over meaning and common sense as well as over institutions.</p>'
     },
     {
       id: 'ideology',
       title: 'Ideology',
+      refs: ['Karl Marx and Friedrich Engels, <em>The German Ideology</em> (written 1845–46).'],
       html: '<p>An <em>ideology</em> is a system of ideas and beliefs that shapes how a society understands itself, and that, in the critical tradition, serves to present particular social arrangements as natural, necessary or just. The concept was given its critical meaning by Karl Marx and Friedrich Engels in <em>The German Ideology</em> (1846), and developed through <a href="#hegemony">Gramsci</a>, the Frankfurt School and later thinkers. Ideology critique, from Marx through the Frankfurt School to Slavoj Žižek, is one of the core tools of <a href="#critical-theory">critical theory</a>; its sharpest target is any claim that a given order has no alternative.</p>'
     },
     {
       id: 'colonisation-of-the-lifeworld',
       title: 'Colonisation of the Life-World',
+      refs: ['Jürgen Habermas, <em>The Theory of Communicative Action</em>, vol. 2 (1981).'],
       html: '<p>The <em>colonisation of the lifeworld</em> is Jürgen Habermas’s term, from <em>The Theory of Communicative Action</em> (1981), for the process by which the logics of money and administrative power – the “system” – penetrate areas of life that depend on mutual understanding, such as family, education, culture and public debate. As these areas come to be governed by markets and bureaucracy, meaning, solidarity and democratic agency are eroded. Habermas’s remedy is not to abolish markets or bureaucracy but to keep them within limits set from the lifeworld – with democratic deliberation, not money or power, deciding what they are for.</p>'
     },
     {
       id: 'dialectics',
       title: 'Dialectics',
+      refs: ['G. W. F. Hegel, <em>The Phenomenology of Spirit</em> (1807).'],
       html: '<p><em>Dialectics</em> is a method of reasoning that understands ideas and societies as developing through contradiction – as opposing tendencies conflict and are resolved in a higher form that preserves something of each. Associated above all with G. W. F. Hegel, and turned by Marx towards material and social history, it is foundational to <a href="#critical-theory">critical theory</a>. A dialectical synthesis seeks not to choose between competing traditions, but to resolve their contradictions into a more comprehensive understanding.</p>'
     },
     {
       id: 'resource-based-economy',
       title: 'Resource-Based Economy',
+      refs: ['Jacque Fresco, <em>The Best That Money Can’t Buy</em> (2002).'],
       html: '<p>A <em>resource-based economy</em> is Jacque Fresco’s proposal for a socio-economic system in which goods and services are provided without money, barter or debt, by managing the Earth’s resources directly through technology and scientific method. Developed through Fresco’s Venus Project, it envisages automated production, the careful accounting of available resources, and the provision of necessities to all. It belongs to the lineage of cybernetic economics, and is a precedent for rethinking <a href="#critical-political-economy">political economy</a> in light of <a href="#post-scarcity">post-scarcity</a> technology.</p>'
     },
     {
       id: 'commons',
       title: 'Commons',
+      refs: ['Elinor Ostrom, <em>Governing the Commons: The Evolution of Institutions for Collective Action</em> (1990).'],
       html: '<p>A <em>commons</em> is a resource held and managed collectively by a community, according to rules its members make for themselves, rather than by the market or the state. Elinor Ostrom’s <em>Governing the Commons</em> (1990) identified the design principles by which commons can endure, answering the <a href="#tragedy-of-the-commons">tragedy of the commons</a>. The idea has been extended to knowledge and software, as in Yochai Benkler’s account of commons-based peer production. The commons offers a form of <a href="#critical-political-economy">political economy</a> that is neither market nor state, and a model for coordination without centralisation.</p>'
     },
     {
       id: 'design-science',
       title: 'Design Science Revolution',
+      refs: ['R. Buckminster Fuller, <em>Operating Manual for Spaceship Earth</em> (1969).'],
       html: '<p><em>Design science</em> – in full, “comprehensive anticipatory design science” – is Buckminster Fuller’s approach to solving humanity’s problems by redesigning its tools and systems rather than by reforming people or politics. Fuller called the change it would bring the <em>design science revolution</em>: a revolution carried out by artefacts rather than by political struggle, following his dictum to “reform the environment, not man”. He argued in <em>Operating Manual for Spaceship Earth</em> (1969) that the planet’s resources, used efficiently, could support all of humanity, and that the task was to make the world work for everyone through design. Its best-known application was the World Game, Fuller’s proposal to treat the planet’s resources as a puzzle to be solved for “100% of humanity” – played in workshops and classrooms from the late 1960s.</p>'
     },
     {
       id: 'post-scarcity',
       title: 'Post-Scarcity Economics',
+      refs: ['Murray Bookchin, <em>Post-Scarcity Anarchism</em> (1971).'],
       html: '<p><em>Post-scarcity</em> describes a condition in which the basic goods people need can be produced in abundance, with minimal human labour, so that scarcity no longer organises economic life. It is associated with the potential of automation, renewable energy and advanced manufacturing, and was anticipated by thinkers from Buckminster Fuller to Jacque Fresco. Post-scarcity is a possibility opened by <a href="#infra-structure">technological infrastructure</a> but blocked by an existing <a href="#critical-political-economy">political economy</a> that depends on scarcity – and so a question of design rather than technology alone.</p>'
     },
     {
@@ -2729,6 +2772,7 @@
     {
       id: 'civilisational-paradigm',
       title: 'Civilisational Paradigm',
+      refs: ['Thomas S. Kuhn, <em>The Structure of Scientific Revolutions</em> (1962).'],
       html: '<p>The <em>civilisational paradigm</em> is the deep pattern on which civilisation has run throughout history: the axioms – about nature as resource, value as accumulation, security as dominance and progress as growth – that have organised human societies since the first agrarian states, and that have evolved into the modern world-system we know today. It is not a single idea or ideology but a pattern expressed at once in every structure of civilisation that <a href="#the-emergence-model">the emergence model</a> distinguishes:</p>' +
         '<ul><li>in the <a href="#infra-structure">infra-structure</a>, as linear, extractive modes of production that take from the living world and return waste to it;</li>' +
         '<li>in the <a href="#inter-structure">inter-structure</a>, as rivalrous economics, property and governance that reward winning at others’ expense and externalising harm;</li>' +
@@ -2902,11 +2946,13 @@
     {
       id: 'natural-order',
       title: 'Natural Order',
+      refs: ['F. A. Hayek, <em>Law, Legislation and Liberty</em>, vol. 1: <em>Rules and Order</em> (1973).'],
       html: '<p><em>Natural order</em> is order that exists independently of human design or action: the regularities of physics, the cycles of ecosystems, the structures of living things. In older political thought the phrase also named the order supposedly given by nature or God – the physiocrats’ <em>ordre naturel</em>, or a fixed hierarchy of beings – against which human arrangements could be judged.</p>'
     },
     {
       id: 'artificial-order',
       title: 'Artificial Order',
+      refs: ['F. A. Hayek, <em>Law, Legislation and Liberty</em>, vol. 1: <em>Rules and Order</em> (1973).'],
       html: '<p><em>Artificial order</em> is order deliberately designed and imposed: a plan, a code of law, an organisation, a machine. Friedrich Hayek called it <em>taxis</em> – made order – and contrasted it with the <em>kosmos</em> of spontaneous order, arguing that designed orders can only be as complex as their designers can understand.</p>'
     },
     {
@@ -2948,6 +2994,7 @@
     {
       id: 'capitalism',
       title: 'Capitalism',
+      refs: ['Adam Smith, <em>The Wealth of Nations</em> (1776).', 'Karl Marx, <em>Capital</em>, vol. 1 (1867).'],
       html: '<p><em>Capitalism</em> is an economic system in which the means of production are privately owned and operated for profit, and in which goods, services and labour are exchanged in markets. Its defining dynamic is accumulation: profit is reinvested to produce further profit, so that the system must grow to remain stable.</p><p>Its history is usually told in stages – mercantile, industrial, financial, digital – each reorganising production, work and power, and each with its own crises and critics, from Marx to the present.</p>'
     },
     {
@@ -3081,6 +3128,30 @@
       html: '<p>Open societies promote the free exchange of information and public discourse, as well as democratic governance based on the participation of the people in shared choices about their social futures. Unlike the tight control over communications and suppression of dissenting views that characterize closed societies, open societies promote transparent governance and embrace good-faith public scrutiny.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#open-society">Open Society</a>.</p>'
     },
     {
+      id: 'cp-paradigm',
+      title: 'Paradigm',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>The modern use of the term ‘paradigm’ was introduced by the philosopher of science Thomas Kuhn in his work “The Structure of Scientific Revolutions”. Kuhn’s idea is that a paradigm is the set of concepts and practices that define a scientific discipline at any particular period of time. A good example of a paradigm is behaviorism – a paradigm under which studying externally observable behavior was viewed as the only scientifically legitimate form of psychology. Kuhn also argued that science progresses by the way of “paradigm shifts,” when a leading paradigm transforms into another through advances in understanding and methodology; for example, when the leading paradigm in psychology transformed from behaviorism to cognitivism, which looked at the human mind from an information processing perspective.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#paradigm">Paradigm</a>.</p>'
+    },
+    {
+      id: 'cp-closed-society',
+      title: 'Closed Society',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>Closed societies restrict the free exchange of information and public discourse, as well as impose top down decisions on their populus. Unlike the open communications and dissenting views that characterize open societies, closed societies promote opaque governance and prevent public opposition that might be found in free and open discourse.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#closed-society">Closed Society</a>.</p>'
+    },
+    {
+      id: 'cp-social-contract-theory',
+      title: 'Social Contract Theory',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>A theory stating that individuals are willing to sacrifice some of their freedom and agree to state authority under certain legal rules, in exchange for the protection of their remaining rights, provided the rest of society adheres to the same rules of engagement. This model of political philosophy originated during the Age of Enlightenment from theorists including, but not limited to John Locke, Thomas Hobbes, and Jean-Jacques Rousseau. It was revived in the 20th century by John Rawls and is used as the basis for modern democratic theory.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#social-contract-theory">Social Contract Theory</a>.</p>'
+    },
+    {
       id: 'cp-risk-society',
       title: 'Risk Society',
       cpOnly: true,
@@ -3119,7 +3190,7 @@
     },
     {
       id: 'non-kinetic-warfare',
-      title: 'Non-kinetic warfare',
+      title: 'Non-Kinetic Warfare',
       tags: ['consilience'],
       ref: 'The Consilience Project, Glossary',
       html: '<p>A form of rivalry between nation-states or conflicting groups, by which tactical aims are realized through means other than direct physical violence. Examples include election meddling, blackmailing politicians, or information warfare.</p>'
@@ -3133,7 +3204,7 @@
     },
     {
       id: 'plausible-deniability',
-      title: 'Plausible deniability',
+      title: 'Plausible Deniability',
       tags: ['consilience'],
       ref: 'The Consilience Project, Glossary',
       html: '<p>The ability of an individual or institutional entity to deny knowing about unethical or illegal activities because there is no evidence to the contrary or no such information has been provided.</p>'
@@ -3274,9 +3345,8 @@
     {
       id: 'paradigm',
       title: 'Paradigm',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary; Kuhn',
-      html: '<p>The modern use of the term ‘paradigm’ was introduced by the philosopher of science Thomas Kuhn in his work “The Structure of Scientific Revolutions”. Kuhn’s idea is that a paradigm is the set of concepts and practices that define a scientific discipline at any particular period of time. A good example of a paradigm is behaviorism – a paradigm under which studying externally observable behavior was viewed as the only scientifically legitimate form of psychology. Kuhn also argued that science progresses by the way of “paradigm shifts,” when a leading paradigm transforms into another through advances in understanding and methodology; for example, when the leading paradigm in psychology transformed from behaviorism to cognitivism, which looked at the human mind from an information processing perspective.</p>'
+      refs: ['Thomas S. Kuhn, <em>The Structure of Scientific Revolutions</em> (1962).'],
+      html: '<p>A <em>paradigm</em>, in Thomas Kuhn’s sense, is the framework of shared assumptions, concepts, exemplary problems and methods within which a community of inquiry works – what it takes for granted, what it counts as a problem and what as a solution. Paradigms are not simply replaced by better evidence: anomalies accumulate, the old framework is stretched to absorb them, and only in a crisis does a new one displace it in a <a href="#paradigm-shift">paradigm shift</a>. This map extends the idea beyond science to civilisation itself: a <a href="#civilisational-paradigm">civilisational paradigm</a> is the set of assumptions about reality, value, progress and the good life on which a civilisation’s institutions are built, and the <a href="#dominant-paradigm">dominant civilisational paradigm</a> is the one now generating the metacrisis.</p>'
     },
     {
       id: 'unverifiable',
@@ -3288,9 +3358,8 @@
     {
       id: 'closed-society',
       title: 'Closed Society',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Closed societies restrict the free exchange of information and public discourse, as well as impose top down decisions on their populus. Unlike the open communications and dissenting views that characterize open societies, closed societies promote opaque governance and prevent public opposition that might be found in free and open discourse.</p>'
+      refs: ['Henri Bergson, <em>The Two Sources of Morality and Religion</em> (1932).', 'Karl Popper, <em>The Open Society and Its Enemies</em> (1945).'],
+      html: '<p>A <em>closed society</em> is one organised around fixed authority and unquestionable doctrine – tribal, theocratic or totalitarian – in which institutions cannot be criticised or changed by those who live under them, and dissent is treated as a threat. The distinction between closed and open societies was first drawn by Henri Bergson and developed by Karl Popper in <em>The Open Society and Its Enemies</em> (1945), who saw the pull back towards closure as a recurring response to the strain of living in an <a href="#open-society">open society</a>. Today the risk is that surveillance, algorithmic control and artificial intelligence make closure more complete and more stable than ever before: the <a href="#despotic-drift">despotic drift</a> of the second attractor.</p>'
     },
     {
       id: 'civic-virtue',
@@ -3319,9 +3388,8 @@
     {
       id: 'social-contract-theory',
       title: 'Social Contract Theory',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary; Hobbes; Locke; Rousseau; Rawls',
-      html: '<p>A theory stating that individuals are willing to sacrifice some of their freedom and agree to state authority under certain legal rules, in exchange for the protection of their remaining rights, provided the rest of society adheres to the same rules of engagement. This model of political philosophy originated during the Age of Enlightenment from theorists including, but not limited to John Locke, Thomas Hobbes, and Jean-Jacques Rousseau. It was revived in the 20th century by John Rawls and is used as the basis for modern democratic theory.</p>'
+      refs: ['Thomas Hobbes, <em>Leviathan</em> (1651).', 'John Locke, <em>Two Treatises of Government</em> (1689).', 'Jean-Jacques Rousseau, <em>The Social Contract</em> (1762).', 'John Rawls, <em>A Theory of Justice</em> (1971).'],
+      html: '<p><em>Social contract theory</em> grounds political authority in the agreement – actual, tacit or hypothetical – of those subject to it: people give up some of their freedom to a common power in exchange for the security and rights that only a shared order can provide. Thomas Hobbes argued for an absolute sovereign as the only alternative to a war of all against all; John Locke for a limited government bound to protect life, liberty and property; Jean-Jacques Rousseau for a general will, under which citizens obey only the laws they give themselves; and John Rawls revived the tradition with a contract made behind a veil of ignorance. Its question – on what terms can people rightly be asked to accept a common order? – returns whenever that order’s foundations shift, as in <a href="#post-agi-social-contract-theory">post-AGI social contract theory</a>.</p>'
     },
     {
       id: 'ethos',
@@ -3353,7 +3421,7 @@
     },
     {
       id: 'intergenerational-transmission',
-      title: 'Intergenerational transmission',
+      title: 'Intergenerational Transmission',
       tags: ['consilience'],
       ref: 'The Consilience Project, Glossary',
       html: '<p>Refers to the foundational process of education which underlies and enables societal and cultural cohesion across generations by passing down values, capacities, knowledge, and personality types.</p>'
@@ -3696,7 +3764,7 @@
     {
       id: 'the-return-to-the-jungle',
       title: 'The Return to the Jungle',
-      refs: ['Yuval Noah Harari, “Yuval Noah Harari argues that what’s at stake in Ukraine is the direction of human history”, <em>The Economist</em> (February 2022).'],
+      refs: ['Yuval Noah Harari, “Yuval Noah Harari argues that what’s at stake in Ukraine is the direction of human history”, <em>The Economist</em> (9 February 2022).'],
       html: '<p><em>The return to the jungle</em> names Yuval Noah Harari’s warning, made as Russia threatened and then invaded Ukraine in 2022, that humanity risks losing one of its greatest achievements: the decline of war. For most of history, he argued, the “law of the jungle” held – any state could be invaded by a stronger neighbour, and militaries consumed a large share of state budgets. In the decades after 1945 this changed: wars of conquest became rare, military spending fell as a share of budgets, and resources were redirected to health, education and welfare. That achievement rested not on a law of nature but on human choices and norms, and could be undone; if aggression is seen to pay, states will rearm, spending will shift back from welfare to weapons, and the world will return to the jungle. See <a href="#the-second-cold-war">the second Cold War</a>.</p>'
     },
     {
@@ -3986,6 +4054,7 @@
     {
       id: 'neo-cybernetics',
       title: 'Neo-Cybernetics',
+      refs: ['Humberto R. Maturana and Francisco J. Varela, <em>Autopoiesis and Cognition: The Realization of the Living</em> (1980).', 'Niklas Luhmann, <em>Social Systems</em> (1984; trans. 1995).'],
       html: '<p><em>Neo-cybernetics</em> refers to the renewal of cybernetic thinking in light of computation, AI and complexity science. It revisits the tradition of Wiener, Ashby and Beer – feedback, self-regulation, variety and viability – as a framework for designing adaptive organisations, economies and governance suited to the scale and speed of the present.</p>'
     },
     {
@@ -4029,13 +4098,14 @@
     },
     {
       id: 'pre-tragic-tragic-post-tragic',
-      title: 'Pre-tragic, Tragic, Post-tragic',
+      title: 'Pre-Tragic, Tragic, Post-Tragic',
       html: '<p><em>Pre-tragic, tragic and post-tragic</em> name three stances towards the brokenness of the world, a distinction taught by Marc Gafni and developed by Zak Stein and Daniel Schmachtenberger. The <em>pre-tragic</em> stance is naive: it has not yet faced how deep suffering, loss and failure go, and its optimism is untested – the stance of the idealist who believes good intentions are enough. The <em>tragic</em> stance has faced them, and been broken by them: it sees clearly that the world is not as it should be and that efforts to change it often fail, and so falls into cynicism, despair or resignation. The <em>post-tragic</em> stance has passed through the tragic without denying it: it holds the full weight of the world’s brokenness while still acting, out of love and responsibility, to make things better – not because success is assured, but because it is called for. It is the stance asked of those working on civilisational transition in the face of the <a href="#metacrisis">metacrisis</a>. See <a href="#acting-irrespective-of-hope">acting irrespective of hope</a>.</p>'
     },
     {
       id: 'acting-irrespective-of-hope',
       title: 'Acting Irrespective of Hope',
-      html: '<p><em>Acting irrespective of hope</em> is the stance, drawn by Fabian Freyenhagen from the ethics of Theodor Adorno, of doing what is right without depending on the expectation that it will succeed. Adorno held that in a radically wrong world there can be no right life, only a life lived less wrongly; and that the prospects for transformation may be slight. Rather than making action conditional on optimism – and so abandoning it when hope fails – one acts because the wrong is wrong, resisting it and refusing complicity whatever the odds. Freed from the need for hope, action is also freed from the despair that follows its loss. See <a href="#pre-tragic-tragic-post-tragic">post-tragic</a> and <a href="#the-new-categorical-imperative">the new categorical imperative</a>.</p>'
+      refs: ['Fabian Freyenhagen, “Acting Irrespective of Hope”, <em>Kantian Review</em> 25:4 (2020), 605–630.', 'Fabian Freyenhagen, <em>Adorno’s Practical Philosophy: Living Less Wrongly</em> (2013).'],
+      html: '<p><em>Acting irrespective of hope</em> is the stance, defended by Fabian Freyenhagen, of doing what is right without depending on the expectation that it will succeed. Kant, and after him theorists of the Frankfurt School, held that those who act morally must hope for better times – that moral action presupposes the possibility of its ends being realised. Freyenhagen argues that this is not so: some actions are “merely expressive”, expressing our practical identities and values rather than aiming at outcomes, and can be done irrespective of hope, or even without it – as in the life of Jean Améry, who resisted and bore witness without expecting the world to be set right. The stance draws on the ethics of Theodor Adorno, on which Freyenhagen has written: in a radically wrong world there can be no right life, only a life lived less wrongly. Rather than making action conditional on optimism – and so abandoning it when hope fails – one acts because the wrong is wrong, refusing complicity whatever the odds. See <a href="#pre-tragic-tragic-post-tragic">post-tragic</a> and <a href="#the-new-categorical-imperative">the new categorical imperative</a>.</p>'
     },
     {
       id: 'cybernetic-existentialism',
@@ -4099,7 +4169,7 @@
     },
     {
       id: 'post-capitalist-realism',
-      title: 'Post-capitalist Realism: Post-Capitalism for the 21st Century',
+      title: 'Post-Capitalist Realism: Post-Capitalism for the 21st Century',
       coined: true,
       html: '<p><em>Post-capitalist realism</em> answers Mark Fisher’s “capitalist realism” – the sense that there is no alternative – by insisting on concrete, workable alternatives suited to 21st century conditions. Rather than utopian blueprints or nostalgic revivals, it seeks realistic paths beyond capitalism grounded in present technologies, institutions and constraints.</p>'
     },
@@ -4168,6 +4238,7 @@
     {
       id: 'collective-intelligence',
       title: 'Collective Intelligence',
+      refs: ['Pierre Lévy, <em>Collective Intelligence</em> (1994; trans. 1997).'],
       html: '<p><em>Collective intelligence</em> is the capacity of groups to think, learn and solve problems together in ways that exceed their individual members. It can emerge in markets, science, open-source communities and deliberative institutions, and is increasingly amplified by digital tools. Its study runs from Francis Galton’s ox-weighing crowd (1907) to Wikipedia and prediction markets – and to the opposite failures, groupthink and information cascades, in which a group knows less than its members.</p>'
     },
     {
@@ -4249,6 +4320,7 @@
     {
       id: 'longtermism',
       title: 'Longtermism',
+      refs: ['William MacAskill, <em>What We Owe the Future</em> (2022).'],
       html: '<p><em>Longtermism</em> is the view that positively influencing the long-term future is a key moral priority of our time, because the number of people who may live in the future is vast and what we do now may shape their lives. It motivates particular attention to existential risks and to choices that could lock in the long-run trajectory of civilisation.</p>'
     },
     {
@@ -4266,8 +4338,8 @@
     {
       id: 'prometheanism',
       title: 'Prometheanism',
-      refs: ['Ray Brassier, “Prometheanism and its Critics”, in Robin Mackay and Armen Avanessian (eds.), <em>#Accelerate: The Accelerationist Reader</em> (2014).'],
-      html: '<p><em>Prometheanism</em> is the affirmation of humanity’s capacity to understand and remake the world – including itself – through reason, science and technology, against the view that there are natural or sacred limits that human beings should not transgress. In contemporary theory it is associated above all with <a href="#left-accelerationism-and-the-red-stack">left accelerationism</a>: Ray Brassier’s “Prometheanism and its Critics” (2014) defended it against critics from Heidegger to the ecological movement who see in technological mastery the source of modernity’s ills, arguing that the problem is not the project of remaking the world but who controls it and to what ends. Its critics reply that the promise of total mastery is what has brought civilisation to the edge of catastrophe.</p><h2>Prometheus</h2><p><em>Prometheus</em>, the Titan who stole fire from the gods for humanity, stands for technological ambition and the human capacity to remake the world – and for its risks. In debates about the future, a Promethean stance affirms reason, technology and human agency against both fatalism and the view that humanity should retreat from transforming nature.</p>'
+      refs: ['Ray Brassier, “Prometheanism and its Critics”, in Robin Mackay and Armen Avanessian (eds.), <em>#Accelerate: The Accelerationist Reader</em> (2014).', 'Harrison Fluss and Landon Frim, <em>Prometheus and Gaia: Technology, Ecology and Anti-Humanism</em> (2022).'],
+      html: '<p><em>Prometheanism</em> is the affirmation of humanity’s capacity to understand and remake the world – including itself – through reason, science and technology, against the view that there are natural or sacred limits that human beings should not transgress. In contemporary theory it is associated above all with <a href="#left-accelerationism-and-the-red-stack">left accelerationism</a>: Ray Brassier’s “Prometheanism and its Critics” (2014) defended it against critics from Heidegger to the ecological movement who see in technological mastery the source of modernity’s ills, arguing that the problem is not the project of remaking the world but who controls it and to what ends. Its critics reply that the promise of total mastery is what has brought civilisation to the edge of catastrophe.</p><h2>Prometheus</h2><p><em>Prometheus</em>, the Titan who stole fire from the gods for humanity, stands for technological ambition and the human capacity to remake the world – and for its risks. In debates about the future, a Promethean stance affirms reason, technology and human agency against both fatalism and the view that humanity should retreat from transforming nature. Harrison Fluss and Landon Frim’s <em>Prometheus and Gaia</em> (2022) sets Prometheus against Gaia – a futurism that sees boundless technology as salvation against an eco-pessimism that sees human innovation as inherently destructive – and finds in both a shared anti-humanism, answering them with a rationalist humanism that is not anthropocentric.</p>'
     },
     {
       id: 'moral-circle-expansion',
@@ -4338,6 +4410,7 @@
     {
       id: 'effective-altruism',
       title: 'Effective Altruism',
+      refs: ['Peter Singer, <em>The Most Good You Can Do</em> (2015).', 'William MacAskill, <em>Doing Good Better</em> (2015).'],
       html: '<p><em>Effective altruism</em> is a movement and philosophy that uses evidence and reason to identify the most effective ways to benefit others, and acts on them. It has directed resources to global health, animal welfare and the reduction of existential risk, and has attracted both wide influence and significant criticism.</p>'
     },
     {
@@ -4360,6 +4433,7 @@
     {
       id: 'new-atheism',
       title: 'New Atheism',
+      refs: ['Sam Harris, <em>The End of Faith</em> (2004).', 'Richard Dawkins, <em>The God Delusion</em> (2006).'],
       html: '<p><em>New Atheism</em> was an early twenty-first-century intellectual movement, associated with Richard Dawkins, Sam Harris, Daniel Dennett and Christopher Hitchens, which argued that religion should be openly criticised and countered by rational argument and science. Its confidence in reason as a replacement for religion has since been questioned in light of the meaning crisis.</p>'
     },
     {
@@ -4415,12 +4489,14 @@
       id: 'ai-alignment',
       title: 'AI Alignment',
       order: 4,
+      refs: ['Stuart Russell, <em>Human Compatible: Artificial Intelligence and the Problem of Control</em> (2019).', 'Brian Christian, <em>The Alignment Problem</em> (2020).'],
       html: '<p>The problem of ensuring that artificial intelligence, and the wider systems it becomes part of, pursue ends compatible with human and planetary flourishing – and what the framing of alignment reveals about intelligence itself.</p>'
     },
     {
       id: 'replicators',
       title: 'Replicators',
       order: 1500,
+      refs: ['Richard Dawkins, <em>The Selfish Gene</em> (1976).'],
       html: '<p>Frameworks for understanding self-propagating systems – genes, memes, institutions, machines – and the philosophical frames and paradigms needed to think about agency, intelligence and alignment across all of them.</p>'
     },
     {
@@ -4450,10 +4526,11 @@
       id: 'goliath-traps',
       title: 'Goliath Traps',
       refs: ['Luke Kemp, <em>Goliath’s Curse: The History and Future of Societal Collapse</em> (2025).'],
-      html: '<p><em>Goliath traps</em> are the conditions in which societies become locked into the dominance hierarchies that Luke Kemp, in <em>Goliath’s Curse</em> (2025), calls “Goliaths”. Once wealth, weapons and land can be concentrated and controlled by a few, competition between and within societies rewards those who concentrate them further, and it becomes hard for any group to step out of the hierarchy without being dominated by those who do not – so that the very structures that will later make a society fragile become self-reinforcing. See <a href="#goliaths-curse">Goliath’s curse</a> and <a href="#multipolar-trap">multipolar trap</a>.</p>'
+      html: '<p><em>Goliath traps</em> are the conditions in which societies become locked into the dominance hierarchies that Luke Kemp, in <em>Goliath’s Curse</em> (2025), calls “Goliaths” – among them status races, arms races and races to the bottom, in which firms or states try to outcompete one another by exploiting people and environments ever more intensely. Once wealth, weapons and land can be concentrated and controlled by a few, competition between and within societies rewards those who concentrate them further, and it becomes hard for any group to step out of the hierarchy without being dominated by those who do not – so that the very structures that will later make a society fragile become self-reinforcing. See <a href="#goliaths-curse">Goliath’s curse</a> and <a href="#multipolar-trap">multipolar trap</a>.</p>'
     },
     {
       id: 'tree-of-doom',
+      check: 'Kemp’s use of “tree of doom” could not be confirmed online, and the roots–trunk–branches reading is a reconstruction. Check it against <em>Goliath’s Curse</em>.',
       title: 'Tree of Doom',
       refs: ['Luke Kemp, <em>Goliath’s Curse: The History and Future of Societal Collapse</em> (2025).'],
       html: '<p>The <em>tree of doom</em> is an image for the causal structure of collapse in the account of <a href="#goliaths-curse">Goliath’s curse</a>: its roots in the concentration of wealth and power, its trunk in the extractive and inequality-driven dynamics of dominance hierarchies, and its branches in the many proximate triggers – war, famine, epidemic, ecological breakdown, political crisis – through which a fragile society finally falls. It directs attention away from the triggers historians often blame and towards the shared roots from which they grow. See <a href="#goliath-traps">Goliath traps</a>.</p>'
@@ -4491,7 +4568,7 @@
 
     {
       id: 'techno-capital-and-technomic',
-      title: 'Techno-capital & Technomic',
+      title: 'Techno-Capital & Technomic',
       refs: ['Nick Land, “Machinic Desire” (1993), in <em>Fanged Noumena: Collected Writings 1987–2007</em> (2011).', 'Nick Land, “Teleoplexy: Notes on Acceleration” (2014), in <em>#Accelerate: The Accelerationist Reader</em>.'],
       html: '<p><em>Techno-capital</em> is Nick Land’s name for capitalism and technology understood as a single process rather than two: a self-organising, self-accelerating circuit in which capital drives technological development and technology drives the expansion of capital, each feeding the other. In Land’s account this circuit is not a tool of human purposes but an emerging agency in its own right, which uses human beings as its medium and tends towards autonomous machine intelligence. Its development is <em>technomic</em> – techno-economic, with technology and economy no longer separable – and, in “Teleoplexy” (2014), Land describes it as a runaway escalation of intelligence, measured not in calendar time but in the accumulation of technomic change. It is the strongest form of <a href="#technological-determinism">technological determinism</a>: history is driven by techno-capital, and human politics can at most accelerate or obstruct it. See <a href="#landian-accelerationism">Landian accelerationism</a>.</p>'
     },
@@ -4843,6 +4920,7 @@
       id: 'evolutionary-biology',
       title: 'Evolutionary Biology',
       order: 1,
+      refs: ['Charles Darwin, <em>On the Origin of Species</em> (1859).'],
       html: '<p><em>Evolutionary biology</em> studies how living things came to be as they are through natural selection, sexual selection, drift and inheritance. For civilisation it is the deepest layer of the <a href="#sub-structure">sub-structure</a>: humans are evolved primates, shaped over hundreds of thousands of years for life in small, mobile, face-to-face groups. That inheritance equips us with capacities for cooperation, fairness, language and culture – and with drives for status, in-group loyalty, short-term reward and competition over resources that served our ancestors but can turn destructive at global scale and with modern technology.</p><p>Because selection acts on groups as well as individuals (<a href="#multilevel-selection">multilevel selection</a>), our evolved nature holds both competitive drives and a deep capacity for cooperation. An evolutionary view of human nature asks which environments and institutions bring out the second rather than the first. See also <a href="#evolutionary-theory">evolutionary theory</a>.</p>'
     },
 
@@ -5065,10 +5143,10 @@
     },
     {
       id: 'antifragility',
-      title: 'Anti-fragility',
+      title: 'Antifragility',
       ref: 'Taleb',
       refs: ['Nassim Nicholas Taleb, <em>Antifragile: Things That Gain from Disorder</em> (2012).'],
-      html: '<p><em>Anti-fragility</em> is Nassim Nicholas Taleb’s term, from <em>Antifragile</em> (2012), for the property of systems that grow stronger from shocks, stress and volatility, rather than merely surviving them. The fragile breaks under stress and the robust resists it, but the anti-fragile improves – as bones strengthen under load and ecosystems renew themselves through small fires.</p><p>For civilisation design it shifts the aim from preventing every shock to building systems that learn and adapt from the ones that come.</p>'
+      html: '<p><em>Antifragility</em> is Nassim Nicholas Taleb’s term, from <em>Antifragile</em> (2012), for the property of systems that grow stronger from shocks, stress and volatility, rather than merely surviving them. The fragile breaks under stress and the robust resists it, but the antifragile improves – as bones strengthen under load and ecosystems renew themselves through small fires.</p><p>For civilisation design it shifts the aim from preventing every shock to building systems that learn and adapt from the ones that come.</p>'
     },
     {
       id: 'broadcast-vs-network-modality',
@@ -5107,17 +5185,18 @@
     },
     {
       id: 'post-statism',
-      title: 'Post-statism',
+      title: 'Post-Statism',
       html: '<p><em>Post-statism</em> names a condition or a project beyond the sovereign nation-state as the basic unit of political order. It covers anarchist and libertarian visions of societies without states, theories of networked and polycentric governance, and analyses – like Benjamin Bratton’s – of how planetary computation and transnational platforms are already eroding state sovereignty.</p>'
     },
     {
       id: 'post-genderism',
-      title: 'Post-genderism',
+      title: 'Post-Genderism',
       html: '<p><em>Post-genderism</em> is the view that gender roles, and perhaps gender itself, could become optional or disappear, whether through social change or through technologies that loosen the link between biological sex and social role. It draws on feminist, queer and transhumanist thought, and appears in xenofeminism among other currents.</p>'
     },
     {
       id: 'civilisational-paradigm-shift',
       title: 'Civilisational Paradigm-Shift',
+      refs: ['Thomas S. Kuhn, <em>The Structure of Scientific Revolutions</em> (1962).'],
       html: '<p>A <em>civilisational paradigm-shift</em> is a change in the basic framework through which a civilisation understands itself and organises its life – its <a href="#civilisational-paradigm">civilisational paradigm</a>. The idea extends Thomas Kuhn’s account of scientific revolutions: just as a science changes its paradigm when anomalies pile up that the old one cannot absorb, a civilisation may reach a point where its accumulated crises can no longer be managed within its existing assumptions.</p><p>Such a shift is not a reform within the system but a change in what counts as a problem, a solution and a good life – and, like a scientific revolution, it tends to look impossible until it is under way.</p>'
     },
     {
@@ -5272,6 +5351,7 @@
     {
       id: 'information-overload',
       title: 'Information Overload',
+      refs: ['Alvin Toffler, <em>Future Shock</em> (1970).'],
       html: '<p><em>Information overload</em> is the condition in which the volume of information exceeds the capacity to process it, so that more information produces less understanding. Attention fragments, judgement defers to whatever is loudest or most recent, and the ability to tell signal from noise declines.</p>'
     },
     {
@@ -5292,6 +5372,7 @@
     {
       id: 'the-nietzschean-crisis',
       title: 'The Nietzschean Crisis',
+      refs: ['Friedrich Nietzsche, <em>The Gay Science</em> (1882).'],
       html: '<p><em>The Nietzschean crisis</em> is the loss of shared foundations for value that Friedrich Nietzsche announced as the “death of God”. With the decline of the religious frameworks that had grounded morality and meaning, he warned, Western culture faced nihilism – the sense that nothing has value – unless new values could be created.</p>'
     },
     {
@@ -5329,11 +5410,13 @@
     {
       id: 'west-versus-islam',
       title: 'Western Civilisation versus Islamic Civilisation',
+      refs: ['Samuel P. Huntington, <em>The Clash of Civilizations and the Remaking of World Order</em> (1996).'],
       html: '<p>The opposition of <em>Western and Islamic civilisation</em> was the centrepiece of Samuel Huntington’s clash of civilisations thesis, and seemed to many to be confirmed by the September 11 attacks and the wars that followed. Critics argue that the framing treats diverse societies as monoliths and can help produce the conflict it predicts.</p>'
     },
     {
       id: 'us-versus-china',
       title: 'US Civilisation versus Chinese Civilisation',
+      refs: ['Graham Allison, <em>Destined for War: Can America and China Escape Thucydides’s Trap?</em> (2017).'],
       html: '<p>The rivalry between <em>the United States and China</em> is increasingly framed as a contest between civilisations as well as states – liberal democracy against a Confucian-inflected party state – over technology, trade, Taiwan and the shape of world order. It is the central case of the <a href="#thucydides-trap">Thucydides trap</a>.</p>'
     },
     {
@@ -5497,7 +5580,7 @@
     },
     {
       id: 'left-hemispheric-conditioning',
-      title: 'Ubiquitous Left-hemispheric Conditioning',
+      title: 'Ubiquitous Left-Hemispheric Conditioning',
       ref: 'McGilchrist',
       refs: ['Iain McGilchrist, <em>The Master and His Emissary: The Divided Brain and the Making of the Western World</em> (2009).'],
       html: '<p><em>Ubiquitous left-hemispheric conditioning</em> draws on Iain McGilchrist’s account, in <a href="#the-master-and-his-emissary">The Master and His Emissary</a> (2009), of the two hemispheres’ different modes of attention: the left narrow, analytic and focused on grasping and using; the right broad, contextual and attuned to the living whole. McGilchrist argues that modern Western culture has come to be dominated by the left hemisphere’s way of seeing, and that a world built in its image reinforces it in turn.</p>'
@@ -5575,6 +5658,7 @@
     {
       id: 'global-stable-totalitarianism',
       title: 'Global Stable Totalitarianism',
+      refs: ['Bryan Caplan, “The Totalitarian Threat”, in Nick Bostrom and Milan M. Ćirković (eds.), <em>Global Catastrophic Risks</em> (2008).'],
       html: '<p><em>Global stable totalitarianism</em> is a worldwide regime of total control that could, with modern surveillance and enforcement, become permanent – unchallengeable from within and with no outside to escape to. It is sometimes counted among existential risks because it could lock in a bad future indefinitely.</p>'
     },
     {
@@ -5599,6 +5683,7 @@
       id: 'hyper-surveillance-capitalism',
       title: 'Hyper-Surveillance Capitalism',
       coined: true,
+      refs: ['Shoshana Zuboff, <em>The Age of Surveillance Capitalism</em> (2019).'],
       html: '<p><em>Hyper-surveillance capitalism</em> is the intensification of <a href="#surveillance-capitalism">surveillance capitalism</a> to the point where every action and expression is recorded, predicted and shaped by commercial and state systems working together – control exercised less by force than by the management of behaviour.</p><p>Artificial intelligence removes the bottleneck that once limited surveillance: the human attention needed to watch, listen and read. Where earlier regimes could collect far more than they could ever examine, AI systems can now analyse every camera feed, conversation, transaction and message in real time – recognising faces, voices and gait, transcribing and interpreting speech, inferring emotion, intention and association, and flagging deviation before it becomes action. Combined with ubiquitous sensors in phones, homes, vehicles and public space, this makes possible a surveillance that is continuous, comprehensive and cheap, and that no longer needs to be targeted. As the cost of watching everyone falls towards zero, the remaining limits are those of law and norm rather than capacity – the condition Nick Bostrom describes as the <a href="#high-tech-panopticon">high-tech panopticon</a>, and a principal path towards <a href="#global-stable-totalitarianism">global stable totalitarianism</a>.</p>'
     },
     {
@@ -5756,7 +5841,7 @@
     },
     {
       id: 'human-collective-intelligence',
-      title: 'Human Collective Intelligence (Macro-agents)',
+      title: 'Human Collective Intelligence (Macro-Agents)',
       html: '<p><em>Human collective intelligence</em> is the capacity of groups of people to think and act together as larger agents – macro-agents such as communities, movements, institutions and nations. Aligning these macro-agents, and improving their intelligence, is as much part of alignment as aligning individuals or machines. See <a href="#collective-intelligence">collective intelligence</a>.</p>'
     },
     {
@@ -5817,6 +5902,7 @@
     {
       id: 'postmodernism',
       title: 'Postmodernism',
+      refs: ['Jean-François Lyotard, <em>The Postmodern Condition: A Report on Knowledge</em> (1979).'],
       html: '<p><em>Postmodernism</em> is the cultural paradigm that arose in the later twentieth century in reaction to modernism: an “incredulity towards metanarratives”, in Jean-François Lyotard’s phrase. It treats grand stories of progress, reason and truth with suspicion, emphasising the role of language, power and perspective in shaping what counts as knowledge.</p><p>It exposed the hidden assumptions and exclusions of modernity, but left many without shared ground on which to build anything in its place.</p>'
     },
     {
@@ -5892,6 +5978,7 @@
     {
       id: 'deconstruction',
       title: 'Deconstruction',
+      refs: ['Jacques Derrida, <em>Of Grammatology</em> (1967).'],
       html: '<p><em>Deconstruction</em> is Jacques Derrida’s method of reading texts to expose the hierarchies and oppositions on which their meaning depends – speech over writing, presence over absence, centre over margin – and to show how those oppositions undo themselves. It became a byword for postmodernism’s unsettling of fixed meanings.</p>'
     },
     {
@@ -5902,6 +5989,7 @@
     {
       id: 'social-constructivism',
       title: 'Social Constructivism',
+      refs: ['Peter L. Berger and Thomas Luckmann, <em>The Social Construction of Reality</em> (1966).'],
       html: '<p><em>Social constructivism</em> is the view that much of what seems natural or given – categories, identities, institutions, even knowledge – is produced by social processes and could be otherwise. Associated with Peter Berger and Thomas Luckmann’s <em>The Social Construction of Reality</em> (1966), it opens social arrangements to question and change.</p>'
     },
     {
@@ -5972,7 +6060,7 @@
     },
     {
       id: 'meta-frames',
-      title: 'Meta-frames',
+      title: 'Meta-Frames',
       html: '<p><em>Meta-frames</em> are the frames within which frames are made: the overarching narratives, the accounts of what is ultimately real and the ways of reasoning that together shape how a culture understands the world. Each cultural paradigm – premodern, modern, postmodern, metamodern – is defined by its meta-frames, and changing paradigms means changing them.</p>'
     },
     {
@@ -6193,16 +6281,19 @@
     {
       id: 'marxism',
       title: 'Marxism',
+      refs: ['Karl Marx and Friedrich Engels, <em>The Communist Manifesto</em> (1848).', 'Karl Marx, <em>Capital</em>, vol. 1 (1867).'],
       html: '<p><em>Marxism</em> is the body of thought founded by Karl Marx and Friedrich Engels: an analysis of capitalism as a system of class exploitation, a theory of history driven by material production and class struggle, and a political programme for its overthrow. In sociology it is the founding form of conflict theory. See <a href="#historical-materialism">historical materialism</a>.</p>'
     },
     {
       id: 'social-ontology',
       title: 'Social Ontology',
+      refs: ['John R. Searle, <em>The Construction of Social Reality</em> (1995).'],
       html: '<p><em>Social ontology</em> asks what society is: what kind of thing a social whole is, how it relates to the individuals within it, and what it means for social facts to exist. Different answers have been framed through governing metaphors – society as an organism, as a machine, or as a cybernetic hybrid of both.</p>'
     },
     {
       id: 'organicism',
       title: 'Organicism: Society as Organism',
+      refs: ['Herbert Spencer, <em>The Principles of Sociology</em> (1876–96).'],
       html: '<p><em>Organicism</em> treats society as a living organism: a whole whose parts, like organs, serve the life of the body, which grows, matures and may sicken or die. The metaphor runs from Plato through Herbert Spencer and Émile Durkheim to structural functionalism, and emphasises interdependence, health and natural development.</p>'
     },
     {
@@ -6218,6 +6309,7 @@
     {
       id: 'structure-and-agency',
       title: 'Structure & Agency',
+      refs: ['Anthony Giddens, <em>The Constitution of Society</em> (1984).'],
       html: '<p><em>Structure and agency</em> is the central problem of social theory: how far people’s actions are determined by the social structures around them – class, institutions, norms – and how far they are free to act and to change those structures. Theories differ in which they emphasise and how they connect the two.</p>'
     },
     {
@@ -6346,6 +6438,7 @@
     {
       id: 'differential-progress',
       title: 'Differential Progress',
+      refs: ['Nick Bostrom, “Existential Risks: Analyzing Human Extinction Scenarios and Related Hazards”, <em>Journal of Evolution and Technology</em> 9 (2002).'],
       html: '<p><em>Differential progress</em> is the strategy of changing not how fast progress happens overall but the order in which things are developed: advancing protective capabilities, wisdom and coordination ahead of dangerous ones, so that civilisation is ready for risks before they arrive.</p>'
     },
     {
@@ -6388,7 +6481,7 @@
     },
     {
       id: 'cosmic-endowment',
-      title: 'The Long-term Future, Lightcone & Cosmic Endowment',
+      title: 'The Long-Term Future, Lightcone & Cosmic Endowment',
       ref: 'Bostrom',
       refs: ['Nick Bostrom, <em>Superintelligence: Paths, Dangers, Strategies</em> (2014).'],
       html: '<p>The <em>cosmic endowment</em> is Nick Bostrom’s term for the resources – stars, galaxies, matter and energy – that an Earth-originating civilisation could in principle reach and use: everything within its future <em>lightcone</em>, the region of space it could reach travelling at up to the speed of light. Its scale is what makes the long-term future, on longtermist views, so important.</p>'
@@ -6416,11 +6509,13 @@
     {
       id: 'total-view',
       title: 'Total View',
+      refs: ['Derek Parfit, <em>Reasons and Persons</em> (1984).'],
       html: '<p>The <em>total view</em> holds that one outcome is better than another if it contains a greater total of wellbeing, counting everyone who would exist. On this view, bringing additional happy people into existence makes the world better, so the loss of all future generations through extinction would be an enormous harm.</p>'
     },
     {
       id: 'person-affecting-view',
       title: 'Person-Affecting View',
+      refs: ['Derek Parfit, <em>Reasons and Persons</em> (1984).'],
       html: '<p>The <em>person-affecting view</em> holds that an outcome can only be better or worse if it is better or worse for someone. On this view there is no obligation to create happy people who would not otherwise exist, and the weight of the far future is much reduced.</p>'
     },
     {
@@ -6470,6 +6565,7 @@
     {
       id: 'von-neumann-probes',
       title: 'Von Neumann Probes',
+      refs: ['John von Neumann, <em>Theory of Self-Reproducing Automata</em> (1966).'],
       html: '<p><em>Von Neumann probes</em> are hypothetical self-replicating spacecraft, named after John von Neumann’s work on self-reproducing machines, that would travel to other star systems, use local materials to build copies of themselves and send them onward – allowing a civilisation to spread across a galaxy in a cosmically short time.</p>'
     },
     {
@@ -6488,6 +6584,7 @@
     {
       id: 'extinction-risk',
       title: 'Extinction Risk',
+      refs: ['Nick Bostrom, “Existential Risks: Analyzing Human Extinction Scenarios and Related Hazards”, <em>Journal of Evolution and Technology</em> 9 (2002).', 'Toby Ord, <em>The Precipice: Existential Risk and the Future of Humanity</em> (2020).'],
       html: '<p><em>Extinction risk</em> is the risk that humanity dies out entirely. It is the most extreme kind of existential risk, ending not only present lives but all future generations.</p>'
     },
     {
@@ -6505,6 +6602,7 @@
     {
       id: 'catastrophic-risk',
       title: 'Catastrophic Risk',
+      refs: ['Nick Bostrom and Milan M. Ćirković (eds.), <em>Global Catastrophic Risks</em> (2008).'],
       html: '<p><em>Catastrophic risk</em> is the risk of events that would kill a large fraction of humanity or devastate civilisation, without necessarily causing extinction. Global catastrophes could still be existential if civilisation failed to recover from them.</p>'
     },
     {
@@ -6520,6 +6618,7 @@
     {
       id: 'suffering-risk',
       title: 'Suffering Risk',
+      refs: ['Kaj Sotala and Lukas Gloor, “Superintelligence as a Cause or Cure for Risks of Astronomical Suffering”, <em>Informatica</em> 41 (2017).'],
       html: '<p><em>Suffering risks</em> (s-risks) are risks of futures containing suffering on an astronomical scale, far exceeding all suffering in history so far. They are distinct from extinction risks: a future could be long and vast, and terrible.</p>'
     },
     {
@@ -6560,7 +6659,8 @@
     },
     {
       id: 'value-lock-in-risk',
-      title: 'Value Lock-in Risk',
+      title: 'Value Lock-In Risk',
+      refs: ['William MacAskill, <em>What We Owe the Future</em> (2022).'],
       html: '<p><em>Value lock-in risk</em> is the risk that a particular set of values becomes permanently entrenched – through a dominant AI, a stable totalitarian regime or simply the momentum of institutions – before humanity has had the chance to reflect on whether they are the right ones.</p>'
     },
     {
@@ -6623,6 +6723,7 @@
     {
       id: 'anti-natalism-and-pro-mortalism',
       title: 'Anti-Natalism & Pro-Mortalism',
+      refs: ['David Benatar, <em>Better Never to Have Been</em> (2006).'],
       html: '<p><em>Anti-natalism</em> holds that it is wrong to bring new people into existence, often because life contains more suffering than its goods can justify; <em>pro-mortalism</em> goes further, holding that death would be better than continued existence. As philosophies they are mostly argued peacefully, but in extreme forms they could motivate harm.</p>'
     },
     {
@@ -6659,7 +6760,7 @@
     },
     {
       id: 'ai-cyberattacks',
-      title: 'AI Cyberattacks & Zero-day Exploits',
+      title: 'AI Cyberattacks & Zero-Day Exploits',
       html: '<p><em>AI cyberattacks</em> use AI to find and exploit software vulnerabilities – including <em>zero-day exploits</em>, flaws unknown to defenders – faster and at greater scale than human hackers, threatening the systems on which infrastructure and finance depend.</p>'
     },
     {
@@ -7698,7 +7799,10 @@
     'the-map': { id: 'the-map', title: 'The Civilisational Map', parent: ROOT.id, html: MAP_INTRO + '\n<!--INDEX-->' },
     'infinite': { id: 'infinite', title: 'Infinite', parent: ROOT.id,
       html: '<p>Every concept on the map in one continuous sequence of slides. Scroll to move from one to the next – through every concept A–Z, or through one of the nine sections.</p>\n<!--SLIDES-->' },
-    'search': { id: 'search', title: 'Search', parent: ROOT.id, html: '<!--SEARCH-->' }
+    'search': { id: 'search', title: 'Search', parent: ROOT.id, html: '<!--SEARCH-->' },
+    // (unlisted: reached only at #review)
+    'review': { id: 'review', title: 'Review', parent: ROOT.id,
+      html: '<p>The entries whose text has not yet been reviewed: drafted for the map and still to be read, corrected and approved. Claims flagged for checking come first, with what needs confirming. When an entry has been reviewed, it is marked <code>reviewed: true</code> and leaves this list. The Consilience Project’s glossary definitions, quoted as written, are not listed.</p>\n<!--REVIEW-->' }
   };
 
   // Alphabetical order ignores a leading “The”, “A” or “An”.
@@ -7934,7 +8038,7 @@
         { head: 'Behavioural-Economic', dropdown: true, items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures', 'goodharts-law'] },
         { head: 'Cultural-Psychological', dropdown: true, items: ['left-hemispheric-conditioning', 'modernist-cultural-paradigm', 'scarcity-rivalry-orientation', 'psychopathic-selection-hypothesis', 'collective-psychological-alienation'] },
         { head: 'Epistemic-Ontological', dropdown: true, items: ['reductionist-world-modelling', 'isolated-problem-solving', 'structural-and-superstructural-separation'] },
-        { head: 'Mytho-poetic', dropdown: true, items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
+        { head: 'Mytho-Poetic', dropdown: true, items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
       ] },
       ['multipolar-trap', [   // (its family of traps, problems and dilemmas, as they are named in turn)
         'multipolar-trap-trap',
@@ -8067,7 +8171,7 @@
       { head: 'Malthusian Catastrophe', items: ['age-of-em'] },
       { head: 'Cybernetic Poetry', items: ['all-watched-over-by-machines'] },
       { head: 'Meditations on Belial', items: ['ape-and-essence'] },
-      { head: 'Post-scarcity Space-Utopia', items: ['the-culture'] },
+      { head: 'Post-Scarcity Space-Utopia', items: ['the-culture'] },
       { head: 'Interdisciplinary Synthesis', items: ['the-glass-bead-game'] },
       { head: 'Crucial Considerations', items: ['nightfall'] },
       { head: 'Critique of Utilitarianism', items: ['the-ones-who-walk-away-from-omelas'] }
@@ -9028,7 +9132,7 @@
       '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) +
         // (the Map's title carries a small ⓘ to the About page, as in the header)
         (c.id === 'the-map' ? '<a class="h1-about" href="#the-map/theproject" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>' : '') + '</h1>' +
-      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()).replace('<!--FICTION-->', fictionListHtml()) +
+      '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()).replace('<!--FICTION-->', fictionListHtml()).replace('<!--REVIEW-->', reviewListHtml()) +
       ((isConcept(c) || c.kind === 'node') && !PAGES[c.id] ? endSectionsHtml(c) : '') +   // (landscape nodes too)
       '</div>';
     // Slides snap gently into place as you scroll.
@@ -9826,6 +9930,30 @@
         return c ? '<li><a href="' + href(c) + '" data-path="' + esc(locPath(['fiction', 'h:' + g.head])) + '">' + esc(c.title) + '</a></li>' : '';
       }).join('') + '</ul></li>';
     }).join('') + '</ul>';
+  }
+  // The Review page: every entry not yet marked reviewed: true (bar the Consilience Project's glossary
+  // text, quoted verbatim), the claims flagged for checking (check: '…') first, then by kind.
+  function needsReview(c) {
+    if (c === ROOT || c.cpOnly || c.reviewed) return false;
+    if (!(isConcept(c) || c.kind === 'node' || c.kind === 'category')) return false;
+    return !(c.tags && c.tags.indexOf('consilience') >= 0 && /Glossary/.test(c.ref || '') && !c.check);
+  }
+  function reviewListHtml() {
+    var all = CONCEPTS.filter(needsReview).sort(byTitle);
+    function group(title, list, cls) {
+      if (!list.length) return '';
+      return '<h2>' + esc(title) + ' <span class="rv-n">' + list.length + '</span></h2><ul class="rv-list' + (cls ? ' ' + cls : '') + '">' +
+        list.map(function (c) {
+          return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a>' + (c.check ? '<span class="rv-check">' + c.check + '</span>' : '') + '</li>';
+        }).join('') + '</ul>';
+    }
+    var rest = all.filter(function (c) { return !c.check; });
+    return '<p class="rv-total">' + all.length + ' entries to review.</p>' +
+      group('To check', all.filter(function (c) { return c.check; }), 'rv-checks') +
+      group('Conceptual Engineerings', rest.filter(function (c) { return c.coined && c.kind !== 'node'; })) +
+      group('Sections', rest.filter(function (c) { return c.kind === 'category' && !c.coined; })) +
+      group('Concepts', rest.filter(function (c) { return isConcept(c) && !c.coined; })) +
+      group('Landscape', rest.filter(function (c) { return c.kind === 'node'; }));
   }
   // Every entry on the site, each once: the concepts, the ten sections' own entries and the landscape's nodes.
   function entriesTotal() {
