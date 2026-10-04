@@ -9050,8 +9050,9 @@
     var a = e.target.closest('a[data-target]');
     if (!a) return;
     e.preventDefault();
-    var to = document.getElementById(a.getAttribute('data-target'));
-    (to.closest('#entry .index-domain') || to).scrollIntoView({ behavior: 'smooth' });   // (a section of the Map's views: to its dividing line)
+    var to = document.getElementById(a.getAttribute('data-target')), sec = to.closest('#entry .index-domain');
+    if (sec) window.scrollTo({ top: window.scrollY + sec.getBoundingClientRect().top + (parseFloat(getComputedStyle(sec).borderTopWidth) || 0) + 2, behavior: 'smooth' });   // (a section of the Map's views: to just below its dividing line)
+    else to.scrollIntoView({ behavior: 'smooth' });
   });
 
   // ---------- Scroll: progress bar, back-to-top, active contents entry ----------
