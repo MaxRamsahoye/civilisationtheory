@@ -9991,26 +9991,15 @@
   // The About page's tally of the site: its concepts (with those filed in the paradigm and the
   // conceptual engineerings among them) and the landscape's nodes – together, its entries.
   function totalsHtml() {
-    var concepts = CONCEPTS.filter(inAZ);
-    var filed = paradigmCount();
-    var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Conceptual Engineerings tab counts them)
     function row(label, n, cls) { return '<li' + (cls ? ' class="' + cls + '"' : '') + '><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
-    // The rows overlap (an entry can be in several of them), so the sum is reconciled with the
-    // total: the entries counted in more than one row are taken off once for each extra row.
-    var sets = [{}, paradigmIds(), landscapeIds(), {}], union = {};
-    concepts.forEach(function (c) { sets[0][c.id] = true; });
-    CONCEPTS.forEach(function (c) { if (c.coined && c !== ROOT && !c.cpOnly) sets[3][c.id] = true; });
-    var sum = 0;
-    sets.forEach(function (set) { Object.keys(set).forEach(function (id) { union[id] = true; sum++; }); });
-    var total = Object.keys(union).length;
+    // The site's entries are those of the Research Paradigm and the Research Landscape (the A–Z and
+    // the Conceptual Engineerings are all filed in the paradigm); an entry listed in both is counted once.
+    var crp = paradigmCount(), crl = landscapeNodeCount();
     return '<ul class="totals">' +
-      row('A–Z Concepts', concepts.length) +
-      row('Civilisation Research Paradigm', filed) +
-      row('Civilisation Research Landscape Nodes', landscapeNodeCount()) +
-      row('Conceptual Engineerings', coined) +
-      row('Sum of the above', sum, 'sum') +
-      row('Entries listed in more than one of the above', '−' + (sum - total), 'overlap') +
-      '<li class="all"><span>Entries in total</span><span class="n">' + total + '</span></li></ul>';
+      row('Civilisation Research Paradigm', crp) +
+      row('Civilisation Research Landscape', crl) +
+      row('Entries listed in both', '−' + (crp + crl - entriesTotal()), 'overlap') +
+      '<li class="all"><span>Entries in total</span><span class="n">' + entriesTotal() + '</span></li></ul>';
   }
   // The Fiction page's list of its works, each under the theme it is filed for (as the Map lists them).
   function fictionListHtml() {
@@ -10045,9 +10034,11 @@
       group('Concepts', rest.filter(function (c) { return isConcept(c) && !c.coined; })) +
       group('Landscape', rest.filter(function (c) { return c.kind === 'node'; }));
   }
-  // Every entry on the site, each once: the concepts, the ten sections' own entries and the landscape's nodes.
+  // The site's entries: those of the Research Paradigm and the Research Landscape, each once.
   function entriesTotal() {
-    return CONCEPTS.filter(function (c) { return isConcept(c) || c.kind === 'node' || (c.kind === 'category' && c.parent === ROOT.id); }).length;
+    var all = {}, add = function (set) { Object.keys(set).forEach(function (id) { all[id] = true; }); };
+    add(paradigmIds()); add(landscapeIds());
+    return Object.keys(all).length;
   }
   function searchPageHtml() {
     return '<div class="sp">' +
