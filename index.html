@@ -1420,6 +1420,13 @@
   .description .ce-list .ce-cats ul, html.page-map .description .ce-list .ce-cats ul { columns: 1; margin: 0; }
   /* Terms not yet in a category: one group across the full width, its list in three columns */
   .description .ce-cats .ce-rest { column-span: all; }
+  .description .ce-cats .ce-wide { column-span: all; }
+  .description .ce-cats .ce-wide .ce-subs { columns: 3; column-gap: 2.4rem; }
+  .description .ce-cats .ce-wide .ce-subgrp { break-inside: avoid; }
+  .description .ce-cats .ce-wide .ce-subgrp > .ce-sub-head { margin-top: 0; }
+  .description .ce-cats .ce-wide .ce-subgrp + .ce-subgrp, .description .ce-cats .ce-wide .ce-subgrp { padding-bottom: 1rem; }
+  @media (max-width: 900px) { .description .ce-cats .ce-wide .ce-subs { columns: 2; } }
+  @media (max-width: 560px) { .description .ce-cats .ce-wide .ce-subs { columns: 1; } }
   /* (the blocks of a section, within its category) */
   .description .ce-sub-head { font-size: 0.98em; font-weight: 600; font-style: italic; line-height: 1.25; margin: 1rem 0 0.4rem; }
   .description .ce-sub-head a, :root.accent .description .ce-sub-head a { color: var(--text); text-decoration: none; }
@@ -8652,6 +8659,7 @@
     // In these sections the novel terms are grouped again under the section's own blocks (its top-level
     // clusters and subheadings), in the paradigm's order; the section's own entry heads the category.
     var CE_SUBCATS = { 'civilisational-mechanics': true, 'civilisation-design': true, 'civilisation-alignment': true };
+    var CE_WIDE = { 'civilisation-alignment': true };
     function ceSubcats(sec, items) {
       var order = (NEW_STRUCTURE[sec] || []).map(function (x) { return typeof x === 'string' ? x : Array.isArray(x) ? x[0] : 'h:' + x.head; });
       var subs = {}, lead = [];
@@ -8704,12 +8712,13 @@
       // Two ways to read them: by category (the default) or A–Z.
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
       '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
-        return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p>' +
+        var wide = g.link && CE_WIDE[g.link.id];   // (a category set across the three columns, its blocks in columns of their own)
+        return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + (wide ? ' ce-wide' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p>' +
           (g.subs && !g.subs.lead.length ? '' : '<ul>' + ceTreeHtml(g.subs ? g.subs.lead : g.items) + '</ul>') +
-          (g.subs ? g.subs.groups.map(function (s) {
-            return '<p class="ce-sub-head">' + (s.link ? '<a href="' + href(s.link) + '">' + esc(s.name) + '</a>' : esc(s.name)) + '</p><ul class="ce-sub">' +
-              ceTreeHtml(s.items) + '</ul>';
-          }).join('') : '') + '</div>';
+          (g.subs ? '<div class="ce-subs">' + g.subs.groups.map(function (s) {
+            return '<div class="ce-subgrp"><p class="ce-sub-head">' + (s.link ? '<a href="' + href(s.link) + '">' + esc(s.name) + '</a>' : esc(s.name)) + '</p><ul class="ce-sub">' +
+              ceTreeHtml(s.items) + '</ul></div>';
+          }).join('') + '</div>' : '') + '</div>';
       }).join('') + '</div>' +
       '<div class="ce-az">' + azListHtml(coined) + '</div></div>';
     // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
