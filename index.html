@@ -1702,6 +1702,7 @@
   .description .menu-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
   .description .menu-col { min-width: 0; }
   .description .menu-col + .menu-col { border-left: 1px solid var(--rule); padding-left: 1.4rem; }
+  .description .menu-col:nth-child(3n+1) { border-left: 0; padding-left: 0 !important; }   /* (a fourth set starts a new row, under the first) */
   .description .menu-set {
     font-size: 0.71rem;
     font-weight: 600;
@@ -2023,6 +2024,9 @@
     {
       id: 'civilisation-theory',
       title: 'Civilisation Theory',
+      kind: 'category',
+      parent: 'theproject',
+      order: 11,
       master: true,
       coined: true,
       html: '<p><em>Civilisation Theory</em> is a unification of all forms of theory – primarily, systems theory, evolutionary theory, critical theory and game theory – applied at a civilisation-scale. The thesis of civilisation theory is that the generative dynamics of existential risk(s) emerge from the initial conditions, developmental process and dominant paradigm of civilisation itself.</p><p>From this macrohistorical frame of reference, the only sufficient solution is civilisation design and transition: to realise a new form of political economy (structure) and cultural psychology (superstructure), compatible with 21st century technology (infrastructure).</p>'
@@ -2590,6 +2594,9 @@
     {
       id: 'metarationality',
       title: 'Metarationality',
+      kind: 'category',
+      parent: 'theproject',
+      order: 14,
       html: '<p><em>Metarationality</em> is the capacity to reason about rationality itself: to understand how, when and why formal, systematic methods work, and how to choose between or go beyond them when they do not. The term was developed by David Chapman, who describes it as neither rejecting rationality nor treating it as universally sufficient. Alongside <a href="#metamodernism">metamodernism</a>, metarationality offers a way through the <a href="#epistemic-crisis">epistemic crisis</a>: holding multiple frameworks at once, and knowing which to use for which problem.</p>'
     },
     {
@@ -3126,13 +3133,14 @@
       title: 'Civilisation Research Paradigm',
       order: 0,
       coined: true,
-      html: '<p>The <em>civilisation research paradigm</em> is the framework by which this map organises the study of civilisation: a set of shared questions, divisions and methods – a paradigm in Thomas Kuhn’s sense – for treating civilisation as a single object of inquiry rather than a background to other subjects. It divides the field into nine sections in three sets of three, each set approaching civilisation from a different altitude.</p>'
+      html: '<p>The <em>civilisation research paradigm</em> is the framework by which this map organises the study of civilisation: a set of shared questions, divisions and methods – a paradigm in Thomas Kuhn’s sense – for treating civilisation as a single object of inquiry rather than a background to other subjects. It divides the field into fourteen sections in four sets, each set approaching civilisation from a different altitude.</p>'
         + '<ul>'
-        + '<li><strong>Civilisational:</strong> how a civilisation works (<a href="#civilisational-mechanics">civilisational mechanics</a>), how it could be designed (<a href="#civilisation-design">civilisation design</a>), and how it could change from one form to another (<a href="#civilisation-transition">civilisational transition</a>).</li>'
+        + '<li><strong>Civilisational:</strong> how a civilisation works (<a href="#civilisational-mechanics">civilisational mechanics</a>), how it could be designed (<a href="#civilisation-design">civilisation design</a>), how it could change from one form to another (<a href="#civilisation-transition">civilisational transition</a>), and how it could be aligned with the good of all (<a href="#civilisation-alignment">civilisation alignment</a>).</li>'
         + '<li><strong>Meta:</strong> the crisis it faces (<a href="#metacrisis">metacrisis</a>), the culture through which it makes meaning (<a href="#metamodernism">metamodernism</a>), and the theories through which it understands itself (<a href="#metatheory">metatheory</a>).</li>'
         + '<li><strong>Macro:</strong> civilisation at the largest scales of time, society and action – its history (<a href="#macrohistory">macrohistory</a>), its social structures (<a href="#macrosociology">macrosociology</a>), and the strategy by which its long-run trajectory might be steered (<a href="#macrostrategy">macrostrategy</a>).</li>'
+        + '<li><strong>Theory:</strong> the theory of civilisation itself (<a href="#civilisation-theory">civilisation theory</a>), and the meta-level frames on which any such theory rests – its picture of reality (<a href="#metaphysics">metaphysics</a>), the story it tells of history (<a href="#metanarrative">metanarrative</a>) and the reasoning by which it knows (<a href="#metarationality">metarationality</a>).</li>'
         + '</ul>'
-        + '<p>Read together, the three sets move from mechanism to meaning to scale: what civilisation is and could be, how it is framed and experienced, and where it has come from and might go. The paradigm is the backbone of <a href="#the-map">the map</a>, and the starting point of its curated sequence.</p>'
+        + '<p>Read together, the four sets move from mechanism to meaning to scale to theory: what civilisation is and could be, how it is framed and experienced, where it has come from and might go, and how it can be understood at all. The paradigm is the backbone of <a href="#the-map">the map</a>, and the starting point of its curated sequence.</p>'
     },
     {
       id: 'the-wizarding-away-of-the-state',
@@ -3157,12 +3165,18 @@
     {
       id: 'metanarrative',
       title: 'Metanarrative',
+      kind: 'category',
+      parent: 'theproject',
+      order: 13,
       ref: 'Lyotard, The Postmodern Condition (1979)',
       html: '<p>A <em>metanarrative</em> (or grand narrative) is an overarching story that claims to explain history as a whole and to give every event its place and meaning – the progress of reason, the triumph of the free market, the dialectic of class struggle. Jean-François Lyotard defined the postmodern condition (1979) as “incredulity toward metanarratives”: the loss of faith in any single story able to legitimate knowledge and politics for everyone.</p><p><a href="#metamodernism">Metamodernism</a> takes up the question that postmodernity left open – whether, knowing that every grand narrative is partial and constructed, a civilisation can still hold a sincere story about where it is going. Without one, societies drift into <a href="#the-meaning-crisis">the meaning crisis</a>; with a naive one, into <a href="#the-age-of-ideology">ideology</a>.</p>'
     },
     {
       id: 'metaphysics',
       title: 'Metaphysics',
+      kind: 'category',
+      parent: 'theproject',
+      order: 12,
       html: '<p><em>Metaphysics</em> is the branch of philosophy concerned with the most basic features of reality: what exists, what it is to be something, the nature of causation, time, mind and matter, and how they relate.</p><p>Every civilisation rests on a metaphysics, usually unexamined – assumptions about what is real and what counts, which shape its science, economics and ethics long before anyone argues about them. Modern industrial societies carry a largely mechanistic and materialist metaphysics, in which the world is a store of separable objects to be used; critics from Alfred North Whitehead to today’s process philosophers have argued for a more relational alternative. See also <a href="#epistemology">epistemology</a>.</p>'
     },
     {
@@ -8096,8 +8110,8 @@
     if (cluster) out += '<h2 id="concept-cluster">Concept Cluster</h2>' + cluster;
     return out;
   }
-  // The sections fall into three sets: civilisational (four), meta and macro (three each).
-  var SET_SIZES = [4, 3, 3];
+  // The sections fall into four sets: civilisational (four), meta and macro (three each), and theory (four).
+  var SET_SIZES = [4, 3, 3, 4];
   function sectionSets(sections) {
     var out = [], i = 0;
     SET_SIZES.forEach(function (n) { out.push(sections.slice(i, i + n)); i += n; });
@@ -8214,10 +8228,7 @@
     ],
     'metamodernism': [
       { head: '', items: ['primitivism', 'classicism', 'premodernism', 'modernism', 'postmodernism', 'metamodernism'] },
-      ['meta-frames', [
-        ['metanarrative', ['hypernormalisation', ['capitalist-realism', [['capitalist-theodicy', ['capitalist-problem-of-evil']], 'lost-futures']]]],
-        ['metaphysics', ['process-philosophy', 'idealism']],
-        ['metarationality', ['relevance-realisation-and-combinatorial-explosion', 'epistemic-uncertainty-and-cluelessness']]]],
+      ['meta-frames', ['metanarrative', 'metaphysics', 'metarationality']],
       { head: 'Related Concepts', items: ['cultural-paradigm', 'stadial-theories-of-history', 'historical-dialectic', 'ideology'] },
       ['modernism', [
         ['rationalism', ['universalism', ['secularism', ['new-atheism']], 'materialism', 'scientism']],
@@ -8247,12 +8258,7 @@
         ['ecological-psychology', [['affordance', [], { label: 'Affordances' }]]]] },
       { head: 'Concepts', items: ['emergence', 'universal-dynamics', 'ontological-stratification', 'transcend-and-include', 'multi-perspectivalism', 'dialectics', 'consilience'] },
       ['philosophy', ['philosophical-paradigms', 'philosophical-frames']],
-      ['cultural-psychology', ['phenomenology', 'axiology', 'ontology', 'epistemology']],
-      ['civilisation-theory', [['systems-theory', [], { also: true }], ['evolutionary-theory', [], { also: true }], ['game-theory', [], { also: true }], ['critical-theory', [], { also: true }]]],
-      ['systems-theory', ['feedback-loop', 'leverage-points', 'resilience']],
-      ['evolutionary-theory', ['evolutionary-biology', 'multilevel-selection', 'selection-pressure']],
-      ['game-theory', ['nash-equilibrium', 'pareto-optimality', 'hawks-and-doves']],
-      ['moral-theory', ['multi-scale-ethics', 'science-of-morality', 'the-moral-landscape', 'moral-circle-expansion']]
+      ['cultural-psychology', ['phenomenology', 'axiology', 'ontology', 'epistemology']]
     ],
     'macrohistory': [
       ['macrohistory', ['big-history', 'cliodynamics', 'structural-demographic-theory', 'world-systems-analysis', ['cultural-evolution', ['memetics']], 'high-modernism', 'socio-economic-evolutionary-mismatch']],
@@ -8271,12 +8277,6 @@
       { head: 'Macrosociological Approaches', items: [['structural-functionalism', ['functional-prerequisites']], ['conflict-theory', [['marxism', ['meta-marxism']], 'critical-theory']]] },
       ['science-and-technology-studies', ['the-techno-onto-logical', 'actor-network-theory', ['theories-of-technology', ['social-construction-of-technology', ['technological-determinism', ['technocratic-solutionism', 'techno-capital-and-technomic', 'techno-capitalist-progress-narrative']]]]]],
       ['critical-social-epistemology', ['epistemic-crisis', 'the-epistemic-commons', 'epistemic-semi-anarchic-default-condition', 'epistemic-principal-agent-problem', ['mad-information-war', ['information-warfare', 'misinformation', 'non-kinetic-warfare']], 'mcluhans-aquarium']],
-      ['critical-social-theory', [
-        'critical-political-economy',
-        { head: 'The Frankfurt School', items: ['the-angel-of-history', 'the-great-refusal', 'the-new-categorical-imperative', 'dialectic-of-enlightenment', 'the-grand-hotel-abyss'] },
-        { head: 'Later Critical Theory', items: ['colonisation-of-the-lifeworld', 'social-pathology', 'recognition-justice'] },
-        { head: 'Political Economy', items: ['business-government', 'means-ends-reversal', 'the-divide'] },
-        { head: 'Power', items: [['biopower', ['necropolitics', 'psychopolitics']]] }]],
       ['social-ontology', ['organicism', 'mechanism-society-as-machine', 'cyberneticism']],
       ['structure-and-agency', ['structuration-theory', 'morphogenetic-approach', 'critical-realism']],
       ['base-and-superstructure', ['dominant-ideology', 'hegemony', 'ideological-state-apparatus', 'culture-industry', 'one-dimensional-man']],
@@ -8309,6 +8309,21 @@
       ['nuclear-risk', ['nuclear-world-war-iii', 'nuclear-non-proliferation-and-disarmament']],
       ['natural-risk', ['naturally-emerging-pandemics', 'supervolcano-eruptions', 'stellar-and-cosmic-events', 'asteroid-and-comet-impacts']]
     ],
+    'civilisation-theory': [
+      ['systems-theory', ['feedback-loop', 'leverage-points', 'resilience']],
+      ['evolutionary-theory', ['evolutionary-biology', 'multilevel-selection', 'selection-pressure']],
+      ['game-theory', ['nash-equilibrium', 'pareto-optimality', 'hawks-and-doves']],
+      ['critical-social-theory', [
+        'critical-political-economy',
+        { head: 'The Frankfurt School', items: ['the-angel-of-history', 'the-great-refusal', 'the-new-categorical-imperative', 'dialectic-of-enlightenment', 'the-grand-hotel-abyss'] },
+        { head: 'Later Critical Theory', items: ['colonisation-of-the-lifeworld', 'social-pathology', 'recognition-justice'] },
+        { head: 'Political Economy', items: ['business-government', 'means-ends-reversal', 'the-divide'] },
+        { head: 'Power', items: [['biopower', ['necropolitics', 'psychopolitics']]] }]],
+      ['moral-theory', ['multi-scale-ethics', 'science-of-morality', 'the-moral-landscape', 'moral-circle-expansion']]
+    ],
+    'metaphysics': ['process-philosophy', 'idealism'],
+    'metanarrative': ['hypernormalisation', ['capitalist-realism', [['capitalist-theodicy', ['capitalist-problem-of-evil']], 'lost-futures']]],
+    'metarationality': ['relevance-realisation-and-combinatorial-explosion', 'epistemic-uncertainty-and-cluelessness'],
     // Fiction: works that illuminate the map's concepts, each under the theme it is filed for (a section
     // of its own at the paradigm's foot, outside its numbered sections, menu and contents).
     'fiction': [
@@ -8411,7 +8426,7 @@
     return had.concat(add.filter(function (x) { var id = nodeId(x); return !id || seen.indexOf(id) < 0; }));
   }
   // Sections whose groups are set in particular columns: the number of groups in each.
-  var SECTION_COLUMNS = { metacrisis: [2, 3, 2], metatheory: [3, 3, 5] };
+  var SECTION_COLUMNS = { metacrisis: [2, 3, 2], metatheory: [2, 2, 2] };
   var HEAD_OF = {};   // (an entry a subheading stands for: that subheading)
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
     (function walk(list, parent, blocks) {
@@ -8471,6 +8486,7 @@
       if (typeof p === 'string') {
         var n = byId[p]; if (!n) return null;
         path.unshift(n); p = (p in STRUCT_PARENT) ? STRUCT_PARENT[p] : null;
+        if (n.master) return path;   // (the Civilisation Theory section: its own entry heads the string, as the master concept)
       } else {
         if (p.title && !(byId[p.parent] && byId[p.parent].title === p.title)) path.unshift(p);   // (a subheading named as its section, or a group without one, is not shown)
         p = p.parent;
@@ -8495,6 +8511,7 @@
         return true;
       }
       if (byId[seg] && byId[seg] === path[path.length - 1]) return true;   // (a section's block headed by its own name is not shown twice)
+      if (byId[seg] && byId[seg].master && path.length === 1 && path[0] === ROOT) { path = [byId[seg]]; return true; }   // (the Civilisation Theory section heads the string itself)
       return byId[seg] ? (path.push(byId[seg]), true) : false;
     });
     return ok ? path.concat([c]) : null;
@@ -8557,7 +8574,7 @@
   // ---------- Entry rendering ----------
   function indexHtml() {
     var concepts = CONCEPTS.filter(inAZ).sort(byTitle);
-    var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+    var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI'];
     var sections = childrenOf(ROOT.id);
     var overviewDesc = '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation.</p>';
     // (each concept counted once, however many places it is listed in)
@@ -8582,7 +8599,7 @@
     // A menu of the sections at the head of the paradigm: one column per set, each section numbered
     // as below and jumping down to it.
     function sectionMenuHtml() {
-      var names = ['Civilisational', 'Meta', 'Macro'];
+      var names = ['Civilisational', 'Meta', 'Macro', 'Theory'];
       return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + sectionSets(sections).map(function (set, k) {
         return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d) {
           var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0;
@@ -8623,7 +8640,7 @@
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + (NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0) + ' concepts</p>' +
           '<h3 class="domain-title"><a href="' + href(d) + '">' + esc(d.title) + '</a></h3>' +
           // First sentence only; the full description is on the section's own page.
-          (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
+          (d.kind === 'category' ? '<p class="domain-desc">' + esc((tmp.querySelector('p') || tmp).textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
           (NEW_STRUCTURE[d.id] ? sectionColsHtml(d.id) : '<p class="rl-empty">Concepts to be added.</p>') + '</section>';
       }).join('');
     }
@@ -9154,8 +9171,8 @@
   // Continuous slide view: every concept as a full-screen slide. A menu picks the deck: every
   // concept A–Z, or one of the nine sections with its concepts in tree order.
   function slidesHtml() {
-    var SETS = ['Civilisational', 'Meta', 'Macro'];
-    var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+    var SETS = ['Civilisational', 'Meta', 'Macro', 'Theory'];
+    var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI'];
     var sections = childrenOf(ROOT.id), sets = sectionSets(sections);
     var az = CONCEPTS.filter(inAZ).sort(byTitle);   // (every concept, and the sections' own entries)
     function inTreeOrder(id) {
@@ -10584,7 +10601,7 @@
     var concepts = CONCEPTS.filter(inAZ);
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;
     var sections = childrenOf(ROOT.id);
-    var NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+    var NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI'];
     function group(title, items) { return '<p class="foot-head">' + title + '</p><ul>' + items.join('') + '</ul>'; }
     function li(inner) { return '<li>' + inner + '</li>'; }
     f.innerHTML = '<div class="foot-inner"><div class="foot-main">' +
