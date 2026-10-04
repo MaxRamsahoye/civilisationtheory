@@ -1076,7 +1076,7 @@
   /* An entry's closing References and Nested Concepts */
   .description ol.refs { padding-left: 1.4rem; font-size: 0.92em; }
   /* The About page's totals: label and number on one line, the whole set apart beneath */
-  .description ul.totals { list-style: none; padding: 0; margin: 0.6rem 0 0; max-width: 30rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.88rem; }
+  .description ul.totals { list-style: none; padding: 0; margin: 1.8rem 0 0; max-width: 30rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.88rem; }
   .description ul.totals li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); margin: 0; }
   .description ul.totals li.sub { padding-left: 1.2rem; color: var(--muted); }
   /* the reconciling lines: the rows' sum, less the entries in more than one row */
@@ -1158,7 +1158,7 @@
   /* (its lists are prose lists, not the other views' columns of links) */
   .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
   .description .ce-list.ab-list li { margin: 0 0 0.4rem; }
-  .description .ce-list.ab-list ul.totals { list-style: none; padding: 0; margin: 0.6rem 0 0; font-size: 0.88rem; }
+  .description .ce-list.ab-list ul.totals { list-style: none; padding: 0; margin: 1.8rem 0 0; font-size: 0.88rem; }
   .description .ce-list.ab-list ul.totals li { margin: 0; }
   /* On the Map, contents only for the About, Research Paradigm and Research Landscape views, once past the opening screen */
   html.page-map:not([data-index="ab"]):not([data-index="cs"]):not([data-index="rl"]) #toc, html.page-map:not(.map-past-opening) #toc { display: none !important; }
@@ -1188,6 +1188,10 @@
   .description .ce-list.ab-list ul.controls { list-style: none; padding: 0; margin: 0.4rem 0 1.4rem; }
   .description .ce-list.ab-list ul.controls li { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; margin: 0 0 0.55rem; align-items: baseline; }
   .description ul.controls .keys { white-space: nowrap; }
+  /* (the Controls in the interface face, as the note on AI use) */
+  .description .controls-sec, .description .controls-sec h3.sub-head { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; }
+  .description .controls-sec { font-size: 0.9rem; line-height: 1.55; }
+  #entry .description .controls-sec h3.sub-head { font-size: 1rem; }
   /* (each group of controls a dropdown, its subheading the toggle, marked with the paradigm's chevron) */
   .description details.ctl-drop > summary { list-style: none; cursor: pointer; position: relative; width: fit-content; }
   .description details.ctl-drop > summary::-webkit-details-marker { display: none; }
@@ -1990,7 +1994,7 @@
         '<p>Whilst mostly written at a reasonably high quality, occasionally this results in drift from the intended meaning of a concept. To account for this downside, the entries are being reviewed one by one, to ensure that they are accurate and to refine their contents – in part by providing source material, and in part by rewriting them directly.</p>',
         '</div>',
         '<h2>Controls</h2>' +
-        '<p>Shortcuts work anywhere on the site except while typing in a box.</p>' +
+        '<div class="controls-sec"><p>Shortcuts work anywhere on the site except while typing in a box.</p>' +
         '<details class="ctl-drop"><summary><h3 class="sub-head">Navigation</h3></summary><ul class="controls">' +
         '<li><span class="keys"><kbd>1</kbd> <span class="k-sep">–</span> <kbd>5</kbd></span><span>Open the Map’s views in turn: About the Project, Civilisation Research Paradigm, Civilisation Research Landscape, Conceptual Engineerings and Alphabetical A–Z (on the Map)</span></li>' +
         '<li><span class="keys"><kbd>Enter</kbd></span><span>Open About the Project (on the Map)</span></li>' +
@@ -2013,7 +2017,7 @@
         '<details class="ctl-drop"><summary><h3 class="sub-head">Pointer</h3></summary><ul class="controls">' +
         '<li><span class="keys"><kbd>Right-click</kbd></span><span>On selected text: <em>Copy</em>, or <em>Copy Link to Highlight</em> – a link that opens the page with that passage highlighted</span></li>' +
         '<li><span class="keys"><kbd>Shift</kbd> <span class="k-sep">+</span> <kbd>Right-click</kbd></span><span>The browser’s own menu</span></li>' +
-        '</ul></details>',
+        '</ul></details></div>',
       ].join('\n')
     },
     {
@@ -9447,7 +9451,10 @@
     if (!a) return;
     e.preventDefault();
     var target = document.getElementById(a.getAttribute('data-jump'));
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!target) return;
+    // (a section of the Map's views: to just below its dividing line, as the contents menu goes)
+    if (target.matches('#entry .index-domain')) window.scrollTo({ top: window.scrollY + target.getBoundingClientRect().top + (parseFloat(getComputedStyle(target).borderTopWidth) || 0) + 2, behavior: 'smooth' });
+    else target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   // ---------- Infinite: deck menu ----------
