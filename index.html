@@ -8315,14 +8315,27 @@
       azListHtml(concepts) + '</div>';
     // Conceptual Engineerings in their own categories (to be defined: each is a name and the ids of
     // the terms it holds, e.g. { name: 'Alignment', ids: ['the-great-alignment', …] }); every term
-    // not yet allocated is listed, alphabetically, as Uncategorised.
-    var CE_CATEGORIES = [];
+    // not yet allocated is listed, alphabetically, as Uncategorised.   (now derived from the paradigm: see ceCategories)
+    // The categories follow the Civilisation Research Paradigm: High-Level first, then each section
+    // in turn, each term under the section it is filed in (its own place there), in the paradigm's order.
+    function ceCategories() {
+      var secs = childrenOf(ROOT.id), cats = [{ name: 'High-Level', ids: [] }];
+      var homeSec = {};
+      Object.keys(STRUCT_PARENT).forEach(function (id) { var l = structLoc(id); if (l) homeSec[id] = decodeURIComponent(l.split('|')[0]); });
+      secs.forEach(function (d) {
+        var ids = [d.id].concat(Object.keys(structIds(NEW_STRUCTURE[d.id] || [], {})).filter(function (id) { return homeSec[id] === d.id; }));
+        cats.push({ name: d.title, link: d, ids: ids });
+      });
+      var P = paradigmIds();
+      curatedSequence().forEach(function (c) { if (!homeSec[c.id] && !(c.kind === 'category') && P[c.id]) cats[0].ids.push(c.id); });   // (filed only among the High-Level frames)
+      return cats;
+    }
     function coinedByCategory(list) {
       var placed = {};
-      var groups = CE_CATEGORIES.map(function (g) {
-        var items = g.ids.map(function (id) { return byId[id]; }).filter(function (c) { return c && list.indexOf(c) >= 0; });
+      var groups = ceCategories().map(function (g) {
+        var items = g.ids.map(function (id) { return byId[id]; }).filter(function (c) { return c && list.indexOf(c) >= 0 && !placed[c.id]; });
         items.forEach(function (c) { placed[c.id] = true; });
-        return { name: g.name, items: items };
+        return { name: g.name, link: g.link, items: items };
       }).filter(function (g) { return g.items.length; });
       var rest = list.filter(function (c) { return !placed[c.id]; });
       if (rest.length) groups.push({ name: 'Uncategorised', items: rest, rest: true });
@@ -8336,7 +8349,7 @@
       // Two ways to read them: by category (the default) or A–Z.
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
       '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
-        return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + esc(g.name) + '</p><ul>' +
+        return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p><ul>' +
           g.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul></div>';
       }).join('') + '</div>' +
       '<div class="ce-az">' + azListHtml(coined) + '</div></div>';
