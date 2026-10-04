@@ -1420,6 +1420,11 @@
   .description .ce-list .ce-cats ul, html.page-map .description .ce-list .ce-cats ul { columns: 1; margin: 0; }
   /* Terms not yet in a category: one group across the full width, its list in three columns */
   .description .ce-cats .ce-rest { column-span: all; }
+  /* (the blocks of a section, within its category) */
+  .description .ce-sub-head { font-size: 0.98em; font-weight: 600; font-style: italic; line-height: 1.25; margin: 1rem 0 0.4rem; }
+  .description .ce-sub-head a, :root.accent .description .ce-sub-head a { color: var(--text); text-decoration: none; }
+  .description .ce-sub-head a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
+  .description .ce-list .ce-cats ul.ce-sub, html.page-map .description .ce-list .ce-cats ul.ce-sub { padding-left: 1rem; }
   .description .ce-list .ce-cats .ce-rest ul, html.page-map .description .ce-list .ce-cats .ce-rest ul { columns: 3; column-gap: 1.4rem; }
   @media (max-width: 640px) { .description .ce-list .ce-cats .ce-rest ul, html.page-map .description .ce-list .ce-cats .ce-rest ul { columns: 1; } }
   @media (max-width: 900px) { .description .ce-cats { columns: 2; } }
@@ -8624,12 +8629,30 @@
       curatedSequence().forEach(function (c) { if (!homeSec[c.id] && !(c.kind === 'category') && P[c.id]) cats[0].ids.push(c.id); });   // (filed only among the High-Level frames)
       return cats;
     }
+    // In these sections the novel terms are grouped again under the section's own blocks (its top-level
+    // clusters and subheadings), in the paradigm's order; the section's own entry heads the category.
+    var CE_SUBCATS = { 'civilisational-mechanics': true, 'civilisation-design': true, 'civilisation-alignment': true };
+    function ceSubcats(sec, items) {
+      var order = (NEW_STRUCTURE[sec] || []).map(function (x) { return typeof x === 'string' ? x : Array.isArray(x) ? x[0] : 'h:' + x.head; });
+      var subs = {}, lead = [];
+      items.forEach(function (c) {
+        var parts = (structLoc(c.id) || '').split('|').map(decodeURIComponent);
+        var key = parts.length > 1 ? parts[1] : c.id;   // (a top-level cluster is its own block)
+        if (c.id === sec) { lead.push(c); return; }
+        (subs[key] = subs[key] || []).push(c);
+      });
+      var out = Object.keys(subs).sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); }).map(function (key) {
+        var h = key.indexOf('h:') === 0;
+        return { name: h ? key.slice(2) : (byId[key] || {}).title || key, link: h ? null : byId[key], items: subs[key] };
+      });
+      return { lead: lead, groups: out };
+    }
     function coinedByCategory(list) {
       var placed = {};
       var groups = ceCategories().map(function (g) {
         var items = g.ids.map(function (id) { return byId[id]; }).filter(function (c) { return c && list.indexOf(c) >= 0 && !placed[c.id]; });
         items.forEach(function (c) { placed[c.id] = true; });
-        return { name: g.name, link: g.link, items: items };
+        return { name: g.name, link: g.link, items: items, subs: g.link && CE_SUBCATS[g.link.id] ? ceSubcats(g.link.id, items) : null };
       }).filter(function (g) { return g.items.length; });
       var rest = list.filter(function (c) { return !placed[c.id]; });
       if (rest.length) groups.push({ name: 'Uncategorised', items: rest, rest: true });
@@ -8644,7 +8667,11 @@
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
       '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
         return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p><ul>' +
-          g.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul></div>';
+          (g.subs ? g.subs.lead : g.items).map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul>' +
+          (g.subs ? g.subs.groups.map(function (s) {
+            return '<p class="ce-sub-head">' + (s.link ? '<a href="' + href(s.link) + '">' + esc(s.name) + '</a>' : esc(s.name)) + '</p><ul class="ce-sub">' +
+              s.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul>';
+          }).join('') : '') + '</div>';
       }).join('') + '</div>' +
       '<div class="ce-az">' + azListHtml(coined) + '</div></div>';
     // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
