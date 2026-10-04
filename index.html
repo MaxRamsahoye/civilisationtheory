@@ -9051,7 +9051,8 @@
     var a = e.target.closest('a[data-target]');
     if (!a) return;
     e.preventDefault();
-    document.getElementById(a.getAttribute('data-target')).scrollIntoView({ behavior: 'smooth' });
+    var to = document.getElementById(a.getAttribute('data-target'));
+    (to.closest('#entry .index-domain') || to).scrollIntoView({ behavior: 'smooth' });   // (a section of the Map's views: to its dividing line)
   });
 
   // ---------- Scroll: progress bar, back-to-top, active contents entry ----------
