@@ -1420,7 +1420,7 @@
   .description .ce-list .ce-cats ul, html.page-map .description .ce-list .ce-cats ul { columns: 1; margin: 0; }
   /* Terms not yet in a category: one group across the full width, its list in three columns */
   .description .ce-cats .ce-rest { column-span: all; }
-  .description .ce-cats .ce-wide { column-span: all; }
+  .description .ce-cats.ce-cats-wide { columns: auto; margin-top: 2.6rem; }
   .description .ce-cats .ce-wide .ce-subs { columns: 3; column-gap: 2.4rem; }
   .description .ce-cats .ce-wide .ce-subgrp { break-inside: avoid; }
   .description .ce-cats .ce-wide .ce-subgrp > .ce-sub-head { margin-top: 0; }
@@ -8711,15 +8711,21 @@
       '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
       // Two ways to read them: by category (the default) or A–Z.
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
-      '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
-        var wide = g.link && CE_WIDE[g.link.id];   // (a category set across the three columns, its blocks in columns of their own)
-        return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + (wide ? ' ce-wide' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p>' +
-          (g.subs && !g.subs.lead.length ? '' : '<ul>' + ceTreeHtml(g.subs ? g.subs.lead : g.items) + '</ul>') +
-          (g.subs ? '<div class="ce-subs">' + g.subs.groups.map(function (s) {
-            return '<div class="ce-subgrp"><p class="ce-sub-head">' + (s.link ? '<a href="' + href(s.link) + '">' + esc(s.name) + '</a>' : esc(s.name)) + '</p><ul class="ce-sub">' +
-              ceTreeHtml(s.items) + '</ul></div>';
-          }).join('') + '</div>' : '') + '</div>';
-      }).join('') + '</div>' +
+      (function () {
+        // (the categories flow in three columns; a wide one follows them all, across the three)
+        var groups = coinedByCategory(coined), isWide = function (g) { return !!(g.link && CE_WIDE[g.link.id]); };
+        function catHtml(g) {
+          return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + (isWide(g) ? ' ce-wide' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p>' +
+            (g.subs && !g.subs.lead.length ? '' : '<ul>' + ceTreeHtml(g.subs ? g.subs.lead : g.items) + '</ul>') +
+            (g.subs ? '<div class="ce-subs">' + g.subs.groups.map(function (s) {
+              return '<div class="ce-subgrp"><p class="ce-sub-head">' + (s.link ? '<a href="' + href(s.link) + '">' + esc(s.name) + '</a>' : esc(s.name)) + '</p><ul class="ce-sub">' +
+                ceTreeHtml(s.items) + '</ul></div>';
+            }).join('') + '</div>' : '') + '</div>';
+        }
+        var wide = groups.filter(isWide);
+        return '<div class="ce-cats">' + groups.filter(function (g) { return !isWide(g); }).map(catHtml).join('') + '</div>' +
+          (wide.length ? '<div class="ce-cats ce-cats-wide">' + wide.map(catHtml).join('') + '</div>' : '');
+      })() +
       '<div class="ce-az">' + azListHtml(coined) + '</div></div>';
     // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
     var cpTerms = CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); }).sort(byTitle);
