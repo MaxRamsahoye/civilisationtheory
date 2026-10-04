@@ -1167,6 +1167,8 @@
     width: max-content; max-width: var(--tocW, 7rem); z-index: 4;
   }
   #toc li.toc-rule { border-top: 1px solid var(--rule); margin-top: 0.55rem; padding-top: 0.55rem; }
+  /* …and the two views' text shifted right, at full width, into the room on the right, to give the contents space beside it */
+  html.page-map .description .ce-list.cs-list, html.page-map .description .ce-list.rl-list { position: relative; left: min(6rem, max(0px, calc(50vw - 33rem))); }
   html.page-map.toc-narrow[data-index="cs"] #toc, html.page-map.toc-narrow[data-index="rl"] #toc { display: none !important; }
   /* …set in the left margin of the About view's centred column */
   html.page-map[data-index="ab"] #toc {
