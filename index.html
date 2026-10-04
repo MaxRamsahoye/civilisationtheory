@@ -955,6 +955,8 @@
   /* The contents and sidenotes fade in whenever they appear (with a page, a view, or past the Map's opening) */
   @keyframes margin-fade-in { from { opacity: 0; } }
   #toc:not([hidden]), .description .sidenote { animation: margin-fade-in .7s ease .15s both; }
+  #toc { transition: opacity .35s ease; }
+  #toc.toc-away { opacity: 0 !important; pointer-events: none; }
   #toc .toc-title {
     display: block;
     font-size: 1.2em;
@@ -10085,6 +10087,12 @@
     // Scrolling back up into the Map's opening screen closes the sidebar, as the footer does.
     if (wasPast && !root.classList.contains('map-past-opening') && root.classList.contains('page-map') &&
         !document.body.classList.contains('sidebar-closed')) setSidebar(false, false);
+    // The contents fade out before they would reach the footer, and back in when it scrolls away.
+    var foot = document.getElementById('site-footer');
+    if (foot && !tocEl.hidden) {
+      var tr = tocEl.getBoundingClientRect(), fr = foot.getBoundingClientRect();
+      tocEl.classList.toggle('toc-away', tr.height > 0 && fr.height > 0 && tr.bottom > fr.top - 48);
+    }
     var current = tocHeads[0];
     tocHeads.forEach(function (h) { if (h.getBoundingClientRect().top < window.innerHeight * 0.3) current = h; });
     if (max > 0 && y >= max - 2) current = tocHeads[tocHeads.length - 1];
