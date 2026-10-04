@@ -956,8 +956,10 @@
   /* The contents and sidenotes fade in whenever they appear (with a page, a view, or past the Map's opening) */
   @keyframes margin-fade-in { from { opacity: 0; } }
   #toc:not([hidden]), .description .sidenote { animation: margin-fade-in .7s ease .15s both; }
-  #toc { transition: opacity .35s ease; }
-  #toc.toc-away { opacity: 0 !important; pointer-events: none; }
+  /* (faded on its children: the menu's own opacity is held by its fade-in animation) */
+  #toc > * { transition: opacity .6s ease; }
+  #toc.toc-away > * { opacity: 0; }
+  #toc.toc-away { pointer-events: none; }
   #toc .toc-title {
     display: block;
     font-size: 1.2em;
