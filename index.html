@@ -10009,6 +10009,7 @@
     var crp = paradigmCount(), crl = landscapeNodeCount();
     return '<ul class="totals">' +
       row('Civilisation Research Paradigm', crp) +
+      row('Conceptual Engineerings', CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length, 'sub') +   // (all filed in the paradigm, so within its count)
       row('Civilisation Research Landscape', crl) +
       row('Entries listed in both', '−' + (crp + crl - entriesTotal()), 'overlap') +
       '<li class="all"><span>Entries in total</span><span class="n">' + entriesTotal() + '</span></li></ul>';
