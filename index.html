@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
+    window.MOVED = { 'the-map/consilience-project': 'the-map/civilisation-research-paradigm', 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -1050,19 +1050,10 @@
   }
   a.entry-tag:hover, :root.accent a.entry-tag:hover { color: var(--accent); }
   :root.accent a.entry-tag { color: var(--text); }
-  .description .cp-note { margin-top: 1.6rem; font-size: 0.92em; color: var(--muted); }
   /* Consilience Project view: every definition in full beneath the list of terms */
   /* The heading over the definitions: well clear of the list above, closer to what it introduces */
   /* (a step below the view's own heading and description) */
-  .description .cp-gloss-head { max-width: 39rem; margin: 7rem auto 0.8rem; font-size: 2.05rem; font-weight: 700; line-height: 1.1; }
-  .description .cp-gloss-sub { max-width: 39rem; margin: 0 auto 2.8rem; font-size: 1.16rem; line-height: 1.45; }
-  .cp-glossary { margin: 0 auto 0; border-top: 1px solid var(--rule); max-width: 39rem; }   /* centred in the wide Map column */
-  .cp-def { padding: 3rem 0 1.6rem; border-bottom: 1px solid var(--rule); scroll-margin-top: 1.5rem; }
-  .cp-def:last-child { border-bottom: 0; }
-  .description .cp-def-title { font-size: 1.75rem; font-weight: 700; line-height: 1.15; margin: 0 0 0.9rem; }
   /* Titles: always underlined, never in the accent colour */
-  :root .description .cp-def-title a { color: var(--text); text-decoration: underline; text-decoration-color: var(--link-underline); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-  :root .description .cp-def-title a:hover { text-decoration-color: var(--text); }
   html.hudless .entry-tags { opacity: 0 !important; visibility: hidden !important; }
   h2 {
     font-weight: 600;
@@ -1121,11 +1112,7 @@
   :root[data-index="az"] .index-list,
   :root[data-index="az"] .ce-list,
   :root[data-index="ce"] .index-list,
-  :root[data-index="ce"] .az-view,
-  :root:not([data-index="cp"]) .cp-list,
-  :root[data-index="cp"] .index-list,
-  :root[data-index="cp"] .az-view,
-  :root[data-index="cp"] .ce-list:not(.cp-list) { display: none; }
+  :root[data-index="ce"] .az-view { display: none; }
   /* About the Project view */
   :root:not([data-index="ab"]) .ab-list,
   :root[data-index="ab"] .index-list,
@@ -1269,7 +1256,6 @@
   :root[data-index="tree"] .index-tabs [data-view="tree"],
   :root[data-index="az"] .index-tabs [data-view="az"],
   :root[data-index="ce"] .index-tabs [data-view="ce"],
-  :root[data-index="cp"] .index-tabs [data-view="cp"],
   :root[data-index="ab"] .index-tabs [data-view="ab"],
   :root[data-index="rl"] .index-tabs [data-view="rl"],
   :root[data-index="cs"] .index-tabs [data-view="cs"],
@@ -1453,7 +1439,6 @@
   :root[data-index="rl"].page-map .index-tabs [data-view="rl"],
   :root[data-index="az"].page-map .index-tabs [data-view="az"],
   :root[data-index="ce"].page-map .index-tabs [data-view="ce"],
-  :root[data-index="cp"].page-map .index-tabs [data-view="cp"],
   :root[data-index="ab"].page-map .index-tabs [data-view="ab"] { background: var(--hl); border-radius: 0 0 5px 5px; }
   /* Everything on the Map in full ink: the muted grey is redefined as the text colour within it */
   html.page-map #entry .description { --muted: var(--text); }
@@ -1946,7 +1931,7 @@
 
         '<h2>Project Context</h2>',
         '<aside class="sidenote" data-sn="1"><span class="sn-num">1</span>The Civilisational Map is an independent project that is not affiliated with the <a href="#civilization-research-institute">Civilization Research Institute</a>.</aside>',
-        '<p><span class="sn-anchor" data-sn="1">The Civilisation Theory Map is inspired by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> (ported over to this site <a href="#the-map/consilience-project">here</a>) and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>.<sup class="sn-ref">1</sup></span> More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
+        '<p><span class="sn-anchor" data-sn="1">The Civilisation Theory Map is inspired by <a href="https://consilienceproject.org/glossary/">the glossary of <em>The Consilience Project</em></a> and the metacrisis frame of the <a href="https://civilizationresearchinstitute.org/"><em>Civilization Research Institute</em></a>.<sup class="sn-ref">1</sup></span> More broadly, Civilisation Theory is a critical dialectical synthesis of three core clusters of intellectual subcultures:</p>',
         '<ul>',
         '<li><strong>The Meta-space:</strong> oriented around the metacrisis, metamodernism and metatheory (also metaphysics, metanarrative, metasystem, metarationality, metacognition)</li>',
         '<li><strong>The PARA-academic space:</strong> encompassing progress studies, AI alignment, rationalism and effective altruism (also existential risk studies).</li>',
@@ -2824,7 +2809,7 @@
     {
       id: 'macroeconomics',
       title: 'Macroeconomics',
-      html: '<p><em>Macroeconomics</em> is the study of the economy as a whole – output, growth, employment, inflation, money and trade, and the policies that govern them – as distinct from the behaviour of individual firms and households. It took its modern form in John Maynard Keynes’s <em>General Theory</em> (1936), and has since been shaped by debates between Keynesian, <a href="#monetarism">monetarist</a> and other schools over how far economies correct themselves and how far they must be steered.</p><p>From a civilisational standpoint its central assumption is growth: most macroeconomic policy is organised around keeping output rising, which ties the economy to <a href="#embedded-growth-obligations">embedded growth obligations</a> and places it in tension with planetary limits. See <a href="#critical-political-economy">political economy</a>.</p>'
+      html: '<p><em>Macroeconomics</em> is the study of the economy as a whole – output, growth, employment, inflation, money and trade, and the policies that govern them – as distinct from the behaviour of individual firms and households. It took its modern form in John Maynard Keynes’s <em>General Theory</em> (1936), and has since been shaped by debates between Keynesian, monetarist and other schools over how far economies correct themselves and how far they must be steered.</p><p>From a civilisational standpoint its central assumption is growth: most macroeconomic policy is organised around keeping output rising, which ties the economy to <a href="#embedded-growth-obligations">embedded growth obligations</a> and places it in tension with planetary limits. See <a href="#critical-political-economy">political economy</a>.</p>'
     },
     {
       id: 'macroevolution',
@@ -3086,261 +3071,34 @@
     {
       id: 'metaphysics',
       title: 'Metaphysics',
-      html: '<p><em>Metaphysics</em> is the branch of philosophy concerned with the most basic features of reality: what exists, what it is to be something, the nature of causation, time, mind and matter, and how they relate.</p><p>Every civilisation rests on a metaphysics, usually unexamined – assumptions about what is real and what counts, which shape its science, economics and ethics long before anyone argues about them. Modern industrial societies carry a largely mechanistic and materialist metaphysics, in which the world is a store of separable objects to be used; critics from Alfred North Whitehead to today’s process philosophers have argued for a more relational alternative. See also <a href="#epistemology">epistemology</a>.</p>'
+      html: '<p><em>Metaphysics</em> is the branch of philosophy concerned with the most basic features of reality: what exists, what it is to be something, the nature of causation, time, mind and matter, and how they relate.</p><p>Every civilisation rests on a metaphysics, usually unexamined – assumptions about what is real and what counts, which shape its science, economics and ethics long before anyone argues about them. Modern industrial societies carry a largely mechanistic and materialist metaphysics, in which the world is a store of separable objects to be used; critics from Alfred North Whitehead to today’s process philosophers have argued for a more relational alternative. See also epistemology.</p>'
     },
     {
       id: 'metapsychology',
       title: 'Metapsychology',
       ref: 'Zachary Stein; Freud',
-      html: '<p><em>Metapsychology</em> is theory about the psyche as a whole – not one school of psychology among others, but a framework for how minds are structured, develop and relate to culture, within which particular psychologies can be placed. The term was Sigmund Freud’s; the philosopher of education Zachary Stein has renewed it as an integrative account of human development, arguing that a civilisation in crisis needs an explicit, shared understanding of what people are and can become in order to educate, govern and care for them well.</p><p>On this view a civilisational crisis is also a crisis of human development, and the transition to a new civilisation is as much psychological and educational as it is technological or political. See also psychology and <a href="#pedagogy">pedagogy</a>.</p>'
-    },
-    // ---- From the Consilience Project glossary (tagged 'consilience')
-    {
-      id: 'cp-commons',
-      title: 'Commons',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A general term for collective resources in which every participant of the collective has an equal interest. Prominent examples are air, nature, culture, and the quality of our shared sensemaking basis or information commons.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#commons">Commons</a>.</p>'
-    },
-    {
-      id: 'cp-epistemic-commons',
-      title: 'Epistemic Commons',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>It is both the public spaces (e.g., town hall, Twitter) and private spaces where people come together to pursue a mutual understanding of issues critical to their society, and the collection of norms, systems, and institutions underpinning this society-wide process of learning. The epistemic commons is a public resource; these spaces and norms are available to all of us, shaped by all of us, and in turn, also influence the way in which all of us engage in learning with each other. For informed and consensual decision-making, open societies and democratic governance depend upon an epistemic commons in which groups and individuals can collectively reflect and communicate in ways that promote mutual learning.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#the-epistemic-commons">The Epistemic Commons</a>.</p>'
-    },
-    {
-      id: 'cp-hyperobjects',
-      title: 'Hyperobjects',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Processes that occupy vast expanses of both time and space, defying the more traditional sense of an “object” as a thing that can be singled out. The concept, introduced by Timothy Morton, invites us to conceive of processes that are difficult to measure, always around us, globally distributed and only observed in pieces. Examples include climate change, ocean pollution, the Internet, and global nuclear armaments and related risks.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#hyperobjects">Hyper-Objects</a>.</p>'
-    },
-    {
-      id: 'cp-open-society',
-      title: 'Open Society',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Open societies promote the free exchange of information and public discourse, as well as democratic governance based on the participation of the people in shared choices about their social futures. Unlike the tight control over communications and suppression of dissenting views that characterize closed societies, open societies promote transparent governance and embrace good-faith public scrutiny.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#open-society">Open Society</a>.</p>'
-    },
-    {
-      id: 'cp-paradigm',
-      title: 'Paradigm',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The modern use of the term ‘paradigm’ was introduced by the philosopher of science Thomas Kuhn in his work “The Structure of Scientific Revolutions”. Kuhn’s idea is that a paradigm is the set of concepts and practices that define a scientific discipline at any particular period of time. A good example of a paradigm is behaviorism – a paradigm under which studying externally observable behavior was viewed as the only scientifically legitimate form of psychology. Kuhn also argued that science progresses by the way of “paradigm shifts,” when a leading paradigm transforms into another through advances in understanding and methodology; for example, when the leading paradigm in psychology transformed from behaviorism to cognitivism, which looked at the human mind from an information processing perspective.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#paradigm">Paradigm</a>.</p>'
-    },
-    {
-      id: 'cp-closed-society',
-      title: 'Closed Society',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Closed societies restrict the free exchange of information and public discourse, as well as impose top down decisions on their populus. Unlike the open communications and dissenting views that characterize open societies, closed societies promote opaque governance and prevent public opposition that might be found in free and open discourse.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#closed-society">Closed Society</a>.</p>'
-    },
-    {
-      id: 'cp-social-contract-theory',
-      title: 'Social Contract Theory',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A theory stating that individuals are willing to sacrifice some of their freedom and agree to state authority under certain legal rules, in exchange for the protection of their remaining rights, provided the rest of society adheres to the same rules of engagement. This model of political philosophy originated during the Age of Enlightenment from theorists including, but not limited to John Locke, Thomas Hobbes, and Jean-Jacques Rousseau. It was revived in the 20th century by John Rawls and is used as the basis for modern democratic theory.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#social-contract-theory">Social Contract Theory</a>.</p>'
-    },
-    {
-      id: 'cp-risk-society',
-      title: 'Risk Society',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A term proposed by sociologists to characterize emergent properties of social systems after the Second World War. Risk societies are increasingly preoccupied with securing the future against widespread and unpredictable risks. Grappling with these risks differentiate risk societies from modern societies, given these risks are the byproduct of modernity’s scientific, industrial, and economic advances. This preoccupation with risk is stimulating a feedback loop and a series of changes in political, cultural, and technological aspects of society.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#world-risk-society">World Risk Society</a>.</p>'
-    },
-    {
-      id: 'cp-sensemaking',
-      title: 'Sensemaking',
-      cpOnly: true,
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A process by which people interpret information and experiences, and structure their understanding of a given domain of knowledge. It is the basis of decision-making: our interpretation of events will inform the rationale for what we do next. As we make sense of the world and accordingly act within it, we also gather feedback that allows us to improve our sensemaking and our capacity to learn. Sensemaking can occur at an individual level through interaction with one’s environment, collectively among groups engaged in discussion, or through socially-distributed reasoning in public discourse.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#sensemaking">Sensemaking</a>.</p>'
+      html: '<p><em>Metapsychology</em> is theory about the psyche as a whole – not one school of psychology among others, but a framework for how minds are structured, develop and relate to culture, within which particular psychologies can be placed. The term was Sigmund Freud’s; the philosopher of education Zachary Stein has renewed it as an integrative account of human development, arguing that a civilisation in crisis needs an explicit, shared understanding of what people are and can become in order to educate, govern and care for them well.</p><p>On this view a civilisational crisis is also a crisis of human development, and the transition to a new civilisation is as much psychological and educational as it is technological or political.</p>'
     },
     {
       id: 'affordance',
       title: 'Affordance',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary; Gibson',
-      html: '<p>The noun was coined by the American ecological psychologist James J. Gibson. It was initially used in the study of animal-environment interaction and has also been used in the study of human-technology interaction. An affordance is an available use or purpose of a thing or an entity. For example, a couch affords being sat on, a microwave button affords being pressed, and a social media platform has an affordance of letting users share with each other.</p>'
-    },
-    {
-      id: 'agent-provocateur',
-      title: 'Agent Provocateur',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Agent provocateur translates to “inciting incident” in French. It is used to reference individuals who attempt to persuade another individual or group to partake in a crime or rash behavior or to implicate them in such acts. This is done to defame, delegitimize, or criminalize the target. For example, starting a conflict at a peaceful protest or attempting to implicate a political figure in a crime.</p>'
+      refs: ['James J. Gibson, <em>The Ecological Approach to Visual Perception</em> (1979).', 'Donald A. Norman, <em>The Design of Everyday Things</em> (1988).'],
+      html: '<p>An <em>affordance</em>, in the ecological psychology of James J. Gibson, is a possibility for action that an environment offers an animal – a surface affords walking, a handle grasping, a ledge falling. Affordances belong neither to things alone nor to perceivers alone but to their relation, and Gibson held that they are perceived directly. Through Donald Norman’s work on design the idea passed into the study of technology, where it names what a tool invites and makes easy: the affordances of a social media platform – sharing, liking, endless scrolling – shape behaviour at the scale of whole societies. See <a href="#ecological-psychology">ecological psychology</a>.</p>'
     },
     {
       id: 'information-warfare',
       title: 'Information Warfare',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Information warfare is a primary aspect of fourth- and fifth-generation warfare. It can be thought of as war with bits and memes instead of guns and bombs. Examples of information warfare include psychological operations like disinformation, propaganda, or manufactured media, or non-kinetic interference in an enemy’s communication capacity or quality.</p>'
+      html: '<p><em>Information warfare</em> is conflict waged through information rather than physical force: propaganda, disinformation, psychological operations, the manipulation of media and social networks, and attacks on an adversary’s communications. Long a part of war, it has moved towards the centre of strategy as societies have come to depend on digital networks, where cheap, deniable and continuous operations can sow division, erode trust and shape perceptions without a shot being fired. Because its target is a society’s capacity to make sense of the world, it attacks the <a href="#the-epistemic-commons">epistemic commons</a> itself. See <a href="#non-kinetic-warfare">non-kinetic warfare</a> and <a href="#misinformation">misinformation</a>.</p>'
     },
     {
       id: 'non-kinetic-warfare',
       title: 'Non-Kinetic Warfare',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A form of rivalry between nation-states or conflicting groups, by which tactical aims are realized through means other than direct physical violence. Examples include election meddling, blackmailing politicians, or information warfare.</p>'
-    },
-    {
-      id: 'sock-puppet',
-      title: 'Sock Puppet',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A fake online persona, crafted to manipulate public opinion without implicating the account creator—the puppeteer. These fabricated identities can be wielded by anyone, from independent citizens to political organizations and information warfare operatives, with the aim of advancing their chosen agenda. Sock puppet personas can embody any identity their puppeteers want, and a single individual can create and operate numerous accounts. Combined with computational technology such as AI-generated text or automation scripts, propagandists can mimic multiple seemingly legitimate voices to create the illusion of organic popular trends within the public discourse.</p>'
-    },
-    {
-      id: 'plausible-deniability',
-      title: 'Plausible Deniability',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The ability of an individual or institutional entity to deny knowing about unethical or illegal activities because there is no evidence to the contrary or no such information has been provided.</p>'
-    },
-    {
-      id: 'algorithmic-radicalisation',
-      title: 'Algorithmic Radicalization',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Ideological polarization is generated as a side-effect of content recommendation algorithms optimizing for user engagement and advertising revenues. These algorithms will upregulate content that reinforces existing views and filters out countervailing information because this has been proven to drive time on-site. The result is an increasingly polarized perspective founded on a biased information landscape.</p>'
-    },
-    {
-      id: 'limbic-hijack',
-      title: 'Limbic Hijack',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The phenomenon of having your attention captured by emotionally triggering stimuli. These stimuli strategically target the brain center that we share with other mammals that is responsible for emotional processing and arousal—the limbic system. This strategy of activating the limbic system is deliberately exploited by online algorithmic content recommendations to stimulate increased user engagement. Two effective stimuli for achieving this effect are those that can induce disgust or rage, as these sentiments naturally produce highly salient responses in people.</p>'
-    },
-    {
-      id: 'microtargeting',
-      title: 'Microtargeting',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>An online advertising strategy in which companies create personal profiles about individual users from vast quantities of trace data left behind from their online activity. According to these psychometric profiles, companies display content that matches each user’s specific interests at moments when they are most likely to be impacted by it. While traditional advertising appeals to its audience’s demographics, microtargeting curates advertising for individuals and becomes increasingly personalized by analyzing new data.</p>'
-    },
-    {
-      id: 'sensationalism',
-      title: 'Sensationalism',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Sensationalism is a tactic often used in mass media and journalism in which news stories are explicitly chosen and worded to excite the greatest number of readers or viewers, typically at the expense of accuracy. This may be achieved by exaggeration, omission of facts and information, and/or deliberate obstruction of the truth to spark controversy.</p>'
+      html: '<p><em>Non-kinetic warfare</em> pursues the aims of war by means other than physical violence: <a href="#information-warfare">information warfare</a>, cyberattacks, economic coercion, election interference, lawfare and the cultivation of influence over an adversary’s elites. Its attraction is that it is cheap, deniable and continuous, operating below the threshold that would trigger a military response – which blurs the line between war and peace, and turns conflict from an exceptional event into a permanent condition. See <a href="#mad-information-war">MAD information war</a>.</p>'
     },
     {
       id: 'misinformation',
       title: 'Misinformation',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>False or misleading information, irrespective of the intent to mislead. Within the category of misinformation, disinformation is a term used to refer to misinformation with intent. In news media, the public generally expects a higher standard for journalistic integrity and editorial safeguards against misinformation; in this context, misinformation is often referred to as “fake news”.</p>'
-    },
-    {
-      id: 'deep-fakes',
-      title: 'Deep Fakes',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A deep fake is a digitally-altered (via AI) recording of a person for the purpose of political propaganda, sexual objectification, defamation, or parody. They are progressively becoming more indistinguishable from reality to an untrained eye.</p>'
-    },
-    {
-      id: 'epistemic-nihilism',
-      title: 'Epistemic Nihilism',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>This form of nihilism is a diffuse and usually subconscious feeling that it is impossible to really know anything, because, for example, “the science is too complex” or “there is fake news everywhere.” Without a shared ability to make sense of the world as a means to inform our choices, we are left with only the game of power. Claims of “truth” are seen as unwarranted or intentional manipulations, as weaponized or not earnestly believed in.</p>'
-    },
-    {
-      id: 'epistemic-hubris',
-      title: 'Epistemic Hubris',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Inadvertent emotionally or politically -motivated closed-mindedness, manifesting as certainty or overconfidence when dealing with complex indeterminate problems. Epistemic hubris can appear in many forms. For example, it is often demonstrated in the convictions of individuals influenced by highly politicized groups, it shows up in corporate or bureaucratic contexts that err towards certainty through information compression requirements, and it appears in media, where polarized rhetoric is incentivized due to its attention-grabbing effects. Note: for some kinds of problems it may be appropriate or even imperative to have a degree of confidence in one’s knowledge—this is not epistemic hubris.</p>'
-    },
-    {
-      id: 'frame-control',
-      title: 'Frame Control',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The ability of an individual or group to shape the perception of an issue or topic by setting the narrative and determining the context for the debate. A “frame” is the way in which an issue is presented or “framed”, including the language, images, assumptions, and perspectives used to describe it. Controlling the frame can give immense social and political power to the actor who uses it because the narratives created or distorted by frame control are often covertly beneficial to the specific interests of the individual or group that has established the frame. As an example, politicians advocating for tax cuts or pro-business policies may use the phrase “job creators” when referring to wealthy corporations in order to suggest their focus is on improving livelihoods, potentially influencing public perception in favor of the politician’s interests.</p>'
-    },
-    {
-      id: 'cherry-picking',
-      title: 'Cherry Picking',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>To “cherry pick” when making an argument is to selectively present evidence that supports one’s position or desired outcome, while ignoring or omitting any contradicting evidence.</p>'
-    },
-    {
-      id: 'confirmation-bias',
-      title: 'Confirmation Bias',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The cognitive bias of 1) exclusively seeking or recalling evidence in support of one’s current beliefs or values, 2) interpreting ambiguous information in favor of one’s beliefs or values, and 3) ignoring any contrary information. This bias is especially strong when the issues in question are particularly important to one’s identity.</p>'
-    },
-    {
-      id: 'strawman-arguments',
-      title: 'Strawman Arguments',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Presenting the argument of disagreeable others in their weakest forms, and after dismissing those, claiming to have discredited their position as a whole.</p>'
-    },
-    {
-      id: 'thought-terminating-cliches',
-      title: 'Thought-Terminating Clichés',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Used as part of propaganda or advertising campaigns, these are brief, highly-reductive, and definitive-sounding phrases that stop further questioning of ideas. Often used in contexts in which social approval requires unreflective use of the cliché, which can result in confusion at the individual and collective level. Examples include all advertising jingles and catchphrases, and certain political slogans.</p>'
-    },
-    {
-      id: 'villainisation',
-      title: 'Villainization',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Creating the image of an anti-hero who epitomizes the worst of the disagreeable group, and contrasts with the best qualities of one’s own, then characterizing all members of the other group as if they were identical to that image.</p>'
-    },
-    {
-      id: 'epistemic-humility',
-      title: 'Epistemic Humility',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>An ethos of learning that involves a healthy balance between confidence and openness to new ideas. It is neither hubristic, meaning overly confident or arrogant, nor nihilistic, meaning believing that nothing can be known for certain. Instead, it is a subtle orientation that seeks new learning, recognizes the limitations of one’s own knowledge, and avoids absolutisms or fundamentalisms—which are rigid and unyielding beliefs that refuse to consider alternative viewpoints. Those that demonstrate epistemic humility will embrace truths where these are possible to attain but are generally inclined to continuously upgrade their beliefs with new information.</p>'
-    },
-    {
-      id: 'good-faith-communications',
-      title: 'Good Faith Communications',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Discourse oriented towards mutual understanding and coordinated action, with the result of increasing the faith that participants have in the value of communicating. The goal of good faith communication is not to reach a consensus, but to make it possible for all parties to change positions, learn, and continue productive, ongoing interaction.</p>'
-    },
-    {
-      id: 'consilience',
-      title: 'Consilience',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>In science and history, consilience is the principle that evidence from independent, unrelated sources can “converge” on strong conclusions. That is, when multiple sources of evidence are in agreement, the conclusion can be very strong even when none of the individual sources of evidence is significantly so on its own.</p>'
-    },
-    {
-      id: 'epistemology',
-      title: 'Epistemology',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Epistemology is the philosophical study of knowing and the nature of knowledge. It deals with questions such as “how does one know?” and “what is knowing, known, and knowledge?”. Epistemology is considered one of the four main branches of philosophy, along with ethics, logic, and metaphysics.</p>'
-    },
-    {
-      id: 'empiricism',
-      title: 'Empiricism',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary; Locke',
-      html: '<p>Empiricism is a philosophical theory that states that knowledge is derived from sensory experiences and relies heavily on scientific evidence to arrive at a body of truth. English philosopher John Locke proposed that rather than being born with innate ideas or principles, man’s life begins as a “blank slate” and only through his senses is he able to develop his mind and understand the world.</p>'
+      html: '<p><em>Misinformation</em> is false or misleading information, whatever the intent of those who spread it; <em>disinformation</em> is misinformation spread deliberately to deceive. Both are as old as communication, but digital media have changed their scale and speed: algorithms that reward engagement favour the sensational and the outrageous, anyone can publish to millions, and synthetic media make fabrication cheap and convincing. The deeper harm is not any single falsehood but the erosion of shared standards for telling true from false, and of trust in the institutions that once upheld them – the <a href="#epistemic-crisis">epistemic crisis</a>.</p>'
     },
     {
       id: 'paradigm',
@@ -3349,31 +3107,10 @@
       html: '<p>A <em>paradigm</em>, in Thomas Kuhn’s sense, is the framework of shared assumptions, concepts, exemplary problems and methods within which a community of inquiry works – what it takes for granted, what it counts as a problem and what as a solution. Paradigms are not simply replaced by better evidence: anomalies accumulate, the old framework is stretched to absorb them, and only in a crisis does a new one displace it in a <a href="#paradigm-shift">paradigm shift</a>. This map extends the idea beyond science to civilisation itself: a <a href="#civilisational-paradigm">civilisational paradigm</a> is the set of assumptions about reality, value, progress and the good life on which a civilisation’s institutions are built, and the <a href="#dominant-paradigm">dominant civilisational paradigm</a> is the one now generating the metacrisis.</p>'
     },
     {
-      id: 'unverifiable',
-      title: 'Unverifiable',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A proposition or a state of affairs is impossible to be verified, or proven to be true. A further distinction is that a state of affairs can be unverifiable at this time, for example, due to constraints in our technical capacity, or a state of affairs can be unverifiable in principle, which means that there is no possible way to verify the claim.</p>'
-    },
-    {
       id: 'closed-society',
       title: 'Closed Society',
       refs: ['Henri Bergson, <em>The Two Sources of Morality and Religion</em> (1932).', 'Karl Popper, <em>The Open Society and Its Enemies</em> (1945).'],
       html: '<p>A <em>closed society</em> is one organised around fixed authority and unquestionable doctrine – tribal, theocratic or totalitarian – in which institutions cannot be criticised or changed by those who live under them, and dissent is treated as a threat. The distinction between closed and open societies was first drawn by Henri Bergson and developed by Karl Popper in <em>The Open Society and Its Enemies</em> (1945), who saw the pull back towards closure as a recurring response to the strain of living in an <a href="#open-society">open society</a>. Today the risk is that surveillance, algorithmic control and artificial intelligence make closure more complete and more stable than ever before: the <a href="#despotic-drift">despotic drift</a> of the second attractor.</p>'
-    },
-    {
-      id: 'civic-virtue',
-      title: 'Civic Virtue',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The ethical behavior exhibited by individuals in service of bettering their communities and their state, sometimes foregoing personal gain for the pursuit of a greater good for all. In contrast to other sets of moral virtues, civic virtue refers specifically to standards of behavior in the context of citizens participating in governance or civil society. What constitutes civic virtue has evolved over time and may differ across political philosophies. For example, in modern-day democracies, civic virtue includes values such as guaranteeing all citizens the right to vote, and freedom of culture, race, sex, religion, nationality, sexual orientation, or gender identity. A shared understanding of civic virtue among the populace is integral to the stability of a just political system, and waning civic virtue may result in disengagement from collective responsibilities, noncompliance with the rule of law, a breakdown in trust between individuals and the state, and degradation of the intergenerational process of passing on civic virtues.</p>'
-    },
-    {
-      id: 'public-sphere',
-      title: 'Public Sphere',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary; Habermas',
-      html: '<p>First coined by philosopher Jürgen Habermas, the term refers to the collective common spaces where people come together to publicly articulate matters of mutual interest for members of society. By extension, the related theory suggests that impartial, representative governance relies on the capacity of the public sphere to facilitate healthy debate.</p>'
     },
     {
       id: 'post-agi-society',
@@ -3392,60 +3129,14 @@
       html: '<p><em>Social contract theory</em> grounds political authority in the agreement – actual, tacit or hypothetical – of those subject to it: people give up some of their freedom to a common power in exchange for the security and rights that only a shared order can provide. Thomas Hobbes argued for an absolute sovereign as the only alternative to a war of all against all; John Locke for a limited government bound to protect life, liberty and property; Jean-Jacques Rousseau for a general will, under which citizens obey only the laws they give themselves; and John Rawls revived the tradition with a contract made behind a veil of ignorance. Its question – on what terms can people rightly be asked to accept a common order? – returns whenever that order’s foundations shift, as in <a href="#post-agi-social-contract-theory">post-AGI social contract theory</a>.</p>'
     },
     {
-      id: 'ethos',
-      title: 'Ethos',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Derived from a Greek word meaning custom, habit, or character; The set of ideals or customs which lay the foundations around which a group of people coheres. This includes the set of values upon which a culture derives its ethical principles.</p>'
-    },
-    {
       id: 'cultural-enlightenment',
       title: 'Cultural Enlightenment',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>While “The Enlightenment” was a specific instantiation of cultural enlightenment in 18th-century Europe, cultural enlightenment is a more general process that has occurred multiple times in history, in many different cultures. When a culture goes through a period of increasing reflectivity on itself it is undergoing cultural enlightenment. This period of reflectivity brings about the awareness required for a culture to reimagine its institutions from a new perspective. Similarly, “The Renaissance” refers to a specific period in Europe while the process of a cultural renaissance has occurred elsewhere. A cultural renaissance is more general than (and may precede) an enlightenment, as it describes a period of renewed interest in a particular topic.</p>'
-    },
-    {
-      id: 'renaissance',
-      title: 'Renaissance',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The word itself is French for rebirth, and this meaning is maintained across its many purposes. The term is commonly used with reference to the European Renaissance, a period of European cultural, artistic, political, and economic renewal following the middle ages. The term can refer to other periods of great social change, such as the Bengal Renaissance (beginning in late 18th century India).</p>'
-    },
-    {
-      id: 'pedagogy',
-      title: 'Pedagogy',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>The theory and practice of teaching and learning, and how this process influences, and is influenced by, the social, political, and psychological development of learners.</p>'
-    },
-    {
-      id: 'intergenerational-transmission',
-      title: 'Intergenerational Transmission',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Refers to the foundational process of education which underlies and enables societal and cultural cohesion across generations by passing down values, capacities, knowledge, and personality types.</p>'
-    },
-    {
-      id: 'societal-autopoiesis',
-      title: 'Societal Autopoiesis',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Autopoiesis from the Greek αὐτo- (auto-) ‘self’, and ποίησις (poiesis) ‘creation, production’—is a term coined in biology that refers to a system’s capability for reproducing and maintaining itself by metabolizing energy to create its own parts, and eventually new emergent components. All living systems are autopoietic. Societal Autopoiesis is an extension of the biological term, making reference to the process by which a society maintains its capacity to perpetuate and adapt while experiencing relative continuity of shared identity.</p>'
-    },
-    {
-      id: 'monetarism',
-      title: 'Monetarism',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A prevailing school of economic thought that emphasizes the government’s role in controlling the supply of money circulating in an economy as the primary determinant of economic growth. This involves central banks using various methods of increasing or decreasing the money supply of their currency (e.g., altering interest rates).</p>'
+      html: '<p><em>Cultural enlightenment</em> is the process by which a culture becomes reflective about itself – able to examine its own assumptions, institutions and ways of knowing, and to reimagine them. The European Enlightenment of the eighteenth century is its best-known instance but not its only one: comparable periods of self-examination and renewal have occurred in many civilisations, often preceded by a renaissance of learning. In the account of the <a href="#third-attractor">third attractor</a>, a new cultural enlightenment – a society-wide growth in the capacity for collective <a href="#sensemaking">sensemaking</a> and wisdom – is a precondition for open societies able to govern exponential technology.</p>'
     },
     {
       id: 'technocapitalism',
       title: 'Technocapitalism',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>A worldview that holds technology, specifically developed by private corporations, as the primary driver of civilizational progress. For evidence of its success, adherents point to the consistent global progress in reducing metrics like child mortality and poverty while capitalism has been the dominant economic paradigm. However, the market incentives driving this progress have also resulted in new, sometimes greater, societal problems as externalities.</p><p>In Nick Land’s darker usage – <a href="#techno-capital-and-technomic">techno-capital</a> – the term names not a worldview but a process: capital and technology fused into a single self-accelerating system that uses human beings as its medium, and that is, in Land’s account, already becoming an intelligence in its own right.</p>'
+      html: '<p><em>Technocapitalism</em> is the worldview that holds technological innovation, driven by private enterprise and markets, to be the primary engine of civilisational progress. Its adherents point to the falling rates of poverty and child mortality and the rising living standards of the capitalist era; its critics, to the externalities – ecological, social and existential – that the same incentives have produced, often outrunning the problems they solved. See <a href="#techno-capitalist-progress-narrative">the techno-capitalist progress narrative</a>.</p><p>In Nick Land’s darker usage – <a href="#techno-capital-and-technomic">techno-capital</a> – the term names not a worldview but a process: capital and technology fused into a single self-accelerating system that uses human beings as its medium, and that is, in Land’s account, already becoming an intelligence in its own right.</p>'
     },
     {
       id: 'goodharts-law',
@@ -5346,7 +5037,7 @@
     {
       id: 'algorithmic-political-polarisation',
       title: 'Algorithmic Political Polarisation',
-      html: '<p><em>Algorithmic political polarisation</em> is the deepening of political division by recommendation systems that learn what keeps people engaged and serve them more of it. Because content that provokes anger and confirms identity holds attention, the systems tend to push users towards more extreme and more homogeneous information environments. See <a href="#algorithmic-radicalisation">algorithmic radicalisation</a>.</p>'
+      html: '<p><em>Algorithmic political polarisation</em> is the deepening of political division by recommendation systems that learn what keeps people engaged and serve them more of it. Because content that provokes anger and confirms identity holds attention, the systems tend to push users towards more extreme and more homogeneous information environments. See algorithmic radicalisation.</p>'
     },
     {
       id: 'information-overload',
@@ -7802,7 +7493,7 @@
     'search': { id: 'search', title: 'Search', parent: ROOT.id, html: '<!--SEARCH-->' },
     // (unlisted: reached only at #review)
     'review': { id: 'review', title: 'Review', parent: ROOT.id,
-      html: '<p>The entries whose text has not yet been reviewed: drafted for the map and still to be read, corrected and approved. Claims flagged for checking come first, with what needs confirming. When an entry has been reviewed, it is marked <code>reviewed: true</code> and leaves this list. The Consilience Project’s glossary definitions, quoted as written, are not listed.</p>\n<!--REVIEW-->' }
+      html: '<p>The entries whose text has not yet been reviewed: drafted for the map and still to be read, corrected and approved. Claims flagged for checking come first, with what needs confirming. When an entry has been reviewed, it is marked <code>reviewed: true</code> and leaves this list.</p>\n<!--REVIEW-->' }
   };
 
   // Alphabetical order ignores a leading “The”, “A” or “An”.
@@ -7971,15 +7662,7 @@
   }
   function setStart(i) { for (var k = 0, n = 0; k < SET_SIZES.length; n += SET_SIZES[k++]) if (i === n) return true; return false; }
   function isConcept(c) { return c !== ROOT && c.kind !== 'category' && c.kind !== 'node' && !c.cpOnly; }   // (landscape nodes – people, organisations, movements – are not concepts)
-  // (the A–Z: every concept and the ten sections' own entries – bar the Consilience Project's glossary
-  // terms not yet filed in the paradigm, which appear only in its own view)
-  var azParadigm = null;
-  function inAZ(c) {
-    if (c.kind === 'category' && c.parent === ROOT.id) return true;
-    if (!isConcept(c)) return false;
-    if (!(c.tags && c.tags.indexOf('consilience') >= 0)) return true;
-    return !!(azParadigm || (azParadigm = paradigmIds()))[c.id];
-  }
+  function inAZ(c) { return isConcept(c) || (c.kind === 'category' && c.parent === ROOT.id); }   // (the A–Z: every concept and the ten sections' own entries)
   function childrenOf(id) {
     return CONCEPTS.filter(function (c) { return c.parent === id && !c.cpOnly; })
       .sort(function (a, b) { return ((a.order || 1000) - (b.order || 1000)) || byTitle(a, b); });
@@ -8381,7 +8064,7 @@
       var c = byId[a.getAttribute('href').slice(1)];
       if (!c || !c.coined || a.querySelector('.ce-mark')) return;
       var box = a.closest('.ce-list');
-      if (box && !box.classList.contains('cs-list') && !box.classList.contains('rl-list') && !box.classList.contains('cp-list')) return;
+      if (box && !box.classList.contains('cs-list') && !box.classList.contains('rl-list')) return;
       // (bound to the title's last word, so the mark never wraps onto a line of its own)
       var t = a.lastChild;
       if (t && t.nodeType === 3 && /\S+\s*$/.test(t.nodeValue)) {
@@ -8559,19 +8242,6 @@
           g.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul></div>';
       }).join('') + '</div>' +
       '<div class="ce-az">' + azListHtml(coined) + '</div></div>';
-    // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
-    var cpTerms = CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); }).sort(byTitle);
-    var cp = '<div class="ce-list cp-list">' +
-      '<p class="ce-intro ce-count">Glossary terms: ' + cpTerms.length + '</p><h3 class="ce-title">Consilience Project</h3>' +
-      '<p class="ce-desc">The terms of the <a href="https://consilienceproject.org/glossary/" target="_blank" rel="noopener">glossary of <em>The Consilience Project</em></a>, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations. Where the map has its own entry for a term, the Consilience Project’s definition is given as a separate entry here.</p>' +
-      '<ul>' +
-      // The list jumps to each term's definition below; each definition's title opens its entry.
-      cpTerms.map(function (c) { return '<li><a href="#" data-jump="cpd-' + c.id + '">' + esc(c.title) + '</a></li>'; }).join('') +
-      '</ul><h3 class="cp-gloss-head">Glossary</h3><p class="cp-gloss-sub">A complete list of all terms</p><div class="cp-glossary">' +
-      cpTerms.map(function (c) {
-        return '<section class="cp-def" id="cpd-' + c.id + '"><h4 class="cp-def-title"><a href="' + href(c) + '">' + esc(c.title) + '</a></h4>' +
-          c.html.replace(/<p class="cp-note">[\s\S]*?<\/p>/, '') + '</section>';
-      }).join('') + '</div></div>';
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
@@ -8616,7 +8286,7 @@
       tab('rl', 'Civilisation Research Landscape', rlCount + ' nodes') +
       tab('ce', 'Conceptual Engineerings', coined.length + ' novel terms') +
       tab('az', 'Alphabetical A–Z', concepts.length + ' concepts') + '</nav>' +
-      (concepts.length ? ab + az + ce + cp + cs + rl : '');
+      (concepts.length ? ab + az + ce + cs + rl : '');
   }
 
   // k = how many of the earliest nodes step out into the vertical stack above the line.
@@ -9022,7 +8692,6 @@
   // Tags: small labels under an entry's title marking where it comes from (e.g. entries taken
   // from the Consilience Project's glossary). Each tag has a label and, optionally, a link.
   var TAGS = {
-    consilience: { label: 'Consilience Project', view: 'cp' },   // opens the Map's Consilience Project view
     ce: { label: 'Conceptual Engineering', view: 'ce' },         // the map's own novel terms, marked coined (added automatically)
     landscape: { label: 'Civilisation Research Landscape', view: 'rl' }   // the landscape's nodes: opens the Map's Research Landscape view
   };
@@ -9088,7 +8757,7 @@
   }
 
   // The addresses of the Map's five views
-  var MAP_VIEWS = { ab: 'theproject', cs: 'civilisation-research-paradigm', rl: 'civilisation-research-landscape', az: 'a-z', ce: 'conceptual-engineerings', cp: 'consilience-project' };
+  var MAP_VIEWS = { ab: 'theproject', cs: 'civilisation-research-paradigm', rl: 'civilisation-research-landscape', az: 'a-z', ce: 'conceptual-engineerings' };
   function mapViewHref(v) { return '#the-map/' + MAP_VIEWS[v]; }
   // The A–Z's letters fill three columns in reading order with no later letter set higher than an
   // earlier one: each goes, in turn, to whichever column lets it start highest, but never above
@@ -9716,8 +9385,7 @@
     { id: 'view-cs', view: 'cs', title: 'Civilisation Research Paradigm', html: '<p>The map’s concepts arranged as a research paradigm for the study of civilisation.</p>' },
     { id: 'view-rl', view: 'rl', title: 'Civilisation Research Landscape', html: '<p>The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' },
     { id: 'view-az', view: 'az', title: 'Alphabetical A–Z', html: '<p>Every concept on the map organised into an alphabetical list.</p>' },
-    { id: 'view-ce', view: 'ce', title: 'Conceptual Engineerings', html: '<p>The map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities.</p>' },
-    { id: 'view-cp', view: 'cp', title: 'Consilience Project', html: '<p>The terms of the glossary of The Consilience Project, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations.</p>' }
+    { id: 'view-ce', view: 'ce', title: 'Conceptual Engineerings', html: '<p>The map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities.</p>' }
   ];
   var searchIndex = CONCEPTS.filter(function (c) { return !c.cpOnly && c !== ROOT; }).concat(VIEW_ENTRIES).map(function (c) {
     var tmp = document.createElement('div');
@@ -9942,12 +9610,10 @@
       }).join('') + '</ul></li>';
     }).join('') + '</ul>';
   }
-  // The Review page: every entry not yet marked reviewed: true (bar the Consilience Project's glossary
-  // text, quoted verbatim), the claims flagged for checking (check: '…') first, then by kind.
+  // The Review page: every entry not yet marked reviewed: true, the claims flagged for checking (check: '…') first, then by kind.
   function needsReview(c) {
     if (c === ROOT || c.cpOnly || c.reviewed) return false;
-    if (!(isConcept(c) || c.kind === 'node' || c.kind === 'category')) return false;
-    return !(c.tags && c.tags.indexOf('consilience') >= 0 && /Glossary/.test(c.ref || '') && !c.check);
+    return isConcept(c) || c.kind === 'node' || c.kind === 'category';
   }
   function reviewListHtml() {
     var all = CONCEPTS.filter(needsReview).sort(byTitle);
