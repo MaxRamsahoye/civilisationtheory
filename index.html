@@ -1643,6 +1643,7 @@
     padding-top: 0.2rem;
   }
   .description .az-list ul { list-style: none; padding: 0; margin: 0; }
+  .description .ce-list .az-list ul { columns: 1; font-size: inherit; }   /* (the Conceptual Engineerings' A–Z, as the A–Z view's) */
   .description .az-list li { margin: 0 0 0.4rem; padding: 0; break-inside: avoid; }
   .az-list li a { font-size: 1.01em; }
   /* ---------- Tree index: one section per domain, groups in columns ---------- */
@@ -8122,27 +8123,34 @@
           (NEW_STRUCTURE[d.id] ? sectionColsHtml(d.id) : '<p class="rl-empty">Concepts to be added.</p>') + '</section>';
       }).join('');
     }
-    // Alternative A–Z view: every concept alphabetically, grouped by first letter.
-    var letters = {};
-    concepts.forEach(function (c) {
-      var L = sortKey(c).charAt(0).toUpperCase();
-      if (!/[A-Z]/.test(L)) L = '0–9';  // numbers gathered after Z
-      (letters[L] = letters[L] || []).push(c);
-    });
+    // Alternative A–Z view: every concept alphabetically, grouped by first letter (as is the
+    // Conceptual Engineerings' A–Z arrangement).
+    function lettersOf(list) {
+      var letters = {};
+      list.forEach(function (c) {
+        var L = sortKey(c).charAt(0).toUpperCase();
+        if (!/[A-Z]/.test(L)) L = '0–9';  // numbers gathered after Z
+        (letters[L] = letters[L] || []).push(c);
+      });
+      return letters;
+    }
     // Letters are dealt across three columns in turn (A, B, C, then D under A…), and each column
     // stacks at its own height, so a short letter leaves no gap beside a long one.
-    var azCols = ['', '', ''];
-    Object.keys(letters).sort(function (a, b) {
-      return (a === '0–9') - (b === '0–9') || a.localeCompare(b);
-    }).forEach(function (L, i) {
-      azCols[i % 3] += '<section class="az-group" style="order:' + i + '"><h3 class="az-letter">' + L + '</h3><ul>' +
-        letters[L].map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
-        '</ul></section>';
-    });
-    var nLetters = Object.keys(letters).filter(function (L) { return L !== '0–9'; }).length;  // A–Z only
+    function azListHtml(list) {
+      var letters = lettersOf(list), azCols = ['', '', ''];
+      Object.keys(letters).sort(function (a, b) {
+        return (a === '0–9') - (b === '0–9') || a.localeCompare(b);
+      }).forEach(function (L, i) {
+        azCols[i % 3] += '<section class="az-group" style="order:' + i + '"><h3 class="az-letter">' + L + '</h3><ul>' +
+          letters[L].map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
+          '</ul></section>';
+      });
+      return '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div>';
+    }
+    var nLetters = Object.keys(lettersOf(concepts)).filter(function (L) { return L !== '0–9'; }).length;  // A–Z only
     var az = '<div class="az-view"><p class="ce-intro ce-count">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p><h3 class="ce-title">Alphabetical A–Z</h3>' +
       '<p class="ce-desc">Every concept on the map organised into an alphabetical list.</p>' +
-      '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div></div>';
+      azListHtml(concepts) + '</div>';
     // Conceptual Engineerings in their own categories (to be defined: each is a name and the ids of
     // the terms it holds, e.g. { name: 'Alignment', ids: ['the-great-alignment', …] }); every term
     // not yet allocated is listed, alphabetically, as Uncategorised.
@@ -8169,9 +8177,7 @@
         return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + esc(g.name) + '</p><ul>' +
           g.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul></div>';
       }).join('') + '</div>' +
-      '<ul class="ce-az">' +
-      coined.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') +
-      '</ul></div>';
+      '<div class="ce-az">' + azListHtml(coined) + '</div></div>';
     // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
     var cpTerms = CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); }).sort(byTitle);
     var cp = '<div class="ce-list cp-list">' +
@@ -8707,8 +8713,8 @@
   // earlier one: each goes, in turn, to whichever column lets it start highest, but never above
   // the letter before it (pushed down to that letter's line where need be).
   var azWatch = null;
-  function layoutAZ() {
-    var list = document.querySelector('#entry .az-list');
+  function layoutAZ() { document.querySelectorAll('#entry .az-list').forEach(layoutOneAZ); }
+  function layoutOneAZ(list) {
     if (!list || !list.offsetWidth) return;
     var cols = list.querySelectorAll('.az-col'), groups = Array.prototype.slice.call(list.querySelectorAll('.az-group'));
     groups.sort(function (a, b) { return a.style.order - b.style.order; });
@@ -8730,12 +8736,11 @@
   }
   function watchAZ() {
     if (azWatch) { azWatch.disconnect(); azWatch = null; }
-    var list = document.querySelector('#entry .az-list');
-    if (!list) return;
-    var w = -1;
-    if (window.ResizeObserver) {
-      azWatch = new ResizeObserver(function () { if (list.offsetWidth !== w) { w = list.offsetWidth; layoutAZ(); } });
-      azWatch.observe(list);
+    var lists = document.querySelectorAll('#entry .az-list');
+    if (!lists.length) return;
+    if (window.ResizeObserver) {   // (each laid out again when its width changes – as when first shown)
+      azWatch = new ResizeObserver(function (es) { es.forEach(function (e) { var l = e.target; if (l.offsetWidth !== l._w) { l._w = l.offsetWidth; layoutOneAZ(l); } }); });
+      lists.forEach(function (l) { azWatch.observe(l); });
     }
     layoutAZ();
     if (document.fonts) document.fonts.ready.then(layoutAZ);
@@ -9890,7 +9895,7 @@
     if (!document.body.classList.contains('sidebar-closed') && sidebar.matches(':hover')) {
       heads = sidebar.querySelectorAll('.side-letter-name'); box = sidebar;
     } else if (root.classList.contains('page-map') && root.getAttribute('data-index') === 'az') {
-      heads = document.querySelectorAll('#entry .az-letter'); box = null;
+      heads = document.querySelectorAll('#entry .az-view .az-letter'); box = null;
     } else return false;
     var list = Array.prototype.filter.call(heads, function (h) { return /^[A-Z]$/.test(h.textContent.trim()); })
       .sort(function (x, y) { return x.textContent.trim().localeCompare(y.textContent.trim()); });   // (the A–Z deals its letters across columns)
