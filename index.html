@@ -1188,6 +1188,18 @@
   .description .ce-list.ab-list ul.controls { list-style: none; padding: 0; margin: 0.4rem 0 1.4rem; }
   .description .ce-list.ab-list ul.controls li { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; margin: 0 0 0.55rem; align-items: baseline; }
   .description ul.controls .keys { white-space: nowrap; }
+  /* (each group of controls a dropdown, its subheading the toggle, marked with the paradigm's chevron) */
+  .description details.ctl-drop > summary { list-style: none; cursor: pointer; position: relative; width: fit-content; }
+  .description details.ctl-drop > summary::-webkit-details-marker { display: none; }
+  .description details.ctl-drop > summary > h3 { display: inline; }
+  .description details.ctl-drop > summary::before {
+    content: ''; position: absolute; left: -1.05em; top: 0.5em; width: 0.42em; height: 0.42em;
+    border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+    transform: rotate(-45deg); transition: transform .2s ease, border-color .2s ease;
+  }
+  .description details.ctl-drop > summary:hover::before { border-color: var(--text); }
+  .description details.ctl-drop[open] > summary::before { transform: translate(0.08em, -0.1em) rotate(45deg); }
+  .description details.ctl-drop { margin: 0.9rem 0; }
   .description kbd { font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif; font-size: 0.72em; letter-spacing: 0.02em; color: var(--text);
     border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px; padding: 0.05em 0.42em; background: var(--bg-side); }
   .description ul.fiction-list { list-style: none; padding: 0; margin: 1.6rem 0 0; }
@@ -1966,29 +1978,29 @@
         '</div>',
         '<h2>Controls</h2>' +
         '<p>Shortcuts work anywhere on the site except while typing in a box.</p>' +
-        '<h3 class="sub-head">Navigation</h3><ul class="controls">' +
+        '<details class="ctl-drop"><summary><h3 class="sub-head">Navigation</h3></summary><ul class="controls">' +
         '<li><span class="keys"><kbd>1</kbd> <span class="k-sep">–</span> <kbd>5</kbd></span><span>Open the Map’s views in turn: About the Project, Civilisation Research Paradigm, Civilisation Research Landscape, Conceptual Engineerings and Alphabetical A–Z (on the Map)</span></li>' +
         '<li><span class="keys"><kbd>Enter</kbd></span><span>Open About the Project (on the Map)</span></li>' +
         '<li><span class="keys"><kbd>Space</kbd></span><span>Open or close the sidebar</span></li>' +
         '<li><span class="keys"><kbd>Backspace</kbd></span><span>Back to the top of the page; once at the top, back to the previous page</span></li>' +
         '<li><span class="keys"><kbd>A</kbd> <span class="k-sep">–</span> <kbd>Z</kbd></span><span>Jump to that letter in the Alphabetical A–Z view, or in the sidebar while the pointer is over it</span></li>' +
-        '</ul>' +
-        '<h3 class="sub-head">Search</h3><ul class="controls">' +
+        '</ul></details>' +
+        '<details class="ctl-drop"><summary><h3 class="sub-head">Search</h3></summary><ul class="controls">' +
         '<li><span class="keys"><kbd>S</kbd></span><span>Search: in the Map’s opening screen, its search box; anywhere else, find in the page</span></li>' +
         '<li><span class="keys"><kbd>/</kbd></span><span>Open the search page</span></li>' +
         '<li><span class="keys"><kbd>Esc</kbd></span><span>Close find, or clear a search box</span></li>' +
-        '</ul>' +
-        '<h3 class="sub-head">Display</h3><ul class="controls">' +
+        '</ul></details>' +
+        '<details class="ctl-drop"><summary><h3 class="sub-head">Display</h3></summary><ul class="controls">' +
         '<li><span class="keys"><kbd>T</kbd></span><span>Change the theme</span></li>' +
         '<li><span class="keys"><kbd>C</kbd></span><span>Cycle the accent colour of links</span></li>' +
         '<li><span class="keys"><kbd>H</kbd></span><span>Hide the interface, leaving only the page itself (<kbd>H</kbd> or <kbd>Esc</kbd> brings it back)</span></li>' +
         '<li><span class="keys"><kbd>A</kbd></span><span>Hide or show the Map’s topography</span></li>' +
         '<li><span class="keys"><kbd>M</kbd></span><span>Turn sound on or off</span></li>' +
-        '</ul>' +
-        '<h3 class="sub-head">Pointer</h3><ul class="controls">' +
+        '</ul></details>' +
+        '<details class="ctl-drop"><summary><h3 class="sub-head">Pointer</h3></summary><ul class="controls">' +
         '<li><span class="keys"><kbd>Right-click</kbd></span><span>On selected text: <em>Copy</em>, or <em>Copy Link to Highlight</em> – a link that opens the page with that passage highlighted</span></li>' +
         '<li><span class="keys"><kbd>Shift</kbd> <span class="k-sep">+</span> <kbd>Right-click</kbd></span><span>The browser’s own menu</span></li>' +
-        '</ul>',
+        '</ul></details>',
       ].join('\n')
     },
     {
