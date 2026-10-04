@@ -2263,6 +2263,24 @@
       html: '<p><em>Ontology</em> is the study of being: what exists, what kinds of things there are, and how they relate – objects and processes, minds and matter, individuals and wholes. As the core of <a href="#metaphysics">metaphysics</a>, it sets the terms in which every other inquiry is framed. A civilisation’s working ontology – whether, for instance, it sees the world as a store of separable objects or as a web of relations and processes – shapes what it can perceive as a problem and what it can imagine as a solution. See <a href="#ontological-stratification">ontological stratification</a> and <a href="#social-ontology">social ontology</a>.</p>'
     },
     {
+      id: 'nash-equilibrium',
+      title: 'Nash Equilibrium',
+      refs: ['John F. Nash, “Equilibrium Points in n-Person Games”, <em>Proceedings of the National Academy of Sciences</em> 36 (1950).'],
+      html: '<p>A <em>Nash equilibrium</em>, named after the mathematician John Nash, is a set of strategies – one for each player in a game – in which no player can do better by changing their own strategy while the others keep theirs. Nash proved in 1950 that every finite game has at least one such equilibrium, if players may mix their strategies at random. An equilibrium is stable, but it need not be good: in the <a href="#prisoners-dilemma">prisoner’s dilemma</a> the only equilibrium is mutual defection, though both players would be better off cooperating. This gap between what is stable and what is best is the formal core of the <a href="#multipolar-trap">multipolar trap</a> – outcomes that everyone would reject together but that no one can escape alone.</p>'
+    },
+    {
+      id: 'pareto-optimality',
+      title: 'Pareto-Optimality',
+      refs: ['Vilfredo Pareto, <em>Manual of Political Economy</em> (1906).'],
+      html: '<p>An outcome is <em>Pareto-optimal</em>, after the economist Vilfredo Pareto, when no one can be made better off without making someone else worse off; a change that makes at least one party better off and no one worse off is a Pareto improvement. The criterion is minimal – it says nothing about how fairly gains are shared, and many very unequal outcomes are Pareto-optimal – but it is a powerful test of waste: an outcome that is not Pareto-optimal leaves gains unclaimed that could benefit someone at no cost to anyone. Equilibria of competition are often not Pareto-optimal, which is why coordination can leave everyone better off. See <a href="#nash-equilibrium">Nash equilibrium</a> and <a href="#paretotopia">paretotopia</a>.</p>'
+    },
+    {
+      id: 'hawks-and-doves',
+      title: 'Hawks & Doves',
+      refs: ['John Maynard Smith and George R. Price, “The Logic of Animal Conflict”, <em>Nature</em> 246 (1973).', 'John Maynard Smith, <em>Evolution and the Theory of Games</em> (1982).'],
+      html: '<p><em>Hawks and doves</em> is a game in which two players contest a resource. A hawk always fights; a dove displays but retreats if attacked. Two doves share the resource, a hawk takes it from a dove, and two hawks fight, with the loser paying a cost that may exceed the value of the prize. John Maynard Smith and George Price used it to show why animal contests are usually ritualised rather than lethal: when fighting is costly, neither all-hawk nor all-dove is stable, and evolution settles on a mix of the two – an <a href="#evolutionarily-stable-strategy">evolutionarily stable strategy</a>. Applied to states and firms, the game models brinkmanship and escalation, and shows how lowering the cost of conflict, or raising the prize, tips a population towards aggression. See <a href="#arms-race">arms race</a>.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
@@ -8197,20 +8215,21 @@
       { head: 'Life-World', items: ['pre-tragic-tragic-post-tragic', 'cybernetic-existentialism', 'acting-irrespective-of-hope', 'existential-hope', 'second-enlightenment', 'pragmatic-utopianism'] },
       ['the-state', [['ship-of-theseus-of-the-state', ['ship-of-the-state', 'ship-of-theseus']], ['the-wizarding-away-of-the-state', ['withering-away-of-the-state']]]]
     ],
-    'metatheory': [
+    'metatheory': [   // (laid out in three columns: see SECTION_COLUMNS)
       ['metatheory', ['utok', 'cosmoerotic-humanism', ['cybernetics-and-systems-theory', ['neo-cybernetics']], 'complex-thought', 'integral-theory', 'critical-realism']],
       ['archtheory', ['complex-integral-realism']],
-      ['civilisation-theory', [['systems-theory', [], { also: true }], ['evolutionary-theory', [], { also: true }], 'game-theory', ['critical-theory', [], { also: true }]]],
-      ['systems-theory', ['feedback-loop', 'leverage-points', 'resilience']],
-      ['evolutionary-theory', ['evolutionary-biology', 'multilevel-selection', 'selection-pressure']],
-      ['philosophy', ['philosophical-paradigms', 'philosophical-frames']],
-      ['moral-theory', ['multi-scale-ethics', 'science-of-morality', 'the-moral-landscape', 'moral-circle-expansion']],
-      ['cultural-psychology', ['phenomenology', 'axiology', 'ontology', 'epistemology']],
       { head: 'Other Currents', items: [
         ['new-materialism', ['intra-action']],
         ['second-order-cybernetics', ['participant-observers']],
         ['ecological-psychology', [['affordance', [], { label: 'Affordances' }]]]] },
-      { head: 'Concepts', items: ['emergence', 'universal-dynamics', 'ontological-stratification', 'transcend-and-include', 'multi-perspectivalism', 'dialectics', 'consilience'] }
+      { head: 'Concepts', items: ['emergence', 'universal-dynamics', 'ontological-stratification', 'transcend-and-include', 'multi-perspectivalism', 'dialectics', 'consilience'] },
+      ['philosophy', ['philosophical-paradigms', 'philosophical-frames']],
+      ['cultural-psychology', ['phenomenology', 'axiology', 'ontology', 'epistemology']],
+      ['civilisation-theory', [['systems-theory', [], { also: true }], ['evolutionary-theory', [], { also: true }], ['game-theory', [], { also: true }], ['critical-theory', [], { also: true }]]],
+      ['systems-theory', ['feedback-loop', 'leverage-points', 'resilience']],
+      ['evolutionary-theory', ['evolutionary-biology', 'multilevel-selection', 'selection-pressure']],
+      ['game-theory', ['nash-equilibrium', 'pareto-optimality', 'hawks-and-doves']],
+      ['moral-theory', ['multi-scale-ethics', 'science-of-morality', 'the-moral-landscape', 'moral-circle-expansion']]
     ],
     'macrohistory': [
       ['macrohistory', ['big-history', 'cliodynamics', 'structural-demographic-theory', 'world-systems-analysis', ['cultural-evolution', ['memetics']], 'high-modernism', 'socio-economic-evolutionary-mismatch']],
@@ -8369,7 +8388,7 @@
     return had.concat(add.filter(function (x) { var id = nodeId(x); return !id || seen.indexOf(id) < 0; }));
   }
   // Sections whose groups are set in particular columns: the number of groups in each.
-  var SECTION_COLUMNS = { metacrisis: [2, 3, 2] };
+  var SECTION_COLUMNS = { metacrisis: [2, 3, 2], metatheory: [3, 3, 5] };
   var HEAD_OF = {};   // (an entry a subheading stands for: that subheading)
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
     (function walk(list, parent, blocks) {
