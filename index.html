@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
+    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -2221,6 +2221,30 @@
       html: '<p><em>Post-post-capitalism</em> names what lies beyond <a href="#post-capitalism">post-capitalism</a>: a civilisation no longer defined by its relation to capitalism at all. The prefix “post-” names a future only by what it is not, and so keeps capitalism as the reference point – just as “postmodernism” remained defined by the modernism it rejected. Post-post-capitalism asks what a successor civilisation would be in its own positive terms: what it would be organised around, what it would value and how it would understand itself, once the transition was complete and capitalism had become one historical form among others rather than the horizon against which everything is measured. It is to post-capitalism what <a href="#metamodernism">metamodernism</a> is to postmodernism – a step from critique and negation towards reconstruction. See <a href="#argument-from-post-capitalist-desire">the argument from post-capitalist desire</a>.</p>'
     },
     {
+      id: 'cultural-psychology',
+      title: 'Cultural Psychology',
+      refs: ['Richard A. Shweder, “Cultural Psychology – What Is It?”, in J. W. Stigler, R. A. Shweder and G. Herdt (eds.), <em>Cultural Psychology</em> (1990).', 'Lev S. Vygotsky, <em>Mind in Society</em> (1978).'],
+      html: '<p><em>Cultural psychology</em> is the study of how culture and mind make each other up: how the meanings, practices and institutions of a culture shape the psyches of those within it, and how those psyches in turn reproduce and change the culture. Against the assumption of a universal mind on which culture is merely a surface layer, it holds, in Richard Shweder’s phrase, that culture and psyche are mutually constituted. For a metatheory of civilisation it names the dimensions along which a civilisation forms the people who live in it: what shows up for them in experience (<a href="#phenomenology">phenomenology</a>), what they value (<a href="#axiology">axiology</a>), what they take to be real (<a href="#ontology">ontology</a>) and how they come to know it (<a href="#epistemology">epistemology</a>). Together these make up a civilisation’s <a href="#super-structure">superstructure</a>, and any transition to a new civilisation must change them as well.</p>'
+    },
+    {
+      id: 'phenomenology',
+      title: 'Phenomenology',
+      refs: ['Edmund Husserl, <em>Ideas: General Introduction to Pure Phenomenology</em> (1913).', 'Martin Heidegger, <em>Being and Time</em> (1927).', 'Maurice Merleau-Ponty, <em>Phenomenology of Perception</em> (1945).'],
+      html: '<p><em>Phenomenology</em> is the study of experience as it is lived from the first-person point of view: the structures of perception, attention, embodiment, time and meaning through which anything shows up for us at all. Founded by Edmund Husserl, and developed by Martin Heidegger, Maurice Merleau-Ponty and others, it brackets questions about what lies behind appearances to describe the appearing itself. Its insight for civilisation theory is that the world does not show up the same way for everyone: a culture shapes what its members notice and overlook, what feels salient, sacred or meaningless – and so a change of civilisation is also a change in how the world is experienced. See <a href="#4e-cognition">4E cognition</a> and <a href="#cultural-psychology">cultural psychology</a>.</p>'
+    },
+    {
+      id: 'axiology',
+      title: 'Axiology',
+      refs: ['Robert S. Hartman, <em>The Structure of Value</em> (1967).'],
+      html: '<p><em>Axiology</em> is the study of value: what is good, worth wanting or worth doing, and why. It spans ethics, the value of actions and lives, and aesthetics, the value of beauty and form, and asks how values are grounded, how they relate to one another and how they can be ranked when they conflict. Every civilisation embodies an axiology – often unstated – in what its institutions reward and its metrics count; the map’s critique of narrow metric optimisation is in large part a critique of the axiology of the present order. See <a href="#axiological-design">axiological design</a> and <a href="#moral-theory">moral theory</a>.</p>'
+    },
+    {
+      id: 'ontology',
+      title: 'Ontology',
+      refs: ['Martin Heidegger, <em>Being and Time</em> (1927).', 'W. V. O. Quine, “On What There Is”, <em>Review of Metaphysics</em> 2 (1948).'],
+      html: '<p><em>Ontology</em> is the study of being: what exists, what kinds of things there are, and how they relate – objects and processes, minds and matter, individuals and wholes. As the core of <a href="#metaphysics">metaphysics</a>, it sets the terms in which every other inquiry is framed. A civilisation’s working ontology – whether, for instance, it sees the world as a store of separable objects or as a web of relations and processes – shapes what it can perceive as a problem and what it can imagine as a solution. See <a href="#ontological-stratification">ontological stratification</a> and <a href="#social-ontology">social ontology</a>.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
@@ -3200,6 +3224,22 @@
       html: '<p>A worldview that holds technology, specifically developed by private corporations, as the primary driver of civilizational progress. For evidence of its success, adherents point to the consistent global progress in reducing metrics like child mortality and poverty while capitalism has been the dominant economic paradigm. However, the market incentives driving this progress have also resulted in new, sometimes greater, societal problems as externalities.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#technocapitalism">Technocapitalism</a>.</p>'
     },
     {
+      id: 'cp-consilience',
+      title: 'Consilience',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>In science and history, consilience is the principle that evidence from independent, unrelated sources can “converge” on strong conclusions. That is, when multiple sources of evidence are in agreement, the conclusion can be very strong even when none of the individual sources of evidence is significantly so on its own.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#consilience">Consilience</a>.</p>'
+    },
+    {
+      id: 'cp-epistemology',
+      title: 'Epistemology',
+      cpOnly: true,
+      tags: ['consilience'],
+      ref: 'The Consilience Project, Glossary',
+      html: '<p>Epistemology is the philosophical study of knowing and the nature of knowledge. It deals with questions such as “how does one know?” and “what is knowing, known, and knowledge?”. Epistemology is considered one of the four main branches of philosophy, along with ethics, logic, and metaphysics.</p><p class="cp-note">This is the Consilience Project’s definition. See also this map’s own entry: <a href="#epistemology">Epistemology</a>.</p>'
+    },
+    {
       id: 'cp-risk-society',
       title: 'Risk Society',
       cpOnly: true,
@@ -3365,16 +3405,14 @@
     {
       id: 'consilience',
       title: 'Consilience',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>In science and history, consilience is the principle that evidence from independent, unrelated sources can “converge” on strong conclusions. That is, when multiple sources of evidence are in agreement, the conclusion can be very strong even when none of the individual sources of evidence is significantly so on its own.</p>'
+      refs: ['William Whewell, <em>The Philosophy of the Inductive Sciences</em> (1840).', 'Edward O. Wilson, <em>Consilience: The Unity of Knowledge</em> (1998).'],
+      html: '<p><em>Consilience</em> is the “jumping together” of knowledge: the convergence of independent lines of evidence, from unrelated fields, on a single explanation. The term was coined by William Whewell, for whom the strongest theories were those that unexpectedly explained facts of quite different kinds. Edward O. Wilson’s <em>Consilience: The Unity of Knowledge</em> (1998) turned it into a programme – the linking of the natural sciences, the social sciences and the humanities into one continuous web of explanation. For a metatheory of civilisation, consilience is both method and aim: no single discipline can grasp the dynamics of civilisation, which only come into view where the findings of many converge. The <a href="#the-consilience-project">Consilience Project</a> takes its name from the idea. See <a href="#multi-perspectivalism">multi-perspectivalism</a>.</p>'
     },
     {
       id: 'epistemology',
       title: 'Epistemology',
-      tags: ['consilience'],
-      ref: 'The Consilience Project, Glossary',
-      html: '<p>Epistemology is the philosophical study of knowing and the nature of knowledge. It deals with questions such as “how does one know?” and “what is knowing, known, and knowledge?”. Epistemology is considered one of the four main branches of philosophy, along with ethics, logic, and metaphysics.</p>'
+      refs: ['Plato, <em>Theaetetus</em> (c. 369 BCE).', 'René Descartes, <em>Meditations on First Philosophy</em> (1641).', 'Alvin I. Goldman, <em>Knowledge in a Social World</em> (1999).'],
+      html: '<p><em>Epistemology</em> is the study of knowledge: what it is, how it is acquired and justified, and where its limits lie. Its classical questions – what distinguishes knowledge from mere belief, whether certainty is possible, how reason and experience each contribute – run from Plato through Descartes and Hume to the present. Social epistemology extends them from the individual knower to communities and institutions, asking how a society comes to know what it knows, and whom it trusts to tell it. A civilisation’s epistemology – its accepted ways of establishing what is true – is part of its <a href="#super-structure">superstructure</a>, and its breakdown is the <a href="#epistemic-crisis">epistemic crisis</a>. See <a href="#critical-social-epistemology">critical social epistemology</a>.</p>'
     },
     {
       id: 'empiricism',
@@ -8149,11 +8187,12 @@
       ['evolutionary-theory', ['evolutionary-biology', 'multilevel-selection', 'selection-pressure']],
       ['philosophy', ['philosophical-paradigms', 'philosophical-frames']],
       ['moral-theory', ['multi-scale-ethics', 'science-of-morality', 'the-moral-landscape', 'moral-circle-expansion']],
+      ['cultural-psychology', ['phenomenology', 'axiology', 'ontology', 'epistemology']],
       { head: 'Other Currents', items: [
         ['new-materialism', ['intra-action']],
         ['second-order-cybernetics', ['participant-observers']],
         ['ecological-psychology', [['affordance', [], { label: 'Affordances' }]]]] },
-      { head: 'Concepts', items: ['emergence', 'universal-dynamics', 'ontological-stratification', 'transcend-and-include', 'multi-perspectivalism', 'dialectics'] }
+      { head: 'Concepts', items: ['emergence', 'universal-dynamics', 'ontological-stratification', 'transcend-and-include', 'multi-perspectivalism', 'dialectics', 'consilience'] }
     ],
     'macrohistory': [
       ['macrohistory', ['big-history', 'cliodynamics', 'structural-demographic-theory', 'world-systems-analysis', ['cultural-evolution', ['memetics']], 'high-modernism', 'socio-economic-evolutionary-mismatch']],
