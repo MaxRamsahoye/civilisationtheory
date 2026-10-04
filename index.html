@@ -1702,7 +1702,6 @@
   .description .menu-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem; }
   .description .menu-col { min-width: 0; }
   .description .menu-col + .menu-col { border-left: 1px solid var(--rule); padding-left: 1.4rem; }
-  .description .menu-col:nth-child(3n+1) { border-left: 0; padding-left: 0 !important; }   /* (a fourth set starts a new row, under the first) */
   .description .menu-set {
     font-size: 0.71rem;
     font-weight: 600;
@@ -8599,8 +8598,12 @@
     // A menu of the sections at the head of the paradigm: one column per set, each section numbered
     // as below and jumping down to it.
     function sectionMenuHtml() {
-      var names = ['Civilisational', 'Meta', 'Macro', 'Theory'];
-      return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + sectionSets(sections).map(function (set, k) {
+      var names = ['Civilisational', 'Meta', 'Macro'];
+      // (the Theory set is listed in the menu's first two columns: Civilisation Theory with the
+      // Civilisational sections, the meta-frames with the Meta sections)
+      var cols = sectionSets(sections).slice(0, 3);
+      (sectionSets(sections)[3] || []).forEach(function (d) { cols[d.id === 'civilisation-theory' ? 0 : 1].push(d); });
+      return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + cols.map(function (set, k) {
         return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d) {
           var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0;
           return '<li class="menu-sec"><span>' +
