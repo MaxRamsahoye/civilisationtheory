@@ -912,6 +912,7 @@
   .foot-col li { display: flex; align-items: baseline; margin: 0 0 0.6rem; font-size: 0.92rem; line-height: 1.3; }
   .foot-col a { color: var(--text); text-decoration: none; }
   .foot-col a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 0.15em; }
+  .foot-col li.foot-rule { border-top: 1px solid var(--rule); padding-top: 0.6rem; }
   .foot-num { flex: none; width: 1.9rem; font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; color: var(--muted); }
   /* Not wide enough for everything in one row: title and description above, menus beneath */
   @container (max-width: 1435px) {
@@ -8491,6 +8492,13 @@
     SET_SIZES.forEach(function (n) { out.push(sections.slice(i, i + n)); i += n; });
     return out;
   }
+  // The sections as the menus list them, in three columns: the Theory set joins the first two –
+  // Civilisation Theory with the Civilisational sections, the meta-frames with the Meta sections.
+  function menuColumns(sections) {
+    var sets = sectionSets(sections), cols = sets.slice(0, 3).map(function (s) { return s.slice(); });
+    (sets[3] || []).forEach(function (d) { cols[d.id === 'civilisation-theory' ? 0 : 1].push(d); });
+    return cols;
+  }
   function setStart(i) { for (var k = 0, n = 0; k < SET_SIZES.length; n += SET_SIZES[k++]) if (i === n) return true; return false; }
   function isConcept(c) { return c !== ROOT && c.kind !== 'category' && c.kind !== 'node' && !c.cpOnly; }   // (landscape nodes – people, organisations, movements – are not concepts)
   // (the A–Z: every concept and the ten sections' own entries – bar the Consilience Project's glossary
@@ -8989,8 +8997,7 @@
       var names = ['Civilisational', 'Meta', 'Macro'];
       // (the Theory set is listed in the menu's first two columns: Civilisation Theory with the
       // Civilisational sections, the meta-frames with the Meta sections)
-      var cols = sectionSets(sections).slice(0, 3);
-      (sectionSets(sections)[3] || []).forEach(function (d) { cols[d.id === 'civilisation-theory' ? 0 : 1].push(d); });
+      var cols = menuColumns(sections);
       return '<nav class="index-menu" aria-label="Sections"><div class="menu-cols">' + cols.map(function (set, k) {
         return '<div class="menu-col"><p class="menu-set">' + names[k] + '</p><ul>' + set.map(function (d, j) {
           var i = sections.indexOf(d), n = NEW_STRUCTURE[d.id] ? structCount(NEW_STRUCTURE[d.id], d.id) : 0;
@@ -11013,10 +11020,10 @@
         '<p class="foot-head">Explore</p><nav class="head-icons foot-icons" aria-label="Explore">' +
           document.querySelector('#site-header .head-icons').innerHTML.replace(/ data-page="[^"]*"/g, '') + '</nav>' +
         '</div><div class="foot-col foot-sections"><p class="foot-head">Sections</p><div class="foot-secs">' +
-        sectionSets(sections).map(function (set) {
-          return '<ul>' + set.map(function (d) {
+        menuColumns(sections).map(function (set, k) {   // (in the columns of the Paradigm's own menu)
+          return '<ul>' + set.map(function (d, j) {
             // Each opens its section of the Civilisation Research Paradigm on the Map.
-            return li('<span class="foot-num">' + NUM[sections.indexOf(d)] + '</span><a href="#the-map" data-view-link="cs" data-section="' + d.id + '">' + esc(d.title) + '</a>');
+            return '<li' + (k === 1 && j === 3 ? ' class="foot-rule"' : '') + '><span class="foot-num">' + NUM[sections.indexOf(d)] + '</span><a href="#the-map" data-view-link="cs" data-section="' + d.id + '">' + esc(d.title) + '</a></li>';
           }).join('') + '</ul>';
         }).join('') +
       '</div></div></div></div>' +
