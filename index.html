@@ -1167,6 +1167,10 @@
     width: max-content; max-width: var(--tocW, 7rem); z-index: 4;
   }
   #toc li.toc-rule { border-top: 1px solid var(--rule); margin-top: 0.55rem; padding-top: 0.55rem; }
+  /* …and the two views' text set further right, to give the contents room beside it (on screens wide enough for them) */
+  @media (min-width: 1100px) {
+    html.page-map .description .ce-list.cs-list, html.page-map .description .ce-list.rl-list { margin-left: 6rem; }
+  }
   html.page-map.toc-narrow[data-index="cs"] #toc, html.page-map.toc-narrow[data-index="rl"] #toc { display: none !important; }
   /* …set in the left margin of the About view's centred column */
   html.page-map[data-index="ab"] #toc {
@@ -9011,9 +9015,10 @@
   // On the Map's Research Paradigm and Landscape views the contents sit centred in the left margin
   // beside the view, and only where that margin has room for them.
   function placeMapToc() {
-    var list = document.querySelector('#entry .cs-list, #entry .rl-list'), entry = document.getElementById('entry');
-    if (!list || !entry) return;
-    var margin = entry.getBoundingClientRect().left, rail = 4.6 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+    var view = document.documentElement.getAttribute('data-index');
+    var list = document.querySelector(view === 'rl' ? '#entry .rl-list' : '#entry .cs-list');
+    if (!list || !list.getClientRects().length) return;
+    var margin = list.getBoundingClientRect().left, rail = 4.6 * parseFloat(getComputedStyle(document.documentElement).fontSize);
     document.documentElement.style.setProperty('--tocW', Math.max(0, margin - rail - 22) + 'px');
     document.documentElement.classList.toggle('toc-narrow', margin - rail < 100);
   }
