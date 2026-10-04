@@ -1425,6 +1425,7 @@
   .description .ce-sub-head a, :root.accent .description .ce-sub-head a { color: var(--text); text-decoration: none; }
   .description .ce-sub-head a:hover { text-decoration: underline; text-decoration-color: var(--link-underline); text-underline-offset: 3px; }
   .description .ce-list .ce-cats ul.ce-sub, html.page-map .description .ce-list .ce-cats ul.ce-sub { padding-left: 1rem; }
+  .description .ce-list .ce-cats li > ul.ce-sub, html.page-map .description .ce-list .ce-cats li > ul.ce-sub { margin-top: 0.4rem; font-size: 1em; }
   .description .ce-list .ce-cats .ce-rest ul, html.page-map .description .ce-list .ce-cats .ce-rest ul { columns: 3; column-gap: 1.4rem; }
   @media (max-width: 640px) { .description .ce-list .ce-cats .ce-rest ul, html.page-map .description .ce-list .ce-cats .ce-rest ul { columns: 1; } }
   @media (max-width: 900px) { .description .ce-cats { columns: 2; } }
@@ -8647,6 +8648,21 @@
       });
       return { lead: lead, groups: out };
     }
+    // A list of novel terms, each nested under the nearest novel term above it in the paradigm (as
+    // filed there, within the same list), in the list's order.
+    function ceTreeHtml(items) {
+      var inList = {}, kids = {}, tops = [];
+      items.forEach(function (c) { inList[c.id] = true; });
+      items.forEach(function (c) {
+        var up = (structLoc(c.id) || '').split('|').slice(1).map(decodeURIComponent).reverse().filter(function (id) { return inList[id] && id !== c.id; })[0];
+        if (up) (kids[up] = kids[up] || []).push(c); else tops.push(c);
+      });
+      return (function list(cs) {
+        return cs.map(function (c) {
+          return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a>' + (kids[c.id] ? '<ul class="ce-sub">' + list(kids[c.id]) + '</ul>' : '') + '</li>';
+        }).join('');
+      })(tops);
+    }
     function coinedByCategory(list) {
       var placed = {};
       var groups = ceCategories().map(function (g) {
@@ -8667,10 +8683,10 @@
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
       '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
         return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + (g.link ? '<a href="' + href(g.link) + '">' + esc(g.name) + '</a>' : esc(g.name)) + '</p><ul>' +
-          (g.subs ? g.subs.lead : g.items).map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul>' +
+          ceTreeHtml(g.subs ? g.subs.lead : g.items) + '</ul>' +
           (g.subs ? g.subs.groups.map(function (s) {
             return '<p class="ce-sub-head">' + (s.link ? '<a href="' + href(s.link) + '">' + esc(s.name) + '</a>' : esc(s.name)) + '</p><ul class="ce-sub">' +
-              s.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul>';
+              ceTreeHtml(s.items) + '</ul>';
           }).join('') : '') + '</div>';
       }).join('') + '</div>' +
       '<div class="ce-az">' + azListHtml(coined) + '</div></div>';
