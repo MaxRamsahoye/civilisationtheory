@@ -1169,6 +1169,10 @@
   #toc li.toc-rule { border-top: 1px solid var(--rule); margin-top: 0.55rem; padding-top: 0.55rem; }
   /* …and the two views' text shifted right, at full width, into the room on the right, to give the contents space beside it */
   html.page-map .description .ce-list.cs-list, html.page-map .description .ce-list.rl-list { position: relative; left: min(6rem, max(0px, calc(50vw - 33rem))); }
+  /* A section laid out column by column: three columns side by side, each a single column of its groups */
+  html.page-map .description .ce-list.cs-list .struct-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 2.4rem; }
+  html.page-map .description .ce-list.cs-list .struct-grid > ul.struct-cols { columns: 1; }
+  @media (max-width: 900px) { html.page-map .description .ce-list.cs-list .struct-grid { grid-template-columns: 1fr; } }
   html.page-map.toc-narrow[data-index="cs"] #toc, html.page-map.toc-narrow[data-index="rl"] #toc { display: none !important; }
   /* …set in the left margin of the About view's centred column */
   html.page-map[data-index="ab"] #toc {
@@ -7673,9 +7677,8 @@
       ['coherence-of-civilisations', [['clash-of-civilisations', [], { also: true }], 'convergent-cultural-evolution']],
       ['the-post-status-quo', ['post-capitalism', 'post-statism', ['post-humanism', ['life-3-0']], 'post-genderism']]
     ],
-    'metacrisis': [
+    'metacrisis': [   // (laid out in three columns: see SECTION_COLUMNS)
       ['civilisational-crisis', ['metacrisis', 'polycrisis', 'permacrisis', 'omnicrisis']],
-      ['metacrisis', [['problem-complex', [], { also: true }], ['generative-dynamics', [], { also: true }], ['attractor-states', [], { also: true }], 'exponential-technology', ['existential-risk', [], { also: true }], 'sensemaking-and-choicemaking']],   // (the section's three parts, each filed under its own subheading below)
       { head: 'Problem Complex', entry: 'problem-complex', desc: 'The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.', items: [
         ['ecological-crisis', ['climate-migration', 'the-anthropocene',
           ['planetary-boundaries', ['crossed-planetary-boundaries', 'safe-operating-space', 'tipping-points']],
@@ -7694,6 +7697,7 @@
           ['global-psychological-disorder', ['aggression-and-anti-social-behaviour', 'dark-triad-traits', 'political-radicalisation']],
           'global-infertility'], { dropdown: true }]
       ] },
+      ['metacrisis', [['problem-complex', [], { also: true }], ['generative-dynamics', [], { also: true }], ['attractor-states', [], { also: true }]]],
       { head: 'Generative Dynamics', entry: 'generative-dynamics', desc: 'Generative dynamics are the underlying patterns and processes that re-produce problems and amplify them to a global catastrophic scale and severity.', items: [
         { head: 'Game-Theoretic', dropdown: true, items: ['zero-sum-game', ['arms-races-and-tragedies-of-the-commons', ['arms-race', 'tragedy-of-the-commons']], 'multipolar-trap', 'instrumental-convergence-and-strategy-stealing'] },
         { head: 'Systems-Theoretic', dropdown: true, items: ['narrow-metric-optimisation', 'positive-feedback-loops-and-power-asymmetries', 'exponential-technological-acceleration', 'life-blind-search-processes'] },
@@ -7709,6 +7713,7 @@
         { head: 'Dilemmas', dropdown: true, items: ['prisoners-dilemma', 'security-dilemma'] },
         { head: 'Game Theory', dropdown: true, items: [['race-to-the-bottom', [], { also: true }], ['arms-race', [], { also: true }], 'red-queen-effect', ['tragedy-of-the-commons', [], { also: true }], 'free-rider-problem'] },
         { head: 'Common Parlance', dropdown: true, items: ['crab-mentality', 'tyranny-of-small-decisions'] }]],
+      { head: 'Major Frames', items: ['exponential-technology', ['existential-risk', [], { also: true }], 'sensemaking-and-choicemaking'] },
       { head: 'Attractor States', entry: 'attractor-states', desc: 'Attractor states are extreme stable conditions in the future possibility space of civilisation, that existing trajectories converge towards. Overall, there are three macro-scale attractors.', blocks: true, items: [   // (each attractor a block of its own)
         ['first-attractor', ['escalating-system-dynamics', 'escalating-state-competition', 'escalating-rogue-actors'], { dropdown: true }],
         ['second-attractor', ['global-stable-totalitarianism', 'hyper-surveillance-capitalism', ['despotic-drift-and-closed-society', ['despotic-drift', 'closed-society']], 'high-modern-panopticon'], { dropdown: true }],
@@ -7905,6 +7910,8 @@
     var seen = had.map(nodeId);
     return had.concat(add.filter(function (x) { var id = nodeId(x); return !id || seen.indexOf(id) < 0; }));
   }
+  // Sections whose groups are set in particular columns: the number of groups in each.
+  var SECTION_COLUMNS = { metacrisis: [2, 3, 2] };
   var HEAD_OF = {};   // (an entry a subheading stands for: that subheading)
   Object.keys(NEW_STRUCTURE).forEach(function (sec) {
     (function walk(list, parent, blocks) {
@@ -8085,6 +8092,17 @@
         }).join('') + '</ul></div>';
       }).join('') + '</div></nav>';
     }
+    // A section's groups in three columns – flowing from one to the next, or, for a section with a
+    // set layout (SECTION_COLUMNS: how many of its groups go in each column), placed column by column.
+    function sectionColsHtml(id) {
+      var list = NEW_STRUCTURE[id], counts = SECTION_COLUMNS[id];
+      if (!counts) return '<ul class="index-cols struct-cols">' + structHtml(list, true, [id]) + '</ul>';
+      var at = 0;
+      return '<div class="struct-grid">' + counts.map(function (n) {
+        var col = list.slice(at, at + n); at += n;
+        return '<ul class="index-cols struct-cols">' + structHtml(col, true, [id]) + '</ul>';
+      }).join('') + '</div>';
+    }
     // The sections in turn: numbering, heading and description, with their concepts where filed.
     function sectionsHtml() {
       return sections.map(function (d, i) {
@@ -8096,7 +8114,7 @@
           '<h3 class="domain-title"><a href="' + href(d) + '">' + esc(d.title) + '</a></h3>' +
           // First sentence only; the full description is on the section's own page.
           (d.kind === 'category' ? '<p class="domain-desc">' + esc(tmp.textContent.split(/(?<=[.:])\s+(?=[A-Z])/)[0]) + '</p>' : '') +
-          (NEW_STRUCTURE[d.id] ? '<ul class="index-cols struct-cols">' + structHtml(NEW_STRUCTURE[d.id], true, [d.id]) + '</ul>' : '<p class="rl-empty">Concepts to be added.</p>') + '</section>';
+          (NEW_STRUCTURE[d.id] ? sectionColsHtml(d.id) : '<p class="rl-empty">Concepts to be added.</p>') + '</section>';
       }).join('');
     }
     // Alternative A–Z view: every concept alphabetically, grouped by first letter.
