@@ -7779,6 +7779,7 @@
   }
   function setStart(i) { for (var k = 0, n = 0; k < SET_SIZES.length; n += SET_SIZES[k++]) if (i === n) return true; return false; }
   function isConcept(c) { return c !== ROOT && c.kind !== 'category' && c.kind !== 'node' && !c.cpOnly; }   // (landscape nodes – people, organisations, movements – are not concepts)
+  function inAZ(c) { return isConcept(c) || (c.kind === 'category' && c.parent === ROOT.id); }   // (the A–Z: every concept and the ten sections' own entries)
   function childrenOf(id) {
     return CONCEPTS.filter(function (c) { return c.parent === id && !c.cpOnly; })
       .sort(function (a, b) { return ((a.order || 1000) - (b.order || 1000)) || byTitle(a, b); });
@@ -8183,7 +8184,7 @@
   // or “An” is ignored; numbers come last, under 0–9).
   function buildSidebarAZ() {
     var groups = {};
-    CONCEPTS.filter(isConcept).sort(byTitle).forEach(function (c) {
+    CONCEPTS.filter(inAZ).sort(byTitle).forEach(function (c) {
       var L = sortKey(c).charAt(0).toUpperCase();
       if (!/[A-Z]/.test(L)) L = '0–9';
       (groups[L] = groups[L] || []).push(c);
@@ -8203,7 +8204,7 @@
 
   // ---------- Entry rendering ----------
   function indexHtml() {
-    var concepts = CONCEPTS.filter(isConcept).sort(byTitle);
+    var concepts = CONCEPTS.filter(inAZ).sort(byTitle);
     var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
     var sections = childrenOf(ROOT.id);
     var overviewDesc = '<p class="ce-desc">The map’s concepts arranged as a research paradigm for the study of civilisation.</p>';
@@ -9672,7 +9673,7 @@
   // The About page's tally of the site: its concepts (with those filed in the paradigm and the
   // conceptual engineerings among them) and the landscape's nodes – together, its entries.
   function totalsHtml() {
-    var concepts = CONCEPTS.filter(isConcept);
+    var concepts = CONCEPTS.filter(inAZ);
     var filed = paradigmCount();
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;   // (as the Conceptual Engineerings tab counts them)
     function row(label, n, cls) { return '<li' + (cls ? ' class="' + cls + '"' : '') + '><span>' + label + '</span><span class="n">' + n + '</span></li>'; }
@@ -10126,7 +10127,7 @@
   // ---------- Footer: title, description, menus and shortcuts ----------
   (function buildFooter() {
     var f = document.getElementById('site-footer');
-    var concepts = CONCEPTS.filter(isConcept);
+    var concepts = CONCEPTS.filter(inAZ);
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;
     var sections = childrenOf(ROOT.id);
     var NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
