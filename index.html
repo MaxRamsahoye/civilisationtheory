@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics' };
+    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -4040,15 +4040,10 @@
       title: 'Amoral Economy',
       coined: true,
       ref: 'Derived from E. P. Thompson (moral economy)',
-      refs: ['E. P. Thompson, “The Moral Economy of the English Crowd in the Eighteenth Century”, <em>Past &amp; Present</em> 50 (1971).', 'Karl Polanyi, <em>The Great Transformation</em> (1944).'],
-      html: '<p>The <em>amoral economy</em> is derived from E. P. Thompson’s <a href="#moral-economy">moral economy</a> – the customary norms of fairness and obligation that once bounded economic life – by naming what replaces it: an economy coordinated by prices and optimisation alone, in which moral claims have no standing except as preferences that can be priced. It is not immoral by intent but indifferent by design, treating whatever cannot be counted – dignity, community, the living world – as an externality. What Karl Polanyi called the disembedding of the economy from society is, in these terms, the passage from a moral to an amoral economy.</p>'
+      refs: ['E. P. Thompson, “The Moral Economy of the English Crowd in the Eighteenth Century”, <em>Past &amp; Present</em> 50 (1971).', 'Karl Polanyi, <em>The Great Transformation</em> (1944).', 'James C. Scott, <em>The Moral Economy of the Peasant</em> (1976).'],
+      html: '<p>The <em>amoral economy</em> is derived from E. P. Thompson’s moral economy – the customary norms of fairness and obligation that once bounded economic life – by naming what replaces it: an economy coordinated by prices and optimisation alone, in which moral claims have no standing except as preferences that can be priced. It is not immoral by intent but indifferent by design, treating whatever cannot be counted – dignity, community, the living world – as an externality. What Karl Polanyi called the disembedding of the economy from society is, in these terms, the passage from a moral to an amoral economy.</p><h2>Moral Economy</h2><p>A <em>moral economy</em> is an economy governed by shared norms of fairness and obligation rather than by market prices alone. E. P. Thompson (1971) used the term for the customary expectations of eighteenth-century English crowds, and James C. Scott (1976) for the subsistence ethics of peasant societies. It reminds us that economies are always embedded in moral expectations.</p>'
     },
-    {
-      id: 'moral-economy',
-      title: 'Moral Economy',
-      ref: 'Thompson; Scott',
-      html: '<p>A <em>moral economy</em> is an economy governed by shared norms of fairness and obligation rather than by market prices alone. E. P. Thompson (1971) used the term for the customary expectations of eighteenth-century English crowds, and James C. Scott (1976) for the subsistence ethics of peasant societies. It reminds us that economies are always embedded in moral expectations.</p>'
-    },
+
     {
       id: 'post-capitalist-peace-theory',
       title: 'Post-Capitalist Peace Theory',
