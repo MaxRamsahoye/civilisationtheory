@@ -1174,6 +1174,9 @@
   html.page-map .description .ce-list.cs-list .struct-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 2.4rem; }
   html.page-map .description .ce-list.cs-list .struct-grid > ul.struct-cols { columns: 1; }
   @media (max-width: 900px) { html.page-map .description .ce-list.cs-list .struct-grid { grid-template-columns: 1fr; } }
+  /* …in the interface face: names in IBM Plex regular, the heading in its medium weight */
+  html.page-map[data-index="cs"] #toc, html.page-map[data-index="rl"] #toc { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-size: 0.78rem; }
+  html.page-map[data-index="cs"] #toc .toc-title, html.page-map[data-index="rl"] #toc .toc-title { font-weight: 500; font-size: 1.15em; }
   html.page-map.toc-narrow[data-index="cs"] #toc, html.page-map.toc-narrow[data-index="rl"] #toc { display: none !important; }
   /* …set in the left margin of the About view's centred column */
   html.page-map[data-index="ab"] #toc {
@@ -8734,9 +8737,9 @@
     var SETS = ['Civilisational', 'Meta', 'Macro'];
     var NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
     var sections = childrenOf(ROOT.id), sets = sectionSets(sections);
-    var az = CONCEPTS.filter(isConcept).sort(byTitle);
+    var az = CONCEPTS.filter(inAZ).sort(byTitle);   // (every concept, and the sections' own entries)
     function inTreeOrder(id) {
-      var out = [];
+      var out = byId[id] ? [byId[id]] : [];   // (the section's own entry first)
       Object.keys(structIds(NEW_STRUCTURE[id] || [], {})).forEach(function (k) { if (byId[k] && isConcept(byId[k])) out.push(byId[k]); });   // (in paradigm order)
       return out;
     }
@@ -8752,7 +8755,7 @@
     var lists = sections.map(function (d) { return inTreeOrder(d.id); });
     var menu = '<nav class="deck-menu" aria-label="Slides">' +
       '<button type="button" class="deck-all" data-deck="az"><span class="deck-name">Alphabetical A–Z</span>' +
-      '<span class="deck-n">All ' + az.length + ' concepts</span></button>' +
+      '<span class="deck-n">All ' + az.length + ' entries</span></button>' +
       '<div class="deck-cols">' + SETS.map(function (label, k) {
         return '<div class="deck-col"><p class="menu-set">' + label + '</p>' +
           sets[k].map(function (d) {
@@ -8764,11 +8767,11 @@
     return menu + deck(az, 'az') + sections.map(function (d, i) { return deck(lists[i], d.id); }).join('');
   }
 
-  // Show the chosen deck (remembered); anything unknown falls back to A–Z.
+  // Show the chosen deck; anything unknown falls back to the first section.
   function showDeck(key) {
     var decks = [].slice.call(document.querySelectorAll('#entry .slides'));
     if (!decks.length) return;
-    if (!decks.some(function (d) { return d.getAttribute('data-deck') === key; })) key = 'az';
+    if (!decks.some(function (d) { return d.getAttribute('data-deck') === key; })) key = decks[1] ? decks[1].getAttribute('data-deck') : 'az';   // (unknown: the first section)
     decks.forEach(function (d) { d.hidden = d.getAttribute('data-deck') !== key; });
     document.querySelectorAll('#entry .deck-menu button').forEach(function (b) {
       b.setAttribute('aria-pressed', b.getAttribute('data-deck') === key ? 'true' : 'false');
@@ -8926,7 +8929,7 @@
     if (!document.documentElement.classList.contains('main-page') || c.id === 'the-map' || c === ROOT) {
       foldIconsTimer = setTimeout(function () { measureIconFold(); document.documentElement.classList.add('icons-folded'); }, 1600);
     }
-    if (c.id === 'infinite') { showDeck('az'); }
+    if (c.id === 'infinite') { showDeck(childrenOf(ROOT.id)[0].id); }   // (opening on the first section; A–Z is one choice among them)
     fitCrumbs();
 
     buildToc();
