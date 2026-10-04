@@ -1310,6 +1310,9 @@
      the tab line's margin), so that scrolled to, none of the opening's topography shows */
   html.page-map .description > .ce-list, html.page-map .description > .az-view { padding-top: 0.05px; min-height: 100vh; }   /* (and a short view still scrolls clear of it) */
   html.page-map .description .ce-title { margin-top: 5.5rem; font-size: 2.4rem; margin-bottom: 1.1rem; }
+  /* Each view's count sits above its heading, as each section's does above its title */
+  html.page-map .description .ce-intro.ce-count { margin: 5.5rem 0 0.5rem; }
+  html.page-map .description .ce-count + .ce-title { margin-top: 0; }
   html.page-map .description .ce-intro, html.page-map .description .cs-list .ce-intro { margin-bottom: 3.2rem; }   /* room beneath each view's counter */
   html.page-map .description .ce-desc { font-size: 1.1em; line-height: 1.5; max-width: 42rem; margin-bottom: 4rem; }   /* room above each view's heading – enough that, scrolled to, none of the opening's topography shows */
   .description .ce-desc { color: var(--muted); font-size: 0.92em; line-height: 1.45; margin: 0 0 2.8rem; max-width: 36rem; }
@@ -8137,9 +8140,8 @@
         '</ul></section>';
     });
     var nLetters = Object.keys(letters).filter(function (L) { return L !== '0–9'; }).length;  // A–Z only
-    var az = '<div class="az-view"><h3 class="ce-title">Alphabetical A–Z</h3>' +
+    var az = '<div class="az-view"><p class="ce-intro ce-count">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p><h3 class="ce-title">Alphabetical A–Z</h3>' +
       '<p class="ce-desc">Every concept on the map organised into an alphabetical list.</p>' +
-      '<p class="ce-intro">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p>' +
       '<div class="az-list">' + azCols.map(function (col) { return '<div class="az-col">' + col + '</div>'; }).join('') + '</div></div>';
     // Conceptual Engineerings in their own categories (to be defined: each is a name and the ids of
     // the terms it holds, e.g. { name: 'Alignment', ids: ['the-great-alignment', …] }); every term
@@ -8159,11 +8161,10 @@
     // Conceptual Engineerings: the author's own novel terms.
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).sort(byTitle);
     var ce = '<div class="ce-list">' +
-      '<h3 class="ce-title">Conceptual Engineerings</h3>' +
+      '<p class="ce-intro ce-count">Novel terms: ' + coined.length + '</p><h3 class="ce-title">Conceptual Engineerings</h3>' +
       '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
       // Two ways to read them: by category (the default) or A–Z.
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
-      '<p class="ce-intro">Novel terms: ' + coined.length + '</p>' +
       '<div class="ce-cats">' + coinedByCategory(coined).map(function (g) {
         return '<div class="ce-cat' + (g.rest ? ' ce-rest' : '') + '"><p class="ce-cat-head">' + esc(g.name) + '</p><ul>' +
           g.items.map(function (c) { return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a></li>'; }).join('') + '</ul></div>';
@@ -8174,9 +8175,9 @@
     // Consilience Project: the terms of the Consilience Project's glossary, alphabetically.
     var cpTerms = CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); }).sort(byTitle);
     var cp = '<div class="ce-list cp-list">' +
-      '<h3 class="ce-title">Consilience Project</h3>' +
+      '<p class="ce-intro ce-count">Glossary terms: ' + cpTerms.length + '</p><h3 class="ce-title">Consilience Project</h3>' +
       '<p class="ce-desc">The terms of the <a href="https://consilienceproject.org/glossary/" target="_blank" rel="noopener">glossary of <em>The Consilience Project</em></a>, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations. Where the map has its own entry for a term, the Consilience Project’s definition is given as a separate entry here.</p>' +
-      '<p class="ce-intro">Glossary terms: ' + cpTerms.length + '</p><ul>' +
+      '<ul>' +
       // The list jumps to each term's definition below; each definition's title opens its entry.
       cpTerms.map(function (c) { return '<li><a href="#" data-jump="cpd-' + c.id + '">' + esc(c.title) + '</a></li>'; }).join('') +
       '</ul><h3 class="cp-gloss-head">Glossary</h3><p class="cp-gloss-sub">A complete list of all terms</p><div class="cp-glossary">' +
@@ -8187,9 +8188,8 @@
     // Curated Sequence: a reading path through the map – the research paradigm, then its nine sections.
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
-      '<h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc +
       // (every concept filed in the paradigm, counted once)
-      '<p class="ce-intro">Concepts: ' + paradigmCount() + '</p>' + sectionMenuHtml() +
+      '<p class="ce-intro ce-count">Concepts: ' + paradigmCount() + '</p><h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc + sectionMenuHtml() +
       // First the curated sequence, as a section of its own (High-Level, unnumbered and not in the
       // menu); then the numbered sections with their concepts.
       '<div class="seq-structure"><section class="index-domain set-start" id="nidx-high-level">' +
@@ -8201,9 +8201,9 @@
     // …in its sections, each with its individuals, organisations and movements side by side.
     var rlCount = landscapeNodeCount();
     var rl = '<div class="ce-list rl-list">' +
-      '<h3 class="ce-title">Civilisation Research Landscape</h3>' +
+      '<p class="ce-intro ce-count">Nodes: ' + rlCount + '</p><h3 class="ce-title">Civilisation Research Landscape</h3>' +
       '<p class="ce-desc">The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' +
-      '<p class="ce-intro">Nodes: ' + rlCount + '</p><div class="seq-structure">' +
+      '<div class="seq-structure">' +
       LANDSCAPE.map(function (sec, i) {
         var n = Object.keys(sec.groups.reduce(function (seen, g) { return structIds(g.items, seen); }, {})).length, e = sec.entry && byId[sec.entry];
         return '<section class="index-domain' + (i === 0 ? ' set-start' : '') + '">' +
