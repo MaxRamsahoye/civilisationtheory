@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
+    window.MOVED = { 'critical-social-theory': 'critical-theory', 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -2350,7 +2350,7 @@
       id: 'critical-theory',
       title: 'Critical Theory',
       refs: ['Max Horkheimer, “Traditional and Critical Theory” (1937).'],
-      html: '<p><em>Critical theory</em> is the tradition of social theory that examines society in order to change it, exposing the forms of power and ideology that present particular arrangements as natural or inevitable. It originated with the Frankfurt School – Max Horkheimer’s essay “Traditional and Critical Theory” (1937), Theodor Adorno, Herbert Marcuse and later Jürgen Habermas. Its central claim is that social arrangements presented as natural or inevitable are historical, and so can be changed – and that criticism worth the name aims at freeing people, not only at describing them.</p>'
+      html: '<p><em>Critical theory</em> is the tradition of social theory that examines society in order to change it, exposing the forms of power and ideology that present particular arrangements as natural or inevitable. It originated with the Frankfurt School – Max Horkheimer’s essay “Traditional and Critical Theory” (1937), Theodor Adorno, Herbert Marcuse and later Jürgen Habermas. Its central claim is that social arrangements presented as natural or inevitable are historical, and so can be changed – and that criticism worth the name aims at freeing people, not only at describing them.</p><p>In its wider sense, as <em>critical social theory</em>, it seeks not only to describe how a social order works but to diagnose what is wrong with it – the forms of domination, exploitation and suffering it produces and conceals – and to identify the possibilities for emancipation within it. Its core is the critical theory of <a href="#the-frankfurt-school">the Frankfurt School</a>, from Horkheimer, Adorno, Marcuse and Benjamin to Habermas and Honneth, which joined Marx’s critique of political economy with philosophy, psychoanalysis and cultural analysis; around it are other traditions that share its aim – institutional critiques of business and the state, Foucault’s analyses of power, and postcolonial accounts of global inequality.</p>'
     },
     {
       id: 'game-theory',
@@ -4015,12 +4015,6 @@
       html: '<p><em>Recognition justice</em> is the dimension of justice concerned with whether people are accorded equal standing and respect, as distinct from how material goods are distributed. Developed from Hegel by Axel Honneth in <em>The Struggle for Recognition</em> (1992), and by Charles Taylor, it holds that identity and self-respect depend on recognition by others – in love, rights and social esteem – and that misrecognition is itself a form of injustice. Nancy Fraser argued that justice requires both recognition and redistribution, together with political representation, an exchange set out in <em>Redistribution or Recognition?</em> (2003).</p>'
     },
     {
-      id: 'critical-social-theory',
-      title: 'Critical Social Theory',
-      refs: ['Max Horkheimer, “Traditional and Critical Theory” (1937).'],
-      html: '<p><em>Critical social theory</em> is social theory that examines society in order to change it: it seeks not only to describe how a social order works, but to diagnose what is wrong with it – the forms of domination, exploitation and suffering it produces and conceals – and to identify the possibilities for emancipation within it. Its core is the <a href="#critical-theory">critical theory</a> of <a href="#the-frankfurt-school">the Frankfurt School</a>, from Horkheimer, Adorno, Marcuse and Benjamin to Habermas and Honneth, which joined Marx’s critique of political economy with philosophy, psychoanalysis and cultural analysis. In a wider sense it includes other traditions that share that aim: institutional critiques of business and the state, Foucault’s analyses of power, and postcolonial accounts of global inequality. What unites them is the conviction that social arrangements presented as natural, necessary or rational are historical and can be otherwise.</p>'
-    },
-    {
       id: 'the-angel-of-history',
       title: 'The Angel of History',
       ref: 'Benjamin',
@@ -5137,7 +5131,7 @@
       id: 'critical-social-epistemology',
       title: 'Critical Social Epistemology',
       refs: ['Steve Fuller, <em>Social Epistemology</em> (1988).', 'Miranda Fricker, <em>Epistemic Injustice: Power and the Ethics of Knowing</em> (2007).'],
-      html: '<p><em>Critical social epistemology</em> studies how a society comes to know what it knows – through its institutions of science, education, media, expertise and now algorithms – with attention to the forms of power, interest and distortion that shape that process. Social epistemology, developed by Steve Fuller and Alvin Goldman in the 1980s, asks how knowledge is produced and distributed collectively rather than by individual knowers; a critical social epistemology adds the questions of <a href="#critical-social-theory">critical social theory</a>: who controls the means of producing knowledge, whose interests the resulting picture of the world serves, and how communication is systematically distorted, as Jürgen Habermas argued, or how some knowers are denied credibility, as Miranda Fricker’s account of epistemic injustice (2007) describes. It treats a society’s capacity for collective sensemaking as a condition of its capacity to govern itself.</p>'
+      html: '<p><em>Critical social epistemology</em> studies how a society comes to know what it knows – through its institutions of science, education, media, expertise and now algorithms – with attention to the forms of power, interest and distortion that shape that process. Social epistemology, developed by Steve Fuller and Alvin Goldman in the 1980s, asks how knowledge is produced and distributed collectively rather than by individual knowers; a critical social epistemology adds the questions of <a href="#critical-theory">critical social theory</a>: who controls the means of producing knowledge, whose interests the resulting picture of the world serves, and how communication is systematically distorted, as Jürgen Habermas argued, or how some knowers are denied credibility, as Miranda Fricker’s account of epistemic injustice (2007) describes. It treats a society’s capacity for collective sensemaking as a condition of its capacity to govern itself.</p>'
     },
     {
       id: 'epistemic-principal-agent-problem',
@@ -8273,7 +8267,7 @@
       ['twenty-first-century-civilisational-hypothesis', [['clash-of-civilisations', [], { label: 'The Clash of Civilisations?' }], ['the-end-of-history', [], { label: 'The End of History?' }]]]
     ],
     'macrosociology': [
-      { head: 'Macrosociological Approaches', items: [['structural-functionalism', ['functional-prerequisites']], ['conflict-theory', [['marxism', ['meta-marxism']], 'critical-theory']]] },
+      { head: 'Macrosociological Approaches', items: [['structural-functionalism', ['functional-prerequisites']], ['conflict-theory', [['marxism', ['meta-marxism']], ['critical-theory', [], { also: true }]]]] },
       ['science-and-technology-studies', ['the-techno-onto-logical', 'actor-network-theory', ['theories-of-technology', ['social-construction-of-technology', ['technological-determinism', ['technocratic-solutionism', 'techno-capital-and-technomic', 'techno-capitalist-progress-narrative']]]]]],
       ['critical-social-epistemology', ['epistemic-crisis', 'the-epistemic-commons', 'epistemic-semi-anarchic-default-condition', 'epistemic-principal-agent-problem', ['mad-information-war', ['information-warfare', 'misinformation', 'non-kinetic-warfare']], 'mcluhans-aquarium']],
       ['social-ontology', ['organicism', 'mechanism-society-as-machine', 'cyberneticism']],
@@ -8312,7 +8306,7 @@
       ['systems-theory', ['feedback-loop', 'leverage-points', 'resilience']],
       ['evolutionary-theory', ['evolutionary-biology', 'multilevel-selection', 'selection-pressure']],
       ['game-theory', ['nash-equilibrium', 'pareto-optimality', 'hawks-and-doves']],
-      ['critical-social-theory', [
+      ['critical-theory', [
         'critical-political-economy',
         { head: 'The Frankfurt School', items: ['the-angel-of-history', 'the-great-refusal', 'the-new-categorical-imperative', 'dialectic-of-enlightenment', 'the-grand-hotel-abyss'] },
         { head: 'Later Critical Theory', items: ['colonisation-of-the-lifeworld', 'social-pathology', 'recognition-justice'] },
