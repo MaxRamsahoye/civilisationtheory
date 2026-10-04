@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism' };
+    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -2130,16 +2130,12 @@
       title: 'Dominant Civilisational Paradigm',
       html: '<p>The <em>dominant paradigm</em> is the set of shared assumptions – about value, progress, nature, the self and the good life – out of which a civilisation’s institutions arise, and which usually goes unexamined because it is taken as reality itself. The term draws on Thomas Kuhn’s account of paradigms in <em>The Structure of Scientific Revolutions</em> (1962), while Donella Meadows (1999) identified the paradigm as one of the highest leverage points for changing any system. The present paradigm of growth, competition and extraction can be read as one of the origins of the <a href="#metacrisis">metacrisis</a>, alongside civilisation’s developmental process and initial conditions.</p>'
     },
-    {
-      id: 'political-economy',
-      title: 'Political Economy',
-      html: '<p><em>Political economy</em> is the structure of a civilisation: the institutions that govern how resources are owned, produced, allocated and exchanged, and how collective decisions are made about them. In a three-layer model of civilisation that echoes Marvin Harris’s cultural materialism, political economy (structure) sits between technology (<a href="#technological-infrastructure">infrastructure</a>) and <a href="#super-structure">cultural psychology</a> (superstructure). Because it sets the incentives every actor responds to, it decides which behaviours are rewarded long before any individual chooses – a point on which Adam Smith, Marx and the later institutionalists agreed, if on little else.</p>'
-    },
+
 
     {
       id: 'technological-infrastructure',
       title: 'Technological Infrastructure',
-      html: '<p><em>Technological infrastructure</em> is the material base of a civilisation: its tools, energy systems, production, communication and computation. In a three-layer model of civilisation, it is the infrastructure on which <a href="#political-economy">political economy</a> (structure) and <a href="#super-structure">cultural psychology</a> (superstructure) rest.</p><p>The defining feature of the 21st century is that this layer is changing exponentially – through AI, biotechnology and automation – while the other two remain largely inherited from earlier eras. The resulting mismatch is what the biologist E. O. Wilson summed up as “Palaeolithic emotions, medieval institutions and godlike technology”.</p>'
+      html: '<p><em>Technological infrastructure</em> is the material base of a civilisation: its tools, energy systems, production, communication and computation. In a three-layer model of civilisation, it is the infrastructure on which <a href="#critical-political-economy">political economy</a> (structure) and <a href="#super-structure">cultural psychology</a> (superstructure) rest.</p><p>The defining feature of the 21st century is that this layer is changing exponentially – through AI, biotechnology and automation – while the other two remain largely inherited from earlier eras. The resulting mismatch is what the biologist E. O. Wilson summed up as “Palaeolithic emotions, medieval institutions and godlike technology”.</p>'
     },
     {
       id: 'civilisation-transition',
@@ -2329,12 +2325,12 @@
     {
       id: 'resource-based-economy',
       title: 'Resource-Based Economy',
-      html: '<p>A <em>resource-based economy</em> is Jacque Fresco’s proposal for a socio-economic system in which goods and services are provided without money, barter or debt, by managing the Earth’s resources directly through technology and scientific method. Developed through Fresco’s Venus Project, it envisages automated production, the careful accounting of available resources, and the provision of necessities to all. It belongs to the lineage of cybernetic economics, and is a precedent for rethinking <a href="#political-economy">political economy</a> in light of <a href="#post-scarcity">post-scarcity</a> technology.</p>'
+      html: '<p>A <em>resource-based economy</em> is Jacque Fresco’s proposal for a socio-economic system in which goods and services are provided without money, barter or debt, by managing the Earth’s resources directly through technology and scientific method. Developed through Fresco’s Venus Project, it envisages automated production, the careful accounting of available resources, and the provision of necessities to all. It belongs to the lineage of cybernetic economics, and is a precedent for rethinking <a href="#critical-political-economy">political economy</a> in light of <a href="#post-scarcity">post-scarcity</a> technology.</p>'
     },
     {
       id: 'commons',
       title: 'Commons',
-      html: '<p>A <em>commons</em> is a resource held and managed collectively by a community, according to rules its members make for themselves, rather than by the market or the state. Elinor Ostrom’s <em>Governing the Commons</em> (1990) identified the design principles by which commons can endure, answering the <a href="#tragedy-of-the-commons">tragedy of the commons</a>. The idea has been extended to knowledge and software, as in Yochai Benkler’s account of commons-based peer production. The commons offers a form of <a href="#political-economy">political economy</a> that is neither market nor state, and a model for coordination without centralisation.</p>'
+      html: '<p>A <em>commons</em> is a resource held and managed collectively by a community, according to rules its members make for themselves, rather than by the market or the state. Elinor Ostrom’s <em>Governing the Commons</em> (1990) identified the design principles by which commons can endure, answering the <a href="#tragedy-of-the-commons">tragedy of the commons</a>. The idea has been extended to knowledge and software, as in Yochai Benkler’s account of commons-based peer production. The commons offers a form of <a href="#critical-political-economy">political economy</a> that is neither market nor state, and a model for coordination without centralisation.</p>'
     },
     {
       id: 'design-science',
@@ -2344,7 +2340,7 @@
     {
       id: 'post-scarcity',
       title: 'Post-Scarcity Economics',
-      html: '<p><em>Post-scarcity</em> describes a condition in which the basic goods people need can be produced in abundance, with minimal human labour, so that scarcity no longer organises economic life. It is associated with the potential of automation, renewable energy and advanced manufacturing, and was anticipated by thinkers from Buckminster Fuller to Jacque Fresco. Post-scarcity is a possibility opened by <a href="#technological-infrastructure">technological infrastructure</a> but blocked by an existing <a href="#political-economy">political economy</a> that depends on scarcity – and so a question of design rather than technology alone.</p>'
+      html: '<p><em>Post-scarcity</em> describes a condition in which the basic goods people need can be produced in abundance, with minimal human labour, so that scarcity no longer organises economic life. It is associated with the potential of automation, renewable energy and advanced manufacturing, and was anticipated by thinkers from Buckminster Fuller to Jacque Fresco. Post-scarcity is a possibility opened by <a href="#technological-infrastructure">technological infrastructure</a> but blocked by an existing <a href="#critical-political-economy">political economy</a> that depends on scarcity – and so a question of design rather than technology alone.</p>'
     },
     {
       id: 'capitalist-realism',
@@ -2683,7 +2679,7 @@
     {
       id: 'macroeconomics',
       title: 'Macroeconomics',
-      html: '<p><em>Macroeconomics</em> is the study of the economy as a whole – output, growth, employment, inflation, money and trade, and the policies that govern them – as distinct from the behaviour of individual firms and households. It took its modern form in John Maynard Keynes’s <em>General Theory</em> (1936), and has since been shaped by debates between Keynesian, <a href="#monetarism">monetarist</a> and other schools over how far economies correct themselves and how far they must be steered.</p><p>From a civilisational standpoint its central assumption is growth: most macroeconomic policy is organised around keeping output rising, which ties the economy to <a href="#embedded-growth-obligations">embedded growth obligations</a> and places it in tension with planetary limits. See <a href="#political-economy">political economy</a>.</p>'
+      html: '<p><em>Macroeconomics</em> is the study of the economy as a whole – output, growth, employment, inflation, money and trade, and the policies that govern them – as distinct from the behaviour of individual firms and households. It took its modern form in John Maynard Keynes’s <em>General Theory</em> (1936), and has since been shaped by debates between Keynesian, <a href="#monetarism">monetarist</a> and other schools over how far economies correct themselves and how far they must be steered.</p><p>From a civilisational standpoint its central assumption is growth: most macroeconomic policy is organised around keeping output rising, which ties the economy to <a href="#embedded-growth-obligations">embedded growth obligations</a> and places it in tension with planetary limits. See <a href="#critical-political-economy">political economy</a>.</p>'
     },
     {
       id: 'macroevolution',
@@ -3800,7 +3796,7 @@
     {
       id: 'critical-political-economy',
       title: 'Critical Political Economy',
-      html: '<p><em>Critical political economy</em> studies the economy as a system of power, social relations and history rather than as a neutral mechanism. Drawing on Marx, institutional economics and critical theory, it asks who benefits from economic arrangements, how they are maintained, and how they might be changed – treating the economy as a political and human creation.</p>'
+      html: '<p><em>Critical political economy</em> studies the economy as a system of power, social relations and history rather than as a neutral mechanism. Drawing on Marx, institutional economics and critical theory, it asks who benefits from economic arrangements, how they are maintained, and how they might be changed – treating the economy as a political and human creation.</p><h2>Political Economy</h2><p><em>Political economy</em> is the structure of a civilisation: the institutions that govern how resources are owned, produced, allocated and exchanged, and how collective decisions are made about them. In a three-layer model of civilisation that echoes Marvin Harris’s cultural materialism, political economy (structure) sits between technology (<a href="#technological-infrastructure">infrastructure</a>) and <a href="#super-structure">cultural psychology</a> (superstructure). Because it sets the incentives every actor responds to, it decides which behaviours are rewarded long before any individual chooses – a point on which Adam Smith, Marx and the later institutionalists agreed, if on little else.</p>'
     },
     {
       id: 'critical-alien-phenomenology',
@@ -4729,7 +4725,7 @@
       id: 'super-structure',
       title: 'Superstructure: Cultural Psychology',
       order: 3,
-      html: '<p>The <em>super-structure</em> is the structure of meaning that sits above the material and social orders – what <a href="#the-emergence-model">the emergence model</a> calls memetic structure: a culture’s values, beliefs, worldview, identities, orienting narratives and definitions of success. It conditions behaviour from the inside, shaping what people want, admire and consider normal, and it both reflects and legitimates the other structures. A new civilisation needs a super-structure that makes sense of it and makes it worth wanting. See <a href="#coherence-of-civilisations">the coherence of civilisations</a>.</p><p><em>Cultural psychology</em> is the superstructure of a civilisation: its shared values, narratives, identities, forms of meaning and modes of sensemaking, as they are lived by the people within it. It shapes what a society is able to want and to imagine, and is in turn shaped by the <a href="#political-economy">political economy</a> and <a href="#technological-infrastructure">technology</a> it lives within. It also explains why institutions transplanted from one society to another so often behave differently there: a new economy run by people formed by the old one tends to recreate the old one.</p>'
+      html: '<p>The <em>super-structure</em> is the structure of meaning that sits above the material and social orders – what <a href="#the-emergence-model">the emergence model</a> calls memetic structure: a culture’s values, beliefs, worldview, identities, orienting narratives and definitions of success. It conditions behaviour from the inside, shaping what people want, admire and consider normal, and it both reflects and legitimates the other structures. A new civilisation needs a super-structure that makes sense of it and makes it worth wanting. See <a href="#coherence-of-civilisations">the coherence of civilisations</a>.</p><p><em>Cultural psychology</em> is the superstructure of a civilisation: its shared values, narratives, identities, forms of meaning and modes of sensemaking, as they are lived by the people within it. It shapes what a society is able to want and to imagine, and is in turn shaped by the <a href="#critical-political-economy">political economy</a> and <a href="#technological-infrastructure">technology</a> it lives within. It also explains why institutions transplanted from one society to another so often behave differently there: a new economy run by people formed by the old one tends to recreate the old one.</p>'
     },
     {
       id: 'sub-structure',
