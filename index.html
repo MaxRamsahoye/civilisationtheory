@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy' };
+    window.MOVED = { 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'cultural-psychology': 'super-structure', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -4167,6 +4167,12 @@
       html: '<p><em>Life 3.0</em> is Max Tegmark’s term, from his book of that name (2017), for life that can design both its software and its hardware. Where biological life (1.0) evolves both and cultural life (2.0) can learn new software, life 3.0 – enabled by AI – could redesign itself entirely. Tegmark uses the frame to explore the futures AI might bring.</p>'
     },
     {
+      id: 'prometheanism',
+      title: 'Prometheanism',
+      refs: ['Ray Brassier, “Prometheanism and its Critics”, in Robin Mackay and Armen Avanessian (eds.), <em>#Accelerate: The Accelerationist Reader</em> (2014).'],
+      html: '<p><em>Prometheanism</em> is the affirmation of humanity’s capacity to understand and remake the world – including itself – through reason, science and technology, against the view that there are natural or sacred limits that human beings should not transgress. In contemporary theory it is associated above all with <a href="#left-accelerationism-and-the-red-stack">left accelerationism</a>: Ray Brassier’s “Prometheanism and its Critics” (2014) defended it against critics from Heidegger to the ecological movement who see in technological mastery the source of modernity’s ills, arguing that the problem is not the project of remaking the world but who controls it and to what ends. Its critics reply that the promise of total mastery is what has brought civilisation to the edge of catastrophe.</p><h2>Prometheus</h2><p><em>Prometheus</em>, the Titan who stole fire from the gods for humanity, stands for technological ambition and the human capacity to remake the world – and for its risks. In debates about the future, a Promethean stance affirms reason, technology and human agency against both fatalism and the view that humanity should retreat from transforming nature.</p>'
+    },
+    {
       id: 'moral-circle-expansion',
       title: 'Moral Circle Expansion',
       ref: 'Singer (The Expanding Circle)',
@@ -4231,12 +4237,7 @@
       ref: 'Banks',
       html: '<p><em>Metamathics</em>, in Iain M. Banks’s Culture novels, is the exploration by the Culture’s artificial Minds of the mathematics of alternative, hypothetical universes – a pursuit so absorbing that some Minds prefer it to engaging with reality. It is Banks’s image of what a superintelligence might find meaningful once every practical problem is solved.</p>'
     },
-    {
-      id: 'prometheus',
-      title: 'Prometheus',
-      ref: 'Fluss & Frim',
-      html: '<p><em>Prometheus</em>, the Titan who stole fire from the gods for humanity, stands for technological ambition and the human capacity to remake the world – and for its risks. In debates about the future, a Promethean stance affirms reason, technology and human agency against both fatalism and the view that humanity should retreat from transforming nature.</p>'
-    },
+
     {
       id: 'effective-altruism',
       title: 'Effective Altruism',
@@ -7889,7 +7890,7 @@
       ['transitional-projects', ['integral', 'civium', 'regen-villages']],
       { head: 'Strategy', items: ['blue-teaming', 'red-teaming', ['yellow-teaming', ['positive-externalities']]] },
       { head: 'Buckminster Fuller', items: ['critical-path', 'design-science', 'the-world-game', 'spaceship-earth'] },
-      ['left-accelerationism-and-the-red-stack', ['fully-automated-luxury-communism', ['the-red-stack', [], { also: true }]]],
+      ['left-accelerationism-and-the-red-stack', ['fully-automated-luxury-communism', ['the-red-stack', [], { also: true }], 'prometheanism']],
       { head: 'Life-World', items: ['pre-tragic-tragic-post-tragic', 'cybernetic-existentialism', 'acting-irrespective-of-hope', 'existential-hope', 'second-enlightenment', 'pragmatic-utopianism'] },
       ['the-state', [['ship-of-theseus-of-the-state', ['ship-of-the-state', 'ship-of-theseus']], ['the-wizarding-away-of-the-state', ['withering-away-of-the-state']]]]
     ],
@@ -7899,7 +7900,7 @@
       ['civilisation-theory', [['systems-theory', [], { also: true }], ['evolutionary-theory', [], { also: true }], 'game-theory', ['critical-theory', [], { also: true }]]],
       ['systems-theory', ['feedback-loop', 'leverage-points', 'resilience']],
       ['evolutionary-theory', ['evolutionary-biology', 'multilevel-selection', 'selection-pressure']],
-      ['moral-theory', ['multi-scale-ethics', 'science-of-morality', 'the-moral-landscape']],
+      ['moral-theory', ['multi-scale-ethics', 'science-of-morality', 'the-moral-landscape', 'moral-circle-expansion']],
       { head: 'Other Currents', items: [
         ['new-materialism', ['intra-action']],
         ['second-order-cybernetics', ['participant-observers']],
