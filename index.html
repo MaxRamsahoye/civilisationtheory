@@ -676,6 +676,7 @@
     transform: translateX(var(--fold-x, 0px)); opacity: 0; pointer-events: none;
   }
   html.icons-folded:not(.icons-open) #theme-toggle { opacity: 0; pointer-events: none; }
+  html.icons-folded:not(.icons-open) #site-header .head-icons { pointer-events: none; }   /* (the folded icons' empty row lets clicks through to the title that has slid over it) */
   /* T with the icons folded: the theme icon (showing the new theme) briefly takes the menu icon's place */
   html.icons-folded.theme-peek:not(.icons-open) #theme-toggle { opacity: 1; transform: none; transition: opacity .25s ease; }
   html.icons-folded.theme-peek:not(.icons-open) #head-menu { opacity: 0; transition: opacity .25s ease; }
