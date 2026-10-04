@@ -4584,6 +4584,16 @@
       html: '<p><em>Cybernetic neo-Platonism</em> joins cybernetics with the Platonic tradition: it treats the patterns, forms and organising principles of systems – feedback, information, structure – as more fundamental than their material substrates. The same form of organisation can be realised in cells, societies or machines, and it is the form, not the matter, that explains behaviour.</p>'
     },
     {
+      id: 'civilisation-as-superintelligence',
+      title: 'Civilisation as Superintelligence',
+      html: '<p><em>Civilisation as superintelligence</em> is the view that human civilisation – the combined system of people, markets, states, corporations, science and technology – already constitutes a superintelligence: an agent whose capacity to perceive, model, decide and act on the world vastly exceeds that of any individual within it. No one designs a smartphone, runs a global supply chain or produces the scientific picture of the world; the civilisation does, as an emergent collective intelligence. If so, the alignment problem is not only a future problem about artificial minds but a present one: whether the goals this superintelligence actually pursues – as revealed by its behaviour rather than by the intentions of its members – are aligned with the wellbeing of the people and living systems within it. The concepts beneath it ask how such an intelligence can be recognised (<a href="#planetary-reverse-turing-test">the planetary reverse Turing test</a>), what it is when it is unaligned (<a href="#unaligned-artificial-artificial-superintelligence">unaligned artificial artificial superintelligence</a>) and how it is composed of agents within agents (<a href="#hierarchical-agency">hierarchical agency</a>).</p>'
+    },
+    {
+      id: 'society-as-machine-intelligence',
+      title: 'Society as Machine Intelligence',
+      html: '<p><em>Society as machine intelligence</em> treats a society as an information-processing machine: a system that takes in signals from its environment and its members, processes them through mechanisms such as markets, bureaucracies, elections and algorithms, and produces decisions. The view runs through the history of <a href="#computational-mechanism">computational mechanism</a> – from Friedrich Hayek’s account of the price system as a mechanism for using dispersed knowledge, and the socialist calculation debate over whether a planner’s computer could do the same, to Stafford Beer’s cybernetic models of the state and today’s algorithmic governance. It illuminates how societies coordinate at scales beyond human comprehension, but also what is lost when they are understood, and redesigned, purely as computation: the mechanism optimises what it can measure, and the purposes it serves become those of the machine rather than of the people within it. See <a href="#limits-to-alignment">limits to alignment</a> and <a href="#civilisation-as-superintelligence">civilisation as superintelligence</a>.</p>'
+    },
+    {
       id: 'computational-mechanism',
       title: 'Computational Mechanism',
       coined: true,
@@ -7728,11 +7738,10 @@
         ['genealogy-of-the-metacrisis', ['three-attractors-model', ['vulnerable-world-hypothesis', [], { also: true }], 'the-narrow-corridor', 'anacyclosis'], { dropdown: true }]] }
     ],
     'civilisation-alignment': [
-      ['civilisation-alignment', [
-        { head: 'Agency', items: ['hierarchical-agency', 'unaligned-artificial-artificial-superintelligence'] },
-        { head: 'Recognition', items: ['planetary-reverse-turing-test'] },
-        { head: 'Foundations', items: ['utopia-unified-theory', 'computational-mechanism', 'limits-to-alignment'] }]],
+      ['civilisation-alignment', ['utopia-unified-theory',
+        ['civilisation-as-superintelligence', ['planetary-reverse-turing-test', 'unaligned-artificial-artificial-superintelligence', 'hierarchical-agency']]]],
       ['cybernetic-neo-platonism', ['complex-adaptive-agency', 'behaviour-of-a-system']],
+      ['computational-mechanism', ['society-as-machine-intelligence', 'limits-to-alignment']],
       ['human-alignment', ['population-level-motivation-selection', 'human-collective-intelligence', 'self-alignment', 'ai-as-anthropological-mirror', 'human-inner-alignment-problem']],
       { head: 'Multi', items: ['multi-scale-alignment', 'multi-principal-alignment', 'multi-agent-alignment'] },
       { head: 'Societal', items: ['institutional-alignment', 'ai-developer-alignment'] },
