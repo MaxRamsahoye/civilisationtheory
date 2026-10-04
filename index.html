@@ -2140,6 +2140,24 @@
       html: '<p><em>Infrastructural Gaianism</em> joins the new infrastructuralism – the turn in recent design and theory towards infrastructure, rather than ideology or policy, as the decisive layer at which a civilisation is shaped – with Gaianism, the view, following James Lovelock and Lynn Margulis’s <a href="#gaia">Gaia hypothesis</a>, of the Earth as a single self-regulating living system. Together they hold that the infrastructures of civilisation – energy, water, food, materials, transport, building and computation – should be designed as organs of the Earth system rather than as machines set against it: closing material loops, running on the planet’s energy flows, regenerating the ecosystems they draw on, and sensing and responding to the state of the biosphere. On this view the material base of a viable civilisation is not a technological stack imposed on nature but a planetary metabolism woven into Gaia’s own. See <a href="#infra-structure">infrastructure</a> and <a href="#biowisdom">biowisdom</a>.</p>'
     },
     {
+      id: 'multipolar-trap-trap',
+      title: 'The ‘Multi-Polar Trap’ Trap',
+      coined: true,
+      html: '<p><em>The ‘multi-polar trap’ trap</em> is the trap of seeing every problem as a <a href="#multipolar-trap">multipolar trap</a>. The concept is powerful: it explains how competition can drive rational actors into outcomes none of them want, from arms races to races to the bottom. But once it becomes the lens through which everything is seen, it turns from an explanation into an excuse and a fatalism – every harm becomes the inevitable product of competition, no one is responsible because everyone is trapped, and the only conceivable escape is a global coordinator powerful enough to stop the race. The frame obscures the actors who choose and benefit, the many cases in which cooperation, norms and institutions already hold competition in check, and the possibility of changing the game rather than merely coordinating within it. Escaping the multipolar trap requires first escaping the trap of thinking that it is the only trap there is. See <a href="#agents-of-doom">agents of doom</a>.</p>'
+    },
+    {
+      id: 'the-twin-neural-problem',
+      title: 'The Twin Neural Problem',
+      coined: true,
+      html: '<p><em>The twin neural problem</em> is the recognition that the alignment of artificial intelligence and the alignment of human beings are, at bottom, the same problem in two substrates. Both artificial neural networks and human brains are opaque systems whose values and dispositions were not written down but formed by optimisation – gradient descent on training data in the one case, evolution and cultural conditioning in the other – so that neither can simply be read or rewritten from outside. The difficulties of AI alignment – interpretability, misgeneralisation, goals that diverge from those intended, behaviour that changes with scale and context – mirror the long-standing difficulties of aligning people and institutions with what is good. Progress on either can inform the other, and neither can be solved alone, since aligned machines in the hands of misaligned humans, or aligned humans served by misaligned machines, would fail together. See <a href="#human-inner-alignment-problem">the human inner alignment problem</a> and <a href="#ai-as-anthropological-mirror">AI as anthropological mirror</a>.</p>'
+    },
+    {
+      id: 'cultural-psychological-adaptationism',
+      title: 'Cultural-Psychological Adaptationism',
+      coined: true,
+      html: '<p><em>Cultural-psychological adaptationism</em> extends <a href="#military-economic-adaptationism">military-economic adaptationism</a> from institutions to minds and cultures. If the dominant institutions of civilisation have been selected for military and economic competitiveness, then so too have the values, identities, beliefs and psychological dispositions that sustain them: the cultures and personalities that best serve competitive growth – acquisitive, status-seeking, disciplined, individualistic, oriented to work and accumulation – have been rewarded and reproduced, while those less suited to it have been displaced or absorbed. The <a href="#super-structure">super-structure</a> of a civilisation is in this sense an adaptation to its competitive environment rather than an expression of human nature or of what makes people flourish – which is why a change in that environment is a precondition of deep cultural change, and why cultural change alone cannot escape it.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       html: '<p>A <em>polycrisis</em> is a condition in which multiple crises – ecological, economic, geopolitical, technological – interact so that their combined effect is greater than the sum of their parts. The term was introduced by Edgar Morin and Anne Brigitte Kern in <em>Homeland Earth</em> (1993) and popularised by the historian Adam Tooze in the early 2020s. Where the polycrisis describes how crises entangle and cascade, the <a href="#metacrisis">metacrisis</a> asks why they arise together at all: the polycrisis is the surface pattern, the metacrisis its underlying cause.</p>'
@@ -7809,7 +7827,7 @@
   var NEW_STRUCTURE = {
     'civilisational-mechanics': [
       ['initial-conditions', ['root-socio-economic-orientation', 'circumscription-theory', 'agriculturalisation-trap']],
-      ['developmental-process', [['military-economic-adaptationism', ['great-grower-competition']], ['accelerationism', ['time-space-compression']], ['problem-solution-externality-history', ['the-integral-accident', 'negative-existential-externality']]]],
+      ['developmental-process', [['military-economic-adaptationism', ['great-grower-competition']], 'cultural-psychological-adaptationism', ['accelerationism', ['time-space-compression']], ['problem-solution-externality-history', ['the-integral-accident', 'negative-existential-externality']]]],
       ['structural-teleology', [['exterminism', ['ai-exterminism']], 'exhaustionism', 'extractivism']],
       ['vulnerable-world-hypothesis', ['anarchy-technology-dilemma', 'technological-self-destruction-hypothesis', 'fragile-world-hypothesis']],
       ['world-risk-society', ['world-risk-factory', 'manufactured-risk', 'reflexive-modernisation']],
@@ -7868,6 +7886,7 @@
         { head: 'Mytho-poetic', dropdown: true, items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
       ] },
       ['multipolar-trap', [   // (its family of traps, problems and dilemmas, as they are named in turn)
+        'multipolar-trap-trap',
         { head: 'Traps', dropdown: true, items: ['hobbesian-trap', 'social-trap', 'darwinian-trap',
           ['goliath-traps', [['arms-race', [], { also: true, label: 'Arms Races' }], 'status-races', ['race-to-the-bottom', [], { label: 'Races to the Bottom' }]]]] },
         { head: 'Problems', dropdown: true, items: ['coordination-problem', 'collective-action-problem'] },
@@ -7887,7 +7906,7 @@
         ['civilisation-as-superintelligence', ['millers-box', 'planetary-reverse-turing-test', 'unaligned-artificial-artificial-superintelligence', 'hierarchical-agency']]]],
       ['cybernetic-neo-platonism', ['complex-adaptive-agency', 'behaviour-of-a-system']],
       ['computational-mechanism', [['megamechanical-turk', ['mturkification']], ['society-as-machine-intelligence', ['machine-process']], 'limits-to-alignment']],
-      ['human-alignment', ['population-level-motivation-selection', 'human-collective-intelligence', 'self-alignment', 'ai-as-anthropological-mirror', 'human-inner-alignment-problem']],
+      ['human-alignment', ['population-level-motivation-selection', 'human-collective-intelligence', 'self-alignment', 'ai-as-anthropological-mirror', 'human-inner-alignment-problem', 'the-twin-neural-problem']],
       { head: 'Multi', items: ['multi-scale-alignment', 'multi-principal-alignment', 'multi-agent-alignment'] },
       { head: 'Societal', items: ['institutional-alignment', 'ai-developer-alignment'] },
       { head: 'System', items: [['capitalism-as-unaligned-asi', ['capitalism-as-paperclip-maximiser']], 'states-and-corporations-as-unaligned-asi', 'marl-by-market-feedback', 'predict-o-matic-markets'] },
