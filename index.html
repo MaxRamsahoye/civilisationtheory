@@ -1163,7 +1163,7 @@
   html.page-map:not([data-index="ab"]):not([data-index="cs"]):not([data-index="rl"]) #toc, html.page-map:not(.map-past-opening) #toc { display: none !important; }
   /* …the paradigm's and the landscape's sections, in the left margin beside the view (none where the margin is too narrow) */
   html.page-map[data-index="cs"] #toc, html.page-map[data-index="rl"] #toc {
-    position: fixed; top: 50vh; left: var(--tocL, 8rem); transform: translate(-50%, -50%);   /* (centred between the icon rail and the text, its names wrapping to fit) */
+    position: fixed; top: 50vh; left: var(--tocL, 6rem); transform: translateY(-50%);   /* (a third of the space between the icon rail and the text on its left, two thirds on its right) */
     width: max-content; max-width: var(--tocW, 7rem); z-index: 4;
   }
   #toc li.toc-rule { border-top: 1px solid var(--rule); margin-top: 0.55rem; padding-top: 0.55rem; }
@@ -9028,10 +9028,12 @@
     var list = document.querySelector(view === 'rl' ? '#entry .rl-list' : '#entry .cs-list');
     if (!list || !list.getClientRects().length) return;
     var margin = list.getBoundingClientRect().left, toggle = document.getElementById('sidebar-toggle');
-    var rail = toggle && toggle.getClientRects().length ? toggle.getBoundingClientRect().right : 0, room = margin - rail - 32;   // (an equal gap either side)
-    document.documentElement.style.setProperty('--tocL', ((rail + margin) / 2) + 'px');
+    var rail = toggle && toggle.getClientRects().length ? toggle.getBoundingClientRect().right : 0, room = margin - rail - 36;
     document.documentElement.style.setProperty('--tocW', Math.max(0, room) + 'px');
     document.documentElement.classList.toggle('toc-narrow', room < 90);
+    // The space left beside it split a third to its left, two thirds to its right.
+    var w = tocEl.offsetWidth || Math.min(room, 170);
+    document.documentElement.style.setProperty('--tocL', (rail + Math.max(12, (margin - rail - w) / 3)) + 'px');
   }
   window.addEventListener('resize', placeMapToc);
   // Switching between the Map's views brings up that view's contents.
@@ -9057,6 +9059,7 @@
   var topBtn = document.getElementById('to-top');
   var progressDone = false;
   function onScroll() {
+    if (document.documentElement.classList.contains('page-map') && /^(cs|rl)$/.test(document.documentElement.getAttribute('data-index'))) placeMapToc();   // (once the contents show, they can be measured)
     var max = document.documentElement.scrollHeight - window.innerHeight;
     var y = window.scrollY;
     // On the Map, the bar measures the view below the opening screen: it starts at the tab line.
