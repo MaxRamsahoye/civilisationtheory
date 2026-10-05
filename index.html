@@ -12180,6 +12180,21 @@
     }, prev === 'none' || prev === view ? 0 : 230);
   });
   var viewFadeTimer;
+  function deselectAll() {
+    var root = document.documentElement;
+    if (!root.classList.contains('page-map')) { root.setAttribute('data-index', 'none'); location.hash = '#the-map'; return; }
+    if (root.getAttribute('data-index') === 'none') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    clearTimeout(viewFadeTimer);
+    root.classList.add('view-fading');
+    viewFadeTimer = setTimeout(function () {
+      root.setAttribute('data-index', 'none');
+      root.classList.remove('tabs-away');
+      history.replaceState(null, '', '#the-map'); trail[trail.length - 1].hash = location.hash;
+      setMapTail();
+      window.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      requestAnimationFrame(function () { root.classList.remove('view-fading'); });
+    }, reduceMotion.matches ? 0 : 230);
+  }
   function toMapView() {
     var panel = Array.prototype.find.call(document.querySelectorAll('#entry .description > .az-view, #entry .description > .ce-list'),
       function (el) { return getComputedStyle(el).display !== 'none'; });
@@ -13249,6 +13264,10 @@
       setHudless(!document.documentElement.classList.contains('hudless'));
     } else if (e.key === 'Escape' && document.documentElement.classList.contains('hudless')) {
       setHudless(false);
+    } else if (e.key === 'Escape' && !e.repeat && !(e.target.closest && e.target.closest('input, textarea, select, [contenteditable]'))) {
+      // Esc: deselect – the Map's view closes back to its opening screen; any other page returns there.
+      e.preventDefault();
+      deselectAll();
     } else if (document.documentElement.classList.contains('page-map') && !e.repeat && (/^[1-5]$/.test(e.key) || e.key === 'Enter')) {
       // The Map's views: 1–5 in tab order (Enter = 1)
       var vs = ['ab', 'cs', 'rl', 'ce', 'az'], v = vs[e.key === 'Enter' ? 0 : +e.key - 1];
