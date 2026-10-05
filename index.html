@@ -4438,6 +4438,18 @@
       html: '<p><em>AI safety</em> is the field concerned with preventing artificial intelligence from causing serious harm – from accidents and misuse to the loss of human control over systems more capable than their makers. It spans technical work on robustness, interpretability, evaluations and <a href="#ai-alignment">alignment</a>, together with the <a href="#ai-governance">governance</a> needed to put that work into practice. Alignment is its central problem, but safety also asks under what conditions even aligned systems should be built and deployed.</p>'
     },
     {
+      id: 'ai-control',
+      title: 'AI Control',
+      refs: ['Ryan Greenblatt, Buck Shlegeris et al., “AI Control: Improving Safety Despite Intentional Subversion” (2023).'],
+      html: '<p><em>AI control</em> is the approach to <a href="#ai-safety">AI safety</a> that aims to keep powerful AI systems from causing catastrophe even if they are misaligned. Rather than relying on a system’s goals being right, it designs the protocols around it – monitoring by trusted models, restricted permissions, auditing and red-teaming – so that a model attempting to subvert them would be caught or contained. Developed especially at Redwood Research, it is a complement to <a href="#ai-alignment">alignment</a>: a second line of defence for the period in which alignment cannot yet be verified.</p>'
+    },
+    {
+      id: 'ai-interpretability',
+      title: 'AI Interpretability',
+      refs: ['Chris Olah et al., “Zoom In: An Introduction to Circuits”, <em>Distill</em> (2020).', 'Anthropic, “Scaling Monosemanticity” (2024).'],
+      html: '<p><em>AI interpretability</em> is the study of what is happening inside AI systems – how a neural network represents concepts and arrives at its outputs. Its most ambitious branch, mechanistic interpretability, tries to reverse-engineer networks into human-understandable features and circuits. For <a href="#ai-safety">AI safety</a> it promises a way to check a system’s reasoning directly, rather than only its behaviour, and so to detect deception or misaligned goals that testing alone might miss.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
@@ -10366,7 +10378,7 @@
       { head: 'System', items: [['capitalism-as-unaligned-asi', ['capitalism-as-paperclip-maximiser']], 'states-and-corporations-as-unaligned-asi', 'marl-by-market-feedback', 'predict-o-matic-markets'] },
       ['replicator-alignment-problem', ['replicators', 'aligned-evolutionarily-stable-social-structure', 'genes-as-replicators', 'memes-as-replicators', 'capital-as-replicator', 'nano-as-replicators', 'ais-as-replicators']],
       ['ai-alignment', ['orthogonality-thesis', 'corrigibility', 'mesa-optimisation', 'reward-hacking', ['artificial-superintelligence', ['intelligence-explosion', 'ai-takeoff-speeds']], 'artificial-collective-intelligence', 'algorithmic-recommender-systems']],
-      'ai-safety',
+      ['ai-safety', ['ai-control', 'ai-interpretability']],
       { head: 'Values', items: ['monolithic-alignment', 'pluralistic-alignment'] },
       { head: 'Volition', items: ['coherent-extrapolated-volition', 'coherent-blended-volition', 'coherent-aggregated-volition'] }
     ],
@@ -10591,7 +10603,7 @@
         { head: 'Existential Risk Studies', items: ['nick-bostrom', 'toby-ord', 'anders-sandberg', 'martin-rees', 'max-tegmark', 'carl-shulman', 'joe-carlsmith'] },
         { head: 'Forecasting', items: ['philip-tetlock'] }] },
       // The AI subsection beneath, its subfields, organisations and individuals aligned.
-      { name: 'Submovements & Subfields', sub: 0, items: ['ai-safety', 'ai-alignment', 'ai-governance'] },
+      { name: 'Submovements & Subfields', sub: 0, items: [['ai-safety', ['ai-alignment', 'ai-control', 'ai-interpretability']], 'ai-governance'] },
       { name: 'Organisations', sub: 1, items: [
         { head: 'AI Alignment', items: ['miri', 'center-for-human-compatible-ai', 'center-for-ai-safety'] },
         { head: 'AI Governance', items: ['centre-for-the-governance-of-ai', 'uk-ai-security-institute'] },
