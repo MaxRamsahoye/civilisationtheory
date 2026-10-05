@@ -1200,8 +1200,8 @@
   html.page-map .description .rl-list .rl-span-cols { display: grid; column-gap: 2.4rem; padding-left: 1rem; }
   html.page-map .description .ce-list.rl-list .rl-span-cols > ul.struct-cols { columns: 1; min-width: 0; }
   html.page-map .description .ce-list.rl-list .rl-sub { border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: 2.2rem; }
-  html.page-map .description .ce-list.rl-list .rl-sub > ul.rl-sub-clusters { padding-left: 1rem; }
-  html.page-map .description .ce-list.rl-list .rl-sub > ul.struct-cols > li.struct-head > ul { margin-top: 0; }
+  html.page-map .description .ce-list.rl-list .rl-sub ul.rl-sub-clusters { padding-left: 1rem; }
+  html.page-map .description .ce-list.rl-list .rl-sub .struct-grid > ul.struct-cols > li.struct-head > ul { margin-top: 0; }
   html.page-map .description .ce-list.rl-list .rl-sub li.struct-sub:first-child > span { margin-top: 0; }   /* (its first subheading level with the cluster beside it) */
   @media (max-width: 900px) { html.page-map .description .rl-list .rl-span { grid-column: auto !important; } html.page-map .description .rl-list .rl-span-cols { grid-template-columns: 1fr !important; } }
   /* …in the interface face: names in IBM Plex regular, the heading in its medium weight */
@@ -10569,23 +10569,29 @@
       desc: 'The research and advocacy communities that grew up beside the universities – rationalism, effective altruism, progress studies and existential risk studies – and shaped AI alignment and macrostrategy.', groups: [
       { name: 'Submovements & Subfields', items: [['the-rationalist-community', [], { label: 'Rationalism' }],
         ['effective-altruism', ['global-poverty-health-and-development', 'ea-animal-welfare', 'longtermism']],
-        'progress-studies', 'existential-risk-studies', 'ai-alignment', 'ai-governance', ['macrostrategy', [], { label: 'Macrostrategy Research' }], 'forecasting'] },
+        'progress-studies', 'existential-risk-studies', ['macrostrategy', [], { label: 'Macrostrategy Research' }], 'forecasting'] },
       { name: 'Organisations', items: [
         { head: 'Rationalism', items: [['lightcone-infrastructure', ['lesswrong']], 'cfar'] },
         { head: 'Effective Altruism', items: ['centre-for-effective-altruism', '80000-hours', 'open-philanthropy', 'givewell', 'giving-what-we-can', 'rethink-priorities'] },
         { head: 'Progress Studies', items: ['roots-of-progress-institute', 'institute-for-progress', 'works-in-progress'] },
         { head: 'Macrostrategy', items: ['future-of-humanity-institute', 'acs-research-group', 'forethought', 'centre-for-the-study-of-existential-risk', 'future-of-life-institute', 'global-priorities-institute'] },
-        { head: 'AI Alignment', items: ['miri', 'center-for-human-compatible-ai', 'center-for-ai-safety'] },
-        { head: 'AI Governance', items: ['centre-for-the-governance-of-ai', 'uk-ai-security-institute'] },
-        { head: 'Forecasting', items: ['metaculus', 'ai-futures-project'] },
-        { head: 'Frontier AI', items: ['frontier-ai-labs', 'redwood-research', 'metr', 'epoch-ai'] }] },
+        { head: 'Forecasting', items: ['metaculus'] }] },
       { name: 'Individuals', items: [
         { head: 'Rationalism', items: ['eliezer-yudkowsky', 'robin-hanson', 'scott-alexander', 'julia-galef'] },
         { head: 'Effective Altruism', items: ['peter-singer', 'will-macaskill', 'hilary-greaves', 'holden-karnofsky'] },
         { head: 'Progress (Studies) Movement', items: ['jason-crawford', 'steven-pinker', 'tyler-cowen', 'patrick-collison'] },
         { head: 'Existential Risk Studies', items: ['nick-bostrom', 'toby-ord', 'anders-sandberg', 'martin-rees', 'max-tegmark', 'carl-shulman', 'joe-carlsmith'] },
+        { head: 'Forecasting', items: ['philip-tetlock'] }] },
+      // The AI subsection beneath, its subfields, organisations and individuals aligned.
+      { name: 'Submovements & Subfields', sub: 0, items: ['ai-alignment', 'ai-governance'] },
+      { name: 'Organisations', sub: 1, items: [
+        { head: 'AI Alignment', items: ['miri', 'center-for-human-compatible-ai', 'center-for-ai-safety'] },
+        { head: 'AI Governance', items: ['centre-for-the-governance-of-ai', 'uk-ai-security-institute'] },
+        { head: 'AI Forecasting', items: ['ai-futures-project'] },
+        { head: 'Frontier AI', items: ['frontier-ai-labs', 'redwood-research', 'metr', 'epoch-ai'] }] },
+      { name: 'Individuals', sub: 2, items: [
         { head: 'AI Alignment', items: ['stuart-russell', 'yoshua-bengio', 'geoffrey-hinton', 'paul-christiano', 'jan-kulveit'] },
-        { head: 'Forecasting', items: ['philip-tetlock', 'katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }] },
+        { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }], subHead: 'AI' },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
       { name: 'Variants', cols: [3, 3], items: [
@@ -11026,11 +11032,11 @@
               return '<div class="rl-span" style="grid-column: span ' + g.cols.length + '"><p class="rl-span-head">' + esc(g.name) + '</p><div class="rl-span-cols" style="grid-template-columns: repeat(' + g.cols.length + ', 1fr)">' + split + '</div></div>';
             if (g.name) return '<ul class="index-cols struct-cols"><li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>';
             return split;
-          }).join('') + '</div>' + rlSubHtml(sec) : '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
+          }).join('') + '</div>' + rlSubHtml(sec) : '<ul class="index-cols struct-cols">' + sec.groups.filter(function (g) { return g.sub === undefined; }).map(function (g) {
             var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);   // (each listing carries its landscape place)
             return g.name ? '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li>'
               : structHtml(g.items, true, trail);   // (a group without a name: its clusters side by side, across the columns)
-          }).join('') + '</ul>') : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
+          }).join('') + '</ul>' + rlSubHtml(sec)) : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
     // A section's subsection: its groups set in the columns given, aligned beneath the columns above
     // (a Variants group under the clusters, an Individuals group under the individuals).
@@ -11040,11 +11046,11 @@
       var cols = ['', '', ''];
       subs.forEach(function (g) {
         var trail = ['L:' + sec.title, 'h:' + g.name];
-        cols[g.sub] = g.items.some(function (x) { return x && !Array.isArray(x) && typeof x === 'object'; })
-          ? '<ul class="index-cols struct-cols"><li class="is-category struct-head"><ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>'   // (subheadings: as in a named column)
+        cols[g.sub] = !g.items.every(function (x) { return Array.isArray(x) && (x[1] || []).length; })
+          ? '<ul class="index-cols struct-cols"><li class="is-category struct-head"><ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>'   // (entries or subheadings: as in a named column)
           : '<ul class="index-cols struct-cols rl-sub-clusters">' + structHtml(g.items, true, trail) + '</ul>';   // (clusters: as under a heading across columns)
       });
-      return '<div class="struct-grid rl-sub">' + cols.map(function (h) { return h || '<div></div>'; }).join('') + '</div>';
+      return '<div class="rl-sub">' + (sec.subHead ? '<p class="rl-span-head">' + esc(sec.subHead) + '</p>' : '') + '<div class="struct-grid">' + cols.map(function (h) { return h || '<div></div>'; }).join('') + '</div></div>';
     }
     // About the Project: the site's introduction (the root entry), as a view of the Map.
     var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
