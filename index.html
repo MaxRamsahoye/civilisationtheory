@@ -1191,6 +1191,7 @@
     width: max-content; max-width: var(--tocW, 7rem); z-index: 4;
   }
   #toc li.toc-rule { border-top: 1px solid var(--rule); margin-top: 0.55rem; padding-top: 0.55rem; }
+  #toc li.toc-sub { padding-left: 0.9rem; }
   /* …and the two views' text shifted right, at full width, into the room on the right, to give the contents space beside it */
   html.page-map .description .ce-list.cs-list, html.page-map .description .ce-list.rl-list { position: relative; left: min(6rem, max(0px, calc(50vw - 33rem))); }
   /* A section laid out column by column: three columns side by side, each a single column of its groups */
@@ -4429,6 +4430,12 @@
       parent: 'civilisation-research-landscape',
       tags: ['landscape'],
       html: '<p><em>Daniel Dennett</em> (1942–2024) was an American philosopher of mind and of evolution, author of <em>Consciousness Explained</em> (1991) and <em>Darwin’s Dangerous Idea</em> (1995). His <em>Breaking the Spell</em> (2006) proposed studying religion as a natural phenomenon shaped by cultural evolution, making him the most academic of the <a href="#new-atheism">New Atheists</a>.</p>'
+    },
+    {
+      id: 'ai-safety',
+      title: 'AI Safety',
+      refs: ['Dario Amodei et al., “Concrete Problems in AI Safety” (2016).', 'Dan Hendrycks, <em>Introduction to AI Safety, Ethics, and Society</em> (2024).'],
+      html: '<p><em>AI safety</em> is the field concerned with preventing artificial intelligence from causing serious harm – from accidents and misuse to the loss of human control over systems more capable than their makers. It spans technical work on robustness, interpretability, evaluations and <a href="#ai-alignment">alignment</a>, together with the <a href="#ai-governance">governance</a> needed to put that work into practice. Alignment is its central problem, but safety also asks under what conditions even aligned systems should be built and deployed.</p>'
     },
     {
       id: 'polycrisis',
@@ -10359,6 +10366,7 @@
       { head: 'System', items: [['capitalism-as-unaligned-asi', ['capitalism-as-paperclip-maximiser']], 'states-and-corporations-as-unaligned-asi', 'marl-by-market-feedback', 'predict-o-matic-markets'] },
       ['replicator-alignment-problem', ['replicators', 'aligned-evolutionarily-stable-social-structure', 'genes-as-replicators', 'memes-as-replicators', 'capital-as-replicator', 'nano-as-replicators', 'ais-as-replicators']],
       ['ai-alignment', ['orthogonality-thesis', 'corrigibility', 'mesa-optimisation', 'reward-hacking', ['artificial-superintelligence', ['intelligence-explosion', 'ai-takeoff-speeds']], 'artificial-collective-intelligence', 'algorithmic-recommender-systems']],
+      'ai-safety',
       { head: 'Values', items: ['monolithic-alignment', 'pluralistic-alignment'] },
       { head: 'Volition', items: ['coherent-extrapolated-volition', 'coherent-blended-volition', 'coherent-aggregated-volition'] }
     ],
@@ -10583,7 +10591,7 @@
         { head: 'Existential Risk Studies', items: ['nick-bostrom', 'toby-ord', 'anders-sandberg', 'martin-rees', 'max-tegmark', 'carl-shulman', 'joe-carlsmith'] },
         { head: 'Forecasting', items: ['philip-tetlock'] }] },
       // The AI subsection beneath, its subfields, organisations and individuals aligned.
-      { name: 'Submovements & Subfields', sub: 0, items: ['ai-alignment', 'ai-governance'] },
+      { name: 'Submovements & Subfields', sub: 0, items: ['ai-safety', 'ai-alignment', 'ai-governance'] },
       { name: 'Organisations', sub: 1, items: [
         { head: 'AI Alignment', items: ['miri', 'center-for-human-compatible-ai', 'center-for-ai-safety'] },
         { head: 'AI Governance', items: ['centre-for-the-governance-of-ai', 'uk-ai-security-institute'] },
@@ -10591,7 +10599,7 @@
         { head: 'Frontier AI', items: ['frontier-ai-labs', 'redwood-research', 'metr', 'epoch-ai'] }] },
       { name: 'Individuals', sub: 2, items: [
         { head: 'AI Alignment', items: ['stuart-russell', 'yoshua-bengio', 'geoffrey-hinton', 'paul-christiano', 'jan-kulveit'] },
-        { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }], subHead: 'AI' },
+        { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }], subHead: 'The AI Space' },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
       { name: 'Variants', cols: [3, 3], items: [
@@ -11855,7 +11863,7 @@
     var root = document.documentElement, mapView = root.classList.contains('page-map') && root.getAttribute('data-index');
     var listOf = { cs: '.cs-list', rl: '.rl-list' }[mapView];
     tocHeads = Array.prototype.slice.call(document.querySelectorAll(listOf
-      ? '#entry ' + listOf + ' > .ce-title, #entry ' + listOf + ' .index-domain:not(.toc-skip) .domain-title'   // (the Research Paradigm's or Landscape's sections)
+      ? '#entry ' + listOf + ' > .ce-title, #entry ' + listOf + ' .index-domain:not(.toc-skip) .domain-title, #entry ' + listOf + ' .rl-sub > .rl-span-head'   // (the Research Paradigm's or Landscape's sections, and a section's named subsection)
       : root.classList.contains('page-map')
       ? '#entry .ab-list > .ce-title, #entry .ab-list > h2'   // (on the Map: the About view's own)
       : '#entry h1, #entry h2:not(.slide-title)')).filter(function (h) { return !h.closest('.long-only, .short-only') || h.getClientRects().length; });   // (not those of a hidden version)
@@ -11877,7 +11885,8 @@
         // On the Paradigm, a rule between High-Level and each of the three sets of sections (and its
         // sections named without their article: Metacrisis).
         var sec = listOf && h.closest('.index-domain'), rule = i > 0 && sec && sec.classList.contains('set-start');
-        return '<li' + (rule ? ' class="toc-rule"' : '') + '><a href="#" data-target="' + h.id + '">' + esc(mapView === 'cs' ? h.textContent.replace(/^The\s+/, '') : h.textContent) + '</a></li>';
+        var sub = h.classList.contains('rl-span-head');   // (a subsection: nested under its section)
+        return '<li' + (rule ? ' class="toc-rule"' : sub ? ' class="toc-sub"' : '') + '><a href="#" data-target="' + h.id + '">' + esc(mapView === 'cs' ? h.textContent.replace(/^The\s+/, '') : h.textContent) + '</a></li>';
       }).join('') + '</ul>';
   }
   // On the Map's Research Paradigm and Landscape views the contents sit centred in the left margin
@@ -11913,7 +11922,7 @@
     // (the Paradigm's and Landscape's own headings: up to the tab line, their tab at the top of the screen)
     var tabs = a.classList.contains('toc-tab') && document.querySelector('#entry .index-tabs');
     if (tabs) { window.scrollTo({ top: docY(tabs, 'top'), behavior: 'smooth' }); return; }
-    var to = document.getElementById(a.getAttribute('data-target')), sec = to.closest('#entry .index-domain');
+    var to = document.getElementById(a.getAttribute('data-target')), sec = to.closest('#entry .rl-sub') || to.closest('#entry .index-domain');   // (a subsection: to just below its own line)
     if (sec) window.scrollTo({ top: window.scrollY + sec.getBoundingClientRect().top + (parseFloat(getComputedStyle(sec).borderTopWidth) || 0) + 2, behavior: 'smooth' });   // (a section of the Map's views: to just below its dividing line)
     else to.scrollIntoView({ behavior: 'smooth' });
   });
