@@ -11047,7 +11047,7 @@
   // The Conceptual Engineerings page's Curated box: its groups, each with its entries (nested where given).
   // The Research Landscape page's Curated box: each group headed by an entry, with the people beneath it.
   var RL_CURATED = [
-    { head: 'Civilization Research Institute', link: 'civilization-research-institute', items: [['daniel-schmachtenberger', ['new-economics-series']]] },
+    { head: 'Civilization Research Institute', links: [['civilization-research-institute', 'Civilization Research Institute'], ['the-consilience-project', 'The Consilience Project']], items: [['daniel-schmachtenberger', ['new-economics-series']]] },
     { head: 'Integral Collective', link: 'integral-collective', items: [['peter-joseph', ['new-human-rights-movement']]] },
     { head: 'Future of Humanity Institute', link: 'future-of-humanity-institute', items: [['nick-bostrom', ['vulnerable-world-hypothesis']]] },
     { head: 'The CCRU', link: 'ccru', items: [['nick-land', ['xenosystems']], ['mark-fisher', ['capitalist-realism']]] },
@@ -11430,10 +11430,12 @@
       }
       var picked = {};
       (function add(items) { items.forEach(function (x) { var id = typeof x === 'string' ? x : x[0]; if (byId[id]) picked[id] = true; if (Array.isArray(x)) add(x[1]); }); })([].concat.apply([], groups.map(function (g) { return g.items; })));
-      if (headsCount) groups.forEach(function (g) { if (g.link && byId[g.link]) picked[g.link] = true; });
+      if (headsCount) groups.forEach(function (g) { (g.links ? g.links.map(function (l) { return l[0]; }) : [g.link]).forEach(function (id) { if (id && byId[id]) picked[id] = true; }); });
       return '<div class="ce-curated"><p class="ce-curated-count">Selected: ' + Object.keys(picked).length + '</p><p class="ce-curated-head">Curated</p><div class="ce-curated-cols">' + groups.map(function (g) {
         var e = g.link && byId[g.link];
-        return '<div class="ce-curated-grp"><p class="ce-sub-head">' + (e ? '<a href="' + href(e) + '">' + esc(g.head) + '</a>' : esc(g.head)) + '</p>' + tree(g.items) + '</div>';
+        var head = g.links ? g.links.filter(function (l) { return byId[l[0]]; }).map(function (l) { return '<a href="' + href(byId[l[0]]) + '">' + esc(l[1]) + '</a>'; }).join(' &amp; ')   // (a group headed by two entries, each its own link)
+          : e ? '<a href="' + href(e) + '">' + esc(g.head) + '</a>' : esc(g.head);
+        return '<div class="ce-curated-grp"><p class="ce-sub-head">' + head + '</p>' + tree(g.items) + '</div>';
       }).join('') + '</div></div>';
     }
     var ce = '<div class="ce-list ce-main">' +
