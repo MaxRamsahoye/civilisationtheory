@@ -4571,6 +4571,30 @@
       html: '<p><em>DeepSeek</em> is a Chinese AI company, founded in 2023 and backed by the hedge fund High-Flyer, whose open-weight models – especially the reasoning model R1, released in January 2025 – approached the performance of the leading American labs at a fraction of the reported training cost, unsettling assumptions about the US lead in AI.</p>'
     },
     {
+      id: 'ai-research-scientists',
+      title: 'AI Research Scientists',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p>The <em>AI research scientists</em> are the researchers whose work founded modern artificial intelligence and who have become, as its power has grown, some of the most prominent public voices on its risks. Geoffrey Hinton, Yoshua Bengio and Yann LeCun shared the 2018 Turing Award for their work on deep learning; Stuart Russell co-wrote the field’s standard textbook. They are divided on what they built: Hinton and Bengio have warned that advanced AI could pose an existential threat, Russell has long argued that the field’s standard model of intelligence must be rethought for <a href="#ai-safety">safety</a>, while LeCun has dismissed such fears as overblown.</p>'
+    },
+    {
+      id: 'ai-politics',
+      title: 'AI Politics',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>AI politics</em> is the contest over who builds and controls advanced artificial intelligence, and to what ends – among companies, states and publics. Its fault lines include the framing of AI as a matter of national security and a race between the United States and China, export controls on the chips that power it, the lobbying of AI companies, the divide between accelerationists and advocates of <a href="#ai-safety">safety</a>, and the question of whether the benefits and power AI confers will be concentrated or shared. It is the political arena in which <a href="#ai-governance">AI governance</a> is decided.</p>'
+    },
+    {
+      id: 'yann-lecun',
+      title: 'Yann LeCun',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Yann LeCun</em> is a French-American computer scientist and a pioneer of deep learning, known especially for convolutional neural networks. He shared the 2018 Turing Award with Geoffrey Hinton and Yoshua Bengio, and was for many years chief AI scientist at Meta. Unlike his co-laureates, he has been a leading sceptic of claims that AI poses an existential risk, and a prominent advocate of open-weight models.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
@@ -10723,7 +10747,7 @@
         { head: 'Existential Risk Studies', items: ['nick-bostrom', 'toby-ord', 'anders-sandberg', 'martin-rees', 'max-tegmark', 'carl-shulman', 'joe-carlsmith'] },
         { head: 'Forecasting', items: ['philip-tetlock'] }] },
       // The AI subsection beneath, its subfields, organisations and individuals aligned.
-      { name: 'Submovements & Subfields', sub: 0, items: [['ai-safety', ['ai-alignment', 'ai-control', 'ai-interpretability']], 'ai-governance'] },
+      { name: 'Submovements & Subfields', sub: 0, items: ['ai-research-scientists', ['ai-safety', ['ai-alignment', 'ai-control', 'ai-interpretability']], 'ai-governance', 'ai-politics'] },
       { name: 'Organisations', sub: 1, items: [
         { head: 'AI Safety', items: ['center-for-ai-safety', 'apollo-research', 'metr'] },
         { head: 'AI Alignment', items: ['miri', 'center-for-human-compatible-ai'] },
@@ -10733,11 +10757,13 @@
         { head: 'AI Forecasting', items: ['ai-futures-project', 'epoch-ai'] },
         { head: 'Frontier AI', items: [['frontier-ai-labs', ['openai', 'anthropic', 'google-deepmind', 'xai', 'meta-ai', 'deepseek']]] }] },
       { name: 'Individuals', sub: 2, items: [
+        { head: 'AI Research Scientists', items: ['geoffrey-hinton', 'yoshua-bengio', 'yann-lecun', 'stuart-russell'] },
         { head: 'AI Safety', items: ['dan-hendrycks'] },
-        { head: 'AI Alignment', items: ['stuart-russell', 'yoshua-bengio', 'geoffrey-hinton', 'paul-christiano', 'jan-kulveit'] },
+        { head: 'AI Alignment', items: ['paul-christiano', 'jan-kulveit'] },
         { head: 'AI Control', items: ['buck-shlegeris', 'ryan-greenblatt'] },
         { head: 'AI Interpretability', items: ['chris-olah', 'neel-nanda'] },
-        { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }], subHead: 'The AI Space' },
+        { head: 'AI Politics', items: ['leopold-aschenbrenner'] },
+        { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo'] }] }], subHead: 'The AI Space' },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
       { name: 'Variants', cols: [3, 3], items: [
