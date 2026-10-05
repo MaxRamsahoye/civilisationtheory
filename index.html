@@ -1179,6 +1179,9 @@
   html.page-map .description .ce-list.cs-list .struct-grid, html.page-map .description .ce-list.rl-list .struct-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 2.4rem; }
   html.page-map .description .ce-list.cs-list .struct-grid > ul.struct-cols, html.page-map .description .ce-list.rl-list .struct-grid > ul.struct-cols { columns: 1; }
   @media (max-width: 900px) { html.page-map .description .ce-list.cs-list .struct-grid, html.page-map .description .ce-list.rl-list .struct-grid { grid-template-columns: 1fr; } }
+  html.page-map .description .rl-list .rl-span-cols { display: grid; column-gap: 2.4rem; padding-left: 1rem; }
+  html.page-map .description .ce-list.rl-list .rl-span-cols > ul.struct-cols { columns: 1; min-width: 0; }
+  @media (max-width: 900px) { html.page-map .description .rl-list .rl-span { grid-column: auto !important; } html.page-map .description .rl-list .rl-span-cols { grid-template-columns: 1fr !important; } }
   /* …in the interface face: names in IBM Plex regular, the heading in its medium weight */
   html.page-map[data-index="cs"] #toc, html.page-map[data-index="rl"] #toc { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-size: 0.78rem; }
   html.page-map[data-index="cs"] #toc .toc-title, html.page-map[data-index="rl"] #toc .toc-title { font-weight: 500; font-size: 1.15em; }
@@ -1564,6 +1567,7 @@
   .description .struct-head > .struct-desc { margin: 0.3rem 0 0.8rem; font-size: 0.86em; line-height: 1.45; font-style: italic; }   /* (a subheading's own description) */
   /* The landscape's groups and their subgroups set well apart from the entries beneath them */
   html.page-map .description .rl-list .struct-cols > li.struct-head > span { display: block; font-size: 1.22em; font-weight: 700; margin-bottom: 0.2rem; }
+  html.page-map .description .rl-list .rl-span-head { display: block; font-size: 1.22em; font-weight: 700; margin: 0 0 0.75rem; line-height: 1.3; }
   html.page-map .description .rl-list .struct-sub > span { display: block; font-style: italic; font-weight: 600; font-size: 1.05em; color: var(--text); margin: 0.5rem 0 0.1rem; }
   html.page-map .description .rl-list .struct-cols li a { font-weight: 400; font-size: 0.97em; }
   html.page-map .description .rl-list .struct-cols li.struct-sub > span > a { font-weight: inherit; font-size: 1em; color: inherit; }   /* (a subheading that leads to its entry) */
@@ -10525,12 +10529,12 @@
         { head: 'Meaning & Consciousness', items: ['iain-mcgilchrist', 'john-vervaeke', 'jamie-wheal', 'jeremy-lent', 'thomas-hubl', 'otto-scharmer'] },
         { head: 'Collapse & Ecology', items: ['nate-hagens', 'paul-kingsnorth', 'charles-eisenstein', 'vanessa-machado-de-oliveira', 'joanna-macy'] }] },
       { name: 'Organisations', items: [
-        { head: 'Metacrisis & Technology', items: ['club-of-rome', ['civilization-research-institute', ['the-consilience-project']], 'center-for-humane-technology'] },
+        { head: 'Metacrisis & Technology', items: [['civilization-research-institute', ['the-consilience-project']], 'center-for-humane-technology'] },
         { head: 'Metatheory', items: ['institute-of-applied-metatheory', 'centre-for-critical-realism', 'center-for-world-philosophy-and-religion', 'santa-fe-institute'] },
         { head: 'Integral & Metamodernism', items: ['integral-institute', 'center-for-integral-wisdom', 'metamoderna', 'perspectiva', 'life-itself', 'ekskaret-foundation'] },
         { head: 'Meaning & Sensemaking', items: ['vervaeke-foundation', 'the-stoa', 'rebel-wisdom'] },
         { head: 'Systems Change', items: ['presencing-institute', 'dark-matter-labs'] },
-        { head: 'Collapse & Ecology', items: ['post-carbon-institute', 'dark-mountain-project'] }] },
+        { head: 'Collapse & Ecology', items: ['club-of-rome', 'post-carbon-institute', 'dark-mountain-project'] }] },
       { name: 'Movements', items: [
         { head: 'Integral & Metamodernism', items: ['metamodernism', 'integral-life', 'integral-altruism', 'second-renaissance', 'inner-development-goals'] },
         { head: 'The Liminal Web', link: 'the-liminal-web', items: ['game-b', 'the-emergentsia', 'web-3'] },
@@ -10558,7 +10562,7 @@
         { head: 'Forecasting', items: ['philip-tetlock', 'katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }] },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
-      { cols: [3, 4], items: [
+      { name: 'Variants', cols: [3, 4], items: [
         ['accelerationism', ['ccru', 'landian-accelerationism', 'unconditional-accelerationism', 'left-accelerationism-and-the-red-stack', 'right-accelerationism', 'effective-accelerationism']],
         ['xenofeminism', ['laboria-cuboniks', ['cyberfeminism', ['cyborg-manifesto']], 'post-genderism', 'gender-abolitionism', 'anti-essentialism']],
         ['speculative-realism', ['new-materialism', 'assemblage-theory', 'actor-network-theory', 'object-oriented-ontology', 'dark-ecology', 'alien-phenomenology']],
@@ -10961,9 +10965,11 @@
           (sec.desc ? '<p class="domain-desc">' + esc(sec.desc) + '</p>' : '') +
           (sec.groups.length ? (sec.groups.some(function (g) { return g.cols; }) ? '<div class="struct-grid">' + sec.groups.map(function (g) {   // (set columns: the unnamed group split as given, each named group a column of its own)
             var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);
+            var at = 0, split = g.cols && g.cols.map(function (k) { var part = g.items.slice(at, at + k); at += k; return '<ul class="index-cols struct-cols">' + structHtml(part, true, trail) + '</ul>'; }).join('');
+            if (split && g.name)   // (a named group across columns: its heading over them, its clusters beneath, side by side)
+              return '<div class="rl-span" style="grid-column: span ' + g.cols.length + '"><p class="rl-span-head">' + esc(g.name) + '</p><div class="rl-span-cols" style="grid-template-columns: repeat(' + g.cols.length + ', 1fr)">' + split + '</div></div>';
             if (g.name) return '<ul class="index-cols struct-cols"><li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>';
-            var at = 0;
-            return g.cols.map(function (k) { var part = g.items.slice(at, at + k); at += k; return '<ul class="index-cols struct-cols">' + structHtml(part, true, trail) + '</ul>'; }).join('');
+            return split;
           }).join('') + '</div>' : '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
             var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);   // (each listing carries its landscape place)
             return g.name ? '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li>'
