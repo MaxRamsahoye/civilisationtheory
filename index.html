@@ -10991,9 +10991,12 @@
   ];
   // The Conceptual Engineerings page's Curated box: its groups, each with its entries (nested where given).
   var CE_CURATED = [
-    { head: 'The System', items: [['endgame-capitalism-and-exterminism', ['agi-as-victory-condition-of-class-warfare']], 'problem-solution-externality-history', 'capitalist-theodicy'] },
+    { head: 'Capitalism', items: ['endgame-capitalism-and-exterminism', 'agi-as-victory-condition-of-class-warfare', 'neomechanisation-and-autonomisation', 'the-capital-curse'] },
+    { head: 'The System', items: ['marl-by-market-feedback', 'problem-solution-externality-history', 'capitalist-theodicy', ['post-capitalist-realism', [], { label: 'Post-Capitalist Realism' }]] },
     { head: 'Philosophy of Economics', items: ['hayeks-great-wall', 'ship-of-theseus-of-the-state', 'the-wizarding-away-of-the-state', 'the-silicon-cage'] },
     { head: 'Critical Alien Phenomenology', link: 'critical-alien-phenomenology', items: ['demons-of-surveillance-capitalism', 'market-as-life-blind-watchmaker', 'philosophical-zombie-apocalypse', 'moloch-of-the-gaps'] },
+    { head: 'Techno-Onto-Logical', link: 'the-techno-onto-logical', items: ['complex-adaptive-agency', 'megamechanical-turk', 'computational-mechanism', 'the-twin-neural-problem'] },
+    { head: 'Existential Risk', items: ['4e-global-catastrophic-risk', 'ai-exterminism', 'spontaneous-disorder', 'civilisational-mechanics'] },
     { head: 'Blue Skies Social Science', link: 'blue-skies-social-science', items: ['civilisation-x', 'the-great-alignment', 'coherence-of-civilisations', 'viable-life-world-system'] }
   ];
   var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {}, TOP_BLOCKS = {};   // (the concepts nested beneath each, the list each is filed in, and each section's leading groups)
@@ -11356,7 +11359,7 @@
         return '<ul>' + items.map(function (x) {
           var id = typeof x === 'string' ? x : x[0], c = byId[id];
           if (!c) return '';
-          return '<li><a href="' + href(c) + '">' + esc(c.title) + '</a>' + (Array.isArray(x) && x[1].length ? tree(x[1]) : '') + '</li>';
+          return '<li><a href="' + href(c) + '">' + esc((Array.isArray(x) && x[2] && x[2].label) || c.title) + '</a>' + (Array.isArray(x) && x[1].length ? tree(x[1]) : '') + '</li>';
         }).join('') + '</ul>';
       }
       return '<div class="ce-curated"><p class="ce-curated-head">Curated</p><div class="ce-curated-cols">' + CE_CURATED.map(function (g) {
