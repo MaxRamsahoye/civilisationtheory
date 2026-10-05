@@ -1215,8 +1215,9 @@
   html.page-map .description .ce-list.rl-list .rl-flow ul.struct-cols, html.page-map .description .ce-list.rl-list .rl-boxed > ul.struct-cols { columns: 1; }
   html.page-map .description .ce-list.rl-list .rl-flow > ul.struct-cols > li.struct-head { break-inside: auto; }
   html.page-map .description .ce-list.rl-list .rl-flow li.struct-sub { break-inside: avoid; }
-  html.page-map .description .ce-list.rl-list .rl-box { break-inside: avoid; border: 1px solid var(--rule); padding: 1.1rem 1.3rem 0.7rem; margin: 0 0 2.2rem; }
+  html.page-map .description .ce-list.rl-list .rl-box { break-inside: avoid; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 0 1.3rem 0.2rem 0; margin: 0 0 2.2rem; }   /* (set off by a rule beneath and one to its right) */
   html.page-map .description .ce-list.rl-list .rl-box .rl-span-head { margin-bottom: 0.6rem; }
+  html.page-map .description .ce-list.rl-list .rl-box > ul.struct-cols > li.struct-head { padding-bottom: 0; margin-bottom: 0; }
   html.page-map .description .ce-list.rl-list .rl-box > ul.struct-cols > li.struct-head > ul { margin-top: 0.55rem; }
   html.page-map .description .ce-list.rl-list .rl-box .rl-span-head + ul.struct-cols > li.struct-head > ul { margin-top: 0; }
   @media (max-width: 900px) { html.page-map .description .ce-list.rl-list .rl-flow { grid-column: auto; columns: 1; } }   /* (its first subheading level with the cluster beside it) */
