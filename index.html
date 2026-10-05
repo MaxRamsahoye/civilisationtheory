@@ -4459,6 +4459,70 @@
       html: '<p><em>AI interpretability</em> is the study of what is happening inside AI systems – how a neural network represents concepts and arrives at its outputs. Its most ambitious branch, mechanistic interpretability, tries to reverse-engineer networks into human-understandable features and circuits. For <a href="#ai-safety">AI safety</a> it promises a way to check a system’s reasoning directly, rather than only its behaviour, and so to detect deception or misaligned goals that testing alone might miss.</p>'
     },
     {
+      id: 'apollo-research',
+      title: 'Apollo Research',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Apollo Research</em> is a London-based <a href="#ai-safety">AI safety</a> organisation, founded in 2023, that evaluates frontier AI models for deceptive and “scheming” behaviour – a model covertly pursuing goals other than those it was given – and works with AI developers and governments on how such risks should be tested for.</p>'
+    },
+    {
+      id: 'goodfire',
+      title: 'Goodfire',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Goodfire</em> is an AI research company, founded in 2024, devoted to <a href="#ai-interpretability">interpretability</a>: building tools that read and edit the internal features of neural networks, so that what a model has learned can be understood and its behaviour steered from the inside.</p>'
+    },
+    {
+      id: 'transluce',
+      title: 'Transluce',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Transluce</em> is a non-profit research lab, founded in 2024 by Jacob Steinhardt and Sarah Schwettmann, that builds open, scalable tools for understanding AI systems – using AI agents to help explain and audit the behaviour and internals of other models – as public infrastructure for <a href="#ai-interpretability">interpretability</a> and oversight.</p>'
+    },
+    {
+      id: 'dan-hendrycks',
+      title: 'Dan Hendrycks',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Dan Hendrycks</em> is an American machine learning researcher and the director of the <a href="#center-for-ai-safety">Center for AI Safety</a>. He created widely used AI benchmarks, including MMLU, organised the 2023 Statement on AI Risk – signed by leading researchers and AI company heads – and wrote <em>Introduction to AI Safety, Ethics, and Society</em> (2024).</p>'
+    },
+    {
+      id: 'buck-shlegeris',
+      title: 'Buck Shlegeris',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Buck Shlegeris</em> is the chief executive of <a href="#redwood-research">Redwood Research</a> and one of the originators of <a href="#ai-control">AI control</a>: the programme of designing protocols that keep AI systems safe even if they are trying to subvert them.</p>'
+    },
+    {
+      id: 'ryan-greenblatt',
+      title: 'Ryan Greenblatt',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Ryan Greenblatt</em> is the chief scientist of <a href="#redwood-research">Redwood Research</a>, lead author of the paper that introduced <a href="#ai-control">AI control</a> (2023), and of “Alignment Faking in Large Language Models” (2024), with Anthropic, which showed a model strategically complying with training it disagreed with in order to preserve its own preferences.</p>'
+    },
+    {
+      id: 'chris-olah',
+      title: 'Chris Olah',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Chris Olah</em> is a Canadian researcher and a co-founder of Anthropic, where he leads interpretability research. Through the journal <em>Distill</em> and the “circuits” programme he did more than anyone to found mechanistic <a href="#ai-interpretability">interpretability</a> – the attempt to reverse-engineer neural networks into understandable parts.</p>'
+    },
+    {
+      id: 'neel-nanda',
+      title: 'Neel Nanda',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Neel Nanda</em> is a British researcher who leads the mechanistic <a href="#ai-interpretability">interpretability</a> team at Google DeepMind. He created the TransformerLens library and has done much to grow the field through open tools, tutorials and mentorship.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
@@ -10613,12 +10677,18 @@
       // The AI subsection beneath, its subfields, organisations and individuals aligned.
       { name: 'Submovements & Subfields', sub: 0, items: [['ai-safety', ['ai-alignment', 'ai-control', 'ai-interpretability']], 'ai-governance'] },
       { name: 'Organisations', sub: 1, items: [
-        { head: 'AI Alignment', items: ['miri', 'center-for-human-compatible-ai', 'center-for-ai-safety'] },
+        { head: 'AI Safety', items: ['center-for-ai-safety', 'apollo-research'] },
+        { head: 'AI Alignment', items: ['miri', 'center-for-human-compatible-ai'] },
+        { head: 'AI Control', items: ['redwood-research'] },
+        { head: 'AI Interpretability', items: ['goodfire', 'transluce'] },
         { head: 'AI Governance', items: ['centre-for-the-governance-of-ai', 'uk-ai-security-institute'] },
         { head: 'AI Forecasting', items: ['ai-futures-project'] },
-        { head: 'Frontier AI', items: ['frontier-ai-labs', 'redwood-research', 'metr', 'epoch-ai'] }] },
+        { head: 'Frontier AI', items: ['frontier-ai-labs', 'metr', 'epoch-ai'] }] },
       { name: 'Individuals', sub: 2, items: [
+        { head: 'AI Safety', items: ['dan-hendrycks'] },
         { head: 'AI Alignment', items: ['stuart-russell', 'yoshua-bengio', 'geoffrey-hinton', 'paul-christiano', 'jan-kulveit'] },
+        { head: 'AI Control', items: ['buck-shlegeris', 'ryan-greenblatt'] },
+        { head: 'AI Interpretability', items: ['chris-olah', 'neel-nanda'] },
         { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }], subHead: 'The AI Space' },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
