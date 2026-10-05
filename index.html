@@ -1199,6 +1199,10 @@
   @media (max-width: 900px) { html.page-map .description .ce-list.cs-list .struct-grid, html.page-map .description .ce-list.rl-list .struct-grid { grid-template-columns: 1fr; } }
   html.page-map .description .rl-list .rl-span-cols { display: grid; column-gap: 2.4rem; padding-left: 1rem; }
   html.page-map .description .ce-list.rl-list .rl-span-cols > ul.struct-cols { columns: 1; min-width: 0; }
+  html.page-map .description .ce-list.rl-list .rl-sub { border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: 2.2rem; }
+  html.page-map .description .ce-list.rl-list .rl-sub > ul.rl-sub-clusters { padding-left: 1rem; }
+  html.page-map .description .ce-list.rl-list .rl-sub > ul.struct-cols > li.struct-head > ul { margin-top: 0; }
+  html.page-map .description .ce-list.rl-list .rl-sub li.struct-sub:first-child > span { margin-top: 0; }   /* (its first subheading level with the cluster beside it) */
   @media (max-width: 900px) { html.page-map .description .rl-list .rl-span { grid-column: auto !important; } html.page-map .description .rl-list .rl-span-cols { grid-template-columns: 1fr !important; } }
   /* …in the interface face: names in IBM Plex regular, the heading in its medium weight */
   html.page-map[data-index="cs"] #toc, html.page-map[data-index="rl"] #toc { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-size: 0.78rem; }
@@ -10103,7 +10107,8 @@
     for (var i = 0; i < segs.length; i++) {
       var seg = segs[i];
       if (land && cur === root && seg.indexOf('h:') === 0 && land.groups.some(function (g) { return g.name === seg.slice(2); })) {   // (a named group)
-        cur = land.groups.filter(function (g) { return g.name === seg.slice(2); })[0].items; parent = { title: seg.slice(2), heading: true, parent: parent }; blocks = true;
+        cur = [].concat.apply([], land.groups.filter(function (g) { return g.name === seg.slice(2); }).map(function (g) { return g.items; }));   // (a name may head a subsection too)
+        parent = { title: seg.slice(2), heading: true, parent: parent }; blocks = true;
       } else if (seg.indexOf('h:') === 0 || seg.indexOf('q:') === 0) {
         var h = cur.filter(function (x) { return x && !Array.isArray(x) && typeof x === 'object' && x.head === seg.slice(2); })[0];
         if (!h) return null;
@@ -10583,13 +10588,12 @@
         { head: 'Forecasting', items: ['philip-tetlock', 'katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }] },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
-      { name: 'Variants', cols: [3, 4], items: [
+      { name: 'Variants', cols: [3, 3], items: [
         ['accelerationism', ['ccru', 'landian-accelerationism', 'unconditional-accelerationism', 'left-accelerationism-and-the-red-stack', 'right-accelerationism', 'effective-accelerationism']],
         ['xenofeminism', ['laboria-cuboniks', ['cyberfeminism', ['cyborg-manifesto']], 'post-genderism', 'gender-abolitionism', 'anti-essentialism']],
         ['speculative-realism', ['new-materialism', 'assemblage-theory', 'actor-network-theory', 'object-oriented-ontology', 'dark-ecology', 'alien-phenomenology']],
         ['marxism', ['post-marxism', 'meta-marxism', 'freudo-marxism', 'marxism-and-darwinism', 'marxism-and-behaviourism']],
         ['critical-theory', [['the-frankfurt-school', ['the-grand-hotel-abyss']], 'generations-of-critical-theory']],
-        ['new-atheism', ['classical-atheism', 'anti-theism', 'post-theism', 'secular-spirituality']],
         ['planetary-computation', [['the-stack', [], { also: true }]]]] },
       { name: 'Individuals', items: [
         { head: 'Accelerationism', link: 'accelerationism', items: ['nick-land', 'mark-fisher', 'srnicek-and-williams', 'ray-brassier', 'reza-negarestani'] },
@@ -10597,8 +10601,10 @@
         { head: 'Speculative Realism', link: 'speculative-realism', items: ['quentin-meillassoux', 'graham-harman', 'timothy-morton', 'bruno-latour', 'jane-bennett', 'karen-barad', 'manuel-delanda'] },
         { head: 'Marxism', link: 'marxism', items: ['slavoj-zizek'] },
         { head: 'Critical Theory', link: 'critical-theory', items: ['byung-chul-han'] },
-        { head: 'The Four Horsemen of New Atheism', link: 'the-four-horsemen-of-new-atheism', items: ['richard-dawkins', 'christopher-hitchens', 'sam-harris', 'daniel-dennett'] },
-        { head: 'Planetary Computation', link: 'planetary-computation', items: ['benjamin-bratton', 'yuk-hui'] }] }] }
+        { head: 'Planetary Computation', link: 'planetary-computation', items: ['benjamin-bratton', 'yuk-hui'] }] },
+      // A subsection beneath, its idea and its individuals aligned: New Atheism and the Four Horsemen.
+      { name: 'Variants', sub: 0, items: [['new-atheism', ['classical-atheism', 'anti-theism', 'post-theism', 'secular-spirituality']]] },
+      { name: 'Individuals', sub: 2, items: [{ head: 'The Four Horsemen of New Atheism', link: 'the-four-horsemen-of-new-atheism', items: ['richard-dawkins', 'christopher-hitchens', 'sam-harris', 'daniel-dennett'] }] }] }
   ];
   var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {}, TOP_BLOCKS = {};   // (the concepts nested beneath each, the list each is filed in, and each section's leading groups)
   function nodeId(x) { return typeof x === 'string' ? x : Array.isArray(x) ? x[0] : null; }
@@ -11013,19 +11019,33 @@
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + ' nodes</p>' +
           '<h3 class="domain-title">' + (e ? '<a href="' + href(e) + '">' + esc(sec.title) + '</a>' : esc(sec.title)) + '</h3>' +
           (sec.desc ? '<p class="domain-desc">' + esc(sec.desc) + '</p>' : '') +
-          (sec.groups.length ? (sec.groups.some(function (g) { return g.cols; }) ? '<div class="struct-grid">' + sec.groups.map(function (g) {   // (set columns: the unnamed group split as given, each named group a column of its own)
+          (sec.groups.length ? (sec.groups.some(function (g) { return g.cols; }) ? '<div class="struct-grid">' + sec.groups.filter(function (g) { return g.sub === undefined; }).map(function (g) {   // (set columns: the unnamed group split as given, each named group a column of its own)
             var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);
             var at = 0, split = g.cols && g.cols.map(function (k) { var part = g.items.slice(at, at + k); at += k; return '<ul class="index-cols struct-cols">' + structHtml(part, true, trail) + '</ul>'; }).join('');
             if (split && g.name)   // (a named group across columns: its heading over them, its clusters beneath, side by side)
               return '<div class="rl-span" style="grid-column: span ' + g.cols.length + '"><p class="rl-span-head">' + esc(g.name) + '</p><div class="rl-span-cols" style="grid-template-columns: repeat(' + g.cols.length + ', 1fr)">' + split + '</div></div>';
             if (g.name) return '<ul class="index-cols struct-cols"><li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>';
             return split;
-          }).join('') + '</div>' : '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
+          }).join('') + '</div>' + rlSubHtml(sec) : '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
             var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);   // (each listing carries its landscape place)
             return g.name ? '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li>'
               : structHtml(g.items, true, trail);   // (a group without a name: its clusters side by side, across the columns)
           }).join('') + '</ul>') : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
+    // A section's subsection: its groups set in the columns given, aligned beneath the columns above
+    // (a Variants group under the clusters, an Individuals group under the individuals).
+    function rlSubHtml(sec) {
+      var subs = sec.groups.filter(function (g) { return g.sub !== undefined; });
+      if (!subs.length) return '';
+      var cols = ['', '', ''];
+      subs.forEach(function (g) {
+        var trail = ['L:' + sec.title, 'h:' + g.name];
+        cols[g.sub] = g.items.some(function (x) { return x && !Array.isArray(x) && typeof x === 'object'; })
+          ? '<ul class="index-cols struct-cols"><li class="is-category struct-head"><ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>'   // (subheadings: as in a named column)
+          : '<ul class="index-cols struct-cols rl-sub-clusters">' + structHtml(g.items, true, trail) + '</ul>';   // (clusters: as under a heading across columns)
+      });
+      return '<div class="struct-grid rl-sub">' + cols.map(function (h) { return h || '<div></div>'; }).join('') + '</div>';
+    }
     // About the Project: the site's introduction (the root entry), as a view of the Map.
     var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
     // The views as a row of tabs, each with its own tally beneath its name.
