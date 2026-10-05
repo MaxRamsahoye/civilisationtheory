@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'epistemic-uncertainty-and-cluelessness': 'epistemic-uncertainty', 'critical-social-theory': 'critical-theory', 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
+    window.MOVED = { 'demons-of-techno-capitalism': 'demons-of-surveillance-capitalism', 'epistemic-uncertainty-and-cluelessness': 'epistemic-uncertainty', 'critical-social-theory': 'critical-theory', 'civilisational-alignment': 'civilisation-alignment', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -7352,10 +7352,16 @@
       html: '<p><em>Inverted totalitarianism</em> is Sheldon Wolin’s term, from <em>Democracy Incorporated</em> (2008), for a system in which economic power dominates politics while democratic forms are retained – totalitarian in its reach, but managed rather than charismatic, and relying on apathy rather than mobilisation. Its stable form is one that has become self-perpetuating, with no crisis to disrupt it.</p>'
     },
     {
-      id: 'demons-of-techno-capitalism',
-      title: 'The Demons of Techno-Capitalism',
+      id: 'demons-of-surveillance-capitalism',
+      title: 'The Demons of Surveillance Capitalism',
       coined: true,
-      html: '<p>The <em>demons of techno-capitalism</em> are the autonomous, impersonal forces produced by the fusion of technology and capital – optimisation processes, algorithms and market dynamics that act with apparent intention, pursuing growth, engagement and profit through human beings without any human fully directing them.</p><p>The <em>demons of surveillance capitalism</em> are one species of this wider family: the automated, profit-seeking processes – recommendation engines, ad-targeting systems, engagement optimisers – that act on people continuously and invisibly. Like the demons of older cosmologies, they are unseen agents that influence desire and belief, serving ends that are not those of the people they act upon. See <a href="#surveillance-capitalism">surveillance capitalism</a>.</p>'
+      refs: ['René Descartes, <em>Meditations on First Philosophy</em> (1641).', 'Pierre-Simon Laplace, <em>A Philosophical Essay on Probabilities</em> (1814).', 'Shoshana Zuboff, <em>The Age of Surveillance Capitalism</em> (2019).'],
+      html:
+        '<p>The <em>demons of surveillance capitalism</em> are the automated, profit-seeking processes – recommendation engines, ad-targeting systems, engagement optimisers – that act on people continuously and invisibly. Like the demons of older cosmologies, they are unseen agents that influence desire and belief, serving ends that are not those of the people they act upon. They are one species of a wider family, the demons of techno-capitalism: the autonomous, impersonal forces produced by the fusion of technology and capital – optimisation processes, algorithms and market dynamics that act with apparent intention, pursuing growth, engagement and profit through human beings without any human fully directing them. See <a href="#surveillance-capitalism">surveillance capitalism</a>.</p><p>Two demons of modern philosophy describe what they do: one deceives, the other predicts.</p>' +
+        '<h2>Descartes’ Demon: Perceptual Manipulation</h2>' +
+        '<p>In his <em>Meditations</em> (1641), René Descartes imagined an evil demon, “supremely powerful and cunning”, who had devoted all his energies to deceiving him – so that the sky, colours, sounds and every external thing he perceived might be illusions laid as traps for his judgement. The demon of surveillance capitalism realises a partial version of this thought experiment. Each person now perceives much of the world through a personalised, algorithmically curated feed – the news selected for them, the posts ranked for them, the products, people and synthetic media placed before them – shaped to hold attention and steer behaviour rather than to show the world as it is. The demon need not lie outright: selection, ordering and omission are enough to alter what a person takes reality to be, and no two people are shown the same world.</p>' +
+        '<h2>Laplace’s Demon: Prediction Machine</h2>' +
+        '<p>In his <em>Philosophical Essay on Probabilities</em> (1814), Pierre-Simon Laplace imagined an intellect that knew, at one instant, every force in nature and the position of every particle: for it, “nothing would be uncertain, and the future, like the past, would be present to its eyes”. Surveillance capitalism pursues this demon at the scale of human behaviour. It harvests the traces of what people do in order to build what Shoshana Zuboff calls prediction products – forecasts of what they will feel, click and buy – sold in markets in future behaviour. And because a prediction is worth most when it is certain, the prediction machine is drawn from forecasting behaviour to shaping it: making people predictable. Here the two demons meet – perceptions managed so that behaviour can be foretold.</p>'
     },
     {
       id: 'marl-by-market-feedback',
@@ -10629,7 +10635,7 @@
       ['risk-production', ['anthropogenic-risk', 'capitalogenic-risk', ['systemic-risk', [], { also: true }]]],
       ['hyper-agents', ['hyper-agential-hyper-realism', 'hyper-agents-of-doom', 'economic-superorganism', ['megamachine', [], { also: true }], 'the-technium', ['the-stack', ['the-black-stack', 'the-red-stack', 'the-green-stack']], 'what-progress-wants', ['moloch', ['moloch-of-the-gaps']], 'leviathan', 'kraken', 'the-benevolent-dictator', ['gaia', [], { also: true }]]],
       ['hyperobjects', ['climate', ['capitalism-as-hyperobject', [], { label: 'Capitalism' }], 'space', 'the-internet']],
-      ['critical-alien-phenomenology', ['reverse-extended-mind-thesis', 'reverse-prosthesis', 'inverse-instrumentality', 'loop-in-the-human', 'the-gaze', 'darwin-among-the-machines', 'demons-of-techno-capitalism', 'market-as-life-blind-watchmaker', 'seeing-like-a-state']],
+      ['critical-alien-phenomenology', ['reverse-extended-mind-thesis', 'reverse-prosthesis', 'inverse-instrumentality', 'loop-in-the-human', 'the-gaze', 'darwin-among-the-machines', 'demons-of-surveillance-capitalism', 'market-as-life-blind-watchmaker', 'seeing-like-a-state']],
       ['civilisational-paradigm', ['paradigm', ['dominant-paradigm', ['hegemonic-power']], ['counter-hegemonic-civilisational-paradigm', ['counter-hegemony']], ['civilisational-paradigm-shift', ['paradigm-shift'], { also: true }], ['civilisational-paradigm-paralysis', ['paradigm-paralysis']]]],
       ['world-system', ['world-command-and-control-system', 'world-system-securitisation', 'empire', 'capitalist-world-system', 'post-capitalist-world-system', 'complex-world-system-dynamics', ['life-world-system', ['viable-life-world-system']], 'life-world-systems-change']],
       ['4e-ontology', ['4e-cognition', '4e-intelligence', '4e-agency', '4e-global-catastrophic-risk', '4e-power', '4e-utopia']],
@@ -10975,7 +10981,7 @@
   var CE_CURATED = [
     { head: 'The System', items: [['endgame-capitalism-and-exterminism', ['agi-as-victory-condition-of-class-warfare']], 'problem-solution-externality-history', 'capitalist-theodicy'] },
     { head: 'Philosophy of Economics', items: ['hayeks-great-wall', 'ship-of-theseus-of-the-state', 'the-wizarding-away-of-the-state', 'the-silicon-cage'] },
-    { head: 'Critical Alien Phenomenology', link: 'critical-alien-phenomenology', items: ['demons-of-techno-capitalism', 'market-as-life-blind-watchmaker', 'philosophical-zombie-apocalypse', 'moloch-of-the-gaps'] },
+    { head: 'Critical Alien Phenomenology', link: 'critical-alien-phenomenology', items: ['demons-of-surveillance-capitalism', 'market-as-life-blind-watchmaker', 'philosophical-zombie-apocalypse', 'moloch-of-the-gaps'] },
     { head: 'Blue Skies Social Science', link: 'blue-skies-social-science', items: ['civilisation-x', 'the-great-alignment', 'coherence-of-civilisations', 'viable-life-world-system'] }
   ];
   var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {}, TOP_BLOCKS = {};   // (the concepts nested beneath each, the list each is filed in, and each section's leading groups)
