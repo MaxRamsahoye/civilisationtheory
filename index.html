@@ -1203,7 +1203,18 @@
   html.page-map .description .ce-list.rl-list .rl-sub { border-top: 1px solid var(--rule); margin-top: 2rem; padding-top: 2.2rem; }
   html.page-map .description .ce-list.rl-list .rl-sub ul.rl-sub-clusters { padding-left: 1rem; }
   html.page-map .description .ce-list.rl-list .rl-sub .struct-grid > ul.struct-cols > li.struct-head > ul { margin-top: 0; }
-  html.page-map .description .ce-list.rl-list .rl-sub li.struct-sub:first-child > span { margin-top: 0; }   /* (its first subheading level with the cluster beside it) */
+  html.page-map .description .ce-list.rl-list .rl-sub li.struct-sub:first-child > span { margin-top: 0; }
+  /* A boxed row: the box at the head of the first column, the next group flowing beneath it into the second */
+  html.page-map .description .ce-list.rl-list .rl-sub.rl-sub-boxed { border-top: 0; margin-top: 3.2rem; padding-top: 0; }
+  html.page-map .description .ce-list.rl-list .rl-flow { grid-column: span 2; columns: 2; column-gap: 2.4rem; }
+  html.page-map .description .ce-list.rl-list .rl-flow ul.struct-cols, html.page-map .description .ce-list.rl-list .rl-boxed > ul.struct-cols { columns: 1; }
+  html.page-map .description .ce-list.rl-list .rl-flow > ul.struct-cols > li.struct-head { break-inside: auto; }
+  html.page-map .description .ce-list.rl-list .rl-flow li.struct-sub { break-inside: avoid; }
+  html.page-map .description .ce-list.rl-list .rl-box { break-inside: avoid; border: 1px solid var(--rule); padding: 1.1rem 1.3rem 0.7rem; margin: 0 0 2.2rem; }
+  html.page-map .description .ce-list.rl-list .rl-box .rl-span-head { margin-bottom: 0.6rem; }
+  html.page-map .description .ce-list.rl-list .rl-box > ul.struct-cols > li.struct-head > ul { margin-top: 0.55rem; }
+  html.page-map .description .ce-list.rl-list .rl-box .rl-span-head + ul.struct-cols > li.struct-head > ul { margin-top: 0; }
+  @media (max-width: 900px) { html.page-map .description .ce-list.rl-list .rl-flow { grid-column: auto; columns: 1; } }   /* (its first subheading level with the cluster beside it) */
   @media (max-width: 900px) { html.page-map .description .rl-list .rl-span { grid-column: auto !important; } html.page-map .description .rl-list .rl-span-cols { grid-template-columns: 1fr !important; } }
   /* …in the interface face: names in IBM Plex regular, the heading in its medium weight */
   html.page-map[data-index="cs"] #toc, html.page-map[data-index="rl"] #toc { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-size: 0.78rem; }
@@ -10763,7 +10774,7 @@
         { head: 'AI Control', items: ['buck-shlegeris', 'ryan-greenblatt'] },
         { head: 'AI Interpretability', items: ['chris-olah', 'neel-nanda'] },
         { head: 'AI Politics', items: ['leopold-aschenbrenner'] },
-        { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo'] }] }], subHead: 'The AI Space' },
+        { head: 'AI Forecasting', items: ['katja-grace', 'ajeya-cotra', 'daniel-kokotajlo'] }] }], subHead: 'The AI Space', boxed: true },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
       { name: 'Variants', cols: [3, 3], items: [
@@ -11197,7 +11208,7 @@
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + ' nodes</p>' +
           '<h3 class="domain-title">' + (e ? '<a href="' + href(e) + '">' + esc(sec.title) + '</a>' : esc(sec.title)) + '</h3>' +
           (sec.desc ? '<p class="domain-desc">' + esc(sec.desc) + '</p>' : '') +
-          (sec.groups.length ? (sec.groups.some(function (g) { return g.cols; }) ? '<div class="struct-grid">' + sec.groups.filter(function (g) { return g.sub === undefined; }).map(function (g) {   // (set columns: the unnamed group split as given, each named group a column of its own)
+          (sec.groups.length ? sec.boxed ? rlBoxedHtml(sec) : (sec.groups.some(function (g) { return g.cols; }) ? '<div class="struct-grid">' + sec.groups.filter(function (g) { return g.sub === undefined; }).map(function (g) {   // (set columns: the unnamed group split as given, each named group a column of its own)
             var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);
             var at = 0, split = g.cols && g.cols.map(function (k) { var part = g.items.slice(at, at + k); at += k; return '<ul class="index-cols struct-cols">' + structHtml(part, true, trail) + '</ul>'; }).join('');
             if (split && g.name)   // (a named group across columns: its heading over them, its clusters beneath, side by side)
@@ -11223,6 +11234,22 @@
           : '<ul class="index-cols struct-cols rl-sub-clusters">' + structHtml(g.items, true, trail) + '</ul>';   // (clusters: as under a heading across columns)
       });
       return '<div class="rl-sub">' + (sec.subHead ? '<p class="rl-span-head">' + esc(sec.subHead) + '</p>' : '') + '<div class="struct-grid">' + cols.map(function (h) { return h || '<div></div>'; }).join('') + '</div></div>';
+    }
+    // A section set as a boxed row: its first group in a box at the head of the first column, the
+    // second flowing beneath it and on into the second column, the third in the third column; then its
+    // subsection the same way, its name heading the box.
+    function rlBoxedHtml(sec) {
+      function col(g, head) {
+        var trail = ['L:' + sec.title, 'h:' + g.name];
+        return '<ul class="index-cols struct-cols"><li class="is-category struct-head">' + (head ? '<span>' + esc(head) + '</span>' : '') + '<ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>';
+      }
+      function row(gs, boxHead, named) {
+        return '<div class="struct-grid rl-boxed"><div class="rl-flow"><div class="rl-box">' + (boxHead ? '<p class="rl-span-head">' + esc(boxHead) + '</p>' : '') +
+          col(gs[0], named && gs[0].name) + '</div>' + col(gs[1], named && gs[1].name) + '</div>' + col(gs[2], named && gs[2].name) + '</div>';
+      }
+      var main = sec.groups.filter(function (g) { return g.sub === undefined; });
+      var subs = sec.groups.filter(function (g) { return g.sub !== undefined; }).sort(function (a, b) { return a.sub - b.sub; });
+      return row(main, null, true) + (subs.length ? '<div class="rl-sub rl-sub-boxed">' + row(subs, sec.subHead, false) + '</div>' : '');
     }
     // About the Project: the site's introduction (the root entry), as a view of the Map.
     var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
@@ -12027,7 +12054,7 @@
     var root = document.documentElement, mapView = root.classList.contains('page-map') && root.getAttribute('data-index');
     var listOf = { cs: '.cs-list', rl: '.rl-list' }[mapView];
     tocHeads = Array.prototype.slice.call(document.querySelectorAll(listOf
-      ? '#entry ' + listOf + ' > .ce-title, #entry ' + listOf + ' .index-domain:not(.toc-skip) .domain-title, #entry ' + listOf + ' .rl-sub > .rl-span-head'   // (the Research Paradigm's or Landscape's sections, and a section's named subsection)
+      ? '#entry ' + listOf + ' > .ce-title, #entry ' + listOf + ' .index-domain:not(.toc-skip) .domain-title, #entry ' + listOf + ' .rl-sub .rl-span-head'   // (the Research Paradigm's or Landscape's sections, and a section's named subsection)
       : root.classList.contains('page-map')
       ? '#entry .ab-list > .ce-title, #entry .ab-list > h2'   // (on the Map: the About view's own)
       : '#entry h1, #entry h2:not(.slide-title)')).filter(function (h) { return !h.closest('.long-only, .short-only') || h.getClientRects().length; });   // (not those of a hidden version)
