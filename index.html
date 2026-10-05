@@ -4806,6 +4806,32 @@
       html: '<p><em>Antikythera</em> is a think tank and research studio for the philosophy and design of <a href="#planetary-computation">planetary computation</a>, directed by <a href="#benjamin-bratton">Benjamin Bratton</a> and launched in 2022 with the Berggruen Institute. Named after the ancient Greek Antikythera mechanism – a geared device for computing the movements of the heavens – it treats computation not only as a tool but as a way of knowing the planet and a medium through which a planetary civilisation might steer itself, working through studios, publications and a book series on how the emerging infrastructures of AI and sensing could be composed toward a viable planetary future.</p>'
     },
     {
+      id: 'new-economics-series',
+      title: 'New Economics Series',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      refs: ['Daniel Schmachtenberger, “New Economics Series”, parts 1–4, <em>Civilization Emerging</em>.'],
+      html: '<p>The <em>New Economics Series</em> is an early four-part series of talks by <a href="#daniel-schmachtenberger">Daniel Schmachtenberger</a>, published on his site Civilization Emerging, that approaches economics through systems thinking – as the system by which a civilisation allocates resources and coordinates human activity – and asks what an economy beyond market economics and a rivalrous worldview would have to be. Its parts set out the design constraints for a viable economic system; the transition from win-lose to win-win systems, and from fragmentation to wholism; the origins of many global issues in the foundational structures of macroeconomics; and models of the nature and evolution of economies, including linear, multiplicative and exponential economies. It anticipates his later work on the <a href="#metacrisis">metacrisis</a>.</p>'
+    },
+    {
+      id: 'new-human-rights-movement',
+      title: 'The New Human Rights Movement',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      refs: ['Peter Joseph, <em>The New Human Rights Movement: Reinventing the Economy to End Oppression</em> (2017).'],
+      html: '<p><em>The New Human Rights Movement: Reinventing the Economy to End Oppression</em> (2017) is a book by <a href="#peter-joseph">Peter Joseph</a> arguing that the greatest sources of human suffering today are not overt acts of oppression but the structural violence built into the market economy – the poverty, inequality, ill health and ecological harm that follow from how the system is organised. A human rights movement worthy of the name, he argues, must therefore target the socio-economic system itself, and he sets out the case for a post-scarcity economy designed with the methods of science and systems thinking. It develops his idea of the <a href="#root-socio-economic-orientation">root socio-economic orientation</a>.</p>'
+    },
+    {
+      id: 'xenosystems',
+      title: 'Xenosystems',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Xenosystems</em> is the blog on which <a href="#nick-land">Nick Land</a> developed his later thought through the 2010s – a dense stream of posts on capital, technology, intelligence and time that elaborated his <a href="#landian-accelerationism">accelerationism</a> alongside the neoreactionary politics of <a href="#dark-enlightenment">the Dark Enlightenment</a>. Its recurring themes include capital as an alien intelligence assembling itself through human history, the escape of artificial intelligence from human control, and the “Outside” as the ultimate horizon of thought.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
@@ -10932,13 +10958,13 @@
   var LANDSCAPE = [
     { title: 'Cybernetic Economics', entry: 'cybernetic-economics',
       desc: 'Thinkers, organisations and movements developing a new form of economics steered by information and feedback, obsoleting the traditional functions of states and markets – from Beer and Fuller to Fresco’s resource-based economy and Joseph’s Integral.', groups: [
-      { name: 'Individuals', items: ['peter-joseph', 'jacque-fresco', 'buckminster-fuller', 'stafford-beer', 'michel-bauwens', { head: 'Cybernetics', link: 'cybernetics', items: ['norbert-wiener', 'w-ross-ashby'] }] },
+      { name: 'Individuals', items: [['peter-joseph', ['new-human-rights-movement']], 'jacque-fresco', 'buckminster-fuller', 'stafford-beer', 'michel-bauwens', { head: 'Cybernetics', link: 'cybernetics', items: ['norbert-wiener', 'w-ross-ashby'] }] },
       { name: 'Organisations', items: ['integral-collective', 'the-venus-project', 'buckminster-fuller-institute', 'project-cybersyn', 'p2p-foundation'] },
       { name: 'Movements', items: ['the-zeitgeist-movement'] }] },
     { title: 'Meta-space', entry: 'meta-space',
       desc: 'The loose ecosystem of thinkers, institutes and communities working on the metacrisis through integrative metatheory, sensemaking and cultural renewal.', groups: [
       { name: 'Individuals', items: [
-        { head: 'Metacrisis & Technology', items: ['daniel-schmachtenberger', 'zak-stein', 'jordan-hall', 'tristan-harris'] },
+        { head: 'Metacrisis & Technology', items: [['daniel-schmachtenberger', ['new-economics-series']], 'zak-stein', 'jordan-hall', 'tristan-harris'] },
         { head: 'Metatheory', items: ['edgar-morin', 'roy-bhaskar', 'gregg-henriques', 'david-bohm'] },
         { head: 'Integral & Metamodernism', items: ['ken-wilber', 'marc-gafni', 'hanzi-freinacht', 'jonathan-rowson', 'bonnitta-roy', 'tomas-bjorkman', 'lene-rachel-andersen', 'alexander-bard', 'brendan-graham-dempsey'] },
         { head: 'Meaning & Consciousness', items: ['iain-mcgilchrist', 'john-vervaeke', 'jamie-wheal', 'jeremy-lent', 'thomas-hubl', 'otto-scharmer'] },
@@ -10999,7 +11025,7 @@
         ['critical-theory', [['the-frankfurt-school', ['the-grand-hotel-abyss']], 'generations-of-critical-theory']],
         ['planetary-computation', ['antikythera', ['the-stack', [], { also: true }]]]] },
       { name: 'Individuals', items: [
-        { head: 'Accelerationism', link: 'accelerationism', items: ['nick-land', 'mark-fisher', 'srnicek-and-williams', 'ray-brassier', 'reza-negarestani'] },
+        { head: 'Accelerationism', link: 'accelerationism', items: [['nick-land', ['xenosystems']], 'mark-fisher', 'srnicek-and-williams', 'ray-brassier', 'reza-negarestani'] },
         { head: 'Xenofeminism', link: 'xenofeminism', items: ['sadie-plant'] },
         { head: 'Speculative Realism', link: 'speculative-realism', items: ['quentin-meillassoux', 'graham-harman', 'timothy-morton', 'bruno-latour', 'jane-bennett', 'karen-barad', 'manuel-delanda'] },
         { head: 'Marxism', link: 'marxism', items: ['slavoj-zizek'] },
@@ -11012,10 +11038,10 @@
   // The Conceptual Engineerings page's Curated box: its groups, each with its entries (nested where given).
   // The Research Landscape page's Curated box: each group headed by an entry, with the people beneath it.
   var RL_CURATED = [
-    { head: 'Civilization Research Institute', link: 'civilization-research-institute', items: ['daniel-schmachtenberger'] },
-    { head: 'Integral', link: 'integral', items: ['peter-joseph'] },
-    { head: 'Future of Humanity Institute', link: 'future-of-humanity-institute', items: ['nick-bostrom'] },
-    { head: 'The CCRU', link: 'ccru', items: ['nick-land', 'mark-fisher'] }
+    { head: 'Civilization Research Institute', link: 'civilization-research-institute', items: [['daniel-schmachtenberger', ['new-economics-series']]] },
+    { head: 'Integral', link: 'integral', items: [['peter-joseph', ['new-human-rights-movement']]] },
+    { head: 'Future of Humanity Institute', link: 'future-of-humanity-institute', items: [['nick-bostrom', ['vulnerable-world-hypothesis']]] },
+    { head: 'The CCRU', link: 'ccru', items: [['nick-land', ['xenosystems']], ['mark-fisher', ['capitalist-realism']]] }
   ];
   var CE_CURATED = [
     { head: 'Capitalism', items: ['endgame-capitalism-and-exterminism', 'agi-as-victory-condition-of-class-warfare', 'neomechanisation-and-autonomisation', 'the-capital-curse'] },
