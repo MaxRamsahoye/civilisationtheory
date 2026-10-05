@@ -1566,6 +1566,7 @@
   html.page-map .description .rl-list .struct-cols > li.struct-head > span { display: block; font-size: 1.22em; font-weight: 700; margin-bottom: 0.2rem; }
   html.page-map .description .rl-list .struct-sub > span { display: block; font-style: italic; font-weight: 600; font-size: 1.05em; color: var(--text); margin: 0.5rem 0 0.1rem; }
   html.page-map .description .rl-list .struct-cols li a { font-weight: 400; font-size: 0.97em; }
+  html.page-map .description .rl-list .struct-cols li.struct-sub > span > a { font-weight: inherit; font-size: 1em; color: inherit; }   /* (a subheading that leads to its entry) */
   html.page-map .description .rl-list .struct-cols > li.is-category > a { font-weight: 700; }   /* (a cluster heading a column, as in the paradigm) */
   html.page-map .description .ce-list.cs-list .struct-cols > li.struct-plain > ul { padding-left: 0; margin-top: 0; }
   .description .struct-drop details > summary { list-style: none; cursor: pointer; }
@@ -10472,7 +10473,7 @@
   var LANDSCAPE = [
     { title: 'Cybernetic Economics', entry: 'cybernetic-economics',
       desc: 'Thinkers, organisations and movements developing a new form of economics steered by information and feedback, obsoleting the traditional functions of states and markets – from Beer and Fuller to Fresco’s resource-based economy and Joseph’s Integral.', groups: [
-      { name: 'Individuals', items: ['peter-joseph', 'jacque-fresco', 'buckminster-fuller', 'stafford-beer', 'michel-bauwens', ['cybernetics', ['norbert-wiener', 'w-ross-ashby']]] },
+      { name: 'Individuals', items: ['peter-joseph', 'jacque-fresco', 'buckminster-fuller', 'stafford-beer', 'michel-bauwens', { head: 'Cybernetics', link: 'cybernetics', items: ['norbert-wiener', 'w-ross-ashby'] }] },
       { name: 'Organisations', items: ['integral-collective', 'the-venus-project', 'buckminster-fuller-institute', 'project-cybersyn', 'p2p-foundation'] },
       { name: 'Movements', items: ['the-zeitgeist-movement'] }] },
     { title: 'Meta-space', entry: 'meta-space',
@@ -10687,7 +10688,7 @@
         if (typeof x === 'string') x = [x, []];
         if (!Array.isArray(x) && x.head && x.dropdown && !top)   // (a subheading folded: the marker opens it)
           return '<li class="struct-sub struct-drop"><details><summary><span>' + esc(x.head) + '</span></summary><ul>' + structHtml(x.items, false, trail.concat(['h:' + x.head])) + '</ul></details></li>';
-        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + esc(x.head) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])) + '</ul></li>'
+        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + (x.link && byId[x.link] ? '<a href="' + href(byId[x.link]) + '">' + esc(x.head) + '</a>' : esc(x.head)) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])) + '</ul></li>'
           : '<li class="is-category struct-plain"><ul>' + structHtml(x.items, false, trail) + '</ul></li>';   // (a group without a heading)
         var c = byId[x[0]], kids = x[1] || [], o = x[2] || {};
         if (!c) return '';
