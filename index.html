@@ -1610,7 +1610,7 @@
   html.page-map .description .rl-list .rl-span-head { display: block; font-size: 1.22em; font-weight: 700; margin: 0 0 0.75rem; line-height: 1.3; }
   html.page-map .description .rl-list .struct-sub > span { display: block; font-style: italic; font-weight: 600; font-size: 1.05em; color: var(--text); margin: 0.5rem 0 0.1rem; }
   html.page-map .description .rl-list .struct-cols li a { font-weight: 400; font-size: 0.97em; }
-  html.page-map .description .rl-list .struct-cols li.struct-sub > span > a { font-weight: inherit; font-size: 1em; color: inherit; }   /* (a subheading that leads to its entry) */
+  html.page-map .description .struct-cols li.struct-sub > span > a, html.page-map .description .struct-cols li.struct-head > span > a { font-weight: inherit; font-size: 1em; color: inherit; }   /* (a subheading that leads to its entry) */
   html.page-map .description .rl-list .struct-cols > li.is-category > a { font-weight: 700; }   /* (a cluster heading a column, as in the paradigm) */
   html.page-map .description .ce-list.cs-list .struct-cols > li.struct-plain > ul { padding-left: 0; margin-top: 0; }
   .description .struct-drop details > summary { list-style: none; cursor: pointer; }
@@ -4752,6 +4752,12 @@
       title: 'Post-Rationalists',
       refs: ['David Chapman, <em>In the Cells of the Eggplant</em> (2020–).', 'Venkatesh Rao, <em>Ribbonfarm</em> (2007–).'],
       html: '<p>The <em>post-rationalists</em> – “postrats” – are a loose online milieu that grew out of, and partly away from, the <a href="#rationalists">rationalists</a>. They keep the rationalists’ curiosity and intellectual seriousness but hold that systematic rationality is not enough: that much of what matters in life is carried by intuition, embodiment, ritual, relationship and meaning, which formal methods cannot capture and may even damage. Drawing on David Chapman’s account of <a href="#metarationality">metarationality</a>, Venkatesh Rao’s <em>Ribbonfarm</em>, contemplative practice and the human sciences, they explore how to reason well about when, and how far, to trust reasoning itself.</p>'
+    },
+    {
+      id: 'uncertainty',
+      title: 'Uncertainty',
+      refs: ['Frank H. Knight, <em>Risk, Uncertainty and Profit</em> (1921).', 'John Kay and Mervyn King, <em>Radical Uncertainty: Decision-Making Beyond the Numbers</em> (2020).'],
+      html: '<p><em>Uncertainty</em> is the condition of not knowing what is true or what will happen. Its kinds differ in depth. Risk, in Frank Knight’s distinction, is uncertainty that can be measured – outcomes and their probabilities are known; <a href="#knightian-uncertainty">Knightian uncertainty</a> is the deeper condition in which they cannot be, shading into <a href="#unknown-unknowns">unknown unknowns</a> and <a href="#black-swans">black swans</a>. <a href="#epistemic-uncertainty-and-cluelessness">Epistemic uncertainty</a> is a lack of knowledge that more evidence could in principle remove, as against irreducible chance; at its limit lies cluelessness about the long-run effects of what we do. <a href="#moral-uncertainty">Moral uncertainty</a> extends the problem from facts to values: not knowing what is right. Much of <a href="#metarationality">metarationality</a> concerns how to reason and act well when the formal methods built for measurable risk meet the deeper kinds.</p>'
     },
     {
       id: 'polycrisis',
@@ -10809,7 +10815,7 @@
       { head: 'Rationality & Its Limits', items: ['instrumental-and-value-rationality', ['expected-utility-theory', ['prospect-theory']], ['bounded-rationality', ['ecological-rationality', 'dual-process-theory']]] },
       { head: 'Bias & Self-Deception', items: [['heuristics-and-biases', ['illusion-of-explanatory-depth']], 'motivated-reasoning', 'cognitive-dissonance'] },
       { head: 'Collective Reasoning', items: ['groupthink', 'information-cascades', 'preference-falsification', 'wisdom-of-crowds', 'epistemic-trust'] },
-      { head: 'Uncertainty', items: [['knightian-uncertainty', ['black-swans', 'unknown-unknowns', 'epistemic-uncertainty-and-cluelessness']], 'reflexivity', ['moral-uncertainty', [], { also: true }]] },
+      { head: 'Uncertainty', entry: 'uncertainty', items: [['knightian-uncertainty', ['black-swans', 'unknown-unknowns']], 'epistemic-uncertainty-and-cluelessness', ['moral-uncertainty', [], { also: true }], 'reflexivity'] },
       { head: 'Forecasting', items: ['bayesian-epistemology', ['superforecasting', ['inside-and-outside-view', 'calibration']], 'hedgehogs-and-foxes', 'lindy-effect'] },
       { head: 'Decision-Making', items: ['robust-decision-making', 'explore-exploit', 'value-of-information', 'premortem', 'precautionary-principle', 'via-negativa'] },
       { head: 'Models & Knowing', items: [['map-is-not-the-territory', ['legibility']], ['tacit-knowledge', ['metis', 'chestertons-fence']]] },
@@ -11141,7 +11147,7 @@
         if (typeof x === 'string') x = [x, []];
         if (!Array.isArray(x) && x.head && x.dropdown && !top)   // (a subheading folded: the marker opens it)
           return '<li class="struct-sub struct-drop"><details><summary><span>' + esc(x.head) + '</span></summary><ul>' + structHtml(x.items, false, trail.concat(['h:' + x.head])) + '</ul></details></li>';
-        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + (x.link && byId[x.link] ? '<a href="' + href(byId[x.link]) + '">' + esc(x.head) + '</a>' : esc(x.head)) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])) + '</ul></li>'
+        if (!Array.isArray(x)) return x.head ? '<li class="' + (top ? 'is-category struct-head' : 'struct-sub') + '"><span>' + ((x.link || x.entry) && byId[x.link || x.entry] ? '<a href="' + href(byId[x.link || x.entry]) + '">' + esc(x.head) + '</a>' : esc(x.head)) + '</span>' + (x.desc ? '<p class="struct-desc">' + esc(x.desc) + '</p>' : '') + '<ul>' + structHtml(x.items, false, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])) + '</ul></li>'
           : '<li class="is-category struct-plain"><ul>' + structHtml(x.items, false, trail) + '</ul></li>';   // (a group without a heading)
         var c = byId[x[0]], kids = x[1] || [], o = x[2] || {};
         if (!c) return '';
