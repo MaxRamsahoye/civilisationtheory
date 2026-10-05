@@ -12450,7 +12450,10 @@
     if (foot && !tocEl.hidden) {
       var tr = tocEl.getBoundingClientRect(), fr = foot.getBoundingClientRect(), stop = fr.height > 0 ? fr.top : Infinity;
       if (fic) { var xr = fic.getBoundingClientRect(); if (xr.height > 0) stop = Math.min(stop, xr.top); }
-      tocEl.classList.toggle('toc-away', tr.height > 0 && stop < Infinity && tr.bottom > stop - 48);
+      // (on the Landscape, they wait until its Curated section has scrolled past)
+      var cur = document.documentElement.getAttribute('data-index') === 'rl' && document.querySelector('#entry .rl-list > .ce-curated');
+      var held = cur && cur.getClientRects().length && cur.getBoundingClientRect().bottom > tr.top;
+      tocEl.classList.toggle('toc-away', !!held || (tr.height > 0 && stop < Infinity && tr.bottom > stop - 48));
     }
     var current = tocHeads[0];
     tocHeads.forEach(function (h) { if (h.getBoundingClientRect().top < window.innerHeight * 0.3) current = h; });
