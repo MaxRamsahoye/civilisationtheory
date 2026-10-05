@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'critical-social-theory': 'critical-theory', 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
+    window.MOVED = { 'epistemic-uncertainty-and-cluelessness': 'epistemic-uncertainty', 'critical-social-theory': 'critical-theory', 'civilisational-alignment': 'civilisation-alignment', 'demons-of-surveillance-capitalism': 'demons-of-techno-capitalism', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -2457,7 +2457,7 @@
       id: 'knightian-uncertainty',
       title: 'Knightian Uncertainty',
       refs: ['Frank H. Knight, <em>Risk, Uncertainty and Profit</em> (1921).', 'John Maynard Keynes, “The General Theory of Employment”, <em>Quarterly Journal of Economics</em> 51 (1937).'],
-      html: '<p><em>Knightian uncertainty</em>, after the economist Frank Knight, is uncertainty that cannot be measured: the possible outcomes, or their probabilities, are unknown. Knight distinguished it from risk, where the odds can be calculated, as in a game of dice or an insurance table. John Maynard Keynes made the same point of the long-term future – of the prospects of a war, the price of copper or the rate of interest twenty years hence, “we simply do not know”. Much of what matters most to civilisation – novel technologies, unprecedented crises, the long-term future – lies in this domain, where expected-value reasoning breaks down and robustness, optionality and humility count for more than optimisation. See <a href="#epistemic-uncertainty-and-cluelessness">epistemic uncertainty and cluelessness</a>.</p>'
+      html: '<p><em>Knightian uncertainty</em>, after the economist Frank Knight, is uncertainty that cannot be measured: the possible outcomes, or their probabilities, are unknown. Knight distinguished it from risk, where the odds can be calculated, as in a game of dice or an insurance table. John Maynard Keynes made the same point of the long-term future – of the prospects of a war, the price of copper or the rate of interest twenty years hence, “we simply do not know”. Much of what matters most to civilisation – novel technologies, unprecedented crises, the long-term future – lies in this domain, where expected-value reasoning breaks down and robustness, optionality and humility count for more than optimisation. See <a href="#epistemic-uncertainty">epistemic uncertainty</a> and <a href="#cluelessness">cluelessness</a>.</p>'
     },
     {
       id: 'four-ways-of-knowing',
@@ -4058,7 +4058,7 @@
       kind: 'node',
       parent: 'civilisation-research-landscape',
       tags: ['landscape'],
-      html: '<p><em>Hilary Greaves</em> is a British philosopher at the University of Oxford and was the founding director of the <a href="#global-priorities-institute">Global Priorities Institute</a>. With William MacAskill she wrote the case for strong <a href="#longtermism">longtermism</a>, and her work on <a href="#epistemic-uncertainty-and-cluelessness">cluelessness</a> asks whether we can know the long-run effects of our actions at all.</p>'
+      html: '<p><em>Hilary Greaves</em> is a British philosopher at the University of Oxford and was the founding director of the <a href="#global-priorities-institute">Global Priorities Institute</a>. With William MacAskill she wrote the case for strong <a href="#longtermism">longtermism</a>, and her work on <a href="#cluelessness">cluelessness</a> asks whether we can know the long-run effects of our actions at all.</p>'
     },
     {
       id: 'center-for-human-compatible-ai',
@@ -4757,7 +4757,7 @@
       id: 'uncertainty',
       title: 'Uncertainty',
       refs: ['Frank H. Knight, <em>Risk, Uncertainty and Profit</em> (1921).', 'John Kay and Mervyn King, <em>Radical Uncertainty: Decision-Making Beyond the Numbers</em> (2020).'],
-      html: '<p><em>Uncertainty</em> is the condition of not knowing what is true or what will happen. Its kinds differ in depth. Risk, in Frank Knight’s distinction, is uncertainty that can be measured – outcomes and their probabilities are known; <a href="#knightian-uncertainty">Knightian uncertainty</a> is the deeper condition in which they cannot be, shading into <a href="#unknown-unknowns">unknown unknowns</a> and <a href="#black-swans">black swans</a>. <a href="#epistemic-uncertainty-and-cluelessness">Epistemic uncertainty</a> is a lack of knowledge that more evidence could in principle remove, as against irreducible chance; at its limit lies cluelessness about the long-run effects of what we do. <a href="#moral-uncertainty">Moral uncertainty</a> extends the problem from facts to values: not knowing what is right. Much of <a href="#metarationality">metarationality</a> concerns how to reason and act well when the formal methods built for measurable risk meet the deeper kinds.</p>'
+      html: '<p><em>Uncertainty</em> is the condition of not knowing what is true or what will happen. Its kinds differ in depth. Risk, in Frank Knight’s distinction, is uncertainty that can be measured – outcomes and their probabilities are known; <a href="#knightian-uncertainty">Knightian uncertainty</a> is the deeper condition in which they cannot be, shading into <a href="#unknown-unknowns">unknown unknowns</a> and <a href="#black-swans">black swans</a>. <a href="#epistemic-uncertainty">Epistemic uncertainty</a> is a lack of knowledge that more evidence could in principle remove, as against irreducible chance; at its limit lies <a href="#cluelessness">cluelessness</a> about the long-run effects of what we do. <a href="#moral-uncertainty">Moral uncertainty</a> extends the problem from facts to values: not knowing what is right. Much of <a href="#metarationality">metarationality</a> concerns how to reason and act well when the formal methods built for measurable risk meet the deeper kinds.</p>'
     },
     {
       id: 'polycrisis',
@@ -5044,10 +5044,16 @@
       html: '<p><em>Combinatorial explosion</em> is the problem that the number of possible options, inferences and interpretations open to any agent grows exponentially, so that no mind or machine can search through them all. <em>Relevance realisation</em> is <a href="#john-vervaeke">John Vervaeke</a>’s name for the self-organising process by which cognition nevertheless zeroes in on what matters – what to notice, remember and do – without ever being able to define relevance in advance. For Vervaeke it lies at the root of intelligence, insight and wisdom, and its breakdown at the level of a culture is part of <a href="#the-meaning-crisis">the meaning crisis</a>. See <a href="#metarationality">metarationality</a>.</p>'
     },
     {
-      id: 'epistemic-uncertainty-and-cluelessness',
-      title: 'Epistemic Uncertainty & Cluelessness',
+      id: 'epistemic-uncertainty',
+      title: 'Epistemic Uncertainty',
+      refs: ['Armen Der Kiureghian and Ove Ditlevsen, “Aleatory or Epistemic? Does It Matter?”, <em>Structural Safety</em> 31 (2009).'],
+      html: '<p><em>Epistemic uncertainty</em> is uncertainty that arises from the limits of our knowledge – incomplete data, imperfect models, unmeasured variables – as distinct from <em>aleatory</em> uncertainty, the irreducible randomness of the world itself. The distinction matters for how to act: epistemic uncertainty can in principle be reduced by gathering evidence, building better models and doing research, while aleatory uncertainty can only be managed, by hedging, insurance and resilience. Much error comes from mistaking one for the other – treating ignorance as chance, or chance as something more knowledge could remove. At its limit, in reasoning about the long-run effects of action, lies <a href="#cluelessness">cluelessness</a>.</p>'
+    },
+    {
+      id: 'cluelessness',
+      title: 'Cluelessness',
       refs: ['James Lenman, “Consequentialism and Cluelessness”, <em>Philosophy &amp; Public Affairs</em> 29 (2000).', 'Hilary Greaves, “Cluelessness”, <em>Proceedings of the Aristotelian Society</em> 116 (2016).'],
-      html: '<p><em>Epistemic uncertainty</em> is uncertainty that arises from the limits of our knowledge, as distinct from the randomness of the world itself. <em>Cluelessness</em> is its sharpest form in ethics: the problem, set out by James Lenman (2000) and Hilary Greaves (2016), that the long-run consequences of our actions are so vast and unforeseeable that we may have no idea whether they make the world better or worse overall. It poses a deep challenge to any attempt to act for the long-term future, including <a href="#longtermism">longtermism</a>. See <a href="#moral-uncertainty">moral uncertainty</a>.</p>'
+      html: '<p><em>Cluelessness</em> is the sharpest form of <a href="#epistemic-uncertainty">epistemic uncertainty</a> in ethics: the problem, set out by James Lenman (2000) and Hilary Greaves (2016), that the long-run consequences of our actions are so vast and unforeseeable that we may have no idea whether they make the world better or worse overall. Greaves distinguishes a simple form, which cancels out because unforeseeable effects are as likely to be good as bad, from a complex form, in which we have some reasons pointing each way but no way to weigh them. It poses a deep challenge to any attempt to act for the long-term future, including <a href="#longtermism">longtermism</a>. See <a href="#moral-uncertainty">moral uncertainty</a>.</p>'
     },
     {
       id: 'metarationality',
@@ -5924,7 +5930,7 @@
     {
       id: 'epistemic-humility',
       title: 'Epistemic Humility',
-      html: '<p><em>Epistemic humility</em> is the disposition to hold beliefs in proportion to the evidence and with awareness of the limits of one’s knowledge: to recognise that one may be wrong, that one’s perspective is partial, and that others may see what one cannot. It is distinct from scepticism or relativism – it does not deny that some views are better than others – but it tempers conviction with openness to correction. For collective sensemaking it is a civic as well as an intellectual virtue: societies in which certainty is rewarded and doubt punished lose the capacity to learn from their mistakes. See <a href="#epistemic-uncertainty-and-cluelessness">epistemic uncertainty and cluelessness</a> and <a href="#multi-perspectivalism">multi-perspectivalism</a>.</p>'
+      html: '<p><em>Epistemic humility</em> is the disposition to hold beliefs in proportion to the evidence and with awareness of the limits of one’s knowledge: to recognise that one may be wrong, that one’s perspective is partial, and that others may see what one cannot. It is distinct from scepticism or relativism – it does not deny that some views are better than others – but it tempers conviction with openness to correction. For collective sensemaking it is a civic as well as an intellectual virtue: societies in which certainty is rewarded and doubt punished lose the capacity to learn from their mistakes. See <a href="#epistemic-uncertainty">epistemic uncertainty</a> and <a href="#cluelessness">cluelessness</a> and <a href="#multi-perspectivalism">multi-perspectivalism</a>.</p>'
     },
     {
       id: 'good-faith-communications',
@@ -10815,7 +10821,7 @@
       { head: 'Rationality & Its Limits', items: ['instrumental-and-value-rationality', ['expected-utility-theory', ['prospect-theory']], ['bounded-rationality', ['ecological-rationality', 'dual-process-theory']]] },
       { head: 'Bias & Self-Deception', items: [['heuristics-and-biases', ['illusion-of-explanatory-depth']], 'motivated-reasoning', 'cognitive-dissonance'] },
       { head: 'Collective Reasoning', items: ['groupthink', 'information-cascades', 'preference-falsification', 'wisdom-of-crowds', 'epistemic-trust'] },
-      { head: 'Uncertainty', entry: 'uncertainty', items: ['knightian-uncertainty', 'epistemic-uncertainty-and-cluelessness', ['moral-uncertainty', [], { also: true }]] },
+      { head: 'Uncertainty', entry: 'uncertainty', items: ['knightian-uncertainty', 'epistemic-uncertainty', 'cluelessness', ['moral-uncertainty', [], { also: true }]] },
       { head: 'Forecasting', items: ['bayesian-epistemology', ['superforecasting', ['inside-and-outside-view', 'calibration']], 'hedgehogs-and-foxes', 'lindy-effect', 'black-swans', 'unknown-unknowns'] },
       { head: 'Decision-Making', items: ['robust-decision-making', 'explore-exploit', 'value-of-information', 'premortem', 'precautionary-principle', 'via-negativa'] },
       { head: 'Models & Knowing', items: [['map-is-not-the-territory', ['legibility']], 'reflexivity', ['tacit-knowledge', ['metis', 'chestertons-fence']]] },
