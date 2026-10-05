@@ -763,6 +763,8 @@
   .description .ips { max-width: 42rem; margin: 0 0 4rem; }
   html.page-map .description .ce-desc:has(+ .ips) { margin-bottom: 2.4rem; }
   html.page-map .description .ce-desc:has(+ .ce-note) { margin-bottom: 1.2rem; }
+  /* Conceptual Engineerings: its title, description, note and search as wide as the three columns below */
+  html.page-map .description .ce-list.ce-main > .ce-desc, html.page-map .description .ce-list.ce-main > .ce-note, html.page-map .description .ce-list.ce-main > .ips { max-width: none; }
   .description .ce-note {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.78rem; line-height: 1.5; color: var(--muted); max-width: 42rem; margin: 0 0 2.4rem;
@@ -1104,7 +1106,7 @@
   /* An entry's closing References and Nested Concepts */
   .description ol.refs { padding-left: 1.4rem; font-size: 0.92em; }
   /* The About page's totals: label and number on one line, the whole set apart beneath */
-  .description ul.totals { list-style: none; padding: 0; margin: 1.8rem 0 0; max-width: 30rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.88rem; }
+  .description ul.totals { list-style: none; padding: 0; margin: 3rem 0 3rem; max-width: 30rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.88rem; }
   .description ul.totals li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.45rem 0; border-bottom: 1px solid var(--rule); margin: 0; }
   .description ul.totals li.sub { padding-left: 1.2rem; color: var(--muted); }
   /* the reconciling lines: the rows' sum, less the entries in more than one row */
@@ -1162,7 +1164,7 @@
   .description .ab-list { max-width: 39rem; margin-left: auto; margin-right: auto; }
   /* A Note on AI Use: set apart in a box, in smaller interface type */
   .description .ai-note {
-    margin: 2.2rem 0 0; padding: 1.1rem 1.3rem 0.4rem; border: 1px solid var(--rule); border-radius: 4px;
+    margin: 3.4rem 0 4.4rem; padding: 1.1rem 1.3rem 0.4rem; border: 1px solid var(--rule); border-radius: 4px;
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.8rem; line-height: 1.6;
   }
   #entry .description .ai-note h3.sub-head { font-family: inherit; font-size: 0.9rem; font-weight: 600; margin: 0 0 0.6rem; }
@@ -1186,7 +1188,7 @@
   /* (its lists are prose lists, not the other views' columns of links) */
   .description .ce-list.ab-list ul { columns: auto; font-size: inherit; line-height: inherit; padding-left: 1.3rem; list-style: disc; margin: 0 0 15px; }
   .description .ce-list.ab-list li { margin: 0 0 0.4rem; }
-  .description .ce-list.ab-list ul.totals { list-style: none; padding: 0; margin: 1.8rem 0 0; font-size: 0.88rem; }
+  .description .ce-list.ab-list ul.totals { list-style: none; padding: 0; margin: 3.4rem 0 4.4rem; font-size: 0.88rem; }
   .description .ce-list.ab-list ul.totals li { margin: 0; }
   /* On the Map, contents only for the About, Research Paradigm and Research Landscape views, once past the opening screen */
   html.page-map:not([data-index="ab"]):not([data-index="cs"]):not([data-index="rl"]) #toc, html.page-map:not(.map-past-opening) #toc { display: none !important; }
@@ -11311,7 +11313,7 @@
     }
     // Conceptual Engineerings: the author's own novel terms.
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).sort(byTitle);
-    var ce = '<div class="ce-list">' +
+    var ce = '<div class="ce-list ce-main">' +
       '<p class="ce-intro ce-count">Novel terms: ' + coined.length + '</p><h3 class="ce-title">Conceptual Engineerings</h3>' +
       '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
       '<p class="ce-note">Note: due to AI-assisted production there is a possibility that at present entries do not reflect their intended novel conceptual meaning.</p>' + ipsHtml('ce') +
