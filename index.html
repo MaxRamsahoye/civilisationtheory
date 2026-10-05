@@ -1176,9 +1176,9 @@
   /* …and the two views' text shifted right, at full width, into the room on the right, to give the contents space beside it */
   html.page-map .description .ce-list.cs-list, html.page-map .description .ce-list.rl-list { position: relative; left: min(6rem, max(0px, calc(50vw - 33rem))); }
   /* A section laid out column by column: three columns side by side, each a single column of its groups */
-  html.page-map .description .ce-list.cs-list .struct-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 2.4rem; }
-  html.page-map .description .ce-list.cs-list .struct-grid > ul.struct-cols { columns: 1; }
-  @media (max-width: 900px) { html.page-map .description .ce-list.cs-list .struct-grid { grid-template-columns: 1fr; } }
+  html.page-map .description .ce-list.cs-list .struct-grid, html.page-map .description .ce-list.rl-list .struct-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 2.4rem; }
+  html.page-map .description .ce-list.cs-list .struct-grid > ul.struct-cols, html.page-map .description .ce-list.rl-list .struct-grid > ul.struct-cols { columns: 1; }
+  @media (max-width: 900px) { html.page-map .description .ce-list.cs-list .struct-grid, html.page-map .description .ce-list.rl-list .struct-grid { grid-template-columns: 1fr; } }
   /* …in the interface face: names in IBM Plex regular, the heading in its medium weight */
   html.page-map[data-index="cs"] #toc, html.page-map[data-index="rl"] #toc { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-size: 0.78rem; }
   html.page-map[data-index="cs"] #toc .toc-title, html.page-map[data-index="rl"] #toc .toc-title { font-weight: 500; font-size: 1.15em; }
@@ -10512,14 +10512,21 @@
         { head: 'Forecasting', items: ['philip-tetlock', 'katja-grace', 'ajeya-cotra', 'daniel-kokotajlo', 'leopold-aschenbrenner'] }] }] },
     { title: 'Alt-Humanities', entry: 'alt-humanities',
       desc: 'The heterodox and radical currents of theory at the edges of the humanities – from accelerationism, xenofeminism and speculative realism to the many branches of Marxism and critical theory.', groups: [
-      { items: [
-        ['accelerationism', ['ccru', ['landian-accelerationism', ['nick-land']], 'unconditional-accelerationism', ['left-accelerationism-and-the-red-stack', ['srnicek-and-williams', 'mark-fisher', 'ray-brassier', 'reza-negarestani']], 'right-accelerationism', 'effective-accelerationism']],
-        ['xenofeminism', ['laboria-cuboniks', ['cyberfeminism', ['cyborg-manifesto', 'sadie-plant']], 'post-genderism', 'gender-abolitionism', 'anti-essentialism']],
-        ['speculative-realism', ['quentin-meillassoux', ['new-materialism', ['jane-bennett', 'karen-barad']], ['assemblage-theory', ['manuel-delanda']], ['actor-network-theory', ['bruno-latour']], ['object-oriented-ontology', ['graham-harman']], ['dark-ecology', ['timothy-morton']], 'alien-phenomenology']],
-        ['marxism', ['post-marxism', 'meta-marxism', 'freudo-marxism', 'marxism-and-darwinism', 'marxism-and-behaviourism', 'slavoj-zizek']],
-        ['critical-theory', [['the-frankfurt-school', ['the-grand-hotel-abyss']], 'generations-of-critical-theory', 'byung-chul-han']],
+      { cols: [3, 4], items: [
+        ['accelerationism', ['ccru', 'landian-accelerationism', 'unconditional-accelerationism', 'left-accelerationism-and-the-red-stack', 'right-accelerationism', 'effective-accelerationism']],
+        ['xenofeminism', ['laboria-cuboniks', ['cyberfeminism', ['cyborg-manifesto']], 'post-genderism', 'gender-abolitionism', 'anti-essentialism']],
+        ['speculative-realism', ['new-materialism', 'assemblage-theory', 'actor-network-theory', 'object-oriented-ontology', 'dark-ecology', 'alien-phenomenology']],
+        ['marxism', ['post-marxism', 'meta-marxism', 'freudo-marxism', 'marxism-and-darwinism', 'marxism-and-behaviourism']],
+        ['critical-theory', [['the-frankfurt-school', ['the-grand-hotel-abyss']], 'generations-of-critical-theory']],
         ['new-atheism', ['classical-atheism', 'anti-theism', 'post-theism', 'secular-spirituality']],
-        ['planetary-computation', ['benjamin-bratton', 'yuk-hui', ['the-stack', [], { also: true }]]]] }] }
+        ['planetary-computation', [['the-stack', [], { also: true }]]]] },
+      { name: 'Individuals', items: [
+        { head: 'Accelerationism', link: 'accelerationism', items: ['nick-land', 'mark-fisher', 'srnicek-and-williams', 'ray-brassier', 'reza-negarestani'] },
+        { head: 'Xenofeminism', link: 'xenofeminism', items: ['sadie-plant'] },
+        { head: 'Speculative Realism', link: 'speculative-realism', items: ['quentin-meillassoux', 'graham-harman', 'timothy-morton', 'bruno-latour', 'jane-bennett', 'karen-barad', 'manuel-delanda'] },
+        { head: 'Marxism', link: 'marxism', items: ['slavoj-zizek'] },
+        { head: 'Critical Theory', link: 'critical-theory', items: ['byung-chul-han'] },
+        { head: 'Planetary Computation', link: 'planetary-computation', items: ['benjamin-bratton', 'yuk-hui'] }] }] }
   ];
   var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {}, TOP_BLOCKS = {};   // (the concepts nested beneath each, the list each is filed in, and each section's leading groups)
   function nodeId(x) { return typeof x === 'string' ? x : Array.isArray(x) ? x[0] : null; }
@@ -10905,11 +10912,16 @@
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + ' nodes</p>' +
           '<h3 class="domain-title">' + (e ? '<a href="' + href(e) + '">' + esc(sec.title) + '</a>' : esc(sec.title)) + '</h3>' +
           (sec.desc ? '<p class="domain-desc">' + esc(sec.desc) + '</p>' : '') +
-          (sec.groups.length ? '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
+          (sec.groups.length ? (sec.groups.some(function (g) { return g.cols; }) ? '<div class="struct-grid">' + sec.groups.map(function (g) {   // (set columns: the unnamed group split as given, each named group a column of its own)
+            var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);
+            if (g.name) return '<ul class="index-cols struct-cols"><li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li></ul>';
+            var at = 0;
+            return g.cols.map(function (k) { var part = g.items.slice(at, at + k); at += k; return '<ul class="index-cols struct-cols">' + structHtml(part, true, trail) + '</ul>'; }).join('');
+          }).join('') + '</div>' : '<ul class="index-cols struct-cols">' + sec.groups.map(function (g) {
             var trail = ['L:' + sec.title].concat(g.name ? ['h:' + g.name] : []);   // (each listing carries its landscape place)
             return g.name ? '<li class="is-category struct-head"><span>' + esc(g.name) + '</span><ul>' + structHtml(g.items, false, trail) + '</ul></li>'
               : structHtml(g.items, true, trail);   // (a group without a name: its clusters side by side, across the columns)
-          }).join('') + '</ul>' : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
+          }).join('') + '</ul>') : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
     // About the Project: the site's introduction (the root entry), as a view of the Map.
     var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
