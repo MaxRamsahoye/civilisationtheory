@@ -762,6 +762,11 @@
   /* In-page search: under each Map page's heading and description, with room above and below */
   .description .ips { max-width: 42rem; margin: 0 0 4rem; }
   html.page-map .description .ce-desc:has(+ .ips) { margin-bottom: 2.4rem; }
+  html.page-map .description .ce-desc:has(+ .ce-note) { margin-bottom: 1.2rem; }
+  .description .ce-note {
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.78rem; line-height: 1.5; color: var(--muted); max-width: 42rem; margin: 0 0 2.4rem;
+  }
   .description .ips .ips-field { margin: 0; }
   .ips-input {
     width: 100%; font: inherit; font-size: 1.15rem; line-height: 1.2; color: var(--text);
@@ -11151,7 +11156,8 @@
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).sort(byTitle);
     var ce = '<div class="ce-list">' +
       '<p class="ce-intro ce-count">Novel terms: ' + coined.length + '</p><h3 class="ce-title">Conceptual Engineerings</h3>' +
-      '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' + ipsHtml('ce') +
+      '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
+      '<p class="ce-note">Note: due to AI-assisted production there is a possibility that at present entries do not reflect their intended novel conceptual meaning.</p>' + ipsHtml('ce') +
       // Two ways to read them: by category (the default) or A–Z.
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
       (function () {
