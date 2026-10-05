@@ -12778,8 +12778,6 @@
     var f = document.getElementById('site-footer');
     var concepts = CONCEPTS.filter(inAZ);
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).length;
-    var sections = childrenOf(ROOT.id);
-    var NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI'];
     function group(title, items) { return '<p class="foot-head">' + title + '</p><ul>' + items.join('') + '</ul>'; }
     function li(inner) { return '<li>' + inner + '</li>'; }
     f.innerHTML = '<div class="foot-inner"><div class="foot-main">' +
@@ -12792,13 +12790,10 @@
         // Explore: the same icons as the header (map, about, search)
         '<p class="foot-head">Explore</p><nav class="head-icons foot-icons" aria-label="Explore">' +
           document.querySelector('#site-header .head-icons').innerHTML.replace(/ data-page="[^"]*"/g, '') + '</nav>' +
-        '</div><div class="foot-col foot-sections"><p class="foot-head">Sections</p><div class="foot-secs">' +
-        menuColumns(sections).map(function (set, k) {   // (in the columns of the Paradigm's own menu)
-          return '<ul>' + set.map(function (d, j) {
-            // Each opens its section of the Civilisation Research Paradigm on the Map.
-            return '<li' + (k === 1 && j === 3 ? ' class="foot-rule"' : '') + '><span class="foot-num">' + NUM[sections.indexOf(d)] + '</span><a href="#the-map" data-view-link="cs" data-section="' + d.id + '">' + esc(d.title) + '</a></li>';
-          }).join('') + '</ul>';
-        }).join('') +
+        '</div><div class="foot-col foot-sections"><p class="foot-head">The Map</p><div class="foot-secs"><ul>' +
+        [['ab', 'About the Project'], ['cs', 'Civilisation Research Paradigm'], ['rl', 'Civilisation Research Landscape'], ['ce', 'Conceptual Engineerings'], ['az', 'Alphabetical A–Z']].map(function (v) {
+          return '<li><a href="#the-map" data-view-link="' + v[0] + '">' + v[1] + '</a></li>';   // (each opens its page of the Map, as its tab does)
+        }).join('') + '</ul>' +
       '</div></div></div></div>' +
       '</div>';
     f.addEventListener('click', function (e) {
