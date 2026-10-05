@@ -1783,6 +1783,7 @@
     padding-top: 2rem;
   }
   .description .index-domain.set-start { border-top-color: var(--text); margin-top: 3.6rem; }
+  .description .index-domain.no-rule { border-top: 0; }
   .description .domain-label {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.71rem;
@@ -11008,7 +11009,7 @@
       '<div class="seq-structure">' +
       LANDSCAPE.map(function (sec, i) {
         var n = Object.keys(sec.groups.reduce(function (seen, g) { return structIds(g.items, seen); }, {})).length, e = sec.entry && byId[sec.entry];
-        return '<section class="index-domain' + (i === 0 ? ' set-start' : '') + '">' +
+        return '<section class="index-domain' + (i === 0 ? ' set-start no-rule' : '') + '">' +   // (the first section: no rule above it)
           '<p class="domain-label">' + (NUMERALS[i] || i + 1) + ' · ' + n + ' nodes</p>' +
           '<h3 class="domain-title">' + (e ? '<a href="' + href(e) + '">' + esc(sec.title) + '</a>' : esc(sec.title)) + '</h3>' +
           (sec.desc ? '<p class="domain-desc">' + esc(sec.desc) + '</p>' : '') +
