@@ -3639,12 +3639,6 @@
       html: '<p>A <em>circular economy</em> is one designed to keep materials in use and eliminate waste – replacing the linear model of take, make and dispose with loops of reuse, repair, remanufacture and recycling, in which the outputs of one process become the inputs of another, as in natural ecosystems. Drawing on industrial ecology and William McDonough and Michael Braungart’s <em>Cradle to Cradle</em> (2002), and promoted by the Ellen MacArthur Foundation, it has been widely adopted in policy. Critics note that circularity alone cannot offset rising total throughput, and that it must be joined to limits on scale. See <a href="#steady-state-economy">steady-state economy</a> and <a href="#infrastructural-gaianism">infrastructural Gaianism</a>.</p>'
     },
     {
-      id: 'green-new-deal',
-      title: 'Green New Deal',
-      refs: ['Naomi Klein, <em>On Fire: The (Burning) Case for a Green New Deal</em> (2019).', 'Ann Pettifor, <em>The Case for the Green New Deal</em> (2019).'],
-      html: '<p>A <em>Green New Deal</em> is a programme of large-scale public investment to decarbonise the economy rapidly while creating jobs and reducing inequality, modelled on Franklin Roosevelt’s New Deal of the 1930s. Proposed in Britain in 2008 and brought to prominence in the United States by the congressional resolution of 2019, it joins climate policy to industrial policy and social justice – green infrastructure, job guarantees and a <a href="#just-transition">just transition</a> for workers in fossil-fuel industries. Its critics on the right object to its cost and scope; some on the ecological left argue that green growth cannot decouple fast enough and that <a href="#degrowth">degrowth</a> is required.</p>'
-    },
-    {
       id: 'orthogonality-thesis',
       title: 'The Orthogonality Thesis',
       refs: ['Nick Bostrom, “The Superintelligent Will”, <em>Minds and Machines</em> 22 (2012).', 'Nick Bostrom, <em>Superintelligence</em> (2014).'],
@@ -9715,7 +9709,7 @@
       ['third-attractor', ['first-attractor', 'second-attractor'], { also: true }],
       ['the-fourth-frontier', ['third-frontier', 'second-frontier', 'first-frontier']],
       ['game-b', ['anti-rivalrous-dynamics', 'antifragility', 'broadcast-vs-network-modality', 'protobs', 'society-4-0', 'collective-intelligence', 'commons']],
-      ['cybernetic-economics', ['cybernetics', ['heterodox-economics', ['steady-state-economy', 'circular-economy']], ['post-scarcity', ['the-culture']], 'integral', 'natural-law-resource-based-economy', 'resource-based-economy', ['world-livingry-service', ['livingry']], ['project-cybersyn', ['the-liberty-machine', ['viable-system-model', ['requisite-variety']]]],
+      ['cybernetic-economics', ['cybernetics', ['heterodox-economics', ['steady-state-economy', 'circular-economy', ['degrowth', [], { also: true }]]], ['post-scarcity', ['the-culture']], 'integral', 'natural-law-resource-based-economy', 'resource-based-economy', ['world-livingry-service', ['livingry']], ['project-cybersyn', ['the-liberty-machine', ['viable-system-model', ['requisite-variety']]]],
         ['history-begins-again', [['the-end-of-history', [], { also: true }], 'hayeks-great-wall', 'the-end-of-the-economic-problem', ['post-agi-social-contract-theory', ['post-agi-society', 'social-contract-theory', 'endgame-capitalism-and-exterminism', 'agi-as-victory-condition-of-class-warfare']]]]]],
       ['coherence-of-civilisations', [['clash-of-civilisations', [], { also: true }], 'convergent-cultural-evolution']],
       ['the-post-status-quo', [['post-capitalism', ['post-capitalist-peace-theory', 'post-capitalist-realism', 'argument-from-post-capitalist-desire', 'post-post-capitalism']], 'post-statism', ['post-humanism', ['life-3-0']], ['post-genderism', ['xenofeminism']]]]
@@ -9723,7 +9717,7 @@
     'metacrisis': [   // (laid out in three columns: see SECTION_COLUMNS)
       ['civilisational-crisis', ['metacrisis', 'polycrisis', 'permacrisis', 'omnicrisis']],
       { head: 'Problem Complex', entry: 'problem-complex', desc: 'The problem complex is all the interconnected crises, critical trajectories and catastrophic risks of civilisation considered as a whole.', items: [
-        ['ecological-crisis', ['climate-migration', 'the-anthropocene', 'biodiversity-loss', 'tragedy-of-the-horizon',
+        ['ecological-crisis', ['climate-migration', 'the-anthropocene', 'biodiversity-loss',
           ['planetary-boundaries', ['crossed-planetary-boundaries', 'safe-operating-space', 'tipping-points']],
           ['the-great-simplification', ['carbon-pulse', 'energy-blindness', 'the-mordor-economy', 'jevons-paradox']]], { dropdown: true }],
         ['technological-crisis', ['twin-nuclei-problem', ['artificial-intelligence-risks', [], { also: true, homeCluster: true }], ['synthetic-biotechnology-risks', [], { also: true, homeCluster: true }]], { dropdown: true }],
@@ -9744,7 +9738,7 @@
       { head: 'Generative Dynamics', entry: 'generative-dynamics', desc: 'Generative dynamics are the underlying patterns and processes that re-produce problems and amplify them to a global catastrophic scale and severity.', items: [
         { head: 'Game-Theoretic', dropdown: true, items: ['zero-sum-game', ['arms-races-and-tragedies-of-the-commons', ['arms-race', 'tragedy-of-the-commons']], 'multipolar-trap', 'instrumental-convergence-and-strategy-stealing'] },
         { head: 'Systems-Theoretic', dropdown: true, items: ['narrow-metric-optimisation', 'positive-feedback-loops-and-power-asymmetries', 'exponential-technological-acceleration', 'life-blind-search-processes'] },
-        { head: 'Behavioural-Economic', dropdown: true, items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures', 'goodharts-law'] },
+        { head: 'Behavioural-Economic', dropdown: true, items: ['abstraction-extraction-accumulation-cycle', 'embedded-growth-obligations', 'perverse-incentive-structures', 'goodharts-law', 'tragedy-of-the-horizon'] },
         { head: 'Cultural-Psychological', dropdown: true, items: ['left-hemispheric-conditioning', 'modernist-cultural-paradigm', 'scarcity-rivalry-orientation', 'psychopathic-selection-hypothesis', 'collective-psychological-alienation'] },
         { head: 'Epistemic-Ontological', dropdown: true, items: ['reductionist-world-modelling', 'isolated-problem-solving', 'structural-and-superstructural-separation'] },
         { head: 'Mytho-Poetic', dropdown: true, items: [['the-wisdom-gap', ['moral-wisdom-gap', 'structural-wisdom-gap', 'epistemic-wisdom-gap']]] }
@@ -9794,7 +9788,7 @@
     ],
     'civilisation-transition': [
       ['civilisation-transition', [['civilisational-paradigm-shift', ['paradigm-shift']], ['theory-of-life-world-systems-change', ['theory-of-change', 'singers-world-systems-change-cruxes']], 'phase-transition', 'two-loops', 'moral-revolutions', 'evolutionarily-stable-strategy', 'super-critical-path', 'situational-attunement', 'psycho-therapeutic-history']],
-      { head: 'Theory of Systems-Change', items: ['lone-country-transition', 'leapfrogging', 'distributed-world-network', 'polycentric-governance', ['green-new-deal', ['just-transition']], 'degrowth'] },
+      { head: 'Theory of Systems-Change', items: ['lone-country-transition', 'leapfrogging', 'distributed-world-network', 'polycentric-governance', 'just-transition', 'degrowth'] },
       ['transitional-projects', ['integral', 'civium', 'regen-villages', ['commons-based-peer-production', ['cosmo-localism']]]],
       { head: 'Strategy', items: ['blue-teaming', 'red-teaming', ['yellow-teaming', ['positive-externalities']], 'prefigurative-politics', 'dual-power', 'non-reformist-reforms'] },
       { head: 'Buckminster Fuller', items: ['critical-path', 'design-science', 'the-world-game', 'spaceship-earth'] },
@@ -9837,16 +9831,16 @@
       ['legitimising-myths', ['myth-of-the-autonomous-man', 'social-dominance-theory']],
       ['violence-and-peace-studies', ['structural-violence', 'cultural-violence', 'structural-and-cultural-peace']],
       ['sociology', ['sociology-as-queen-science', 'sociology-as-social-physics', 'the-sociological-imagination', 'the-sociological-post-mortem']],
-      { head: 'Classical Concepts', items: ['gemeinschaft-and-gesellschaft', 'anomie', 'legitimacy', 'bureaucracy', 'social-capital'] },
+      { head: 'Classical Concepts', items: ['gemeinschaft-and-gesellschaft', 'anomie', 'legitimacy', ['bureaucracy', [['the-iron-cage', [], { also: true }]]], 'social-capital'] },
       { head: 'Modernity', items: ['globalisation', 'network-society', 'liquid-modernity'] },
       { head: 'Political Forms', items: ['nation-state-and-sovereignty', 'liberal-democracy', 'authoritarianism', 'fascism', 'socialism'] },
       { head: 'Political Values', items: ['freedom', 'rights', 'justice'] }
     ],
     'macrostrategy': [
-      ['macrostrategy', ['macrosecuritisation', 'global-priorities-research', ['effective-altruism', ['integral-altruism']], 'crucial-consideration', 'trajectory-change', 'state-vs-transition-risk']],
+      ['macrostrategy', ['macrosecuritisation', 'global-priorities-research', ['effective-altruism', ['integral-altruism']], 'crucial-consideration', 'trajectory-change', 'state-vs-transition-risk', 'unilateralists-curse', 'information-hazards']],
       ['future-of-humanity', ['extinction', 'recurrent-collapse', 'plateau', 'posthumanity']],
       ['differential-progress', ['differential-technological-development', 'differential-intellectual-progress', ['pacing-problem', ['collingridge-dilemma']]]],
-      ['vulnerable-world-hypothesis', ['urn-of-invention', 'high-tech-panopticon', 'unilateralists-curse', 'information-hazards']],
+      ['vulnerable-world-hypothesis', ['urn-of-invention', 'high-tech-panopticon']],
       ['longtermism', ['strong-vs-weak-longtermism', 'the-hinge-of-history', 'cosmic-endowment', 'grand-futures', 'astronomical-waste',
         ['population-ethics', ['total-view', 'person-affecting-view']], 'survival-vs-flourishing', 'moral-uncertainty', 'pascals-mugging-and-fanaticism', 'option-value', 'the-long-reflection', 'cosmic-veil-and-stratified-utopia', 'solved-world']],
       { head: 'Critique', items: ['drone-warfare-utilitarianism', 'tyranny-of-the-cosmic-majority', 'longtermism-as-secular-theodicy', 'future-utility-monster', 'philosophical-zombie-apocalypse'] },
@@ -9881,7 +9875,7 @@
     'metaphysics': [
       { head: 'Monism & Dualism', items: ['one-and-the-many', ['materialism', [], { also: true }], 'atomism', ['idealism', ['absolute-idealism']], 'neutral-monism', 'dualism', ['panpsychism', ['cosmopsychism']]] },
       { head: 'Being', items: ['substance', 'essentialism', ['nominalism-and-realism', [['platonism', ['neoplatonism']]]]] },
-      { head: 'Mind', items: ['consciousness', 'integrated-information-theory', 'substrate-independence', 'personal-identity'] },
+      { head: 'Mind', items: [['consciousness', ['integrated-information-theory']], 'substrate-independence', 'personal-identity'] },
       { head: 'The Sacred', items: ['theism-and-deism', 'pantheism', ['panentheism', ['process-theology']], 'ground-of-being', 'gnosticism', 'logos', 'the-tao', ['nondualism', ['emptiness', 'absolute-nothingness']], 'animism'] },
       { head: 'Process & Relation', items: ['being-and-becoming', ['process-philosophy', ['eternal-objects']], 'relational-ontology', 'holism-and-emergentism', ['speculative-realism', [], { also: true }], ['object-oriented-ontology', [], { also: true }]] },
       { head: 'Causation & Purpose', items: [['causation', ['four-causes', 'laws-of-nature']], ['teleology', ['omega-point']]] },
@@ -9895,7 +9889,7 @@
       { head: 'Revolution & Reaction', items: ['liberation-narratives', 'dark-enlightenment'] },
       { head: 'Collective Fictions', items: [['shared-fictions', ['origin-myths', 'imagined-communities', 'invented-tradition', 'american-dream']]] },
       { head: 'Loss of Narrative', items: ['incredulity-towards-metanarratives', ['disenchantment', [['the-meaning-crisis', [], { also: true }]]], 'post-truth', 'conspiracy-narratives', 'hypernormalisation'] },
-      { head: 'Capitalism', items: [['capitalist-realism', ['lost-futures', 'hauntology']], 'there-is-no-alternative', ['the-end-of-history', [], { also: true }], ['capitalist-theodicy', ['capitalist-problem-of-evil']]] },
+      { head: 'Capitalism', items: [['neoliberalism', [], { also: true }], ['capitalist-realism', ['lost-futures', 'hauntology']], 'there-is-no-alternative', ['the-end-of-history', [], { also: true }], ['capitalist-theodicy', ['capitalist-problem-of-evil']]] },
       { head: 'Reconstruction', items: [['reconstructive-metanarrative', ['narrative-identity', 'monomyth']], 'story-of-separation-and-interbeing', 'mythopoesis', 'pluriverse', 'principle-of-hope', 'the-axial-age', 'perennial-philosophy'] },
       { head: 'Futures', items: ['protopia', 'solarpunk', 'long-now', 'seventh-generation-principle'] }
     ],
