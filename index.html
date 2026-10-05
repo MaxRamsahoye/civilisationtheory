@@ -4434,18 +4434,27 @@
     {
       id: 'ai-safety',
       title: 'AI Safety',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
       refs: ['Dario Amodei et al., “Concrete Problems in AI Safety” (2016).', 'Dan Hendrycks, <em>Introduction to AI Safety, Ethics, and Society</em> (2024).'],
       html: '<p><em>AI safety</em> is the field concerned with preventing artificial intelligence from causing serious harm – from accidents and misuse to the loss of human control over systems more capable than their makers. It spans technical work on robustness, interpretability, evaluations and <a href="#ai-alignment">alignment</a>, together with the <a href="#ai-governance">governance</a> needed to put that work into practice. Alignment is its central problem, but safety also asks under what conditions even aligned systems should be built and deployed.</p>'
     },
     {
       id: 'ai-control',
       title: 'AI Control',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
       refs: ['Ryan Greenblatt, Buck Shlegeris et al., “AI Control: Improving Safety Despite Intentional Subversion” (2023).'],
       html: '<p><em>AI control</em> is the approach to <a href="#ai-safety">AI safety</a> that aims to keep powerful AI systems from causing catastrophe even if they are misaligned. Rather than relying on a system’s goals being right, it designs the protocols around it – monitoring by trusted models, restricted permissions, auditing and red-teaming – so that a model attempting to subvert them would be caught or contained. Developed especially at Redwood Research, it is a complement to <a href="#ai-alignment">alignment</a>: a second line of defence for the period in which alignment cannot yet be verified.</p>'
     },
     {
       id: 'ai-interpretability',
       title: 'AI Interpretability',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
       refs: ['Chris Olah et al., “Zoom In: An Introduction to Circuits”, <em>Distill</em> (2020).', 'Anthropic, “Scaling Monosemanticity” (2024).'],
       html: '<p><em>AI interpretability</em> is the study of what is happening inside AI systems – how a neural network represents concepts and arrives at its outputs. Its most ambitious branch, mechanistic interpretability, tries to reverse-engineer networks into human-understandable features and circuits. For <a href="#ai-safety">AI safety</a> it promises a way to check a system’s reasoning directly, rather than only its behaviour, and so to detect deception or misaligned goals that testing alone might miss.</p>'
     },
@@ -10378,7 +10387,6 @@
       { head: 'System', items: [['capitalism-as-unaligned-asi', ['capitalism-as-paperclip-maximiser']], 'states-and-corporations-as-unaligned-asi', 'marl-by-market-feedback', 'predict-o-matic-markets'] },
       ['replicator-alignment-problem', ['replicators', 'aligned-evolutionarily-stable-social-structure', 'genes-as-replicators', 'memes-as-replicators', 'capital-as-replicator', 'nano-as-replicators', 'ais-as-replicators']],
       ['ai-alignment', ['orthogonality-thesis', 'corrigibility', 'mesa-optimisation', 'reward-hacking', ['artificial-superintelligence', ['intelligence-explosion', 'ai-takeoff-speeds']], 'artificial-collective-intelligence', 'algorithmic-recommender-systems']],
-      ['ai-safety', ['ai-control', 'ai-interpretability']],
       { head: 'Values', items: ['monolithic-alignment', 'pluralistic-alignment'] },
       { head: 'Volition', items: ['coherent-extrapolated-volition', 'coherent-blended-volition', 'coherent-aggregated-volition'] }
     ],
