@@ -761,7 +761,7 @@
   @media (max-width: 640px) { #sp-input { font-size: 1.5rem; } }
   /* In-page search: under each Map page's heading and description, with room above and below */
   .description .ips { max-width: 42rem; margin: 0 0 4rem; }
-  html.page-map .description .ce-desc:has(+ .ips), html.page-map .description .ab-list .ce-title:has(+ .ips) { margin-bottom: 2.4rem; }
+  html.page-map .description .ce-desc:has(+ .ips) { margin-bottom: 2.4rem; }
   .description .ips .ips-field { margin: 0; }
   .ips-input {
     width: 100%; font: inherit; font-size: 1.15rem; line-height: 1.2; color: var(--text);
@@ -10733,6 +10733,7 @@
   // The current page's icon marked: on the Map, its Landscape view takes the Landscape icon, the rest the Map's.
   var CURRENT_PAGE = null;
   function markPageLinks() {
+    syncSidebar();
     var rl = CURRENT_PAGE === 'the-map' && document.documentElement.getAttribute('data-index') === 'rl';
     pageLinks.forEach(function (a) {
       var p = a.getAttribute('data-page');
@@ -10743,9 +10744,9 @@
   new MutationObserver(markPageLinks).observe(document.documentElement, { attributes: true, attributeFilter: ['data-index'] });   // (a tab switched in place)
   // The sidebar lists every concept alphabetically, under letter headings (a leading “The”, “A”
   // or “An” is ignored; numbers come last, under 0–9).
-  function buildSidebarAZ() {
+  function buildSidebarAZ(list) {
     var groups = {};
-    CONCEPTS.filter(inAZ).sort(byTitle).forEach(function (c) {
+    (list || CONCEPTS.filter(inAZ)).sort(byTitle).forEach(function (c) {
       var L = sortKey(c).charAt(0).toUpperCase();
       if (!/[A-Z]/.test(L)) L = '0–9';
       (groups[L] = groups[L] || []).push(c);
@@ -10762,6 +10763,23 @@
   treeEl.innerHTML = buildSidebarAZ() +
     (CONCEPTS.length === 1 ? '<li class="empty">Concepts forthcoming.</li>' : '');
   markCoined(treeEl);
+  // On the Map's Landscape, Conceptual Engineerings and Consilience Project pages the sidebar lists
+  // their own entries A–Z instead; everywhere else, the map's.
+  var sidebarList = 'az';
+  function sidebarEntries(key) {
+    if (key === 'rl') { var ids = landscapeIds(); return CONCEPTS.filter(function (c) { return ids[c.id]; }); }
+    if (key === 'ce') return CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; });
+    if (key === 'cp') return CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); });
+    return null;
+  }
+  function syncSidebar() {
+    var root = document.documentElement, view = root.getAttribute('data-index');
+    var key = CURRENT_PAGE === 'the-map' && /^(rl|ce|cp)$/.test(view) ? view : 'az';
+    if (key === sidebarList) return;
+    sidebarList = key;
+    treeEl.innerHTML = buildSidebarAZ(sidebarEntries(key));
+    markCoined(treeEl);
+  }
 
   // ---------- Entry rendering ----------
   function indexHtml() {
@@ -11008,7 +11026,7 @@
           }).join('') + '</ul>') : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
     // About the Project: the site's introduction (the root entry), as a view of the Map.
-    var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ipsHtml('ab') + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
+    var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
@@ -12387,15 +12405,14 @@
   }
   var spSel = -1;
   // In-page search: a bar under each Map page's heading, searching the entries that page lists
-  // (About: the whole map), with its results opening beneath it.
-  var IPS_LABEL = { ab: 'Search the map', cs: 'Search the paradigm', rl: 'Search the landscape', ce: 'Search the conceptual engineerings', az: 'Search the A–Z', cp: 'Search the glossary' };
+  // with its results opening beneath it.
+  var IPS_LABEL = { cs: 'Search the paradigm', rl: 'Search the landscape', ce: 'Search the conceptual engineerings', az: 'Search the A–Z', cp: 'Search the glossary' };
   function ipsHtml(view) {
     return '<div class="ips" data-ips="' + view + '"><div class="sp-field ips-field"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>' +
       '<input class="ips-input" type="search" placeholder="' + IPS_LABEL[view] + '" aria-label="' + IPS_LABEL[view] + '" autocomplete="off" spellcheck="false"></div>' +
       '<p class="sp-meta ips-meta" hidden></p><ol class="sp-results ips-results"></ol></div>';
   }
-  function ipsScope(box) {   // (the ids of the entries the page links to; none for About, which searches all)
-    if (box.getAttribute('data-ips') === 'ab') return null;
+  function ipsScope(box) {   // (the ids of the entries the page links to)
     var panel = box.parentNode, ids = {};
     panel.querySelectorAll('a[href^="#"]').forEach(function (a) {
       if (box.contains(a)) return;
@@ -12408,8 +12425,8 @@
     var box = input.closest('.ips'), meta = box.querySelector('.ips-meta'), list = box.querySelector('.ips-results');
     var q = input.value.trim().toLowerCase();
     if (!q) { meta.hidden = true; list.innerHTML = ''; return; }
-    if (!box._scope) box._scope = ipsScope(box) || false;
-    var res = searchResults(q, Infinity, box.getAttribute('data-ips') === 'cp' ? searchIndex.concat(cpIndex) : null).filter(function (r) { return !box._scope || box._scope[r.c.id]; });
+    if (!box._scope) box._scope = ipsScope(box);
+    var res = searchResults(q, Infinity, box.getAttribute('data-ips') === 'cp' ? searchIndex.concat(cpIndex) : null).filter(function (r) { return box._scope[r.c.id]; });
     meta.hidden = false;
     meta.textContent = res.length ? res.length + (res.length === 1 ? ' result' : ' results') : 'No matching entries';
     list.innerHTML = res.slice(0, 12).map(function (r, i) {
