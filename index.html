@@ -4362,6 +4362,46 @@
       html: '<p><em>The Burnout Society</em> (2010) is Byung-Chul Han’s diagnosis of the shift from a disciplinary society of prohibition and obligation – “you should” – to an achievement society of unlimited possibility – “you can”. The achievement-subject, free of any external master, exploits themselves, and the result is not the neuroses of repression but depression, attention disorders and burnout: the illnesses of a self exhausted by its own freedom.</p><p>Han argues that this excess of positivity – of stimulation, multitasking and self-optimisation – erodes the capacity for contemplative attention and rest. The book is the starting point for his later account of <a href="#psychopolitics">psychopolitics</a>.</p>'
     },
     {
+      id: 'the-four-horsemen-of-new-atheism',
+      title: 'The Four Horsemen of New Atheism',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>The Four Horsemen</em> is the name given to Richard Dawkins, Christopher Hitchens, Sam Harris and Daniel Dennett, the leading figures of <a href="#new-atheism">New Atheism</a>, after a two-hour conversation the four recorded together in 2007, later published as <em>The Four Horsemen: The Conversation That Sparked an Atheist Revolution</em> (2019). Their bestsellers of the mid-2000s made the open criticism of religion a mass public debate.</p>'
+    },
+    {
+      id: 'richard-dawkins',
+      title: 'Richard Dawkins',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Richard Dawkins</em> is a British evolutionary biologist, author of <em>The Selfish Gene</em> (1976), which popularised the gene-centred view of evolution and coined the word <a href="#memetics">meme</a>, and of <em>The God Delusion</em> (2006), the most widely read text of <a href="#new-atheism">New Atheism</a>.</p>'
+    },
+    {
+      id: 'christopher-hitchens',
+      title: 'Christopher Hitchens',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Christopher Hitchens</em> (1949–2011) was a British-American journalist and polemicist whose <em>God Is Not Great: How Religion Poisons Everything</em> (2007) argued that religion is man-made, morally corrupting and a source of violence and tyranny. A former Trotskyist, he became one of the most combative public voices of <a href="#new-atheism">New Atheism</a>.</p>'
+    },
+    {
+      id: 'sam-harris',
+      title: 'Sam Harris',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Sam Harris</em> is an American neuroscientist and philosopher whose <em>The End of Faith</em> (2004), written in response to the September 11 attacks, launched <a href="#new-atheism">New Atheism</a>. In <em>The Moral Landscape</em> (2010) he argued that science can determine human values, and in <em>Waking Up</em> (2014) he defended meditation as a secular spirituality.</p>'
+    },
+    {
+      id: 'daniel-dennett',
+      title: 'Daniel Dennett',
+      kind: 'node',
+      parent: 'civilisation-research-landscape',
+      tags: ['landscape'],
+      html: '<p><em>Daniel Dennett</em> (1942–2024) was an American philosopher of mind and of evolution, author of <em>Consciousness Explained</em> (1991) and <em>Darwin’s Dangerous Idea</em> (1995). His <em>Breaking the Spell</em> (2006) proposed studying religion as a natural phenomenon shaped by cultural evolution, making him the most academic of the <a href="#new-atheism">New Atheists</a>.</p>'
+    },
+    {
       id: 'polycrisis',
       title: 'Polycrisis',
       refs: ['Edgar Morin and Anne Brigitte Kern, <em>Homeland Earth: A Manifesto for the New Millennium</em> (1993; trans. 1999).', 'Adam Tooze, “Welcome to the World of the Polycrisis”, <em>Financial Times</em> (28 October 2022).'],
@@ -10457,7 +10497,7 @@
     list.forEach(function (x) {
       if (typeof x === 'string') seen[x] = true;
       else if (Array.isArray(x)) { if (!NEW_STRUCTURE[x[0]]) seen[x[0]] = true; structIds(x[1] || [], seen); }
-      else { if (x.entry) seen[x.entry] = true; structIds(x.items, seen); }   // (a subheading standing for an entry counts as that entry)
+      else { if (x.entry) seen[x.entry] = true; if (x.link && byId[x.link] && byId[x.link].kind === 'node') seen[x.link] = true; structIds(x.items, seen); }   // (a subheading standing for an entry counts as that entry; one leading to a landscape node, as that node)
     });
     return seen;
   }
@@ -10526,6 +10566,7 @@
         { head: 'Speculative Realism', link: 'speculative-realism', items: ['quentin-meillassoux', 'graham-harman', 'timothy-morton', 'bruno-latour', 'jane-bennett', 'karen-barad', 'manuel-delanda'] },
         { head: 'Marxism', link: 'marxism', items: ['slavoj-zizek'] },
         { head: 'Critical Theory', link: 'critical-theory', items: ['byung-chul-han'] },
+        { head: 'The Four Horsemen of New Atheism', link: 'the-four-horsemen-of-new-atheism', items: ['richard-dawkins', 'christopher-hitchens', 'sam-harris', 'daniel-dennett'] },
         { head: 'Planetary Computation', link: 'planetary-computation', items: ['benjamin-bratton', 'yuk-hui'] }] }] }
   ];
   var STRUCT_PARENT = {}, STRUCT_KIDS = {}, STRUCT_SIBS = {}, TOP_BLOCKS = {};   // (the concepts nested beneath each, the list each is filed in, and each section's leading groups)
@@ -10565,7 +10606,7 @@
         (function seek(list, trail) {
           list.forEach(function (x) {
             if (found) return;
-            if (x && !Array.isArray(x) && typeof x === 'object') { seek(x.items, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])); return; }
+            if (x && !Array.isArray(x) && typeof x === 'object') { if (x.link === id) { found = locPath(trail); return; } seek(x.items, trail.concat([(x.quiet ? 'q:' : 'h:') + x.head])); return; }   // (a subheading leading to a node: that node's place)
             var xid = typeof x === 'string' ? x : x[0];
             if (xid === id) { found = locPath(trail); return; }
             if (Array.isArray(x)) seek(x[1] || [], trail.concat([xid]));
