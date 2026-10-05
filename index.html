@@ -759,6 +759,24 @@
   .description .sp-snip { margin: 0.55rem 0 0; font-size: 0.95rem; line-height: 1.5; color: var(--muted); }
   .sp-snip mark { background: var(--hl); color: var(--text); }
   @media (max-width: 640px) { #sp-input { font-size: 1.5rem; } }
+  /* In-page search: under each Map page's heading and description, with room above and below */
+  .description .ips { max-width: 42rem; margin: 0 0 4rem; }
+  html.page-map .description .ce-desc:has(+ .ips), html.page-map .description .ab-list .ce-title:has(+ .ips) { margin-bottom: 2.4rem; }
+  .description .ips .ips-field { margin: 0; }
+  .ips-input {
+    width: 100%; font: inherit; font-size: 1.15rem; line-height: 1.2; color: var(--text);
+    background: none; border: 0; outline: none; padding: 0.55rem 0 0.6rem 2rem;
+    -webkit-appearance: none; appearance: none;
+  }
+  .ips-input::placeholder { color: var(--muted); opacity: 0.7; }
+  .ips-input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .description .ips .ips-field svg { width: 1.1rem; height: 1.1rem; }
+  .description .ips .ips-meta { margin: 0.9rem 0 0.4rem; }
+  .description .ips .ips-results:empty { display: none; }
+  .description .ips .ips-results li { padding: 0.8rem 0 0.85rem; }
+  .description .ips .ips-results li.sel::before { top: 0.95rem; bottom: 1rem; }
+  .description .ips .ips-results .sp-title { font-size: 1.1rem; }
+  .description .ips .ips-more a { font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.75rem; font-weight: 500; }
 
   /* ---------- Page transitions: the old page fades out, then the new one fades in ---------- */
   /* The fixed interface stays put while the page changes beneath it */
@@ -10848,7 +10866,7 @@
     }
     var nLetters = Object.keys(lettersOf(concepts)).filter(function (L) { return L !== '0–9'; }).length;  // A–Z only
     var az = '<div class="az-view"><p class="ce-intro ce-count">Concepts: ' + concepts.length + ' · Letters: ' + nLetters + '</p><h3 class="ce-title">Alphabetical A–Z</h3>' +
-      '<p class="ce-desc">Every concept on the map organised into an alphabetical list.</p>' +
+      '<p class="ce-desc">Every concept on the map organised into an alphabetical list.</p>' + ipsHtml('az') +
       azListHtml(concepts) + '</div>';
     // Conceptual Engineerings in their own categories (to be defined: each is a name and the ids of
     // the terms it holds, e.g. { name: 'Alignment', ids: ['the-great-alignment', …] }); every term
@@ -10919,7 +10937,7 @@
     var coined = CONCEPTS.filter(function (c) { return c.coined && c !== ROOT && !c.cpOnly; }).sort(byTitle);
     var ce = '<div class="ce-list">' +
       '<p class="ce-intro ce-count">Novel terms: ' + coined.length + '</p><h3 class="ce-title">Conceptual Engineerings</h3>' +
-      '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' +
+      '<p class="ce-desc"><em>Conceptual engineering</em> is the practice of designing, revising and inventing concepts so that they better serve the work of understanding – treating the concepts we think with as tools that can be improved. The terms below are the map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities for which existing language had no adequate word.</p>' + ipsHtml('ce') +
       // Two ways to read them: by category (the default) or A–Z.
       '<nav class="ce-switch" aria-label="Arrangement"><button type="button" data-ce="cat">By Category</button><button type="button" data-ce="az">A–Z</button></nav>' +
       (function () {
@@ -10942,7 +10960,7 @@
     var cpTerms = CONCEPTS.filter(function (c) { return c.tags && c.tags.indexOf('consilience') >= 0 && (c.cpOnly || isConcept(c)); }).sort(byTitle);
     var cp = '<div class="ce-list cp-list">' +
       '<p class="ce-intro ce-count">Glossary terms: ' + cpTerms.length + '</p><h3 class="ce-title">Consilience Project</h3>' +
-      '<p class="ce-desc">The terms of the <a href="https://consilienceproject.org/glossary/" target="_blank" rel="noopener">glossary of <em>The Consilience Project</em></a>, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations. Where the map has its own entry for a term, the Consilience Project’s definition is given as a separate entry here.</p>' +
+      '<p class="ce-desc">The terms of the <a href="https://consilienceproject.org/glossary/" target="_blank" rel="noopener">glossary of <em>The Consilience Project</em></a>, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations. Where the map has its own entry for a term, the Consilience Project’s definition is given as a separate entry here.</p>' + ipsHtml('cp') +
       '<ul>' +
       // The list jumps to each term's definition below; each definition's title opens its entry.
       cpTerms.map(function (c) { return '<li><a href="#" data-jump="cpd-' + c.id + '">' + esc(c.title) + '</a></li>'; }).join('') +
@@ -10955,7 +10973,7 @@
     var seq = curatedSequence();
     var cs = '<div class="ce-list cs-list">' +
       // (every concept filed in the paradigm, counted once)
-      '<p class="ce-intro ce-count">Concepts: ' + paradigmCount() + '</p><h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc + sectionMenuHtml() +
+      '<p class="ce-intro ce-count">Concepts: ' + paradigmCount() + '</p><h3 class="ce-title">Civilisation Research Paradigm</h3>' + overviewDesc + ipsHtml('cs') + sectionMenuHtml() +
       // First the curated sequence, as a section of its own (High-Level, unnumbered and not in the
       // menu); then the numbered sections with their concepts.
       '<div class="seq-structure"><section class="index-domain set-start" id="nidx-high-level">' +
@@ -10968,7 +10986,7 @@
     var rlCount = landscapeNodeCount();
     var rl = '<div class="ce-list rl-list">' +
       '<p class="ce-intro ce-count">Nodes: ' + rlCount + '</p><h3 class="ce-title">Civilisation Research Landscape</h3>' +
-      '<p class="ce-desc">The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' +
+      '<p class="ce-desc">The wider landscape of civilisation research: the thinkers, institutes, projects and traditions working on the understanding and redesign of civilisation.</p>' + ipsHtml('rl') +
       '<div class="seq-structure">' +
       LANDSCAPE.map(function (sec, i) {
         var n = Object.keys(sec.groups.reduce(function (seen, g) { return structIds(g.items, seen); }, {})).length, e = sec.entry && byId[sec.entry];
@@ -10990,7 +11008,7 @@
           }).join('') + '</ul>') : '<p class="rl-empty">Nodes to be added.</p>') + '</section>';
       }).join('') + '</div></div>';
     // About the Project: the site's introduction (the root entry), as a view of the Map.
-    var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
+    var ab = '<div class="ce-list ab-list"><p class="ab-kicker">About the Project</p><h3 class="ce-title">Civilisational: The Civilisation Theory Map</h3>' + ipsHtml('ab') + ROOT.html.replace('<!--TOTALS-->', totalsHtml()) + '</div>';
     // The views as a row of tabs, each with its own tally beneath its name.
     function tab(view, name, meta) {
       return '<button type="button" data-view="' + view + '"><span class="tab-name">' + name + '</span>' +
@@ -12116,17 +12134,19 @@
     { id: 'view-ce', view: 'ce', title: 'Conceptual Engineerings', html: '<p>The map creator’s own conceptual engineerings: novel concepts coined to name dynamics, problems and possibilities.</p>' },
     { id: 'view-cp', view: 'cp', title: 'Consilience Project', html: '<p>The terms of the glossary of The Consilience Project, whose work on the metacrisis, sensemaking and the epistemic commons is one of this map’s main inspirations.</p>' }
   ];
-  var searchIndex = CONCEPTS.filter(function (c) { return !c.cpOnly && c !== ROOT; }).concat(VIEW_ENTRIES).map(function (c) {
+  function indexEntry(c) {
     var tmp = document.createElement('div');
     tmp.innerHTML = c.html;
     var raw = tmp.textContent.replace(/\s+/g, ' ').trim();
     return { c: c, title: c.title.toLowerCase(), text: raw.toLowerCase(), raw: raw };
-  });
+  }
+  var searchIndex = CONCEPTS.filter(function (c) { return !c.cpOnly && c !== ROOT; }).concat(VIEW_ENTRIES).map(indexEntry);
+  var cpIndex = CONCEPTS.filter(function (c) { return c.cpOnly; }).map(indexEntry);   // (the glossary's own terms: searched on its page only)
   var searchSel = -1;
-  function searchResults(q, limit) {
+  function searchResults(q, limit, pool) {
     q = q.trim().toLowerCase();
     if (!q) return [];
-    return searchIndex.map(function (e) {
+    return (pool || searchIndex).map(function (e) {
       var score = e.title.indexOf(q) === 0 ? 4
         : (' ' + e.title).indexOf(' ' + q) >= 0 ? 3
         : e.title.indexOf(q) >= 0 ? 2
@@ -12366,6 +12386,57 @@
       '<p class="sp-meta" id="sp-meta"></p><ol class="sp-results" id="sp-results"></ol></div>';
   }
   var spSel = -1;
+  // In-page search: a bar under each Map page's heading, searching the entries that page lists
+  // (About: the whole map), with its results opening beneath it.
+  var IPS_LABEL = { ab: 'Search the map', cs: 'Search the paradigm', rl: 'Search the landscape', ce: 'Search the conceptual engineerings', az: 'Search the A–Z', cp: 'Search the glossary' };
+  function ipsHtml(view) {
+    return '<div class="ips" data-ips="' + view + '"><div class="sp-field ips-field"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="42" cy="42" r="28"/><line x1="63" y1="63" x2="90" y2="90"/></svg>' +
+      '<input class="ips-input" type="search" placeholder="' + IPS_LABEL[view] + '" aria-label="' + IPS_LABEL[view] + '" autocomplete="off" spellcheck="false"></div>' +
+      '<p class="sp-meta ips-meta" hidden></p><ol class="sp-results ips-results"></ol></div>';
+  }
+  function ipsScope(box) {   // (the ids of the entries the page links to; none for About, which searches all)
+    if (box.getAttribute('data-ips') === 'ab') return null;
+    var panel = box.parentNode, ids = {};
+    panel.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      if (box.contains(a)) return;
+      var id = decodeURIComponent(a.getAttribute('href').slice(1)).split('/').pop();
+      if (byId[id]) ids[id] = true;
+    });
+    return ids;
+  }
+  function runIps(input) {
+    var box = input.closest('.ips'), meta = box.querySelector('.ips-meta'), list = box.querySelector('.ips-results');
+    var q = input.value.trim().toLowerCase();
+    if (!q) { meta.hidden = true; list.innerHTML = ''; return; }
+    if (!box._scope) box._scope = ipsScope(box) || false;
+    var res = searchResults(q, Infinity, box.getAttribute('data-ips') === 'cp' ? searchIndex.concat(cpIndex) : null).filter(function (r) { return !box._scope || box._scope[r.c.id]; });
+    meta.hidden = false;
+    meta.textContent = res.length ? res.length + (res.length === 1 ? ' result' : ' results') : 'No matching entries';
+    list.innerHTML = res.slice(0, 12).map(function (r, i) {
+      var path = (crumbPath(r.c) || [r.c]).slice(1, -1).map(function (p) { return esc(p.title); }).join(' &gt; ');
+      return '<li' + (i === 0 ? ' class="sel"' : '') + '><a class="sp-title" href="' + href(r.c) + '">' + esc(r.c.title) + '</a>' +
+        '<span class="sp-path">' + path + '</span><p class="sp-snip">' + snippet(r.raw, q) + '</p></li>';
+    }).join('') + (res.length > 12 ? '<li class="ips-more"><a href="#search" data-ips-all>All ' + res.length + ' results</a></li>' : '');
+    markCoined(list);
+  }
+  document.addEventListener('input', function (e) { if (e.target.classList && e.target.classList.contains('ips-input')) runIps(e.target); });
+  document.addEventListener('keydown', function (e) {
+    var input = e.target;
+    if (!input.classList || !input.classList.contains('ips-input')) return;
+    var items = input.closest('.ips').querySelectorAll('.ips-results li:not(.ips-more)'), sel = -1;
+    items.forEach(function (li, i) { if (li.classList.contains('sel')) sel = i; });
+    if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && items.length) {
+      e.preventDefault();
+      sel = (sel + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+      items.forEach(function (li, i) { li.classList.toggle('sel', i === sel); });
+    } else if (e.key === 'Enter' && sel >= 0) { e.preventDefault(); items[sel].querySelector('a').click(); }
+    else if (e.key === 'Escape') { input.value = ''; runIps(input); }
+    e.stopPropagation();   // (typing here never sets off the site's own key shortcuts)
+  }, true);
+  document.addEventListener('click', function (e) {   // (all results: the search page, with the query carried over)
+    var a = e.target.closest && e.target.closest('[data-ips-all]');
+    if (a) lastQuery = a.closest('.ips').querySelector('.ips-input').value;
+  });
   function snippet(text, q) {
     var i = text.toLowerCase().indexOf(q);
     if (i < 0) return esc(text.length > 190 ? text.slice(0, 190).replace(/\s+\S*$/, '') + ' …' : text);
