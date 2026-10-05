@@ -769,6 +769,12 @@
   html.page-map .description .ce-list.ce-main > .ips { margin-bottom: 4.2rem; }
   /* The Curated box: above the arrangements, its groups side by side */
   .description .ce-curated { border-left: 3px solid var(--text); padding: 0.2rem 0 0 3rem; margin: 0 -1.2rem 5.8rem 0; }   /* (the text set further in from the rule; the box reaches as far beyond on the right, so its columns keep their width) */
+  .description .ce-curated { position: relative; }
+  .description .ce-curated-count {   /* (its tally, beside the rule at its head) */
+    position: absolute; right: calc(100% + 1.2rem); top: 0.55rem; margin: 0; white-space: nowrap;
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.71rem; font-weight: 500; letter-spacing: 0.02em; color: var(--muted);
+  }
+  @media (max-width: 640px) { .description .ce-curated-count { position: static; margin: 0 0 0.6rem; } }
   .description .ce-curated-head { font-size: 1.35em; font-weight: 700; line-height: 1.2; margin: 0 0 1.1rem; }
   .description .ce-curated-cols { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 3rem; row-gap: 1.2rem; }
   .description .ce-curated .ce-sub-head { margin-top: 0; }
@@ -11362,7 +11368,9 @@
           return '<li><a href="' + href(c) + '">' + esc((Array.isArray(x) && x[2] && x[2].label) || c.title) + '</a>' + (Array.isArray(x) && x[1].length ? tree(x[1]) : '') + '</li>';
         }).join('') + '</ul>';
       }
-      return '<div class="ce-curated"><p class="ce-curated-head">Curated</p><div class="ce-curated-cols">' + CE_CURATED.map(function (g) {
+      var picked = {};
+      (function add(items) { items.forEach(function (x) { var id = typeof x === 'string' ? x : x[0]; if (byId[id]) picked[id] = true; if (Array.isArray(x)) add(x[1]); }); })([].concat.apply([], CE_CURATED.map(function (g) { return g.items; })));
+      return '<div class="ce-curated"><p class="ce-curated-count">Selected: ' + Object.keys(picked).length + '</p><p class="ce-curated-head">Curated</p><div class="ce-curated-cols">' + CE_CURATED.map(function (g) {
         var e = g.link && byId[g.link];
         return '<div class="ce-curated-grp"><p class="ce-sub-head">' + (e ? '<a href="' + href(e) + '">' + esc(g.head) + '</a>' : esc(g.head)) + '</p>' + tree(g.items) + '</div>';
       }).join('') + '</div></div>';
