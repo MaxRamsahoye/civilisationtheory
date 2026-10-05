@@ -777,6 +777,7 @@
   html.page-map .description .ce-list .ce-curated ul ul { padding-left: 1rem; margin-top: 0.6rem; font-size: 1em; }
   .description .ce-curated-grp { padding-bottom: 1rem; }
   @media (max-width: 640px) { .description .ce-curated-cols { grid-template-columns: 1fr; } }
+  #entry .entry-subtitle { font-style: italic; font-size: 1.25rem; line-height: 1.4; color: var(--muted); margin: -0.4rem 0 1.6rem; }
   .description .ce-note {
     font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.78rem; line-height: 1.5; color: var(--muted); max-width: 42rem; margin: 0 0 2.4rem;
@@ -2261,10 +2262,17 @@
     },
     {
       id: 'the-twin-neural-problem',
-      check: 'The interpretation was drafted from the title alone. Confirm it is what you mean by the term.',
       title: 'The Twin Neural Problem',
+      subtitle: 'Mastery over neural networks in the human and the machine',
       coined: true,
-      html: '<p><em>The twin neural problem</em> is the recognition that the alignment of artificial intelligence and the alignment of human beings are, at bottom, the same problem in two substrates. Both artificial neural networks and human brains are opaque systems whose values and dispositions were not written down but formed by optimisation – gradient descent on training data in the one case, evolution and cultural conditioning in the other – so that neither can simply be read or rewritten from outside. The difficulties of AI alignment – interpretability, misgeneralisation, goals that diverge from those intended, behaviour that changes with scale and context – mirror the long-standing difficulties of aligning people and institutions with what is good. Progress on either can inform the other, and neither can be solved alone, since aligned machines in the hands of misaligned humans, or aligned humans served by misaligned machines, would fail together. See <a href="#human-inner-alignment-problem">the human inner alignment problem</a> and <a href="#ai-as-anthropological-mirror">AI as anthropological mirror</a>.</p>'
+      html:
+        '<p>In the space of about four months in 1952–1953, humanity unlocked the two nuclei that govern matter and life: the nucleus of the atom, via the first test of the Teller-Ulam fusion device, and then the nucleus of the cell, via Watson-Crick’s discovery of DNA’s structure. In response to this, Eric Weinstein observes that ‘having gained the power to manipulate cellular and atomic nuclei [bio tech, nuclear tech] humanity is now in possession of unprecedented destructive power, and thus capable of self-extinction’.</p>' +
+        '<p>Hence, civilisation now faces <a href="https://theportal.wiki/wiki/Twin_Nuclei_Problem" target="_blank" rel="noopener">The Twin Nuclei Problem</a>. We now have access to knowledge capable of ending civilisation outright (through nuclear weapons or engineered pathogens), which means the entire species is now running as a single, correlated experiment: one catastrophic event, whether triggered by malice, error, or accident, could be enough to end it permanently.</p>' +
+        '<p>Alongside the Twin Nuclei Problem which emerged in the mid-20th century, as we approach the mid-21st century we will now face (what I call) <a href="https://www.kyb.tuebingen.mpg.de/772529/news_publication_21977686_transferred" target="_blank" rel="noopener">The Twin Neural Problem</a>:</p>' +
+        '<blockquote><p><strong>The Twin Neural Problem</strong>: having gained the power to manipulate biological and technological neural networks — the brain in the human and the net in the AI — humanity is now in possession of unprecedented cybernetic power, and thus capable of total control over both minds and machines.</p></blockquote>' +
+        '<p>In this not-too-distant future, we have simultaneously cracked the code of human and digital computation and consciousness, across substrates. At its core, is an alignment problem: while we have gained the technical capability to read and rewrite computational systems, this will likely be in the hands of a third-party controller—such as a state or corporation— with its own interests that supervene the interests and autonomy of the individual. This creates a risk of population-scale behavioral control, over all thought and action.</p>' +
+        '<p>An agent with the capability of predicting and predetermining the behaviour of humans and AIs can:</p>' +
+        '<ol><li><strong>cognitive security</strong>: do so at their own discretion, violating any internal beliefs and values such systems may hold (i.e your mind can be overwritten from the outside).</li><li><strong>value lock-in</strong>: do so indefinitely, as once they have such power it affords a decisive strategic advantage (i.e if your mind is controlled, you cannot use your mind to free yourself)</li><li><strong>malevolent manipulation</strong>: do so in a direction with an (extreme) negative valence, creating a suffering catastrophe, a desired dystopia or a stable form of totalitarianism.</li></ol>'
     },
     {
       id: 'cultural-psychological-adaptationism',
@@ -12000,6 +12008,7 @@
       '<h1>' + esc(c === ROOT ? 'Civilisational: The Civilisation Theory Map' : c.title) +
         // (the Map's title carries a small ⓘ to the About page, as in the header)
         (c.id === 'the-map' ? '<a class="h1-about" href="#the-map/theproject" aria-label="About" title="About"><svg viewBox="-4.1 -4.1 108.1 108.1" aria-hidden="true"><circle cx="50" cy="50" r="40"/><line x1="50" y1="44" x2="50" y2="72"/><line x1="50" y1="28" x2="50" y2="31"/></svg></a>' : '') + '</h1>' +
+      (c.subtitle ? '<p class="entry-subtitle">' + esc(c.subtitle) + '</p>' : '') +   // (an entry's subtitle, beneath its title)
       '<div class="description">' + c.html.replace('<!--INDEX-->', indexHtml()).replace('<!--SLIDES-->', slidesHtml()).replace('<!--SEARCH-->', searchPageHtml()).replace('<!--TOTALS-->', totalsHtml()).replace('<!--FICTION-->', fictionListHtml()).replace('<!--REVIEW-->', reviewListHtml()) +
       ((isConcept(c) || c.kind === 'node') && !PAGES[c.id] ? endSectionsHtml(c) : '') +   // (landscape nodes too)
       '</div>';
