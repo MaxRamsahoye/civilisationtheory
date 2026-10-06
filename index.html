@@ -13210,52 +13210,138 @@
     (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(url) : Promise.reject())
       .then(function () { toolsNote(msg || 'Link copied', btn); }, function () { window.prompt('Copy this link:', url); });
   }
-  // The entry as a PDF: title, subtitle, sections, lists, quotations and references, set in Times on A4,
-  // with the site and the entry's address at the foot of each page. (jsPDF, MIT licence, is loaded on first use.)
-  function withJsPDF(done, fail) {
-    if (window.jspdf) { done(); return; }
-    var s = document.createElement('script');
-    s.src = 'vendor/jspdf.umd.min.js'; s.onload = done; s.onerror = fail;
-    document.head.appendChild(s);
+  // The entry as a PDF in the site's own type – ET Bembo for the text, IBM Plex for the labels – with its
+  // italics, bold and links as on the page (links live, to the site), on A4. jsPDF (MIT licence) and the
+  // fonts (vendor/pdf-fonts.js) are loaded on first use.
+  function loadScript(src) {
+    return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
   }
-  var PDF_SAFE = /[ -~ -ÿ–—‘’‚“”„†‡•…‰‹›€™ŒœŠšŸŽžƒˆ˜]/;
-  function pdfText(s) {   // (the standard PDF fonts cover Western European text: other letters lose their accents)
-    return Array.prototype.map.call(s.replace(/\s+/g, ' ').trim(), function (ch) {
-      if (PDF_SAFE.test(ch)) return ch;
+  function withJsPDF(done, fail) {
+    (window.jspdf ? Promise.resolve() : loadScript('vendor/jspdf.umd.min.js'))
+      .then(function () { return window.PDF_FONTS ? null : loadScript('vendor/pdf-fonts.js'); })
+      .then(done, fail);
+  }
+  var SITE_URL = 'https://maxramsahoye.github.io/civilisationtheory/';
+  function pdfText(s) {   // (a letter the fonts lack keeps its base form: ē → e)
+    var ok = window.PDF_ET_CHARS || '';
+    return Array.prototype.map.call(s, function (ch) {
+      if (ok.indexOf(ch) >= 0) return ch;
       var base = ch.normalize('NFD').replace(/[̀-ͯ]/g, '');
-      return PDF_SAFE.test(base) ? base : ({ '−': '-', '→': '->', '←': '<-', '‑': '-', '‐': '-', '­': '' }[ch] || '');
+      return ok.indexOf(base) >= 0 ? base : ({ '−': '-', '→': '->', '←': '<-', '‑': '-', '‐': '-', '­': '', ' ': ' ' }[ch] || '');
     }).join('');
   }
   function entryPdf(c) {
     var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
-    var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 66, y = M + 10, colW = W - 2 * M;
-    function room(h) { if (y + h > H - M) { doc.addPage(); y = M; } }
-    function block(text, font, style, size, lead, indent, gapAfter, color) {
-      doc.setFont(font, style); doc.setFontSize(size); doc.setTextColor(color || 20);
-      doc.splitTextToSize(pdfText(text), colW - (indent || 0)).forEach(function (line) { room(lead); doc.text(line, M + (indent || 0), y); y += lead; });
-      y += gapAfter || 0;
-    }
-    block(c.title, 'times', 'bold', 24, 28, 0, c.subtitle ? 4 : 10);
-    if (c.subtitle) block(c.subtitle, 'times', 'italic', 13, 17, 0, 10, 90);
-    doc.setDrawColor(200); doc.line(M, y - 4, W - M, y - 4); y += 16;
-    var tmp = document.createElement('div'); tmp.innerHTML = c.html;
-    Array.prototype.forEach.call(tmp.children, function (el) {
-      var tag = el.tagName;
-      if (tag === 'H2' || tag === 'H3') { y += 8; room(40); block(el.textContent, 'times', 'bold', 14, 18, 0, 6); }
-      else if (tag === 'UL' || tag === 'OL') Array.prototype.forEach.call(el.children, function (li, i) {
-        room(16); doc.setFont('times', 'normal'); doc.setFontSize(11); doc.text(tag === 'OL' ? (i + 1) + '.' : '•', M + 4, y);
-        block(li.textContent, 'times', 'normal', 11, 15.5, 20, 4);
-      });
-      else if (tag === 'BLOCKQUOTE') { block(el.textContent, 'times', 'italic', 11, 15.5, 18, 10, 60); }
-      else if (el.textContent.trim()) block(el.textContent, 'times', 'normal', 11, 15.5, 0, 9);
+    [['ETR', 'ETBembo', 'normal'], ['ETI', 'ETBembo', 'italic'], ['ETS', 'ETBembo', 'semibold'], ['ETB', 'ETBembo', 'bold'], ['PLEX', 'Plex', 'normal'], ['PLEXS', 'Plex', 'semibold']].forEach(function (f) {
+      doc.addFileToVFS(f[0] + '.ttf', window.PDF_FONTS[f[0]]); doc.addFont(f[0] + '.ttf', f[1], f[2]);
     });
-    if (c.refs && c.refs.length) {
-      y += 10; room(40); block('References', 'helvetica', 'bold', 9, 13, 0, 4, 60);
-      c.refs.forEach(function (r) { var d = document.createElement('div'); d.innerHTML = r; block(d.textContent, 'helvetica', 'normal', 8.5, 12, 0, 3, 60); });
+    var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 66, y = M + 10, colW = W - 2 * M;
+    var INK = [17, 17, 17], LINK = [22, 163, 74], LINE = [134, 210, 160];
+    function room(h) { if (y + h > H - M) { doc.addPage(); y = M; } }
+    // Inline runs, as on the page: italic, bold and links carried through nested tags.
+    function runs(node, st, out) {
+      out = out || [];
+      Array.prototype.forEach.call(node.childNodes, function (n) {
+        if (n.nodeType === 3) { out.push({ t: n.nodeValue, i: st.i, b: st.b, link: st.link }); return; }
+        if (n.nodeType !== 1) return;
+        var tag = n.tagName, s = { i: st.i, b: st.b, link: st.link };
+        if (tag === 'EM' || tag === 'I' || tag === 'CITE') s.i = !st.i;
+        if (tag === 'STRONG' || tag === 'B') s.b = true;
+        if (tag === 'A') { var h = n.getAttribute('href') || ''; s.link = h.charAt(0) === '#' ? SITE_URL + h : h; }
+        if (tag === 'BR') { out.push({ t: '\n', i: s.i, b: s.b, link: null }); return; }
+        runs(n, s, out);
+      });
+      return out;
     }
+    // Set runs as a paragraph: words wrapped to the column, each in its own face; links green and underlined.
+    function para(rs, o) {
+      var size = o.size || 11.5, lead = o.lead || 16, x0 = M + (o.indent || 0), width = colW - (o.indent || 0);
+      function face(r) { return r.b ? (o.base === 'semibold' ? 'bold' : 'bold') : r.i ? 'italic' : (o.base || 'normal'); }
+      var groups = [], cur = null, gapBefore = false;
+      rs.forEach(function (r) {
+        pdfText(r.t.replace(/\s+/g, function (m) { return m.indexOf('\n') >= 0 ? '\n' : ' '; })).split(/( |\n)/).forEach(function (w) {
+          if (w === ' ') { gapBefore = true; cur = null; return; }
+          if (w === '\n') { groups.push({ br: true }); cur = null; gapBefore = false; return; }
+          if (!w) return;
+          doc.setFont('ETBembo', face(r)); doc.setFontSize(size);
+          var tok = { t: w, f: face(r), link: r.link, w: doc.getTextWidth(w) };
+          if (!cur) { cur = { toks: [], w: 0, gap: gapBefore && groups.length > 0 }; groups.push(cur); }
+          cur.toks.push(tok); cur.w += tok.w; gapBefore = false;
+        });
+      });
+      doc.setFont('ETBembo', o.base || 'normal'); doc.setFontSize(size);
+      var space = doc.getTextWidth(' '), lines = [[]], lw = 0;
+      groups.forEach(function (g) {
+        if (g.br) { lines.push([]); lw = 0; return; }
+        var add = (lines[lines.length - 1].length && g.gap ? space : 0) + g.w;
+        if (lw + add > width && lines[lines.length - 1].length) { lines.push([]); lw = 0; add = g.w; }
+        lines[lines.length - 1].push(g); lw += add;
+      });
+      lines.forEach(function (line, li) {
+        room(lead);
+        if (li === 0 && o.marker) { doc.setFont('ETBembo', 'normal'); doc.setFontSize(size); doc.setTextColor.apply(doc, INK); doc.text(o.marker, M + (o.markerX || 4), y); }
+        var x = x0;
+        line.forEach(function (g, gi) {
+          if (gi && g.gap) {
+            var prev = line[gi - 1].toks[line[gi - 1].toks.length - 1], next = g.toks[0];
+            if (prev.link && prev.link === next.link) { doc.setDrawColor.apply(doc, LINE); doc.setLineWidth(0.5); doc.line(x, y + 1.6, x + space, y + 1.6); doc.link(x, y - size * 0.8, space, size, { url: next.link }); }
+            x += space;
+          }
+          g.toks.forEach(function (k) {
+            doc.setFont('ETBembo', k.f); doc.setFontSize(size);
+            doc.setTextColor.apply(doc, k.link ? LINK : (o.color || INK));
+            doc.text(k.t, x, y);
+            if (k.link) {
+              doc.setDrawColor.apply(doc, LINE); doc.setLineWidth(0.5); doc.line(x, y + 1.6, x + k.w, y + 1.6);
+              doc.link(x, y - size * 0.8, k.w, size, { url: k.link });
+            }
+            x += k.w;
+          });
+        });
+        y += lead;
+      });
+      y += o.after || 0;
+    }
+    function plain(text, st) { return [{ t: text, i: !!(st && st.i), b: !!(st && st.b), link: null }]; }
+    // Title and subtitle, then a rule.
+    para(plain(c.title, { b: true }), { size: 26, lead: 30, after: c.subtitle ? 4 : 12 });
+    if (c.subtitle) para(plain(c.subtitle, { i: true }), { size: 13.5, lead: 18, after: 12, color: [100, 100, 100] });
+    doc.setDrawColor(210); doc.setLineWidth(0.5); doc.line(M, y - 6, W - M, y - 6); y += 14;
+    var tmp = document.createElement('div'); tmp.innerHTML = c.html;
+    // (a plain quotation set in from the left, as on the page; an entry's epigraph italic, with its rule and source)
+    (function blocks(parent, q) {
+      Array.prototype.forEach.call(parent.children, function (el) {
+        var tag = el.tagName, ind = q.indent;
+        if (tag === 'H2' || tag === 'H3') { y += 10; room(44); para(runs(el, { i: false, b: false }), { size: tag === 'H2' ? 15 : 13, lead: 19, base: 'semibold', after: 6 }); }
+        else if (tag === 'UL' || tag === 'OL') Array.prototype.forEach.call(el.children, function (li, i) {
+          para(runs(li, { i: q.i, b: false }), { indent: ind + 20, after: 4, marker: tag === 'OL' ? (i + 1) + '.' : '•', markerX: ind + 4 });
+        });
+        else if (tag === 'BLOCKQUOTE') {
+          var epi = el.classList.contains('entry-quote'), top = y, page = doc.getNumberOfPages();
+          if (epi) y += 8;
+          var inner = { i: epi, indent: ind + (epi ? 24 : 22) };
+          if (el.querySelector('p, ul, ol, footer')) blocks(el, inner); else para(runs(el, { i: epi, b: false }), { indent: inner.indent, after: 9 });
+          if (epi && doc.getNumberOfPages() === page) { doc.setDrawColor.apply(doc, LINK); doc.setLineWidth(1.4); doc.line(M + ind + 12, top - 6, M + ind + 12, y - 12); }
+          y += epi ? 12 : 2;
+        }
+        else if (tag === 'FOOTER') {
+          room(14); doc.setFont('Plex', 'normal'); doc.setFontSize(7.5); doc.setTextColor(120);
+          doc.splitTextToSize(pdfText(el.textContent.replace(/\s+/g, ' ').trim()), colW - ind).forEach(function (l) { room(11); doc.text(l, M + ind, y); y += 11; });
+          y += 4;
+        }
+        else if (el.textContent.trim()) para(runs(el, { i: q.i, b: false }), { indent: ind, after: 9 });
+      });
+    })(tmp, { i: false, indent: 0 });
+    if (c.refs && c.refs.length) {
+      y += 12; room(40);
+      doc.setFont('Plex', 'semibold'); doc.setFontSize(9); doc.setTextColor(90); doc.text('References', M, y); y += 15;
+      c.refs.forEach(function (r, i) { var d = document.createElement('div'); d.innerHTML = r; para(runs(d, { i: false, b: false }), { size: 10, lead: 13.5, indent: 18, after: 3, marker: (i + 1) + '.', markerX: 2, color: [60, 60, 60] }); });
+    }
+    var addr = SITE_URL + '#' + c.id;
     for (var i = 1, n = doc.getNumberOfPages(); i <= n; i++) {
-      doc.setPage(i); doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(140);
-      doc.text(pdfText('Civilisation Theory Map · ' + location.href), M, H - 34);
+      doc.setPage(i); doc.setFont('Plex', 'normal'); doc.setFontSize(7.5); doc.setTextColor(140);
+      doc.text('Civilisation Theory Map · ' + addr, M, H - 34);
+      doc.link(M, H - 42, doc.getTextWidth('Civilisation Theory Map · ' + addr), 10, { url: addr });
       doc.text(i + ' / ' + n, W - M, H - 34, { align: 'right' });
     }
     doc.save(c.id + '.pdf');
