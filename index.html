@@ -703,6 +703,9 @@
   }
   #entry-tools .tools-note.on { opacity: 1; }
   #entry-tools [data-tool="narrate"] .stop { display: none; }
+  html.hudless:not(.main-page) #entry-tools.hud-peek { opacity: 1; }
+  html.hudless #entry-tools.hud-peek > :not([data-tool="hud"]) { opacity: 0 !important; pointer-events: none !important; }
+  html.hudless:not(.main-page) #entry-tools.hud-peek [data-tool="hud"] { opacity: 1; transform: translateY(var(--ty)); pointer-events: auto !important; color: var(--text); }
   #entry-tools.narrating [data-tool="narrate"] .wave { display: none; }
   #entry-tools.narrating [data-tool="narrate"] .stop { display: inline; }
   #entry-tools.narrating [data-tool="narrate"] { color: var(--text); }
@@ -13203,6 +13206,11 @@
   tools.querySelector('.tools-plus').addEventListener('mouseenter', openTools);
   tools.querySelector('.tools-plus').addEventListener('click', openTools);   // touch screens
   // Folds again once the pointer leaves the column the three icons occupy.
+  // With the interface hidden, the pointer in the right-hand column brings back the hide icon alone, to undo it.
+  document.addEventListener('mousemove', function (e) {
+    var hl = document.documentElement.classList.contains('hudless');
+    tools.classList.toggle('hud-peek', hl && e.clientX > window.innerWidth - 96);
+  });
   document.addEventListener('mousemove', function (e) {
     if (!tools.classList.contains('open') || tools.classList.contains('intro')) return;   // (held open on arrival, until the header's icons fold)
     var r = tools.getBoundingClientRect(), rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -13427,7 +13435,7 @@
     else if (what === 'share') {
       if (navigator.share) navigator.share({ title: c.title + ' · Civilisation Theory Map', url: location.href }).catch(function () {});
       else copyLink(b, 'Link copied to share');
-    } else if (what === 'hud') { tools.classList.remove('open'); setHudless(true); }
+    } else if (what === 'hud') { var hl = document.documentElement.classList.contains('hudless'); tools.classList.remove('open', 'hud-peek'); setHudless(!hl); }
     else if (what === 'narrate') narrate(c, b);
     else if (what === 'download') {
       withJsPDF(function () { entryPdf(c); toolsNote('Downloaded', b); }, function () { toolsNote('Download unavailable', b); });
