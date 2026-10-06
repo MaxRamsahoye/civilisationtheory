@@ -13173,7 +13173,7 @@
   tools.innerHTML = toolBtn('tools-plus', 'Share, copy link or download', TOOL_SVG.plus) +
     toolBtn('tool', 'Share', TOOL_SVG.share).replace('class="tool"', 'class="tool" data-tool="share" style="--ty:-2.6rem"') +
     toolBtn('tool', 'Copy link', TOOL_SVG.link).replace('class="tool"', 'class="tool" data-tool="link" style="--ty:0rem"') +
-    toolBtn('tool', 'Download', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:2.6rem"') +
+    toolBtn('tool', 'Download as PDF', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:2.6rem"') +
     '<span class="tools-note" aria-live="polite"></span>';
   document.body.appendChild(tools);
   function openTools() { tools.classList.add('open'); }
@@ -13197,24 +13197,55 @@
     (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(url) : Promise.reject())
       .then(function () { toolsNote(msg || 'Link copied', btn); }, function () { window.prompt('Copy this link:', url); });
   }
-  // The entry as Markdown: its title, subtitle, text, references and address.
-  function entryMarkdown(c) {
+  // The entry as a PDF: title, subtitle, sections, lists, quotations and references, set in Times on A4,
+  // with the site and the entry's address at the foot of each page. (jsPDF, MIT licence, is loaded on first use.)
+  function withJsPDF(done, fail) {
+    if (window.jspdf) { done(); return; }
+    var s = document.createElement('script');
+    s.src = 'vendor/jspdf.umd.min.js'; s.onload = done; s.onerror = fail;
+    document.head.appendChild(s);
+  }
+  var PDF_SAFE = /[ -~ -ÿ–—‘’‚“”„†‡•…‰‹›€™ŒœŠšŸŽžƒˆ˜]/;
+  function pdfText(s) {   // (the standard PDF fonts cover Western European text: other letters lose their accents)
+    return Array.prototype.map.call(s.replace(/\s+/g, ' ').trim(), function (ch) {
+      if (PDF_SAFE.test(ch)) return ch;
+      var base = ch.normalize('NFD').replace(/[̀-ͯ]/g, '');
+      return PDF_SAFE.test(base) ? base : ({ '−': '-', '→': '->', '←': '<-', '‑': '-', '‐': '-', '­': '' }[ch] || '');
+    }).join('');
+  }
+  function entryPdf(c) {
+    var doc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4' });
+    var W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 66, y = M + 10, colW = W - 2 * M;
+    function room(h) { if (y + h > H - M) { doc.addPage(); y = M; } }
+    function block(text, font, style, size, lead, indent, gapAfter, color) {
+      doc.setFont(font, style); doc.setFontSize(size); doc.setTextColor(color || 20);
+      doc.splitTextToSize(pdfText(text), colW - (indent || 0)).forEach(function (line) { room(lead); doc.text(line, M + (indent || 0), y); y += lead; });
+      y += gapAfter || 0;
+    }
+    block(c.title, 'times', 'bold', 24, 28, 0, c.subtitle ? 4 : 10);
+    if (c.subtitle) block(c.subtitle, 'times', 'italic', 13, 17, 0, 10, 90);
+    doc.setDrawColor(200); doc.line(M, y - 4, W - M, y - 4); y += 16;
     var tmp = document.createElement('div'); tmp.innerHTML = c.html;
-    function inline(el) { return el.textContent.replace(/\s+/g, ' ').trim(); }
-    var out = ['# ' + c.title]; if (c.subtitle) out.push('*' + c.subtitle + '*');
     Array.prototype.forEach.call(tmp.children, function (el) {
       var tag = el.tagName;
-      if (tag === 'H2' || tag === 'H3') out.push('## ' + inline(el));
-      else if (tag === 'UL' || tag === 'OL') out.push(Array.prototype.map.call(el.children, function (li, i) { return (tag === 'OL' ? (i + 1) + '. ' : '- ') + inline(li); }).join('\n'));
-      else if (tag === 'BLOCKQUOTE') out.push('> ' + inline(el));
-      else if (inline(el)) out.push(inline(el));
+      if (tag === 'H2' || tag === 'H3') { y += 8; room(40); block(el.textContent, 'times', 'bold', 14, 18, 0, 6); }
+      else if (tag === 'UL' || tag === 'OL') Array.prototype.forEach.call(el.children, function (li, i) {
+        room(16); doc.setFont('times', 'normal'); doc.setFontSize(11); doc.text(tag === 'OL' ? (i + 1) + '.' : '•', M + 4, y);
+        block(li.textContent, 'times', 'normal', 11, 15.5, 20, 4);
+      });
+      else if (tag === 'BLOCKQUOTE') { block(el.textContent, 'times', 'italic', 11, 15.5, 18, 10, 60); }
+      else if (el.textContent.trim()) block(el.textContent, 'times', 'normal', 11, 15.5, 0, 9);
     });
     if (c.refs && c.refs.length) {
-      out.push('## References');
-      out.push(c.refs.map(function (r) { var d = document.createElement('div'); d.innerHTML = r; return '- ' + d.textContent; }).join('\n'));
+      y += 10; room(40); block('References', 'helvetica', 'bold', 9, 13, 0, 4, 60);
+      c.refs.forEach(function (r) { var d = document.createElement('div'); d.innerHTML = r; block(d.textContent, 'helvetica', 'normal', 8.5, 12, 0, 3, 60); });
     }
-    out.push('Source: ' + location.href);
-    return out.join('\n\n') + '\n';
+    for (var i = 1, n = doc.getNumberOfPages(); i <= n; i++) {
+      doc.setPage(i); doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(140);
+      doc.text(pdfText('Civilisation Theory Map · ' + location.href), M, H - 34);
+      doc.text(i + ' / ' + n, W - M, H - 34, { align: 'right' });
+    }
+    doc.save(c.id + '.pdf');
   }
   tools.addEventListener('click', function (e) {
     var b = e.target.closest('[data-tool]'), c = CURRENT_ENTRY;
@@ -13225,11 +13256,7 @@
       if (navigator.share) navigator.share({ title: c.title + ' · Civilisation Theory Map', url: location.href }).catch(function () {});
       else copyLink(b, 'Link copied to share');
     } else if (what === 'download') {
-      var blob = new Blob([entryMarkdown(c)], { type: 'text/markdown;charset=utf-8' }), a = document.createElement('a');
-      a.href = URL.createObjectURL(blob); a.download = c.id + '.md';
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
-      toolsNote('Downloaded', b);
+      withJsPDF(function () { entryPdf(c); toolsNote('Downloaded', b); }, function () { toolsNote('Download unavailable', b); });
     }
   });
 
