@@ -706,7 +706,7 @@
   #entry-tools [data-tool="hud"] .hud-on, html.hudless #entry-tools [data-tool="hud"] .hud-off { display: none; }
   html.hudless #entry-tools [data-tool="hud"] .hud-on { display: inline; }
   html.hudless:not(.main-page) #entry-tools.hud-peek { opacity: 1; }
-  html.hudless #entry-tools.hud-peek > :not([data-tool="hud"]) { opacity: 0 !important; pointer-events: none !important; }
+  html.hudless #entry-tools > :not([data-tool="hud"]) { opacity: 0 !important; pointer-events: none !important; transition: none !important; }   /* (hidden at once, so the plus never shows with it) */
   html.hudless:not(.main-page) #entry-tools.hud-peek [data-tool="hud"] { opacity: 1; transform: translateY(var(--ty)); pointer-events: auto !important; color: var(--text); }
   #entry-tools.narrating [data-tool="narrate"] .wave { display: none; }
   #entry-tools.narrating [data-tool="narrate"] .stop { display: inline; }
