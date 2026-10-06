@@ -12155,9 +12155,10 @@
     if (ts) setTimeout(function () { if (ts.isConnected) ts.classList.add('ts-folded'); }, 1600);
     // …and on entries the header icons fold into the menu icon.
     document.documentElement.classList.remove('icons-folded', 'icons-open');
+    if (tools) tools.classList.add('open', 'intro');   // (the entry tools open with the header's icons, and fold with them)
     clearTimeout(foldIconsTimer);
     if (!document.documentElement.classList.contains('main-page') || c.id === 'the-map' || c === ROOT) {
-      foldIconsTimer = setTimeout(function () { measureIconFold(); document.documentElement.classList.add('icons-folded'); }, 1600);
+      foldIconsTimer = setTimeout(function () { measureIconFold(); document.documentElement.classList.add('icons-folded'); if (tools) tools.classList.remove('open', 'intro'); }, 1600);
     }
     if (c.id === 'infinite') { showDeck(childrenOf(ROOT.id)[0].id); }   // (opening on the first section; A–Z is one choice among them)
     fitCrumbs();
@@ -13189,12 +13190,13 @@
     toolBtn('tool', 'Download as PDF', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:2.6rem"') +
     '<span class="tools-note" aria-live="polite"></span>';
   document.body.appendChild(tools);
+  if (!document.documentElement.classList.contains('icons-folded')) tools.classList.add('open', 'intro');   // (the first page: open until the header's icons fold)
   function openTools() { tools.classList.add('open'); }
   tools.querySelector('.tools-plus').addEventListener('mouseenter', openTools);
   tools.querySelector('.tools-plus').addEventListener('click', openTools);   // touch screens
   // Folds again once the pointer leaves the column the three icons occupy.
   document.addEventListener('mousemove', function (e) {
-    if (!tools.classList.contains('open')) return;
+    if (!tools.classList.contains('open') || tools.classList.contains('intro')) return;   // (held open on arrival, until the header's icons fold)
     var r = tools.getBoundingClientRect(), rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
     if (e.clientX < r.left - 16 || e.clientX > r.right + 16 || e.clientY < r.top - 2.6 * rem - 16 || e.clientY > r.bottom + 2.6 * rem + 16) tools.classList.remove('open');
   });
