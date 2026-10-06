@@ -683,6 +683,28 @@
   /* The title travels with the icons: it slides right to sit beside the menu icon, and back */
   #site-header .head-title { transition: transform .5s cubic-bezier(.4, 0, .2, 1); }
   html.icons-folded:not(.icons-open) #site-header .head-title { transform: translateX(var(--title-x, 0px)); }
+  /* Entry tools: middle of the right side, in line with the back-to-top arrow below and the map icon opposite */
+  #entry-tools { position: fixed; right: 1.4rem; top: 50%; width: 2rem; height: 2rem; margin-top: -1rem; z-index: 30; transition: opacity .4s ease; }
+  #entry-tools button {
+    position: absolute; inset: 0; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center;
+    color: var(--muted); background: none; transition: color .2s ease, transform .5s cubic-bezier(.4, 0, .2, 1), opacity .4s ease;
+  }
+  #entry-tools button:hover { color: var(--text); }
+  #entry-tools svg { width: 1.05rem; height: 1.05rem; fill: none; stroke: currentColor; stroke-width: 1.4px; overflow: visible; }
+  #entry-tools svg * { vector-effect: non-scaling-stroke; }
+  #entry-tools .tool { opacity: 0; pointer-events: none; transform: translateY(0); }
+  #entry-tools.open .tool { opacity: 1; pointer-events: auto; transform: translateY(var(--ty, 0)); }
+  #entry-tools .tools-plus { opacity: 1; transition-delay: .2s; }
+  #entry-tools.open .tools-plus { opacity: 0; pointer-events: none; transition-delay: 0s; }
+  #entry-tools .tools-note {
+    position: absolute; right: 2.6rem; top: 50%; transform: translateY(calc(-50% + var(--ty, 0rem))); white-space: nowrap; pointer-events: none;
+    font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--muted);
+    opacity: 0; transition: opacity .3s ease;
+  }
+  #entry-tools .tools-note.on { opacity: 1; }
+  /* (entries only: not on the Map, About, search or the deck; away with the interface and the footer) */
+  html.main-page #entry-tools, html.hudless #entry-tools, html.loading-hud #entry-tools, body.footer-in-view #entry-tools { opacity: 0; pointer-events: none; }
+  html.main-page #entry-tools *, html.hudless #entry-tools *, body.footer-in-view #entry-tools * { pointer-events: none !important; }
   #head-menu {
     position: fixed; top: 0.8rem; right: 0.9rem; z-index: 29;
     width: 2rem; height: 2rem;
@@ -11227,7 +11249,7 @@
   var treeEl = document.getElementById('tree');
   var pageLinks = document.querySelectorAll('#sidebar [data-page], #site-header .head-icons [data-page]');
   // The current page's icon marked: on the Map, its Landscape view takes the Landscape icon, the rest the Map's.
-  var CURRENT_PAGE = null;
+  var CURRENT_PAGE = null, CURRENT_ENTRY = null;
   function markPageLinks() {
     syncSidebar();
     var rl = CURRENT_PAGE === 'the-map' && document.documentElement.getAttribute('data-index') === 'rl';
@@ -12146,6 +12168,7 @@
     // The Map is the front page, and carries the site's own title; the root entry is its About page.
     document.title = c.id === 'the-map' ? 'Civilisational' : (c === ROOT ? 'About' : c.title) + ' · Civilisation Theory Map';
     CURRENT_PAGE = c === ROOT ? 'home' : c.id;
+    CURRENT_ENTRY = c;
     markPageLinks();
     treeEl.querySelectorAll('a').forEach(function (a) {
       if (a.getAttribute('data-id') === c.id) a.setAttribute('aria-current', 'page');
@@ -13133,6 +13156,82 @@
     if (e.clientX < nav.left - 16 || e.clientY > nav.bottom + 16) root.classList.remove('icons-open');
   });
   window.addEventListener('resize', function () { if (document.documentElement.classList.contains('icons-folded')) measureIconFold(); });
+
+  // ---------- Entry tools: a plus icon, middle of the right side, that slides out into Share, Copy link
+  // and Download – opening and folding as the header's menu icon does ----------
+  var tools = document.createElement('div');
+  tools.id = 'entry-tools';
+  var TOOL_SVG = {
+    plus: '<line x1="50" y1="14" x2="50" y2="86"/><line x1="14" y1="50" x2="86" y2="50"/>',
+    share: '<polyline points="32,40 18,40 18,90 82,90 82,40 68,40"/><line x1="50" y1="8" x2="50" y2="62"/><polyline points="33,25 50,8 67,25"/>',
+    link: '<g transform="rotate(-45 50 50)"><rect x="6" y="38" width="50" height="24" rx="12"/><rect x="44" y="38" width="50" height="24" rx="12"/></g>',
+    download: '<line x1="50" y1="8" x2="50" y2="66"/><polyline points="30,46 50,66 70,46"/><line x1="14" y1="90" x2="86" y2="90"/>'
+  };
+  function toolBtn(cls, label, svg) {
+    return '<button type="button" class="' + cls + '" aria-label="' + label + '" title="' + label + '"><svg viewBox="0 0 100 100" aria-hidden="true">' + svg + '</svg></button>';
+  }
+  tools.innerHTML = toolBtn('tools-plus', 'Share, copy link or download', TOOL_SVG.plus) +
+    toolBtn('tool', 'Share', TOOL_SVG.share).replace('class="tool"', 'class="tool" data-tool="share" style="--ty:-2.6rem"') +
+    toolBtn('tool', 'Copy link', TOOL_SVG.link).replace('class="tool"', 'class="tool" data-tool="link" style="--ty:0rem"') +
+    toolBtn('tool', 'Download', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:2.6rem"') +
+    '<span class="tools-note" aria-live="polite"></span>';
+  document.body.appendChild(tools);
+  function openTools() { tools.classList.add('open'); }
+  tools.querySelector('.tools-plus').addEventListener('mouseenter', openTools);
+  tools.querySelector('.tools-plus').addEventListener('click', openTools);   // touch screens
+  // Folds again once the pointer leaves the column the three icons occupy.
+  document.addEventListener('mousemove', function (e) {
+    if (!tools.classList.contains('open')) return;
+    var r = tools.getBoundingClientRect(), rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    if (e.clientX < r.left - 16 || e.clientX > r.right + 16 || e.clientY < r.top - 2.6 * rem - 16 || e.clientY > r.bottom + 2.6 * rem + 16) tools.classList.remove('open');
+  });
+  var toolsNoteTimer;
+  function toolsNote(msg, btn) {
+    var n = tools.querySelector('.tools-note');
+    n.textContent = msg; n.style.setProperty('--ty', btn ? btn.style.getPropertyValue('--ty') : '0rem');
+    n.classList.add('on'); clearTimeout(toolsNoteTimer);
+    toolsNoteTimer = setTimeout(function () { n.classList.remove('on'); }, 1600);
+  }
+  function copyLink(btn, msg) {
+    var url = location.href;
+    (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(url) : Promise.reject())
+      .then(function () { toolsNote(msg || 'Link copied', btn); }, function () { window.prompt('Copy this link:', url); });
+  }
+  // The entry as Markdown: its title, subtitle, text, references and address.
+  function entryMarkdown(c) {
+    var tmp = document.createElement('div'); tmp.innerHTML = c.html;
+    function inline(el) { return el.textContent.replace(/\s+/g, ' ').trim(); }
+    var out = ['# ' + c.title]; if (c.subtitle) out.push('*' + c.subtitle + '*');
+    Array.prototype.forEach.call(tmp.children, function (el) {
+      var tag = el.tagName;
+      if (tag === 'H2' || tag === 'H3') out.push('## ' + inline(el));
+      else if (tag === 'UL' || tag === 'OL') out.push(Array.prototype.map.call(el.children, function (li, i) { return (tag === 'OL' ? (i + 1) + '. ' : '- ') + inline(li); }).join('\n'));
+      else if (tag === 'BLOCKQUOTE') out.push('> ' + inline(el));
+      else if (inline(el)) out.push(inline(el));
+    });
+    if (c.refs && c.refs.length) {
+      out.push('## References');
+      out.push(c.refs.map(function (r) { var d = document.createElement('div'); d.innerHTML = r; return '- ' + d.textContent; }).join('\n'));
+    }
+    out.push('Source: ' + location.href);
+    return out.join('\n\n') + '\n';
+  }
+  tools.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tool]'), c = CURRENT_ENTRY;
+    if (!b || !c) return;
+    var what = b.getAttribute('data-tool');
+    if (what === 'link') copyLink(b);
+    else if (what === 'share') {
+      if (navigator.share) navigator.share({ title: c.title + ' · Civilisation Theory Map', url: location.href }).catch(function () {});
+      else copyLink(b, 'Link copied to share');
+    } else if (what === 'download') {
+      var blob = new Blob([entryMarkdown(c)], { type: 'text/markdown;charset=utf-8' }), a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = c.id + '.md';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+      toolsNote('Downloaded', b);
+    }
+  });
 
   // ---------- Find in page (Ctrl/Cmd+F): the site's own find bar in place of the browser's ----------
   var findBar = document.createElement('div');
