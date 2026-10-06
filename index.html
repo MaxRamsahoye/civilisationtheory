@@ -12170,6 +12170,7 @@
     CURRENT_PAGE = c === ROOT ? 'home' : c.id;
     CURRENT_ENTRY = c;
     markPageLinks();
+    updateBack();
     treeEl.querySelectorAll('a').forEach(function (a) {
       if (a.getAttribute('data-id') === c.id) a.setAttribute('aria-current', 'page');
       else a.removeAttribute('aria-current');
@@ -12260,9 +12261,21 @@
     if (!document.startViewTransition || reduceMotion.matches || !document.getElementById('loader').classList.contains('done')) { render(); return; }
     document.startViewTransition(render);
   });
+  // With nowhere earlier to go (an entry opened straight from a link), Back leads to the Map's page
+  // the entry is filed on: the Research Landscape for its nodes, the Consilience Project for the
+  // glossary's own terms, and the Research Paradigm for the rest.
+  function backFallback() {
+    var c = CURRENT_ENTRY, root = document.documentElement;
+    if (!c || c === ROOT || PAGES[c.id] || root.classList.contains('main-page') || root.classList.contains('page-map')) return null;
+    if (c.cpOnly) return '#the-map/consilience-project';
+    var path = crumbPath(c);
+    return c.kind === 'node' || (path && path[0] === CRL_HEAD) ? '#the-map/civilisation-research-landscape' : '#the-map/civilisation-research-paradigm';
+  }
+  function updateBack() { backBtn.disabled = trail.length < 2 && !backFallback(); }
   backBtn.addEventListener('click', function () {
     if (document.documentElement.classList.contains('page-map')) return;
     if (trail.length > 1) history.back();
+    else { var to = backFallback(); if (to) location.hash = to; }
   });
 
   // ---------- Index menu: jump to a section or category within the page ----------
