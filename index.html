@@ -640,10 +640,15 @@
   /* Hudless mode (H): only the text itself – no header, footer, sidebar, icons, contents or tree string */
   /* The interface fades out (and back in); nothing moves, so the text stays exactly where it is */
   html.hudless #site-header, html.hudless #site-footer, html.hudless #sidebar, html.hudless #scrim,
-  html.hudless .control, html.hudless #progress, html.hudless #toc,
+  html.hudless .control, html.hudless #progress,
   html.hudless #entry > p.tree-string { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+  /* (the contents fade on their children, their own opacity being held by their fade-in) */
+  html.hudless #toc { visibility: hidden !important; pointer-events: none !important; }
+  html.hudless #toc > * { opacity: 0 !important; }
+  /* (every piece of the interface fades out and back in together, over the same .6s, with no delays) */
   html.hud-fade #site-header, html.hud-fade #site-footer, html.hud-fade #sidebar, html.hud-fade #scrim,
-  html.hud-fade .control, html.hud-fade #progress, html.hud-fade #toc,
+  html.hud-fade .control, html.hud-fade #progress, html.hud-fade #toc, html.hud-fade #head-menu, html.hud-fade #map-search,
+  html.hud-fade #entry-tools, html.hud-fade .entry-tags, html.hud-fade #entry h1 .h1-about,
   html.hud-fade #entry > p.tree-string { transition: opacity .6s ease, visibility .6s, transform .25s ease, left .25s ease !important; }
   .head-inner {
     display: flex;
@@ -706,7 +711,7 @@
   #entry-tools [data-tool="hud"] .hud-on, html.hudless #entry-tools [data-tool="hud"] .hud-off { display: none; }
   html.hudless #entry-tools [data-tool="hud"] .hud-on { display: inline; }
   html.hudless:not(.main-page) #entry-tools.hud-peek { opacity: 1; }
-  html.hudless #entry-tools > :not([data-tool="hud"]) { opacity: 0 !important; pointer-events: none !important; transition: none !important; }   /* (hidden at once, so the plus never shows with it) */
+  html.hudless #entry-tools.hud-peek > :not([data-tool="hud"]) { opacity: 0 !important; pointer-events: none !important; transition: none !important; }   /* (hidden at once, so the plus never shows with it) */
   html.hudless:not(.main-page) #entry-tools.hud-peek [data-tool="hud"] { opacity: 1; transform: translateY(var(--ty)); pointer-events: auto !important; color: var(--text); }
   #entry-tools.narrating [data-tool="narrate"] .wave { display: none; }
   #entry-tools.narrating [data-tool="narrate"] .stop { display: inline; }
