@@ -1887,17 +1887,17 @@
   html.loading-topo #loader, html.no-loadin #loader { display: none; }
   /* The shift from the loading screen's blue to the reader's theme: a slow cross-fade of colours */
   html.theme-shift body, html.theme-shift body * { transition: background-color 1.4s ease, color 1.4s ease, border-color 1.4s ease !important; }
-  html.loading-topo body > *:not(#map-topo):not(script) { opacity: 0 !important; pointer-events: none !important; }
+  html.loading-topo body > *:not(#map-topo):not(script):not(#small-note) { opacity: 0 !important; pointer-events: none !important; }
   /* …first the title and subtitle, then (a moment later) the interface: header, controls, tab line */
   html.loading-hud #site-header, html.loading-hud #head-menu, html.loading-hud .control, html.loading-hud #sidebar, html.loading-hud #map-search,
   html.loading-hud #progress, html.loading-hud #entry .index-tabs { opacity: 0 !important; pointer-events: none !important; }
   /* …but first the title types itself out, alone on the terrain, as one phrase */
-  html.title-typing body > *:not(#map-topo):not(script):not(main),
+  html.title-typing body > *:not(#map-topo):not(script):not(main):not(#small-note),
   html.title-typing #entry > *:not(h1) { opacity: 0 !important; pointer-events: none !important; }
   #entry h1 .tw { visibility: hidden; }
   #entry h1 .tw.on { visibility: visible; }
   html.topo-reveal #entry > *,
-  html.topo-reveal body > *:not(#map-topo):not(script),
+  html.topo-reveal body > *:not(#map-topo):not(script):not(#small-note),
   html.topo-reveal #site-header, html.topo-reveal #head-menu, html.topo-reveal .control, html.topo-reveal #map-search, html.topo-reveal #entry .index-tabs { transition: opacity 1.4s ease; }
   .loader-mark, .loader-ring { z-index: 2; }
   #loader h1 { position: relative; margin: 0; white-space: nowrap; }
@@ -1943,8 +1943,39 @@
     h1 { font-size: 2.1rem; }
   }
 </style>
+<style>
+  /* Smaller screens: a note before the site, white on black, which fades once the page has loaded */
+  #small-note { display: none; }
+  @media (max-width: 899px) {
+    #small-note {
+      display: flex; position: fixed; inset: 0; z-index: 2147483000; align-items: center; justify-content: center;
+      padding: 2rem; background: #000; color: #fff; text-align: center; cursor: pointer;
+      font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 1rem; font-weight: 500; line-height: 1.55; letter-spacing: 0.01em;
+      transition: opacity .8s ease;
+    }
+    #small-note p { margin: 0; max-width: 18rem; }
+    #small-note.gone { opacity: 0; pointer-events: none; }
+  }
+</style>
 </head>
 <body class="sidebar-closed">
+<div id="small-note" role="status"><p>This site is designed for larger screen sizes. Best viewed on a laptop.</p></div>
+<script>
+  // (shown once a visit, for at least a few seconds and until the page has loaded; a tap lets it go sooner)
+  (function () {
+    var note = document.getElementById('small-note'), seen = false, start = Date.now();
+    try { seen = sessionStorage.getItem('small-note') === '1'; } catch (e) {}
+    if (seen || !window.matchMedia('(max-width: 899px)').matches) { note.parentNode.removeChild(note); return; }
+    function go() {
+      if (!note.parentNode || note.classList.contains('gone')) return;
+      try { sessionStorage.setItem('small-note', '1'); } catch (e) {}
+      note.classList.add('gone');
+      setTimeout(function () { if (note.parentNode) note.parentNode.removeChild(note); }, 900);
+    }
+    note.addEventListener('click', go);
+    window.addEventListener('load', function () { setTimeout(go, Math.max(0, 3000 - (Date.now() - start))); });
+  })();
+</script>
 
 <div id="loader" aria-hidden="true">
   <div class="loader-mark">
