@@ -702,6 +702,10 @@
     opacity: 0; transition: opacity .3s ease;
   }
   #entry-tools .tools-note.on { opacity: 1; }
+  #entry-tools [data-tool="narrate"] .stop { display: none; }
+  #entry-tools.narrating [data-tool="narrate"] .wave { display: none; }
+  #entry-tools.narrating [data-tool="narrate"] .stop { display: inline; }
+  #entry-tools.narrating [data-tool="narrate"] { color: var(--text); }
   /* (entries only: not on the Map, About, search or the deck; away with the interface and the footer) */
   html.main-page #entry-tools, html.hudless #entry-tools, html.loading-hud #entry-tools, body.footer-in-view #entry-tools { opacity: 0; pointer-events: none; }
   html.main-page #entry-tools *, html.hudless #entry-tools *, body.footer-in-view #entry-tools * { pointer-events: none !important; }
@@ -13179,15 +13183,19 @@
     plus: '<line x1="50" y1="14" x2="50" y2="86"/><line x1="14" y1="50" x2="86" y2="50"/>',
     share: '<polyline points="32,40 18,40 18,90 82,90 82,40 68,40"/><line x1="50" y1="8" x2="50" y2="62"/><polyline points="33,25 50,8 67,25"/>',
     link: '<g transform="rotate(-45 50 50)"><rect x="6" y="38" width="50" height="24" rx="12"/><rect x="44" y="38" width="50" height="24" rx="12"/></g>',
-    download: '<line x1="50" y1="8" x2="50" y2="66"/><polyline points="30,46 50,66 70,46"/><line x1="14" y1="90" x2="86" y2="90"/>'
+    download: '<line x1="50" y1="8" x2="50" y2="66"/><polyline points="30,46 50,66 70,46"/><line x1="14" y1="90" x2="86" y2="90"/>',
+    hud: '<polyline points="10,32 10,10 32,10"/><polyline points="68,10 90,10 90,32"/><polyline points="90,68 90,90 68,90"/><polyline points="32,90 10,90 10,68"/>',
+    narrate: '<polygon points="12,38 30,38 52,18 52,82 30,62 12,62"/><path class="wave" d="M66 34 Q76 50 66 66"/><path class="wave" d="M76 22 Q94 50 76 78"/><rect class="stop" x="64" y="38" width="24" height="24"/>'
   };
   function toolBtn(cls, label, svg) {
     return '<button type="button" class="' + cls + '" aria-label="' + label + '" title="' + label + '"><svg viewBox="0 0 100 100" aria-hidden="true">' + svg + '</svg></button>';
   }
-  tools.innerHTML = toolBtn('tools-plus', 'Share, copy link or download', TOOL_SVG.plus) +
-    toolBtn('tool', 'Share', TOOL_SVG.share).replace('class="tool"', 'class="tool" data-tool="share" style="--ty:-2.6rem"') +
-    toolBtn('tool', 'Copy link', TOOL_SVG.link).replace('class="tool"', 'class="tool" data-tool="link" style="--ty:0rem"') +
-    toolBtn('tool', 'Download as PDF', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:2.6rem"') +
+  tools.innerHTML = toolBtn('tools-plus', 'Share, copy link, download, read aloud or hide the interface', TOOL_SVG.plus) +
+    toolBtn('tool', 'Share', TOOL_SVG.share).replace('class="tool"', 'class="tool" data-tool="share" style="--ty:-5.2rem"') +
+    toolBtn('tool', 'Copy link', TOOL_SVG.link).replace('class="tool"', 'class="tool" data-tool="link" style="--ty:-2.6rem"') +
+    toolBtn('tool', 'Download as PDF', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:0rem"') +
+    toolBtn('tool', 'Read aloud', TOOL_SVG.narrate).replace('class="tool"', 'class="tool" data-tool="narrate" style="--ty:2.6rem"') +
+    toolBtn('tool', 'Hide the interface (H)', TOOL_SVG.hud).replace('class="tool"', 'class="tool" data-tool="hud" style="--ty:5.2rem"') +
     '<span class="tools-note" aria-live="polite"></span>';
   document.body.appendChild(tools);
   if (!document.documentElement.classList.contains('icons-folded')) tools.classList.add('open', 'intro');   // (the first page: open until the header's icons fold)
@@ -13198,7 +13206,7 @@
   document.addEventListener('mousemove', function (e) {
     if (!tools.classList.contains('open') || tools.classList.contains('intro')) return;   // (held open on arrival, until the header's icons fold)
     var r = tools.getBoundingClientRect(), rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    if (e.clientX < r.left - 16 || e.clientX > r.right + 16 || e.clientY < r.top - 2.6 * rem - 16 || e.clientY > r.bottom + 2.6 * rem + 16) tools.classList.remove('open');
+    if (e.clientX < r.left - 16 || e.clientX > r.right + 16 || e.clientY < r.top - 5.2 * rem - 16 || e.clientY > r.bottom + 5.2 * rem + 16) tools.classList.remove('open');
   });
   var toolsNoteTimer;
   function toolsNote(msg, btn) {
@@ -13384,6 +13392,33 @@
     }
     doc.save(c.id + '.pdf');
   }
+  // Read aloud: the entry's title, subtitle and text spoken by the browser's own voice (British English
+  // where there is one), a paragraph at a time; pressed again, or on leaving the entry, it stops.
+  var narrating = null;
+  function stopNarration() {
+    if (window.speechSynthesis) speechSynthesis.cancel();
+    narrating = null; tools.classList.remove('narrating');
+  }
+  function narrate(c, btn) {
+    if (!window.speechSynthesis) { toolsNote('Reading aloud is unavailable here', btn); return; }
+    if (narrating === c.id) { stopNarration(); toolsNote('Stopped', btn); return; }
+    stopNarration();
+    var tmp = document.createElement('div'); tmp.innerHTML = c.html;
+    var parts = [c.title + '.'].concat(c.subtitle ? [c.subtitle + '.'] : []);
+    tmp.querySelectorAll('h2, h3, p, li, blockquote > footer').forEach(function (el) {
+      if (el.closest('li') && el.tagName !== 'LI') return;
+      var s = el.textContent.replace(/\s+/g, ' ').trim(); if (s) parts = parts.concat((/[.!?:;]$/.test(s) ? s : s + '.').split(/(?<=[.!?])\s+(?=[A-Z\u201c\u2018(])/));   // (sentence by sentence, so no utterance runs long)
+    });
+    var voices = speechSynthesis.getVoices(), voice = voices.filter(function (v) { return /^en-GB/i.test(v.lang); })[0] || voices.filter(function (v) { return /^en/i.test(v.lang); })[0];
+    narrating = c.id; tools.classList.add('narrating'); toolsNote('Reading aloud', btn);
+    parts.forEach(function (s, i) {
+      var u = new SpeechSynthesisUtterance(s);
+      if (voice) u.voice = voice; u.rate = 0.98;
+      if (i === parts.length - 1) u.onend = function () { if (narrating === c.id) stopNarration(); };
+      speechSynthesis.speak(u);
+    });
+  }
+  window.addEventListener('hashchange', stopNarration);
   tools.addEventListener('click', function (e) {
     var b = e.target.closest('[data-tool]'), c = CURRENT_ENTRY;
     if (!b || !c) return;
@@ -13392,7 +13427,9 @@
     else if (what === 'share') {
       if (navigator.share) navigator.share({ title: c.title + ' · Civilisation Theory Map', url: location.href }).catch(function () {});
       else copyLink(b, 'Link copied to share');
-    } else if (what === 'download') {
+    } else if (what === 'hud') { tools.classList.remove('open'); setHudless(true); }
+    else if (what === 'narrate') narrate(c, b);
+    else if (what === 'download') {
       withJsPDF(function () { entryPdf(c); toolsNote('Downloaded', b); }, function () { toolsNote('Download unavailable', b); });
     }
   });
