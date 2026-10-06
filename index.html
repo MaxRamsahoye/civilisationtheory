@@ -703,6 +703,8 @@
   }
   #entry-tools .tools-note.on { opacity: 1; }
   #entry-tools [data-tool="narrate"] .stop { display: none; }
+  #entry-tools [data-tool="hud"] .hud-on, html.hudless #entry-tools [data-tool="hud"] .hud-off { display: none; }
+  html.hudless #entry-tools [data-tool="hud"] .hud-on { display: inline; }
   html.hudless:not(.main-page) #entry-tools.hud-peek { opacity: 1; }
   html.hudless #entry-tools.hud-peek > :not([data-tool="hud"]) { opacity: 0 !important; pointer-events: none !important; }
   html.hudless:not(.main-page) #entry-tools.hud-peek [data-tool="hud"] { opacity: 1; transform: translateY(var(--ty)); pointer-events: auto !important; color: var(--text); }
@@ -13187,7 +13189,8 @@
     share: '<polyline points="32,40 18,40 18,90 82,90 82,40 68,40"/><line x1="50" y1="8" x2="50" y2="62"/><polyline points="33,25 50,8 67,25"/>',
     link: '<g transform="rotate(-45 50 50)"><rect x="6" y="38" width="50" height="24" rx="12"/><rect x="44" y="38" width="50" height="24" rx="12"/></g>',
     download: '<line x1="50" y1="8" x2="50" y2="66"/><polyline points="30,46 50,66 70,46"/><line x1="14" y1="90" x2="86" y2="90"/>',
-    hud: '<polyline points="10,32 10,10 32,10"/><polyline points="68,10 90,10 90,32"/><polyline points="90,68 90,90 68,90"/><polyline points="32,90 10,90 10,68"/>',
+    hud: '<g class="hud-off"><polyline points="10,32 10,10 32,10"/><polyline points="68,10 90,10 90,32"/><polyline points="90,68 90,90 68,90"/><polyline points="32,90 10,90 10,68"/></g>' +
+      '<g class="hud-on"><polyline points="10,32 32,32 32,10"/><polyline points="68,10 68,32 90,32"/><polyline points="90,68 68,68 68,90"/><polyline points="32,90 32,68 10,68"/></g>',   // (corners out: hide; corners in, once hidden: show again)
     narrate: '<polygon points="12,38 30,38 52,18 52,82 30,62 12,62"/><path class="wave" d="M66 34 Q76 50 66 66"/><path class="wave" d="M76 22 Q94 50 76 78"/><rect class="stop" x="64" y="38" width="24" height="24"/>'
   };
   function toolBtn(cls, label, svg) {
@@ -13209,7 +13212,8 @@
   // With the interface hidden, the pointer in the right-hand column brings back the hide icon alone, to undo it.
   document.addEventListener('mousemove', function (e) {
     var hl = document.documentElement.classList.contains('hudless');
-    tools.classList.toggle('hud-peek', hl && e.clientX > window.innerWidth - 96);
+    var col = hl && document.querySelector('#entry .description');
+    tools.classList.toggle('hud-peek', !!col && e.clientX > col.getBoundingClientRect().right + 16);   // (anywhere right of the text column)
   });
   document.addEventListener('mousemove', function (e) {
     if (!tools.classList.contains('open') || tools.classList.contains('intro')) return;   // (held open on arrival, until the header's icons fold)
