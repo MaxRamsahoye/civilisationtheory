@@ -718,7 +718,7 @@
   #entry-tools.narrating [data-tool="narrate"] { color: var(--text); }
   /* (while it reads, its icon stays where it is, the others folded away) */
   #entry-tools.narrating:not(.open) [data-tool="narrate"] { opacity: 1; pointer-events: auto; transform: translateY(var(--ty)); }
-  #entry-tools.narrating-fast [data-tool="narrate"]::after { content: '1.5\00d7'; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); margin-right: 0.15rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62rem; font-weight: 600; color: var(--muted); }
+  #entry-tools.narrating-fast [data-tool="narrate"]::after { content: attr(data-speed); position: absolute; right: 100%; top: 50%; transform: translateY(-50%); margin-right: 0.15rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62rem; font-weight: 600; color: var(--muted); }
   /* (entries only: not on the Map, About, search or the deck; away with the interface and the footer) */
   html.main-page #entry-tools, html.hudless #entry-tools, html.loading-hud #entry-tools, body.footer-in-view #entry-tools { opacity: 0; pointer-events: none; }
   html.main-page #entry-tools *, html.hudless #entry-tools *, body.footer-in-view #entry-tools * { pointer-events: none !important; }
@@ -13413,8 +13413,8 @@
     doc.save(c.id + '.pdf');
   }
   // Read aloud: the entry's title, subtitle and text spoken by the browser's own voice (British English
-  // where there is one), a sentence at a time. Pressed once it starts; pressed again it speeds up to 1.5×
-  // (from the sentence it is on); a third press, or leaving the entry, stops it. While it reads, its icon
+  // where there is one), a sentence at a time. Pressed once it starts; pressed again it speeds up to 1.25×,
+  // then 1.5× (from the sentence it is on); a fourth press, or leaving the entry, stops it. While it reads, its icon
   // stays in place even when the others fold away.
   var narrating = null;
   function stopNarration() {
@@ -13434,8 +13434,9 @@
   function narrate(c, btn) {
     if (!window.speechSynthesis) { toolsNote('Reading aloud is unavailable here', btn); return; }
     if (narrating && narrating.id === c.id) {
-      if (narrating.rate < 1.4) {   // (second press: faster, picking up from the current sentence)
-        var n = narrating; n.rate = 1.5; speechSynthesis.cancel(); narrating = n;
+      if (narrating.rate < 1.4) {   // (each further press: faster – 1.25×, then 1.5× – picking up from the current sentence)
+        var n = narrating; n.rate = n.rate < 1.2 ? 1.25 : 1.5; speechSynthesis.cancel(); narrating = n;
+        tools.querySelector('[data-tool="narrate"]').setAttribute('data-speed', n.rate + '\u00d7');
         tools.classList.add('narrating-fast'); tools.querySelector('.tools-note').classList.remove('on'); speakFrom(n, n.at || 0);
       } else { stopNarration(); toolsNote('Stopped', btn); }
       return;
