@@ -716,6 +716,9 @@
   #entry-tools.narrating [data-tool="narrate"] .wave { display: none; }
   #entry-tools.narrating [data-tool="narrate"] .stop { display: inline; }
   #entry-tools.narrating [data-tool="narrate"] { color: var(--text); }
+  /* (while it reads, its icon stays where it is, the others folded away) */
+  #entry-tools.narrating:not(.open) [data-tool="narrate"] { opacity: 1; pointer-events: auto; transform: translateY(var(--ty)); }
+  #entry-tools.narrating-fast [data-tool="narrate"]::after { content: '1.5\00d7'; position: absolute; right: 100%; top: 50%; transform: translateY(-50%); margin-right: 0.15rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62rem; font-weight: 600; color: var(--muted); }
   /* (entries only: not on the Map, About, search or the deck; away with the interface and the footer) */
   html.main-page #entry-tools, html.hudless #entry-tools, html.loading-hud #entry-tools, body.footer-in-view #entry-tools { opacity: 0; pointer-events: none; }
   html.main-page #entry-tools *, html.hudless #entry-tools *, body.footer-in-view #entry-tools * { pointer-events: none !important; }
@@ -13410,30 +13413,43 @@
     doc.save(c.id + '.pdf');
   }
   // Read aloud: the entry's title, subtitle and text spoken by the browser's own voice (British English
-  // where there is one), a paragraph at a time; pressed again, or on leaving the entry, it stops.
+  // where there is one), a sentence at a time. Pressed once it starts; pressed again it speeds up to 1.5×
+  // (from the sentence it is on); a third press, or leaving the entry, stops it. While it reads, its icon
+  // stays in place even when the others fold away.
   var narrating = null;
   function stopNarration() {
     if (window.speechSynthesis) speechSynthesis.cancel();
-    narrating = null; tools.classList.remove('narrating');
+    narrating = null; tools.classList.remove('narrating', 'narrating-fast');
+  }
+  function speakFrom(n, from) {
+    var voices = speechSynthesis.getVoices(), voice = voices.filter(function (v) { return /^en-GB/i.test(v.lang); })[0] || voices.filter(function (v) { return /^en/i.test(v.lang); })[0];
+    n.parts.slice(from).forEach(function (s, k) {
+      var u = new SpeechSynthesisUtterance(s), i = from + k;
+      if (voice) u.voice = voice; u.rate = n.rate;
+      u.onstart = function () { if (narrating === n) n.at = i; };
+      if (i === n.parts.length - 1) u.onend = function () { if (narrating === n) stopNarration(); };
+      speechSynthesis.speak(u);
+    });
   }
   function narrate(c, btn) {
     if (!window.speechSynthesis) { toolsNote('Reading aloud is unavailable here', btn); return; }
-    if (narrating === c.id) { stopNarration(); toolsNote('Stopped', btn); return; }
+    if (narrating && narrating.id === c.id) {
+      if (narrating.rate < 1.4) {   // (second press: faster, picking up from the current sentence)
+        var n = narrating; n.rate = 1.5; speechSynthesis.cancel(); narrating = n;
+        tools.classList.add('narrating-fast'); tools.querySelector('.tools-note').classList.remove('on'); speakFrom(n, n.at || 0);
+      } else { stopNarration(); toolsNote('Stopped', btn); }
+      return;
+    }
     stopNarration();
     var tmp = document.createElement('div'); tmp.innerHTML = c.html;
     var parts = [c.title + '.'].concat(c.subtitle ? [c.subtitle + '.'] : []);
     tmp.querySelectorAll('h2, h3, p, li, blockquote > footer').forEach(function (el) {
       if (el.closest('li') && el.tagName !== 'LI') return;
-      var s = el.textContent.replace(/\s+/g, ' ').trim(); if (s) parts = parts.concat((/[.!?:;]$/.test(s) ? s : s + '.').split(/(?<=[.!?])\s+(?=[A-Z\u201c\u2018(])/));   // (sentence by sentence, so no utterance runs long)
+      var s = el.textContent.replace(/\s+/g, ' ').trim(); if (s) parts = parts.concat((/[.!?:;]$/.test(s) ? s : s + '.').split(/(?<=[.!?])\s+(?=[A-Z“‘(])/));   // (sentence by sentence, so no utterance runs long)
     });
-    var voices = speechSynthesis.getVoices(), voice = voices.filter(function (v) { return /^en-GB/i.test(v.lang); })[0] || voices.filter(function (v) { return /^en/i.test(v.lang); })[0];
-    narrating = c.id; tools.classList.add('narrating'); toolsNote('Reading aloud', btn);
-    parts.forEach(function (s, i) {
-      var u = new SpeechSynthesisUtterance(s);
-      if (voice) u.voice = voice; u.rate = 0.98;
-      if (i === parts.length - 1) u.onend = function () { if (narrating === c.id) stopNarration(); };
-      speechSynthesis.speak(u);
-    });
+    narrating = { id: c.id, parts: parts, at: 0, rate: 0.98 };
+    tools.classList.add('narrating'); toolsNote('Reading aloud', btn);
+    speakFrom(narrating, 0);
   }
   window.addEventListener('hashchange', stopNarration);
   tools.addEventListener('click', function (e) {
