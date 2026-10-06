@@ -707,18 +707,18 @@
     opacity: 0; transition: opacity .3s ease;
   }
   #entry-tools .tools-note.on { opacity: 1; }
-  #entry-tools [data-tool="narrate"] .stop { display: none; }
+  #entry-tools [data-tool="narrate"] .paused { display: none; }
+  #entry-tools.narrating-paused [data-tool="narrate"] .paused { display: inline; }
+  #entry-tools.narrating-paused [data-tool="narrate"] .wave { display: none; }
   #entry-tools [data-tool="hud"] .hud-on, html.hudless #entry-tools [data-tool="hud"] .hud-off { display: none; }
   html.hudless #entry-tools [data-tool="hud"] .hud-on { display: inline; }
   html.hudless:not(.main-page) #entry-tools.hud-peek { opacity: 1; }
   html.hudless #entry-tools.hud-peek > :not([data-tool="hud"]) { opacity: 0 !important; pointer-events: none !important; transition: none !important; }   /* (hidden at once, so the plus never shows with it) */
   html.hudless:not(.main-page) #entry-tools.hud-peek [data-tool="hud"] { opacity: 1; transform: translateY(var(--ty)); pointer-events: auto !important; color: var(--text); }
-  #entry-tools.narrating [data-tool="narrate"] .wave { display: none; }
-  #entry-tools.narrating [data-tool="narrate"] .stop { display: inline; }
   #entry-tools.narrating [data-tool="narrate"] { color: var(--text); }
   /* (while it reads, its icon stays where it is, the others folded away) */
   #entry-tools.narrating:not(.open) [data-tool="narrate"] { opacity: 1; pointer-events: auto; transform: translateY(var(--ty)); }
-  #entry-tools.narrating-fast [data-tool="narrate"]::after { content: attr(data-speed); position: absolute; right: 100%; top: 50%; transform: translateY(-50%); margin-right: 0.15rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62rem; font-weight: 600; color: var(--muted); }
+  #entry-tools.narrating [data-tool="narrate"]::after { content: attr(data-speed); position: absolute; right: 100%; top: 50%; transform: translateY(-50%); margin-right: 0.15rem; font-family: 'IBM Plex Sans Arabic', 'Helvetica Neue', Arial, sans-serif; font-size: 0.62rem; font-weight: 600; color: var(--muted); }
   /* (entries only: not on the Map, About, search or the deck; away with the interface and the footer) */
   html.main-page #entry-tools, html.hudless #entry-tools, html.loading-hud #entry-tools, body.footer-in-view #entry-tools { opacity: 0; pointer-events: none; }
   html.main-page #entry-tools *, html.hudless #entry-tools *, body.footer-in-view #entry-tools * { pointer-events: none !important; }
@@ -13199,7 +13199,7 @@
     download: '<line x1="50" y1="8" x2="50" y2="66"/><polyline points="30,46 50,66 70,46"/><line x1="14" y1="90" x2="86" y2="90"/>',
     hud: '<g class="hud-off"><polyline points="10,32 10,10 32,10"/><polyline points="68,10 90,10 90,32"/><polyline points="90,68 90,90 68,90"/><polyline points="32,90 10,90 10,68"/></g>' +
       '<g class="hud-on"><polyline points="10,32 32,32 32,10"/><polyline points="68,10 68,32 90,32"/><polyline points="90,68 68,68 68,90"/><polyline points="32,90 32,68 10,68"/></g>',   // (corners out: hide; corners in, once hidden: show again)
-    narrate: '<polygon points="12,38 30,38 52,18 52,82 30,62 12,62"/><path class="wave" d="M66 34 Q76 50 66 66"/><path class="wave" d="M76 22 Q94 50 76 78"/><rect class="stop" x="64" y="38" width="24" height="24"/>'
+    narrate: '<polygon points="12,38 30,38 52,18 52,82 30,62 12,62"/><path class="wave" d="M66 34 Q76 50 66 66"/><path class="wave" d="M76 22 Q94 50 76 78"/><g class="paused"><line x1="70" y1="36" x2="70" y2="64"/><line x1="84" y1="36" x2="84" y2="64"/></g>'
   };
   function toolBtn(cls, label, svg) {
     return '<button type="button" class="' + cls + '" aria-label="' + label + '" title="' + label + '"><svg viewBox="0 0 100 100" aria-hidden="true">' + svg + '</svg></button>';
@@ -13208,7 +13208,7 @@
     toolBtn('tool', 'Share', TOOL_SVG.share).replace('class="tool"', 'class="tool" data-tool="share" style="--ty:0rem"') +
     toolBtn('tool', 'Copy link', TOOL_SVG.link).replace('class="tool"', 'class="tool" data-tool="link" style="--ty:2.6rem"') +
     toolBtn('tool', 'Download as PDF', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:5.2rem"') +
-    toolBtn('tool', 'Read aloud', TOOL_SVG.narrate).replace('class="tool"', 'class="tool" data-tool="narrate" style="--ty:-5.2rem"') +
+    toolBtn('tool', 'Read aloud (click: play, faster, pause · double-click: stop)', TOOL_SVG.narrate).replace('class="tool"', 'class="tool" data-tool="narrate" style="--ty:-5.2rem"') +
     toolBtn('tool', 'Hide the interface (H)', TOOL_SVG.hud).replace('class="tool"', 'class="tool" data-tool="hud" style="--ty:-2.6rem"') +
     '<span class="tools-note" aria-live="polite"></span>';
   document.body.appendChild(tools);
@@ -13413,32 +13413,38 @@
     doc.save(c.id + '.pdf');
   }
   // Read aloud: the entry's title, subtitle and text spoken by the browser's own voice (British English
-  // where there is one), a sentence at a time. Pressed once it starts; pressed again it speeds up to 1.25×,
-  // then 1.5× (from the sentence it is on); a fourth press, or leaving the entry, stops it. While it reads, its icon
-  // stays in place even when the others fold away.
-  var narrating = null;
+  // where there is one), a sentence at a time. Each click steps on – play, 1.25×, 1.5×, pause; a click while
+  // paused resumes where it left off, at the speed it was at. A double-click stops it, back to the
+  // beginning (as does leaving the entry). While it is on, its icon stays in place when the others fold away.
+  var narrating = null, narrateClick = null;
+  function narrateLabel(text) {
+    var b = tools.querySelector('[data-tool="narrate"]');
+    if (text) b.setAttribute('data-speed', text); else b.removeAttribute('data-speed');
+  }
   function stopNarration() {
     if (window.speechSynthesis) speechSynthesis.cancel();
-    narrating = null; tools.classList.remove('narrating', 'narrating-fast');
+    narrating = null; tools.classList.remove('narrating', 'narrating-paused'); narrateLabel('');
   }
   function speakFrom(n, from) {
     var voices = speechSynthesis.getVoices(), voice = voices.filter(function (v) { return /^en-GB/i.test(v.lang); })[0] || voices.filter(function (v) { return /^en/i.test(v.lang); })[0];
+    var gen = n.gen = (n.gen || 0) + 1;   // (a run superseded by a new speed, a pause or a stop no longer acts)
     n.parts.slice(from).forEach(function (s, k) {
       var u = new SpeechSynthesisUtterance(s), i = from + k;
       if (voice) u.voice = voice; u.rate = n.rate;
-      u.onstart = function () { if (narrating === n) n.at = i; };
-      if (i === n.parts.length - 1) u.onend = function () { if (narrating === n) stopNarration(); };
+      u.onstart = function () { if (narrating === n && n.gen === gen) n.at = i; };
+      if (i === n.parts.length - 1) u.onend = function () { if (narrating === n && n.gen === gen && !n.paused) stopNarration(); };
       speechSynthesis.speak(u);
     });
   }
-  function narrate(c, btn) {
+  function speedLabel(r) { return (r < 1.2 ? '1' : r < 1.4 ? '1.25' : '1.5') + '×'; }
+  function narrateStep(c, btn) {
     if (!window.speechSynthesis) { toolsNote('Reading aloud is unavailable here', btn); return; }
-    if (narrating && narrating.id === c.id) {
-      if (narrating.rate < 1.4) {   // (each further press: faster – 1.25×, then 1.5× – picking up from the current sentence)
-        var n = narrating; n.rate = n.rate < 1.2 ? 1.25 : 1.5; speechSynthesis.cancel(); narrating = n;
-        tools.querySelector('[data-tool="narrate"]').setAttribute('data-speed', n.rate + '\u00d7');
-        tools.classList.add('narrating-fast'); tools.querySelector('.tools-note').classList.remove('on'); speakFrom(n, n.at || 0);
-      } else { stopNarration(); toolsNote('Stopped', btn); }
+    var n = narrating;
+    if (n && n.id === c.id) {
+      if (n.paused) { n.paused = false; tools.classList.remove('narrating-paused'); narrateLabel(speedLabel(n.rate)); speakFrom(n, n.at || 0); }
+      else if (n.rate < 1.4) { n.gen++; speechSynthesis.cancel(); n.rate = n.rate < 1.2 ? 1.25 : 1.5; narrateLabel(speedLabel(n.rate)); speakFrom(n, n.at || 0); }
+      else { n.paused = true; n.gen++; speechSynthesis.cancel(); tools.classList.add('narrating-paused'); narrateLabel('Paused'); }
+      tools.querySelector('.tools-note').classList.remove('on');
       return;
     }
     stopNarration();
@@ -13449,9 +13455,20 @@
       var s = el.textContent.replace(/\s+/g, ' ').trim(); if (s) parts = parts.concat((/[.!?:;]$/.test(s) ? s : s + '.').split(/(?<=[.!?])\s+(?=[A-Z“‘(])/));   // (sentence by sentence, so no utterance runs long)
     });
     narrating = { id: c.id, parts: parts, at: 0, rate: 0.98 };
-    tools.classList.add('narrating'); toolsNote('Reading aloud', btn);
+    tools.classList.add('narrating'); narrateLabel('1×');
     speakFrom(narrating, 0);
   }
+  // (a click waits a moment, so that a double-click is a stop and not two steps)
+  function narrate(c, btn) {
+    clearTimeout(narrateClick);
+    narrateClick = setTimeout(function () { narrateStep(c, btn); }, 260);
+  }
+  tools.addEventListener('dblclick', function (e) {
+    var b = e.target.closest('[data-tool="narrate"]');
+    if (!b) return;
+    clearTimeout(narrateClick);
+    if (narrating) { stopNarration(); toolsNote('Stopped', b); }
+  });
   window.addEventListener('hashchange', stopNarration);
   tools.addEventListener('click', function (e) {
     var b = e.target.closest('[data-tool]'), c = CURRENT_ENTRY;
