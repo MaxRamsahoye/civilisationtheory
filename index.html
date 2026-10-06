@@ -13191,11 +13191,11 @@
     return '<button type="button" class="' + cls + '" aria-label="' + label + '" title="' + label + '"><svg viewBox="0 0 100 100" aria-hidden="true">' + svg + '</svg></button>';
   }
   tools.innerHTML = toolBtn('tools-plus', 'Share, copy link, download, read aloud or hide the interface', TOOL_SVG.plus) +
-    toolBtn('tool', 'Share', TOOL_SVG.share).replace('class="tool"', 'class="tool" data-tool="share" style="--ty:-5.2rem"') +
-    toolBtn('tool', 'Copy link', TOOL_SVG.link).replace('class="tool"', 'class="tool" data-tool="link" style="--ty:-2.6rem"') +
-    toolBtn('tool', 'Download as PDF', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:0rem"') +
-    toolBtn('tool', 'Read aloud', TOOL_SVG.narrate).replace('class="tool"', 'class="tool" data-tool="narrate" style="--ty:2.6rem"') +
-    toolBtn('tool', 'Hide the interface (H)', TOOL_SVG.hud).replace('class="tool"', 'class="tool" data-tool="hud" style="--ty:5.2rem"') +
+    toolBtn('tool', 'Share', TOOL_SVG.share).replace('class="tool"', 'class="tool" data-tool="share" style="--ty:0rem"') +
+    toolBtn('tool', 'Copy link', TOOL_SVG.link).replace('class="tool"', 'class="tool" data-tool="link" style="--ty:2.6rem"') +
+    toolBtn('tool', 'Download as PDF', TOOL_SVG.download).replace('class="tool"', 'class="tool" data-tool="download" style="--ty:5.2rem"') +
+    toolBtn('tool', 'Read aloud', TOOL_SVG.narrate).replace('class="tool"', 'class="tool" data-tool="narrate" style="--ty:-5.2rem"') +
+    toolBtn('tool', 'Hide the interface (H)', TOOL_SVG.hud).replace('class="tool"', 'class="tool" data-tool="hud" style="--ty:-2.6rem"') +
     '<span class="tools-note" aria-live="polite"></span>';
   document.body.appendChild(tools);
   if (!document.documentElement.classList.contains('icons-folded')) tools.classList.add('open', 'intro');   // (the first page: open until the header's icons fold)
