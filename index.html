@@ -13658,8 +13658,11 @@
       }
     } else if (e.key === 'Backspace') {
       // First to the top of the page; once already at the top, back to the previous page.
+      // (With the pointer over the open sidebar: to the top of the sidebar instead.)
       e.preventDefault();
-      if (window.scrollY > 4) topBtn.click();
+      var sb = document.getElementById('sidebar');
+      if (!document.body.classList.contains('sidebar-closed') && sb.matches(':hover')) sb.scrollTo({ top: 0, behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      else if (window.scrollY > 4) topBtn.click();
       else if (!document.documentElement.classList.contains('page-map')) backBtn.click();
     } else if (e.key === ' ' || e.code === 'Space') {
       e.preventDefault();
