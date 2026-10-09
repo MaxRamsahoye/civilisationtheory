@@ -1331,6 +1331,26 @@
   .description ul.rv-list.rv-checks { columns: 1; }
   .description ul.rv-list.rv-checks > li { margin-bottom: 0.9rem; }
   .description ul.rv-list .rv-check { display: block; color: var(--muted); font-size: 0.92em; margin-top: 0.15rem; }
+  /* The About page's Themes: each theme a card in its own colours, the current one marked */
+  .description .ce-list.ab-list ul.theme-cards { list-style: none; padding: 0; margin: 1rem 0 1.4rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem 1.1rem; }
+  .description .ce-list.ab-list ul.theme-cards li { margin: 0; }
+  @media (max-width: 760px) { .description .ce-list.ab-list ul.theme-cards { grid-template-columns: repeat(2, 1fr); } }
+  .description .theme-card { all: unset; box-sizing: border-box; display: flex; background: none; flex-direction: column; width: 100%; height: 100%; cursor: var(--cursor-link); }
+  .description .theme-card .tc-swatch { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.9rem 1rem; background: var(--tb); border: 1px solid var(--rule); border-radius: 6px; transition: border-color .2s ease, box-shadow .2s ease; }
+  .description .theme-card .tc-aa { font-family: 'ET Bembo', 'ETBembo', Palatino, Georgia, serif; font-size: 1.7rem; line-height: 1; color: var(--tt); }
+  .description .theme-card .tc-link { font-family: 'ET Bembo', 'ETBembo', Palatino, Georgia, serif; font-size: 1rem; color: var(--ta); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--ta) 50%, transparent); text-underline-offset: 0.15em; }
+  .description .theme-card .tc-name { font-weight: 600; margin: 0.55rem 0 0.15rem; }
+  .description .theme-card .tc-desc { color: var(--muted); font-size: 0.92em; line-height: 1.45; }
+  .description .theme-card:hover .tc-swatch { border-color: var(--muted); }
+  .description .theme-card:focus-visible .tc-swatch { outline: 2px solid var(--accent); outline-offset: 2px; }
+  :root[data-theme="light"] .description .theme-card[data-theme-pick="light"] .tc-swatch,
+  :root[data-theme="dark"] .description .theme-card[data-theme-pick="dark"] .tc-swatch,
+  :root[data-theme="sepia"] .description .theme-card[data-theme-pick="sepia"] .tc-swatch,
+  :root[data-theme="midnight"] .description .theme-card[data-theme-pick="midnight"] .tc-swatch { border-color: var(--text); box-shadow: 0 0 0 1px var(--text); }
+  :root[data-theme="light"] .description .theme-card[data-theme-pick="light"] .tc-name::after,
+  :root[data-theme="dark"] .description .theme-card[data-theme-pick="dark"] .tc-name::after,
+  :root[data-theme="sepia"] .description .theme-card[data-theme-pick="sepia"] .tc-name::after,
+  :root[data-theme="midnight"] .description .theme-card[data-theme-pick="midnight"] .tc-name::after { content: ' · current'; font-weight: 400; color: var(--muted); }
   .description ul.controls .k-sep { color: var(--muted); font-size: 0.8em; margin: 0 0.1em; }
   @media (max-width: 560px) { .description .ce-list.ab-list ul.controls li { grid-template-columns: 1fr; gap: 0.15rem; } }
   /* Curated Sequence view */
@@ -2169,6 +2189,22 @@
         '<li><span class="keys"><kbd>Right-click</kbd></span><span>On selected text: <em>Copy</em>, or <em>Copy Link to Highlight</em> – a link that opens the page with that passage highlighted</span></li>' +
         '<li><span class="keys"><kbd>Shift</kbd> <span class="k-sep">+</span> <kbd>Right-click</kbd></span><span>The browser’s own menu</span></li>' +
         '</ul></details></div>',
+        '<h2 class="has-icon"><span class="h-icon"><svg viewBox="-3.7 -3.7 107.3 107.3" aria-hidden="true"><circle cx="50" cy="50" r="18"/><line x1="81.0" y1="50.0" x2="94.0" y2="50.0"/><line x1="71.9" y1="71.9" x2="81.1" y2="81.1"/><line x1="50.0" y1="81.0" x2="50.0" y2="94.0"/><line x1="28.1" y1="71.9" x2="18.9" y2="81.1"/><line x1="19.0" y1="50.0" x2="6.0" y2="50.0"/><line x1="28.1" y1="28.1" x2="18.9" y2="18.9"/><line x1="50.0" y1="19.0" x2="50.0" y2="6.0"/><line x1="71.9" y1="28.1" x2="81.1" y2="18.9"/></svg></span>Themes</h2>' +
+        '<div class="controls-sec themes-sec"><p>The site comes in four themes. It opens in White, or in Blue if your system is set to dark mode, and follows that setting until you choose one; nothing is saved between visits. Choose a theme below, or press <kbd>T</kbd> anywhere to step through them; <kbd>C</kbd> changes the colour of the links, or turns it off.</p>' +
+        '<ul class="theme-cards">' +
+        '<li><button type="button" class="theme-card" data-theme-pick="light" style="--tb:#fffff8;--tt:#111111;--tm:#6b6b64;--ta:#16a34a" aria-label="White theme">' +
+        '<span class="tc-swatch"><span class="tc-aa">Aa</span><span class="tc-link">link</span></span>' +
+        '<span class="tc-name">White</span><span class="tc-desc">Black text on off-white paper, with green links (or rust, at a press of <kbd>C</kbd>).</span></button></li>' +
+        '<li><button type="button" class="theme-card" data-theme-pick="dark" style="--tb:#151515;--tt:#e8e6de;--tm:#8f8d85;--ta:#d9b45a" aria-label="Black theme">' +
+        '<span class="tc-swatch"><span class="tc-aa">Aa</span><span class="tc-link">link</span></span>' +
+        '<span class="tc-name">Black</span><span class="tc-desc">Pale text on near-black, with gold links.</span></button></li>' +
+        '<li><button type="button" class="theme-card" data-theme-pick="sepia" style="--tb:#f4ecd8;--tt:#3b2e1e;--tm:#85735a;--ta:#1f6f6b" aria-label="Sepia theme">' +
+        '<span class="tc-swatch"><span class="tc-aa">Aa</span><span class="tc-link">link</span></span>' +
+        '<span class="tc-name">Sepia</span><span class="tc-desc">Brown text on warm parchment, with teal links.</span></button></li>' +
+        '<li><button type="button" class="theme-card" data-theme-pick="midnight" style="--tb:#161f36;--tt:#e4e8f2;--tm:#9aa3bb;--ta:#8cc4f5" aria-label="Blue theme">' +
+        '<span class="tc-swatch"><span class="tc-aa">Aa</span><span class="tc-link">link</span></span>' +
+        '<span class="tc-name">Blue</span><span class="tc-desc">Pale text on deep blue, with sky-blue links – the theme of the loading screen.</span></button></li>' +
+        '</ul></div>',
       ].join('\n')
     },
     {
@@ -13030,6 +13066,15 @@
   });
   // Until T is used, the site follows a change in the system's light/dark setting.
   var themeChosen = false;
+  // The About page's Themes: a card chooses its theme, as T would.
+  document.addEventListener('click', function (e) {
+    var card = e.target.closest && e.target.closest('.theme-card[data-theme-pick]');
+    if (!card) return;
+    var t = card.getAttribute('data-theme-pick');
+    document.documentElement.setAttribute('data-theme', t);
+    setFavicon(t);
+    themeChosen = true;
+  });
   if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
     var t = e.matches ? 'midnight' : 'light', root = document.documentElement;
     root.setAttribute('data-theme-after', t);
