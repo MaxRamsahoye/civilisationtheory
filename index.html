@@ -1351,6 +1351,11 @@
   :root[data-theme="dark"] .description .theme-card[data-theme-pick="dark"] .tc-name::after,
   :root[data-theme="sepia"] .description .theme-card[data-theme-pick="sepia"] .tc-name::after,
   :root[data-theme="midnight"] .description .theme-card[data-theme-pick="midnight"] .tc-name::after { content: ' · current'; font-weight: 400; color: var(--muted); }
+  /* (the Themes heading's icon: the current theme's, as in the header; it changes the theme, as T does) */
+  h2 .theme-cycle svg { display: none; }
+  h2 .theme-cycle .fill { fill: currentColor; stroke: none; }
+  :root[data-theme="light"] h2 .theme-cycle .i-light, :root[data-theme="dark"] h2 .theme-cycle .i-dark,
+  :root[data-theme="sepia"] h2 .theme-cycle .i-sepia, :root[data-theme="midnight"] h2 .theme-cycle .i-midnight { display: inline-block; }
   .description ul.controls .k-sep { color: var(--muted); font-size: 0.8em; margin: 0 0.1em; }
   @media (max-width: 560px) { .description .ce-list.ab-list ul.controls li { grid-template-columns: 1fr; gap: 0.15rem; } }
   /* Curated Sequence view */
@@ -2189,7 +2194,7 @@
         '<li><span class="keys"><kbd>Right-click</kbd></span><span>On selected text: <em>Copy</em>, or <em>Copy Link to Highlight</em> – a link that opens the page with that passage highlighted</span></li>' +
         '<li><span class="keys"><kbd>Shift</kbd> <span class="k-sep">+</span> <kbd>Right-click</kbd></span><span>The browser’s own menu</span></li>' +
         '</ul></details></div>',
-        '<h2 class="has-icon"><span class="h-icon"><svg viewBox="-3.7 -3.7 107.3 107.3" aria-hidden="true"><circle cx="50" cy="50" r="18"/><line x1="81.0" y1="50.0" x2="94.0" y2="50.0"/><line x1="71.9" y1="71.9" x2="81.1" y2="81.1"/><line x1="50.0" y1="81.0" x2="50.0" y2="94.0"/><line x1="28.1" y1="71.9" x2="18.9" y2="81.1"/><line x1="19.0" y1="50.0" x2="6.0" y2="50.0"/><line x1="28.1" y1="28.1" x2="18.9" y2="18.9"/><line x1="50.0" y1="19.0" x2="50.0" y2="6.0"/><line x1="71.9" y1="28.1" x2="81.1" y2="18.9"/></svg></span>Themes</h2>' +
+        '<h2 class="has-icon"><a class="h-icon theme-cycle" href="#" aria-label="Change theme" title="Change theme"><svg class="i-light" viewBox="-3.7 -3.7 107.3 107.3" aria-hidden="true"><circle cx="50" cy="50" r="18"/><line x1="81.0" y1="50.0" x2="94.0" y2="50.0"/><line x1="71.9" y1="71.9" x2="81.1" y2="81.1"/><line x1="50.0" y1="81.0" x2="50.0" y2="94.0"/><line x1="28.1" y1="71.9" x2="18.9" y2="81.1"/><line x1="19.0" y1="50.0" x2="6.0" y2="50.0"/><line x1="28.1" y1="28.1" x2="18.9" y2="18.9"/><line x1="50.0" y1="19.0" x2="50.0" y2="6.0"/><line x1="71.9" y1="28.1" x2="81.1" y2="18.9"/></svg><svg class="i-dark" viewBox="-5.4 2.6 102.9 102.9" aria-hidden="true"><path class="fill" d="M40.3 18.4 A36 36 0 1 0 81.6 59.7 A30 30 0 0 1 40.3 18.4 Z"/></svg><svg class="i-sepia" viewBox="-3.7 -3.7 107.3 107.3" aria-hidden="true"><circle class="fill" cx="50" cy="50" r="21.5"/><line x1="81.0" y1="50.0" x2="94.0" y2="50.0"/><line x1="71.9" y1="71.9" x2="81.1" y2="81.1"/><line x1="50.0" y1="81.0" x2="50.0" y2="94.0"/><line x1="28.1" y1="71.9" x2="18.9" y2="81.1"/><line x1="19.0" y1="50.0" x2="6.0" y2="50.0"/><line x1="28.1" y1="28.1" x2="18.9" y2="18.9"/><line x1="50.0" y1="19.0" x2="50.0" y2="6.0"/><line x1="71.9" y1="28.1" x2="81.1" y2="18.9"/></svg><svg class="i-midnight" viewBox="-2.8 4.7 98.6 98.6" aria-hidden="true"><path d="M40.3 18.4 A36 36 0 1 0 81.6 59.7 A30 30 0 0 1 40.3 18.4 Z"/><path class="fill" d="M72 21 L75.2 28.8 L83 32 L75.2 35.2 L72 43 L68.8 35.2 L61 32 L68.8 28.8 Z"/></svg></a>Themes</h2>' +
         '<div class="controls-sec themes-sec"><p>The site comes in four themes. It opens in White, or in Blue if your system is set to dark mode, and follows that setting until you choose one; nothing is saved between visits. Choose a theme below, or press <kbd>T</kbd> anywhere to step through them; <kbd>C</kbd> changes the colour of the links, or turns it off.</p>' +
         '<ul class="theme-cards">' +
         '<li><button type="button" class="theme-card" data-theme-pick="light" style="--tb:#fffff8;--tt:#111111;--tm:#6b6b64;--ta:#16a34a" aria-label="White theme">' +
@@ -13067,6 +13072,11 @@
   // Until T is used, the site follows a change in the system's light/dark setting.
   var themeChosen = false;
   // The About page's Themes: a card chooses its theme, as T would.
+  document.addEventListener('click', function (e) {
+    if (!(e.target.closest && e.target.closest('h2 .theme-cycle'))) return;
+    e.preventDefault();
+    document.getElementById('theme-toggle').click();
+  });
   document.addEventListener('click', function (e) {
     var card = e.target.closest && e.target.closest('.theme-card[data-theme-pick]');
     if (!card) return;
