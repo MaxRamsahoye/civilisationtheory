@@ -51,7 +51,7 @@
     document.documentElement.setAttribute('data-theme-after', t);
     if (location.hash === '#theproject') history.replaceState(null, '', '#the-map/theproject');   // (the About page's address: now a view of the Map)
     // Former addresses (a renamed section, merged entries) lead on to their pages.
-    window.MOVED = { 'life-world-system': 'viable-life-world-system', 'demons-of-techno-capitalism': 'demons-of-surveillance-capitalism', 'epistemic-uncertainty-and-cluelessness': 'epistemic-uncertainty', 'critical-social-theory': 'critical-theory', 'civilisational-alignment': 'civilisation-alignment', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure' };
+    window.MOVED = { 'life-world-system': 'viable-life-world-system', 'demons-of-techno-capitalism': 'demons-of-surveillance-capitalism', 'epistemic-uncertainty-and-cluelessness': 'epistemic-uncertainty', 'critical-social-theory': 'critical-theory', 'civilisational-alignment': 'civilisation-alignment', 'generator-functions': 'generative-dynamics', 'moral-economy': 'amoral-economy', 'prometheus': 'prometheanism', 'political-economy': 'critical-political-economy', 'technological-infrastructure': 'infra-structure', 'freedom': 'positive-and-negative-freedom', 'rights': 'human-and-non-human-rights', 'justice': 'critical-theory-of-justice' };
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
@@ -4016,22 +4016,22 @@
       html: '<p><em>Patriarchy</em> is a social system in which men hold primary power over political leadership, property, social privilege and moral authority, and in which women are subordinated within the family and society. The historian Gerda Lerner traced its emergence alongside the rise of agriculture, private property and the state; the sociologist Sylvia Walby analysed its structures across paid work, the household, the state, violence, sexuality and culture. Patriarchy is one of the oldest and most pervasive forms of domination, entangled with <a href="#class">class</a> and <a href="#colonialism">colonialism</a>. See <a href="#xenofeminism">xenofeminism</a>.</p>'
     },
     {
-      id: 'freedom',
-      title: 'Freedom',
+      id: 'positive-and-negative-freedom',
+      title: 'Positive & Negative Freedom',
       refs: ['Isaiah Berlin, “Two Concepts of Liberty” (1958).', 'Philip Pettit, <em>Republicanism</em> (1997).', 'Amartya Sen, <em>Development as Freedom</em> (1999).'],
-      html: '<p><em>Freedom</em> has been understood in several ways. Isaiah Berlin distinguished negative liberty – freedom from interference by others – from positive liberty – the freedom to be one’s own master and realise one’s purposes. The republican tradition, renewed by Philip Pettit, defines freedom as non-domination: not living under the arbitrary power of another, even a benevolent one. Amartya Sen understood it as substantive capability – the real ability to live the life one has reason to value. Which conception a civilisation adopts shapes its institutions and its sense of what progress means. See <a href="#rights">rights</a> and <a href="#open-society">open society</a>.</p>'
+      html: '<p><em>Freedom</em> has been understood in several ways. Isaiah Berlin distinguished negative liberty – freedom from interference by others – from positive liberty – the freedom to be one’s own master and realise one’s purposes. The republican tradition, renewed by Philip Pettit, defines freedom as non-domination: not living under the arbitrary power of another, even a benevolent one. Amartya Sen understood it as substantive capability – the real ability to live the life one has reason to value. Which conception a civilisation adopts shapes its institutions and its sense of what progress means. See <a href="#human-and-non-human-rights">rights</a> and <a href="#open-society">open society</a>.</p>'
     },
     {
-      id: 'rights',
-      title: 'Rights',
+      id: 'human-and-non-human-rights',
+      title: 'Human & Non-Human Rights',
       refs: ['John Locke, <em>Two Treatises of Government</em> (1689).', 'Universal Declaration of Human Rights (1948).'],
-      html: '<p><em>Rights</em> are entitlements that protect individuals and groups – to life, liberty, expression, property, a fair trial, and in later declarations to education, health and work – and that constrain what others, including states, may do to them. Grounded by John Locke in natural law and by others in human dignity or social agreement, they were codified in the revolutionary declarations of the eighteenth century and, after 1945, in the Universal Declaration of Human Rights. Debates continue over their foundation, their universality and their extension – to future generations, to animals, to nature itself and perhaps to artificial minds. See <a href="#freedom">freedom</a>, <a href="#justice">justice</a> and <a href="#deontology">deontology</a>.</p>'
+      html: '<p><em>Rights</em> are entitlements that protect individuals and groups – to life, liberty, expression, property, a fair trial, and in later declarations to education, health and work – and that constrain what others, including states, may do to them. Grounded by John Locke in natural law and by others in human dignity or social agreement, they were codified in the revolutionary declarations of the eighteenth century and, after 1945, in the Universal Declaration of Human Rights. Debates continue over their foundation, their universality and their extension – to future generations, to animals, to nature itself and perhaps to artificial minds. See <a href="#positive-and-negative-freedom">freedom</a>, <a href="#critical-theory-of-justice">justice</a> and <a href="#deontology">deontology</a>.</p>'
     },
     {
-      id: 'justice',
-      title: 'Justice',
+      id: 'critical-theory-of-justice',
+      title: 'Critical Theory of Justice',
       refs: ['Plato, <em>Republic</em> (c. 375 BCE).', 'John Rawls, <em>A Theory of Justice</em> (1971).', 'Robert Nozick, <em>Anarchy, State, and Utopia</em> (1974).'],
-      html: '<p><em>Justice</em> is giving each their due – the principle governing how benefits and burdens, rights and duties, are distributed in a society. Distributive justice asks how goods should be shared: equally, by need, by merit, or by whatever free exchange produces, in the debate between John Rawls’s principles and Robert Nozick’s entitlement theory. Retributive and restorative justice concern wrongdoing; recognition justice concerns respect and status; and climate and intergenerational justice extend the question across borders and generations. See <a href="#veil-of-ignorance">the veil of ignorance</a>, <a href="#recognition-justice">recognition justice</a> and <a href="#rights">rights</a>.</p>'
+      html: '<p><em>Justice</em> is giving each their due – the principle governing how benefits and burdens, rights and duties, are distributed in a society. Distributive justice asks how goods should be shared: equally, by need, by merit, or by whatever free exchange produces, in the debate between John Rawls’s principles and Robert Nozick’s entitlement theory. Retributive and restorative justice concern wrongdoing; recognition justice concerns respect and status; and climate and intergenerational justice extend the question across borders and generations. See <a href="#veil-of-ignorance">the veil of ignorance</a>, <a href="#recognition-justice">recognition justice</a> and <a href="#human-and-non-human-rights">rights</a>.</p>'
     },
     {
       id: 'norbert-wiener',
@@ -10922,7 +10922,7 @@
       { head: 'Classical Concepts', items: ['gemeinschaft-and-gesellschaft', 'anomie', 'legitimacy', ['bureaucracy', [['the-iron-cage', [], { also: true }]]], 'social-capital'] },
       { head: 'Modernity', items: ['globalisation', 'network-society', 'liquid-modernity'] },
       { head: 'Political Forms', items: ['nation-state-and-sovereignty', 'liberal-democracy', 'authoritarianism', 'fascism', 'socialism'] },
-      { head: 'Political Values', items: ['freedom', 'rights', 'justice'] }
+      { head: 'Political Values', items: ['positive-and-negative-freedom', 'human-and-non-human-rights', 'critical-theory-of-justice'] }
     ],
     'macrostrategy': [
       ['macrostrategy', ['macrosecuritisation', 'global-priorities-research', ['effective-altruism', ['integral-altruism']], 'crucial-consideration', 'trajectory-change', 'state-vs-transition-risk', 'unilateralists-curse', 'information-hazards']],
