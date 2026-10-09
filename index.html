@@ -13068,6 +13068,9 @@
     document.documentElement.setAttribute('data-theme', next);
     setFavicon(next);
     themeChosen = true;
+    // (on the About page, the new theme's card flashes, as when it is clicked)
+    var card = document.querySelector('#entry .theme-card[data-theme-pick="' + next + '"]');
+    if (card) press(card);
   });
   // Until T is used, the site follows a change in the system's light/dark setting.
   var themeChosen = false;
