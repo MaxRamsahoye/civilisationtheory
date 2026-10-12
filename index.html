@@ -55,10 +55,8 @@
     if (MOVED[location.hash.slice(1)]) history.replaceState(null, '', '#' + MOVED[location.hash.slice(1)]);
     var h = location.hash, onMap = !h || h === '#' || h === '#the-map';
     if (!onMap) document.documentElement.classList.add('no-loadin');
-    // The loading screen is shown in the blue (midnight) theme; the reader's own theme – light by
-    // default – takes over as the site settles (see the loading screen).
+    // The loading screen is shown in the system's theme, as the rest of the site is.
     else {
-      document.documentElement.setAttribute('data-theme', 'midnight');
       document.documentElement.classList.add('awaiting-theme', 'loading-topo', 'loading-hud');
     }
     // The accent colour is on at the start of every visit; C cycles it (nothing is saved).
@@ -1950,7 +1948,7 @@
   /* The topography loading screen: the Map's opening screen exactly as it is, but with only its
      topography showing until the interface and content fade in over it */
   html.loading-topo #loader, html.no-loadin #loader { display: none; }
-  /* The shift from the loading screen's blue to the reader's theme: a slow cross-fade of colours */
+  /* A change of theme during the loading screen (the system's setting changing): a slow cross-fade of colours */
   html.theme-shift body, html.theme-shift body * { transition: background-color 1.4s ease, color 1.4s ease, border-color 1.4s ease !important; }
   html.loading-topo body > *:not(#map-topo):not(script):not(#small-note) { opacity: 0 !important; pointer-events: none !important; }
   /* …first the title and subtitle, then (a moment later) the interface: header, controls, tab line */
@@ -2208,7 +2206,7 @@
         '<span class="tc-name">Sepia</span><span class="tc-desc">Brown text on warm parchment, with teal links.</span></button></li>' +
         '<li><button type="button" class="theme-card" data-theme-pick="midnight" style="--tb:#161f36;--tt:#e4e8f2;--tm:#9aa3bb;--ta:#8cc4f5" aria-label="Blue theme">' +
         '<span class="tc-swatch"><span class="tc-aa">Aa</span><span class="tc-link">link</span></span>' +
-        '<span class="tc-name">Blue</span><span class="tc-desc">Pale text on deep blue, with sky-blue links – the theme of the loading screen.</span></button></li>' +
+        '<span class="tc-name">Blue</span><span class="tc-desc">Pale text on deep blue, with sky-blue links.</span></button></li>' +
         '</ul></div>',
       ].join('\n')
     },
@@ -13473,7 +13471,7 @@
   if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
     var t = e.matches ? 'midnight' : 'light', root = document.documentElement;
     root.setAttribute('data-theme-after', t);
-    if (themeChosen || root.getAttribute('data-theme') === 'midnight' && root.classList.contains('awaiting-theme')) return;
+    if (themeChosen) return;
     root.setAttribute('data-theme', t); setFavicon(t);
   });
 
@@ -14740,7 +14738,6 @@
     if (!(isView || byId[openId] || PAGES[openId] || openId === ROOT.id) || (openId === 'infinite' && !SHOW_INFINITE)) {
       noLoadIn = false;
       document.documentElement.classList.remove('no-loadin');
-      document.documentElement.setAttribute('data-theme', 'midnight');
       document.documentElement.classList.add('awaiting-theme', 'loading-topo', 'loading-hud');
     }
   }
@@ -14806,17 +14803,16 @@
     }
     function reveal() {
       // Then the subtitle fades in under the typed title; the interface (hidden from the start) follows once they are in;
-      // and only once that has settled does the blue of the loading screen give way to the
-      // system's theme.
+      // and once that has settled the system's theme is confirmed (it is the loading screen's own).
       root.classList.add('topo-reveal', 'flow-late');
       void root.offsetWidth;
       root.classList.remove('title-typing');
       setTimeout(function () { root.classList.remove('loading-hud'); }, 2800);
       setTimeout(function () {
         root.classList.remove('topo-reveal', 'awaiting-theme');
-        if (themeChosen) return;
-        root.classList.add('theme-shift');
         var t = root.getAttribute('data-theme-after') || 'light';
+        if (themeChosen || root.getAttribute('data-theme') === t) return;
+        root.classList.add('theme-shift');
         root.setAttribute('data-theme', t); setFavicon(t);
         setTimeout(function () { root.classList.remove('theme-shift'); }, 1600);
       }, 4400);
