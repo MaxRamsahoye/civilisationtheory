@@ -2181,7 +2181,7 @@
         '</ul></details>' +
         '<details class="ctl-drop"><summary><h3 class="sub-head">Search</h3></summary><ul class="controls">' +
         '<li><span class="keys"><kbd>S</kbd></span><span>Search: in the Map’s opening screen, its search box; anywhere else, find in the page</span></li>' +
-        '<li><span class="keys"><kbd>/</kbd></span><span>Open the search page</span></li>' +
+        '<li><span class="keys"><kbd>/</kbd> <span class="k-sep">or</span> <kbd>Shift</kbd> <span class="k-sep">+</span> <kbd>S</kbd></span><span>Open the search page, to search the whole site</span></li>' +
         '<li><span class="keys"><kbd>Esc</kbd></span><span>Deselect: close the Map’s open view, or return to the Map from any page (in find or a search box: close or clear it)</span></li>' +
         '</ul></details>' +
         '<details class="ctl-drop"><summary><h3 class="sub-head">Display</h3></summary><ul class="controls">' +
@@ -14643,6 +14643,10 @@
       if (!e.repeat && !mapOpening && !document.body.classList.contains('footer-in-view') && !document.documentElement.classList.contains('hudless')) sideBtn.click();
     } else if (/^[a-z]$/i.test(e.key) && !e.shiftKey && letterJump(e.key.toUpperCase())) {
       e.preventDefault();
+    } else if ((e.key === 's' || e.key === 'S') && e.shiftKey && !e.repeat) {
+      // Shift+S: the search page, searching the whole site (as /)
+      e.preventDefault();
+      openSearchPage('');
     } else if ((e.key === 's' || e.key === 'S') && !e.repeat) {
       // Search: in the Map's opening screen, its search box in the top corner; anywhere else, the
       // find-in-page bar (the site's own Ctrl/Cmd+F).
